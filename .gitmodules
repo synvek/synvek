@@ -1,0 +1,9 @@
+[submodule "third_party/deno"]
+	path = third_party/deno
+	url = https://github.com/synvek/deno
+[submodule "third_party/mistral.rs"]
+	path = third_party/mistral.rs
+	url = https://github.com/synvek/mistral.rs
+[submodule "third_party/hf-hub"]
+	path = third_party/hf-hub
+	url = https://github.com/synvek/hf-hub	

@@ -1,0 +1,9 @@
+{
+  "name": "MathFunctionToolsPlugin",
+  "version": "1.0.0",
+  "author": "Developer",
+  "description": "Common math functions for function calls",
+  "entry": "./MathFunctionToolsPlugin.ts",
+  "type": "tool",
+  "permissions": ["net", "read"]
+}

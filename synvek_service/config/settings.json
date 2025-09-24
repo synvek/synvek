@@ -1,0 +1,15 @@
+{
+  "language": "en-US",
+  "modelDir": "./models",
+  "backendServerProtocol": "http://",
+  "backendServerHost": "localhost",
+  "backendServerPort": 12001,
+  "backendServerPath": "/v1",
+  "pinnedFolders": [],
+  "pinnedConversions": [],
+  "selectedConversionId": 1,
+  "defaultTranslationOption": "auto",
+  "activatedToolPlugins": [],
+  "activatedMCPServices": [],
+  "currentUserName": "Me"
+}

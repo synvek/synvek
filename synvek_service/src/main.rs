@@ -1,0 +1,42 @@
+use std::{env, thread};
+use std::ffi::OsString;
+use std::fmt::Debug;
+use std::fs::File;
+use std::sync::Arc;
+use std::sync::atomic::AtomicBool;
+use chrono::Local;
+use clap::Parser;
+use tokio::time::{sleep, Duration};
+use time::macros::format_description;
+use tokio::runtime;
+
+mod api;
+mod command;
+mod config;
+mod error;
+mod common;
+
+mod model_service;
+
+mod script_service;
+
+mod process_service;
+mod system_service;
+mod process_api;
+mod system_api;
+mod model_api;
+mod fetch_api;
+mod worker_service;
+mod worker_api;
+mod fetch_helper;
+
+use tracing_subscriber::fmt::writer::MakeWriterExt;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
+use synvek_service::{fetch_service, start_synvek_service, synvek};
+
+#[actix_web::main]
+async fn main() -> Result<(), anyhow::Error> {
+    start_synvek_service().await?;
+    Ok(())
+}

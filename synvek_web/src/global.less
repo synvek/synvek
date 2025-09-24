@@ -1,0 +1,38 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--container-background-color);
+  scrollbar-color: var(--scroll-color);
+}
+
+:root {
+  --scroll-color: silver transparent ;
+  --scroll-color-elevated: silver transparent ;
+  --layout-background-color: white;
+  --container-background-color: white;
+  --container-background-color-hover: whitesmoke;
+  --setting-background-color: #f5f5f5;
+  --windows-title-button-color: silver;
+  --windows-title-close-button-color: #c11b1e;
+}
+
+[data-theme='dark'] {
+  //Scroll color
+  --scroll-color: #424242 transparent ;     //colorBgSpotlight  colorBgContainer
+  //Scroll color on some special case ,it is useless now after use transparent color
+  --scroll-color-elevated: #424242 transparent ;     //colorBgSpotlight  colorBgElevated
+  --layout-background-color: #141414;     //colorBgContainer
+  --container-background-color: #1f1f1f;    //colorBgElevated
+  --container-background-color-hover: #424242;  //colorBgSpotlight
+  //Setting window background
+  --setting-background-color: #1f1f1f;
+  //Windows custom title bar
+  --windows-title-button-color: #424242;     //windows min max button
+  --windows-title-close-button-color: #c11b1e; //windows close button
+}

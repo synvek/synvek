@@ -1,0 +1,37 @@
+[package]
+name = "synvek_explorer"
+version = "0.1.0"
+description = "Run LLM locally with minimal effort"
+authors = ["iapoo"]
+license = "GPL"
+repository = ""
+edition = "2024"
+rust-version = "1.86"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "synvek_explorer_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.2.0", features = ["config-json5"] }
+
+[dependencies]
+synvek_service = {version = "0.1.0",path = "./../synvek_service" }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+tauri = { version = "2.5.0", features = ["devtools", "config-json5"] }
+tauri-plugin-log = "2.0.0-rc"
+tokio = "1.45.1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["time"] }
+time = { version = "0.3", features = ["macros", "parsing"] }
+tracing-log = "0.2.0"
+tracing-appender = "0.2"
+
+[features]
+cuda = ["synvek_service/cuda"]
+cudnn = ["synvek_service/cudnn"]
+accelerate = ["synvek_service/accelerate"]

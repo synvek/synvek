@@ -1,0 +1,60 @@
+.withoutDrag {
+  -webkit-app-region: no-drag;
+}
+
+.withDrag {
+  -webkit-app-region: drag;
+}
+.headerExtra {
+  height: 100%;
+  display: flex;
+  justify-content: right;
+}
+
+.main {
+  display: table;
+  min-width: 1px;
+  height: 100%;
+}
+
+.content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding-right: 12px;
+}
+
+.tittleBar {
+  height: 100%;
+  background: transparent;
+  user-select: none;
+  display: flex;
+}
+
+.titleBarButton {
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.titleBarButton:hover {
+  background: var(--windows-title-button-color);
+}
+
+.titleBarCloseButton {
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.titleBarCloseButton:hover {
+  background: var(--windows-title-close-button-color);
+}

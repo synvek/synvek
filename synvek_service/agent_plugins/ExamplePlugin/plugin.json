@@ -1,0 +1,9 @@
+{
+  "name": "ExamplePlugin",
+  "version": "1.0.0",
+  "author": "Developer",
+  "description": "A demonstration plugin for Synvek",
+  "entry": "./ExamplePlugin.ts",
+  "type": "plugin",
+  "permissions": ["net", "read"]
+}

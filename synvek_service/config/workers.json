@@ -1,0 +1,17 @@
+{
+  "workers": [
+    {
+      "worker_name": "demo",
+      "worker_path": "plugin/demo",
+      "worker_vendor": "nobody",
+      "worker_major_version": 0,
+      "worker_minor_version": 1,
+      "worker_patch_version": 0,
+      "worker_category": "Plugin",
+      "worker_author": "nobody",
+      "worker_email": "nobody@nobody.com",
+      "worker_homepage": "www.nobody.com",
+      "worker_description": "nobody"
+    }
+  ]
+}

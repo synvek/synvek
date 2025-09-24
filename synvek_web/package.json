@@ -1,0 +1,70 @@
+{
+  "name": "synvek_web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://github.com/synvek/synvek",
+  "author": {
+    "name": "sean.yang",
+    "email": "sean.yang.ai@outlook.com",
+    "url": "https://github.com/synvek/synvek"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "max build",
+    "dev": "max dev",
+    "docker:build": "cross-env UMI_ENV=docker max build",
+    "docs:build": "vitepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:preview": "vitepress preview docs",
+    "desktop:build": "cross-env UMI_ENV=desktop max build",
+    "format": "prettier --cache --write .",
+    "postinstall": "max setup",
+    "prepare": "husky",
+    "prod:build": "cross-env UMI_ENV=production max build",
+    "setup": "max setup",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "@ant-design/pro-components": "^2.4.4",
+    "@antv/g-math": "^1.7.44",
+    "@langchain/core": "^0.3.57",
+    "@langchain/openai": "^0.5.11",
+    "@svgdotjs/svg.js": "^3.2.0",
+    "@tauri-apps/api": "^2.8.0",
+    "@types/react-mentions": "^4.4.1",
+    "@umijs/max": "^4.3.31",
+    "antd": "^5.23.2",
+    "axios": "^1.7.7",
+    "crypto-js": "^4.0.0",
+    "react-audio-play": "^1.0.4",
+    "react-draggable": "^4.4.3",
+    "react-markdown": "^10.1.0",
+    "react-mentions": "^4.4.10",
+    "react-syntax-highlighter": "^15.6.1",
+    "remark-directive": "^4.0.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.5.0",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "compression-webpack-plugin": "^11.1.0",
+    "cross-env": "^7.0.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9",
+    "lint-staged": "^13.2.0",
+    "prettier": "^3.3.3",
+    "prettier-eslint": "^16.3.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-packagejson": "^2.4.3",
+    "typescript": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

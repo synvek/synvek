@@ -1,0 +1,47 @@
+{
+  "$schema": "./../synvek_web/node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "synvek_explorer",
+  "version": "0.1.0",
+  "identifier": "com.synvek.net",
+  "build": {
+    "frontendDist": "./../synvek_web/build",
+    //"devUrl": "http://localhost:8000",
+    "devUrl": null,
+    "beforeDevCommand": null,
+    "beforeBuildCommand": null
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Synvek Explorer",
+        "width": 1024,
+        "height": 768,
+        "resizable": true,
+        "visible": true,
+        "label": "main",
+        "center": true,
+        "create": true,
+        "devtools": true,
+        "fullscreen": false,
+        "decorations": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "./../synvek_agent/build/synvek_agent.cjs": "resources/synvek_agent/synvek_agent.cjs",
+    }
+  }
+}

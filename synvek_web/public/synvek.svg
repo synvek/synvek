@@ -1,0 +1,77 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 花瓣渐变 -->
+    <linearGradient id="sunflowerPetal" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#FFD666"/>
+      <stop offset="100%" stop-color="#FAAD14"/>
+    </linearGradient>
+    <!-- 花蕊光晕 -->
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#874D00"/>
+      <stop offset="100%" stop-color="#874D00" stop-opacity="0.3"/>
+    </radialGradient>
+    <!-- 花瓣渐变 -->
+    <linearGradient id="petalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#722ED1"/>
+      <stop offset="100%" stop-color="#1890FF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景光晕 -->
+  <circle cx="60" cy="60" r="58" fill="url(#coreGlow)"/>
+
+  <!-- 24片向日葵花瓣 -->
+  <g transform="translate(60 60)">
+    <!-- 花瓣模板 (细长水滴形) -->
+    <path id="sunPetal" d="M0-50 
+                        Q5-55 10-50
+                        L15-10
+                        Q10-5 0 0
+                        Q-10-5 -15-10
+                        L-10-50
+                        Q-5-55 0-50Z" 
+          fill="url(#sunflowerPetal)"/>
+    
+    <!-- 15度间隔旋转复制 -->
+    <use href="#sunPetal" transform="rotate(0)"/>
+    <use href="#sunPetal" transform="rotate(20)"/>
+    <use href="#sunPetal" transform="rotate(40)"/>
+    <use href="#sunPetal" transform="rotate(60)"/>
+    <use href="#sunPetal" transform="rotate(80)"/>
+    <use href="#sunPetal" transform="rotate(100)"/>
+    <use href="#sunPetal" transform="rotate(120)"/>
+    <use href="#sunPetal" transform="rotate(140)"/>
+    <use href="#sunPetal" transform="rotate(160)"/>
+    <use href="#sunPetal" transform="rotate(180)"/>
+    <use href="#sunPetal" transform="rotate(200)"/>
+    <use href="#sunPetal" transform="rotate(220)"/>
+    <use href="#sunPetal" transform="rotate(240)"/>
+    <use href="#sunPetal" transform="rotate(260)"/>
+    <use href="#sunPetal" transform="rotate(280)"/>
+    <use href="#sunPetal" transform="rotate(300)"/>
+    <use href="#sunPetal" transform="rotate(320)"/>
+    <use href="#sunPetal" transform="rotate(340)"/>
+  </g>
+
+  <!-- 8片环绕花瓣 -->
+  <g transform="translate(60 60)">
+    <!-- 花瓣模板 (贝塞尔曲线构成) -->
+    <path id="petal" d="M0-30 
+                     C10-20 16.7-23.3 20-13.3
+                     C23.3-3.3 16.7 3.3 0 10
+                     C-16.7 3.3 -23.3-3.3 -20-13.3
+                     C-16.7-23.3 -10-20 0-30Z" 
+          fill="url(#petalGradient)"/>
+    
+    <!-- 旋转复制花瓣 -->
+    <use href="#petal" transform="rotate(0)"/>
+    <use href="#petal" transform="rotate(45)"/>
+    <use href="#petal" transform="rotate(90)"/>
+    <use href="#petal" transform="rotate(135)"/>
+    <use href="#petal" transform="rotate(180)"/>
+    <use href="#petal" transform="rotate(225)"/>
+    <use href="#petal" transform="rotate(270)"/>
+    <use href="#petal" transform="rotate(315)"/>
+  </g>
+
+</svg>
