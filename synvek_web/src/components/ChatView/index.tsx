@@ -487,6 +487,17 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     }
   }
 
+  const populateHistoryMessage = () => {
+    const historyMessages = currentWorkspace.selectedConversionData.chatMessages.filter((chatMessage) => chatMessage.content[0].type === 'text')
+    const historyMessageHead = `## Chat history\n\n`
+    const historyMessageContent = historyMessages
+      .slice(-Consts.HISTORY_CHAT_LIMIT)
+      .map((chatMessage, index) => `chat index ${index}, chat role: ${chatMessage.fromUser ? 'user' : 'assistant'},  ${chatMessage.content[0].text}`)
+      .join('\n')
+
+    return `${historyMessageHead} ${historyMessageContent} \n ## Please answer based on above chat history. \n`
+  }
+
   const handleChatRequest = (chatContent: ChatContent[], chatAttachments: ChatAttachment[], defaultTextModel: string) => {
     let imageInfo = ``
     let imageIndex = 1
@@ -497,7 +508,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     })
     //Keep in streaming because it may be modified while running.
     const enableThinking = turnOnThinking
-    const systemPrompt = `Try to analyze input language and use the language to answer user input, ${enableThinking ? '/thinking' : '/no_thinking'} ${imageInfo}`
+    const historyMessage = populateHistoryMessage()
+
+    const systemPrompt = ` ${historyMessage} \n Try to analyze input language and use the language to answer user input, ${enableThinking ? '/thinking' : '/no_thinking'} ${imageInfo}`
     let modelName = defaultTextModel
     //model name is very special for GGUF or UQFF and so we handle here
     currentWorkspace.modelServers.forEach((modelServer) => {
@@ -508,6 +521,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const response = RequestUtils.chat(
       chatContent,
       [{ type: 'text', text: systemPrompt }],
+      [{ type: 'text', text: historyMessage }],
       defaultTextModel,
       enableThinking,
       turnOnWebSearch,

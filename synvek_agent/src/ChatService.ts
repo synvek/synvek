@@ -15,6 +15,8 @@ import { CommonUtils } from './Utils/CommonUtils.ts'
 import Logger from './Utils/Logger.ts'
 import { ModelServerInfo, RequestUtils } from './Utils/RequestUtils.ts'
 import { SystemUtils } from './Utils/SystemUtils.ts'
+import { MemorySaver } from '@langchain/langgraph'
+import { threadId } from "node:worker_threads";
 
 const chatData = new Elysia().state({ message: '' })
 
@@ -127,6 +129,7 @@ class LLMService {
   public static async chat(
     userMessage: ChatContent[],
     systemMessage: ChatContent[],
+    historyMessage: ChatContent[],
     modelName: string,
     enableThinking: boolean,
     enableWebSearch: boolean,
@@ -154,6 +157,7 @@ class LLMService {
 
     const useMessages = LLMService.buildMessage(userMessage)
     const systemMessages = LLMService.buildMessage(systemMessage)
+    const assistantMessages = LLMService.buildMessage(historyMessage)
     //Logger.info(`Chat is ${userMessage} on ${model.lc_kwargs.configuration.baseURL}`)
     const messages = [
       //new SystemMessage(`Try to check and use input language to answer, ${thinking ? '/thinking' : '/no_thinking'}`),
@@ -175,6 +179,7 @@ class LLMService {
   public static async chatStream(
     userMessage: ChatContent[],
     systemMessage: ChatContent[],
+    historyMessage: ChatContent[],
     modelName: string,
     enableThinking: boolean,
     enableWebSearch: boolean,
@@ -198,31 +203,6 @@ class LLMService {
       filteredTools = [...filteredTools, ...pluginTools]
     })
 
-    const multiply = tool(
-      ({ a, b }: { a: number; b: number }): number => {
-        console.log(`Function is invoked with result = ${a * b}`)
-        return a * b
-      },
-      {
-        name: 'multiply',
-        description: 'Multiply two numbers',
-        schema: z.object({
-          a: z.number(),
-          b: z.number(),
-        }),
-      },
-    )
-
-    const client = new MultiServerMCPClient({
-      mcpServers: {
-        math: {
-          command: 'C:/source/works/PythonProject/.venv/Scripts/python',
-          // Replace with absolute path to your math_server.py file
-          args: ['c:/source/works/huan/engine/tools/MCPDemoServer.py'],
-          transport: 'stdio',
-        },
-      },
-    })
     //const chainTools = filteredTools
     //const toolModel = model.bindTools(chainTools)
     //const agentMemorySaver = new MemorySaver()
@@ -239,8 +219,11 @@ class LLMService {
       tools: filteredTools,
       //checkpointSaver: agentMemorySaver,
     })
+
+    //const config = {  threadId: "a"}
     const useMessages = LLMService.buildMessage(userMessage)
     const systemMessages = LLMService.buildMessage(systemMessage)
+    const assistantMessages = LLMService.buildMessage(historyMessage)
     //Logger.info(`Chat is ${userMessage} on ${model.lc_kwargs.configuration.baseURL}`)
     const messages = [
       //new SystemMessage(`Try to check and use input language to answer, ${thinking ? '/thinking' : '/no_thinking'}`),
@@ -250,7 +233,7 @@ class LLMService {
     //return model.invoke(userMessage[0].text)
     //const test = await toolModel.invoke(messages)
     //console.log(`Test result = ${test}`)
-    return agent.stream({ messages: messages }, { streamMode: 'messages' })
+    return agent.stream({ messages: messages }, { streamMode: 'messages', })
     //return toolModel.stream(messages)
   }
 
@@ -287,6 +270,7 @@ export const chatService = new Elysia()
               const chatStream = await LLMService.chatStream(
                 body.userMessage,
                 body.systemMessage,
+                body.historyMessage,
                 body.modelName,
                 body.enableThinking,
                 body.enableWebSearch,
@@ -365,6 +349,7 @@ export const chatService = new Elysia()
         const response = await LLMService.chat(
           body.userMessage,
           body.systemMessage,
+          body.historyMessage,
           body.modelName,
           body.enableThinking,
           body.enableWebSearch,
@@ -405,6 +390,7 @@ export const chatService = new Elysia()
       body: t.Object({
         userMessage: t.Array(t.Object({ type: t.String(), text: t.String() })),
         systemMessage: t.Array(t.Object({ type: t.String(), text: t.String() })),
+        historyMessage: t.Array(t.Object({ type: t.String(), text: t.String() })),
         streaming: t.Boolean(),
         modelName: t.String(),
         enableThinking: t.Boolean(),

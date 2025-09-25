@@ -556,14 +556,17 @@ export class RequestUtils {
    * Use fetch API since Axios will block stream
    * @param userMessage
    * @param systemMessage
+   * @param historyMessage
    * @param modelName
    * @param enableThinking
    * @param enableWebSearch
-   * @param activatedTools
+   * @param activatedToolPlugins
+   * @param activatedMCPServices
    */
   public static chat(
     userMessage: ChatContent[],
     systemMessage: ChatContent[],
+    historyMessage: ChatContent[],
     modelName: string,
     enableThinking: boolean,
     enableWebSearch: boolean,
@@ -573,6 +576,7 @@ export class RequestUtils {
     const data = {
       userMessage: userMessage,
       systemMessage: systemMessage,
+      historyMessage: historyMessage,
       modelName: modelName,
       streaming: true,
       enableThinking: enableThinking,

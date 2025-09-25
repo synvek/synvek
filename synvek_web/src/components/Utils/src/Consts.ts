@@ -68,6 +68,11 @@ export class Consts {
   public static GENERATION_TYPE_SPEECH = 'speech'
   public static GENERATION_TYPE_TRANSLATION = 'translation'
 
+  /**
+   * Max history chat message for conversion with memory
+   */
+  public static HISTORY_CHAT_LIMIT = 10
+
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },
     { key: '512x512 | 1:1', width: 512, height: 512 },
