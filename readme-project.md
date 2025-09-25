@@ -54,14 +54,17 @@ Synvek is built on Rust & Deno & Tauri & Mistral.rs/Candel. It can run & caht wi
 
     Node 20.x, Deno, Rust
 
-### Download
+### Check out code
 
-git clone https://github.com/synvek/synvek.git
+- Checkout synvek
+    git clone https://github.com/synvek/synvek.git
+
+- Checkout synvek_dev branch of followings to %SYNVEK%/third_party
 git clone https://github.com/synvek/deno.git
 git clone https://github.com/synvek/mistral.rs.git
 git clone https://github.com/synvek/hf-hub.git
 
-git submodule isn't supported yet.
+- Be noted: git submodule isn't supported yet.
 
 ### Prepare output folder
 
