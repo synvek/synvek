@@ -1,4 +1,5 @@
 output/
+build/
 target/
 third_party/
 node_modules

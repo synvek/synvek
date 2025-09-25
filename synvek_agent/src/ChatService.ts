@@ -157,7 +157,7 @@ class LLMService {
 
     const useMessages = LLMService.buildMessage(userMessage)
     const systemMessages = LLMService.buildMessage(systemMessage)
-    const assistantMessages = LLMService.buildMessage(historyMessage)
+    //const assistantMessages = LLMService.buildMessage(historyMessage)
     //Logger.info(`Chat is ${userMessage} on ${model.lc_kwargs.configuration.baseURL}`)
     const messages = [
       //new SystemMessage(`Try to check and use input language to answer, ${thinking ? '/thinking' : '/no_thinking'}`),

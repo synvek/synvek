@@ -597,6 +597,7 @@ export class RequestUtils {
     const data = {
       userMessage: userMessage,
       systemMessage: systemMessage,
+      historyMessage: [],
       modelName: modelName,
       streaming: false,
       enableThinking: false,
