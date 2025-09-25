@@ -4,7 +4,7 @@
 
 ## About Synvek
 
-Synvek is all-in-one tool to run & explore LLM locally. 
+Synvek is all-in-one tool to run & explore LLM  with text, image and voice locally. 
 
 ## Main Features
 
