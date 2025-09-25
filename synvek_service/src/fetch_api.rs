@@ -1,7 +1,3 @@
-//! API模块
-//!
-//! 提供RESTful API接口
-
 use crate::common::ServiceRef;
 use crate::fetch_service::{FetchFile, FetchRepo};
 use crate::fetch_service::{RunningTask, Task, TaskItem};

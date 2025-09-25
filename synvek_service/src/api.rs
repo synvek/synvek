@@ -1,7 +1,3 @@
-//! API模块
-//!
-//! 提供RESTful API接口
-
 use crate::common::ServiceRef;
 use crate::fetch_service;
 use crate::fetch_service::{RunningTask, Task, TaskItem};
@@ -67,7 +63,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
     );
 }
 
-/// 启动Web服务器
+/// Start Web Server
 pub async fn start_server() -> std::io::Result<()> {
     let host = "0.0.0.0";
     let port = 12001;
@@ -78,10 +74,10 @@ pub async fn start_server() -> std::io::Result<()> {
     // Start web server
     HttpServer::new(|| {
         let cors = Cors::default()
-            .allow_any_origin() // 允许所有来源（生产环境应限制为特定域名）
-            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"]) // 允许的HTTP方法
-            .allowed_headers(vec!["Content-Type"]) // 允许的请求头
-            .max_age(3600); // 预检请求缓存时间（秒）
+            .allow_any_origin() 
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"]) 
+            .allowed_headers(vec!["Content-Type"]) 
+            .max_age(3600); 
 
         App::new()
             .wrap(cors)

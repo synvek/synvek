@@ -141,7 +141,7 @@ pub async fn start_model_engine() -> Result<(), anyhow::Error> {
         isq: Some("4".to_string()),
         model_id: "".to_string(),
         model_type: "plain".to_string(),
-        path: Some("C:/source/works/huan/engine/models/Qwen/Qwen3-0.6B".to_string()),
+        path: Some("C:/source/works/engine/models/Qwen/Qwen3-0.6B".to_string()),
         token_source: None,
         cpu: false,
         offloaded: true,
@@ -154,35 +154,6 @@ pub async fn start_model_engine() -> Result<(), anyhow::Error> {
     .await?;
     Ok(())
 }
-
-//
-// pub async fn start_model_engine_async() -> Result<(), anyhow::Error>  {
-//     let _ = thread::spawn(move || {
-//         let rt = runtime::Builder::new_current_thread()
-//             .enable_all()
-//             .build()
-//             .unwrap();
-//
-//         // 执行异步函数
-//         rt.block_on(async {
-//             let start_args2: Vec<OsString> = vec![
-//                 OsString::from("somefile"),
-//                 OsString::from("--port"),
-//                 OsString::from("1236"),
-//                 OsString::from("--isq"),
-//                 OsString::from("4"),
-//                 OsString::from("plain"),
-//                 OsString::from("-m"),
-//                 OsString::from("C:/source/works/huan/engine/models/Qwen/Qwen3-0.6B"),
-//             ];
-//             println!("{:?}", start_args2);
-//             // TODO: 实现服务启动逻辑
-//             mistralrs_server::start(start_args2).await.unwrap();
-//         });
-//
-//     });
-//     Ok(())
-// }
 
 pub async fn start_service() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
@@ -204,5 +175,4 @@ pub fn initialize() {
     worker_service::initialize_worker_service();
     initialize_synvek();
     model_service::initialize_model_server();
-    //fetch_service::initialize();
 }

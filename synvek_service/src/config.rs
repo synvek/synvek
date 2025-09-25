@@ -1,9 +1,7 @@
-//! 配置管理模块
-
 use crate::common;
 use anyhow::Result;
 use directories::ProjectDirs;
-use schemars::{schema_for, JsonSchema};
+use schemars::{JsonSchema, schema_for};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::path::Path;
@@ -12,15 +10,13 @@ use std::sync::{Arc, Mutex, OnceLock, RwLock};
 use std::{env, fs};
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
-#[serde(deny_unknown_fields)] // 拒绝未知字段，防止配置错误
+#[serde(deny_unknown_fields)]
 pub struct SynvekConfig {
     #[schemars(description = "Synvek server port")]
     #[serde(default = "default_port")]
     pub port: u16,
 
-    #[schemars(
-        description = "First model server port number, followings will increase by 1"
-    )]
+    #[schemars(description = "First model server port number, followings will increase by 1")]
     #[serde(default = "default_model_port")]
     pub model_port: u16,
 
@@ -79,8 +75,8 @@ pub struct Config {
 static SYNVEK_CONFIG: OnceLock<Arc<Mutex<SynvekConfig>>> = OnceLock::new();
 
 fn init_synvek_config() -> Arc<Mutex<SynvekConfig>> {
-    let default_config = Config::get_default_config();
-    tracing::info!("Initialize synvek config {:?}", default_config);
+    let default_config = SynvekConfig::default(); //Config::get_default_config();
+    //tracing::info!("Initialize synvek config {:?}", default_config);
     let mut config = Config::new();
     if config.has_config_file_available() {
         let new_config = config.read_config();
@@ -182,7 +178,7 @@ impl Config {
             port: 12001,
             model_port: 12002,
             host: "0.0.0.0".to_string(),
-            endpoint: "https://hf-mirror.com".to_string(),
+            endpoint: "https://huggingface.co".to_string(),
             multi_process: true,
         }
     }
@@ -233,6 +229,7 @@ impl Config {
     fn populate_json_into_config(&self, config_str: String) -> SynvekConfig {
         let mut config: SynvekConfig = Config::get_default_config();
         let new_config: Value = serde_json::from_str(&config_str).unwrap();
+        tracing::info!("Reading config = {:?}", new_config);
         if let Some(port) = new_config.get(common::CONFIG_PORT) {
             config.port = port.as_u64().unwrap() as u16;
         }
@@ -240,7 +237,7 @@ impl Config {
             config.model_port = model_port.as_u64().unwrap() as u16;
         }
         if let Some(endpoint) = new_config.get(common::CONFIG_ENDPOINT) {
-            config.endpoint = endpoint.to_string();
+            config.endpoint = endpoint.as_str().unwrap().to_owned();
         }
         if let Some(host) = new_config.get(common::CONFIG_HOST) {
             config.host = host.as_str().unwrap().to_owned();

@@ -1,7 +1,3 @@
-//! 命令行接口模块
-//!
-//! 提供命令行接口处理功能
-
 use std::ffi::OsString;
 use std::path::PathBuf;
 use clap::{Parser, Subcommand, ArgAction};
@@ -14,7 +10,7 @@ use crate::worker_service::WorkerArgs;
 use crate::model_service::ModelServiceArgs;
 use crate::worker_service::WorkerType;
 
-/// Troni命令行工具
+/// Synvek commands
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
@@ -22,45 +18,44 @@ pub struct Cli {
     pub command: Commands,
 }
 
-/// 支持的命令
+/// Supported commands
 #[derive(Subcommand)]
 pub enum Commands {
-    /// 启动模型服务
+    /// Start model service
     Start(StartArgs),
 
-    /// 运行脚本
+    /// Run script files
     Run(RunArgs),
 
-    /// 运行Worker
+    /// Run workers
     Exec(ExecArgs),
 
-    /// 启动服务
+    /// Start web server
     Serve(ServeArgs),
     
-    /// 停止服务
+    /// Stop web server
     Stop,
     
-    /// 列出模型
+    /// List models
     List(ListArgs),
     
-    /// 添加模型
+    /// Add models
     Add(AddArgs),
     
-    /// 移除模型
+    /// Remove models
     Remove(RemoveArgs),
     
-    /// 查看模型信息
+    /// View models
     Info(InfoArgs),
     
-    /// 测试模型
+    /// Test
     Test(TestArgs),
 }
 
 #[derive(Parser)]
 pub struct RunArgs {
 
-    /// 额外的参数
-    #[arg(last = true)]  // 表示这些参数必须放在最后
+    #[arg(last = true)]
     pub extra_args: Vec<String>,
 }
 
@@ -101,7 +96,7 @@ pub struct StartArgs {
     pub offloaded: bool,
 }
 
-/// 服务启动参数
+/// Service Args
 #[derive(Parser)]
 pub struct ExecArgs {
     /// Worker Id

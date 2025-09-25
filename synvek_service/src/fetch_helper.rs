@@ -168,7 +168,7 @@ pub fn get_repo_files_in_cache(
                 let mut api_builder = ApiBuilder::new()
                     .with_cache_dir(path.clone())
                     .with_token(access_token.clone());
-                if endpoint.is_some() {
+                if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
                     api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
                 }
                 let api = api_builder.build();
@@ -232,7 +232,7 @@ pub fn get_file_size_in_cache(
             let mut api_builder = ApiBuilder::new()
                 .with_cache_dir(path)
                 .with_token(access_token);
-            if endpoint.is_some() {
+            if endpoint.is_some()  && !endpoint.clone().unwrap().trim().is_empty() {
                 api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
             }
             let api = api_builder.build();
@@ -280,8 +280,8 @@ pub fn get_file_meta_remote(
     let mut api_builder = ApiBuilder::new()
         .with_cache_dir(path)
         .with_token(access_token);
-    if endpoint.is_some() {
-        api_builder = api_builder.with_endpoint(endpoint.unwrap());
+    if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
+        api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
     }
     let api = api_builder.build();
     if api.is_ok() {
@@ -328,7 +328,7 @@ pub fn down_model_file<P: Progress>(
     let mut api_builder = ApiBuilder::new()
         .with_cache_dir(path)
         .with_token(access_token);
-    if (endpoint.is_some()) {
+    if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
         api_builder = api_builder.with_endpoint(endpoint.unwrap());
     }
     let api = api_builder.build()?;
@@ -353,7 +353,7 @@ pub fn get_repo_info(
     let mut api_builder = ApiBuilder::new()
         .with_cache_dir(path)
         .with_token(access_token);
-    if endpoint.is_some() {
+    if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
         api_builder = api_builder.with_endpoint(endpoint.unwrap());
     }
     let api = api_builder.build()?;

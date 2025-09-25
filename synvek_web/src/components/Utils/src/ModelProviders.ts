@@ -508,16 +508,16 @@ export const modelProviders: ModelProvider[] = [
     description: 'EricB/Qwen3-1.7B-UQFF details',
   },
   {
-    modelId: 'Qwen3-Embedding-0.6B-GGUF',
+    modelId: 'Qwen3-0.6B-GGUF',
     modelCreator: 'Qwen3',
     modelSource: 'huggingface',
     parameters: 'a',
     modelOptions: [
       {
-        name: 'Qwen3/Qwen3-Embedding-0.6B-GGUF',
+        name: 'Qwen3/Qwen3-0.6B-GGUF',
         fileSize: '0.6G',
         repos: [],
-        files: [{ repoName: 'Qwen3/Qwen3-Embedding-0.6B-GGUF', repoFile: 'Qwen3-Embedding-0.6B-Q8_0.gguf' }],
+        files: [{ repoName: 'Qwen3/Qwen3-0.6B-GGUF', repoFile: 'Qwen3-0.6B-Q8_0.gguf' }],
       },
     ],
     categories: ['text-to-text'],
@@ -532,7 +532,7 @@ export const modelProviders: ModelProvider[] = [
     supportMoQE: false,
     adapter: undefined,
     chatTemplate: undefined,
-    summary: 'Qwen3/Qwen3-Embedding-0.6B-GGUF summary',
-    description: 'Qwen3/Qwen3-Embedding-0.6B-GGUF details',
+    summary: 'Qwen3/Qwen3-0.6B-GGUF summary',
+    description: 'Qwen3/Qwen3-0.6B-GGUF details',
   },
 ]

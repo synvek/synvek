@@ -22,7 +22,7 @@ pub static TASKS_FILE: &str = "tasks.json";
 pub static WORKERS_FILE: &str = "workers.json";
 
 pub static CONFIG_CACHE_PATH: &str = "cache_path";
-pub static CONFIG_ENDPOINT: &str = "end_point";
+pub static CONFIG_ENDPOINT: &str = "endpoint";
 
 pub static CONFIG_HOST: &str = "host";
 

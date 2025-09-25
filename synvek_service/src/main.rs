@@ -1,14 +1,5 @@
-use std::{env, thread};
-use std::ffi::OsString;
 use std::fmt::Debug;
-use std::fs::File;
-use std::sync::Arc;
-use std::sync::atomic::AtomicBool;
-use chrono::Local;
 use clap::Parser;
-use tokio::time::{sleep, Duration};
-use time::macros::format_description;
-use tokio::runtime;
 
 mod api;
 mod command;
