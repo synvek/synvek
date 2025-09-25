@@ -40,20 +40,19 @@ Synvek is built on Rust & Deno & Tauri & Mistral.rs/Candel. It can run & caht wi
 
 ## Buld & Run
 
-
 ### Prepare environment
 
 - Windows
 
-    Rust， Visual Studio 2022, Cuda & Cudnn toolkit
+    Node 20.x, Deno, Rust， Visual Studio 2022, Cuda & Cudnn toolkit
 
 - Linux
     
-    Rust
+    Node 20.x, Deno, Rust
 
 - Macos
 
-    Rust
+    Node 20.x, Deno, Rust
 
 ### Download
 
@@ -64,23 +63,35 @@ git clone https://github.com/synvek/hf-hub.git
 
 git submodule isn't supported yet.
 
-### Buld frontend module: synvek_web
+### Prepare output folder
 
-### Build agent module: synvek_agent
+- mkdir folder under root folder %SYNVEK_DIR%. 
+- copy agent_plugins. config, service_plugins and storage under %SYNVEK_DIR/synvek_service to output folder
+- create empty folder: models under output. It will be default model files.
+- Output folder is working foder for synvek_agent, synvek_service and synvek_explorer.
+### Buld & run frontend module: synvek_web
 
-### Build service module: synvek_service
+- Setup: npm run install
+- Local run: npm run start
+- Build: npm run desktop:build
 
-### Build tauri module: synvek_explorer
+### Build & run agent module: synvek_agent
 
-deno build
-cargo build 
-mistral.rs build
-cargo build --features  "cuda cudnn flash-attn"
-cargo build --release --features  "cuda cudnn"
-cargo build --features  "cuda cudnn"
+- Setup: deno install --allow-scripts=npm:ssh2@1.16.0,npm:cpu-features@0.0.10
+- Local run: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/index.ts
+- Build: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
+- Debug & Run requires output as working folder.
 
-### Run 
+### Build & run service module: synvek_service
 
-Create output folder under root,  copy build artifacts and run following command
+- Local run: cargo run --package synvek_service --features "cuda cudnn" --bin synvek_service -- serve
+- Debug & Run requires output as working folder.
+
+### Build & run tauri module: synvek_explorer
+
+synvek_explorer will static link to synvek_service into single application and so build of synvek_service is not necessary for release build. It is useful for develop & debug.
+- Local run with GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
+- Local run with CPU: cargo run --package synvek_explorer --bin synvek_explorer
+- Debug & Run requires output as working folder.
 
 ## Support & Feedback
