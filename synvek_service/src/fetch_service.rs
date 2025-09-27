@@ -1,4 +1,6 @@
-use crate::{CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, common, fetch_helper};
+use crate::{
+    CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, common, fetch_helper, file_service,
+};
 use anyhow::{Error, Result, anyhow};
 use hf_hub::api::Progress;
 use hf_hub::api::sync::Metadata;
@@ -34,8 +36,8 @@ pub struct TaskItem {
     pub file_name: String,
     pub revision: String,
     pub access_token: Option<String>,
-    pub file_size: Option<u64>,
-    pub commit_hash: Option<String>,
+    pub file_size: u64,
+    pub commit_hash: String,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -116,8 +118,9 @@ pub struct CacheRepoFile {
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
+    pub commit_hash: String,
     pub downloaded: bool,
-    pub file_size: Option<u64>,
+    pub file_size: u64,
     pub access_token: Option<String>,
     pub update_time: u64,
 }
@@ -327,6 +330,14 @@ fn find_endpoint(repo_name: String, tasks: &Tasks) -> Option<String> {
     None
 }
 
+pub fn build_cache_repo_file_key(
+    repo_name: String,
+    file_name: String,
+    commit_hash: String,
+) -> String {
+    repo_name + ":" + file_name.as_str() + ":" + commit_hash.as_str()
+}
+
 fn populate_cache_repo_files() {
     thread::spawn(move || {
         loop {
@@ -347,24 +358,22 @@ fn populate_cache_repo_files() {
                     revision.clone(),
                     endpoint,
                     access_token,
-                    false,
                 );
                 //tracing::info!("Cache repo files checking: {:?}", repo_data);
                 repo_data.iter().for_each(|repo_file_data| {
-                    let cache_key =
-                        repo_file_data.repo_name.clone() + repo_file_data.file_name.as_str();
-                    let file_size = get_task_file_size(
-                        &tasks,
-                        repo_file_data.repo_name.clone(),
+                    let cache_key = build_cache_repo_file_key(
+                        repo_name.to_string(),
                         repo_file_data.file_name.clone(),
+                        repo_file_data.commit_hash.clone(),
                     );
                     let cache_repo_file = CacheRepoFile {
                         cache_key,
                         repo_name: repo_name.clone(),
                         file_name: repo_file_data.file_name.clone(),
                         revision: revision.clone(),
+                        commit_hash: repo_file_data.commit_hash.clone(),
                         downloaded: repo_file_data.downloaded,
-                        file_size,
+                        file_size: repo_file_data.file_size,
                         access_token: None,
                         update_time,
                     };
@@ -447,15 +456,25 @@ pub fn start_fetch_repo(
         };
         task.fetch_repos.push(fetch_repo);
         file_names.iter().for_each(|file_name| {
-            let task_item = TaskItem {
-                repo_name: repo_name.clone(),
-                file_name: file_name.rfilename.clone(),
-                revision: revision.clone(),
-                access_token: access_token.clone(),
-                file_size: None,
-                commit_hash: Some(commit_hash.clone()),
-            };
-            task.task_items.push(task_item);
+            let repo_file_info =
+                file_service::get_repo_file_info(&*repo_name, &*file_name.rfilename, &*commit_hash);
+            if let Some(repo_file_info) = repo_file_info {
+                let task_item = TaskItem {
+                    repo_name: repo_name.clone(),
+                    file_name: file_name.rfilename.clone(),
+                    revision: revision.clone(),
+                    access_token: access_token.clone(),
+                    file_size: repo_file_info.file_size,
+                    commit_hash: commit_hash.clone(),
+                };
+                task.task_items.push(task_item);
+            } else {
+                tracing::error!(
+                    "repo file not found on repo:{}, file name: {}",
+                    repo_name.clone(),
+                    file_name.rfilename.clone().to_string()
+                );
+            }
         });
         return start_task(task, true);
     }
@@ -505,16 +524,26 @@ pub fn start_fetch_repo_file(
             access_token: access_token.clone(),
         };
         task.fetch_files.push(fetch_file);
-        let task_item = TaskItem {
-            repo_name: repo_name.clone(),
-            file_name: file_name.clone(),
-            revision: revision.clone(),
-            access_token: access_token.clone(),
-            file_size: None,
-            commit_hash: None,
-        };
-        task.task_items.push(task_item);
-        start_task(task, true)
+        let repo_file_info =
+            file_service::search_repo_file_info(&*repo_name.clone(), &*file_name.to_string());
+        if let Some(repo_file_info) = repo_file_info {
+            let task_item = TaskItem {
+                repo_name: repo_name.clone(),
+                file_name: file_name.clone(),
+                revision: revision.clone(),
+                access_token: access_token.clone(),
+                file_size: repo_file_info.file_size,
+                commit_hash: repo_file_info.commit_hash,
+            };
+            task.task_items.push(task_item);
+            start_task(task, true)
+        } else {
+            Err(anyhow::anyhow!(
+                "repo file not found on repo:{}, file name: {}",
+                repo_name.clone(),
+                file_name.to_string()
+            ))
+        }
     }
 }
 
@@ -527,8 +556,8 @@ fn update_task_file_meta(
 ) {
     task.task_items.iter_mut().for_each(|task_item| {
         if task_item.repo_name == repo_name && task_item.file_name == file_name {
-            task_item.file_size = Some(file_size);
-            task_item.commit_hash = Some(commit_hash.clone());
+            task_item.file_size = file_size;
+            task_item.commit_hash = commit_hash.clone();
         }
     })
 }
@@ -538,7 +567,7 @@ fn get_task_file_size(tasks: &Tasks, repo_name: String, file_name: String) -> Op
     tasks.tasks.iter().for_each(|task| {
         task.task_items.iter().for_each(|task_item| {
             if task_item.repo_name == repo_name && task_item.file_name == file_name {
-                result = task_item.file_size
+                result = Some(task_item.file_size)
             }
         });
     });
@@ -567,7 +596,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
             let file_size = fetch_helper::get_file_size_in_cache(
                 item.repo_name.clone(),
                 item.file_name.clone(),
-                item.revision.clone(),
+                item.commit_hash.clone(),
                 task.mirror.clone(),
                 item.access_token.clone(),
             );
@@ -577,7 +606,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                 revision: item.revision.clone(),
                 access_token: item.access_token.clone(),
                 file_size,
-                commit_hash: if item.commit_hash.is_some() { item.commit_hash.clone().unwrap()} else { "".to_string() },
+                commit_hash: item.commit_hash.clone(),
             };
             current_task.finished_task_items.push(finished_task_item);
             update_task_file_meta(
@@ -585,10 +614,10 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 file_size,
-                if item.commit_hash.is_some() { item.commit_hash.clone().unwrap()} else { "".to_string() }
+                item.commit_hash.clone(),
             );
         } else if require_remote_meta {
-            let file_meta = fetch_helper::get_file_meta_remote(
+            let file_meta = fetch_helper::get_file_meta_local(
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 item.revision.clone(),
@@ -623,65 +652,28 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                 //TODO: Some files are not detected by remote metadata and they need to be marked as bad files
             }
         } else {
-            if item.commit_hash.is_some() && item.file_size.is_some() {
-                let running_task_item = RunningTaskItem {
-                    repo_name: item.repo_name.clone(),
-                    file_name: item.file_name.clone(),
-                    revision: item.revision.clone(),
-                    access_token: item.access_token.clone(),
-                    downloaded: false,
-                    downloading: false,
-                    total_size: item.file_size.unwrap(),
-                    commit_hash: item.commit_hash.clone().unwrap(),
-                    downloaded_size: 0,
-                    speed: 0,
-                    error: None,
-                    retry_count: 0,
-                };
-                current_task.running_task_items.push(running_task_item);
-                update_task_file_meta(
-                    &mut updated_task,
-                    item.repo_name.clone(),
-                    item.file_name.clone(),
-                    item.file_size.unwrap(),
-                    item.commit_hash.clone().unwrap()
-                );
-            } else {
-                let file_meta = fetch_helper::get_file_meta_remote(
-                    item.repo_name.clone(),
-                    item.file_name.clone(),
-                    item.revision.clone(),
-                    task.mirror.clone(),
-                    item.access_token.clone(),
-                );
-                if file_meta.is_some() {
-                    let file_meta = file_meta.unwrap();
-                    let running_task_item = RunningTaskItem {
-                        repo_name: item.repo_name.clone(),
-                        file_name: item.file_name.clone(),
-                        revision: item.revision.clone(),
-                        access_token: item.access_token.clone(),
-                        downloaded: false,
-                        downloading: false,
-                        total_size: file_meta.size as u64,
-                        commit_hash: file_meta.commit_hash.clone(),
-                        downloaded_size: 0,
-                        speed: 0,
-                        error: None,
-                        retry_count: 0,
-                    };
-                    current_task.running_task_items.push(running_task_item);
-                    update_task_file_meta(
-                        &mut updated_task,
-                        item.repo_name.clone(),
-                        item.file_name.clone(),
-                        file_meta.size as u64,
-                        file_meta.commit_hash.clone(),
-                    );
-                } else {
-                    //TODO: Some files are not detected by remote metadata and they need to be marked as bad files
-                }
-            }
+            let running_task_item = RunningTaskItem {
+                repo_name: item.repo_name.clone(),
+                file_name: item.file_name.clone(),
+                revision: item.revision.clone(),
+                access_token: item.access_token.clone(),
+                downloaded: false,
+                downloading: false,
+                total_size: item.file_size,
+                commit_hash: item.commit_hash.clone(),
+                downloaded_size: 0,
+                speed: 0,
+                error: None,
+                retry_count: 0,
+            };
+            current_task.running_task_items.push(running_task_item);
+            update_task_file_meta(
+                &mut updated_task,
+                item.repo_name.clone(),
+                item.file_name.clone(),
+                item.file_size,
+                item.commit_hash.clone(),
+            );
         }
     });
     update_local_tasks(updated_task.clone());

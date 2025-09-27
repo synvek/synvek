@@ -15,10 +15,7 @@ use crate::api::start_server;
 use crate::command::{Cli, CommandHandler, Commands, ServeArgs};
 use crate::model_service::ModelServiceArgs;
 use crate::script_service::ScriptInfo;
-use crate::{
-    api, config, fetch_service, model_service, process_service, script_service, synvek,
-    worker_service,
-};
+use crate::{api, config, fetch_service, file_service, model_service, process_service, script_service, synvek, worker_service};
 use tracing::level_filters::LevelFilter;
 use tracing_appender::rolling::Rotation;
 use tracing_appender::{

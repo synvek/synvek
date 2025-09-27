@@ -1,7 +1,8 @@
 use crate::fetch_api::ListFetchData;
+use crate::file_service;
 use anyhow::anyhow;
 use hf_hub::api::sync::{Api, ApiBuilder, ApiError, ApiRepo, Metadata};
-use hf_hub::api::{Progress, RepoInfo};
+use hf_hub::api::{Progress, RepoInfo, Siblings};
 use hf_hub::{Cache, Repo, RepoType};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -78,7 +79,7 @@ pub fn exists_in_cache(repo_name: String, file_name: String, revision: String) -
     let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision.clone());
     let cache_repo = cache.repo(repo.clone());
     let file_path = cache_repo.get(file_name.as_str());
-    //tracing::info!("Checking file in path: {:?}", file_path);
+    tracing::info!("Checking file in path:  {:?}", file_path);
     file_path.is_some()
 }
 
@@ -135,78 +136,86 @@ pub fn get_repo_files_in_cache(
     revision: String,
     endpoint: Option<String>,
     access_token: Option<String>,
-    require_remote_file_size: bool,
 ) -> Vec<ListFetchData> {
     let config = crate::config::Config::new();
     let path = std::path::PathBuf::from(config.get_model_dir());
     let commit_hash = get_revision_or_commit_hash_in_cache(repo_name.clone(), revision.clone());
     //tracing::info!("Check repo in cache: {:?}, {:?}, {:?}",repo_name.clone(), path.clone(), commit_hash);
     //Repo info require revision(main), instead of commit hash
-    let repo_info_result = get_repo_info(
-        repo_name.clone(),
-        revision.clone(),
-        endpoint.clone(),
-        None,
-    );
+    let repo_info_result =
+        get_repo_info(repo_name.clone(), revision.clone(), endpoint.clone(), None);
     let mut data: Vec<ListFetchData> = vec![];
     if let Ok(repo_info) = repo_info_result {
         let report_files = repo_info.siblings;
         report_files.into_iter().for_each(|report_file| {
             let file_name = report_file.rfilename;
             let exists = exists_in_cache(repo_name.clone(), file_name.clone(), revision.clone());
-            let mut file_size = 0u64;
-            if exists {
-                file_size = get_file_size_in_cache(
-                    repo_name.clone(),
-                    file_name.clone(),
-                    revision.clone(),
-                    endpoint.clone(),
-                    access_token.clone(),
-                );
+            let file_size = get_file_size_in_cache(
+                repo_name.clone(),
+                file_name.clone(),
+                revision.clone(),
+                endpoint.clone(),
+                access_token.clone(),
+            );
+            let repo_file_info = file_service::search_repo_file_info(&*repo_name, &*file_name);
+            // let mut file_size = 0u64;
+            // if exists {
+            //     file_size = get_file_size_in_cache(
+            //         repo_name.clone(),
+            //         file_name.clone(),
+            //         revision.clone(),
+            //         endpoint.clone(),
+            //         access_token.clone(),
+            //     );
+            // } else {
+            //     let mut api_builder = ApiBuilder::new()
+            //         .with_cache_dir(path.clone())
+            //         .with_token(access_token.clone());
+            //     if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
+            //         api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
+            //     }
+            //     let api = api_builder.build();
+            //     if api.is_ok() {
+            //         let api = api.as_ref().unwrap().clone();
+            //         let repo = api.repo(Repo::with_revision(
+            //             repo_name.clone(),
+            //             RepoType::Model,
+            //             revision.clone(),
+            //         ));
+            //         let url = repo.url(file_name.clone().as_str());
+            //         let metadata = api.metadata(url.as_str());
+            //         if metadata.is_ok() {
+            //             file_size = metadata.unwrap().size as u64
+            //         } else {
+            //             tracing::error!(
+            //                 "Error on check file size on repo: {}, file: {}  with error: {}",
+            //                 repo_name.clone(),
+            //                 file_name.clone(),
+            //                 metadata.unwrap_err()
+            //             );
+            //         }
+            //     } else {
+            //         tracing::error!(
+            //             "Error on check file size on repo: {}, file: {}  with error: {}",
+            //             repo_name.clone(),
+            //             file_name.clone(),
+            //             api.unwrap_err()
+            //         );
+            //     }
+            // }
+            if let Some(repo_file_info) = repo_file_info {
+                let list_fetch_data = ListFetchData {
+                    repo_name: repo_name.clone(),
+                    file_name: file_name.clone(),
+                    revision: revision.clone(),
+                    commit_hash: repo_file_info.commit_hash,
+                    downloaded: exists,
+                    file_size,
+                };
+                data.push(list_fetch_data);
+            } else {
+                tracing::error!("Repo file info not found on repo: {} and file: {}", repo_name, file_name);
             }
-            if !exists && require_remote_file_size {
-                let mut api_builder = ApiBuilder::new()
-                    .with_cache_dir(path.clone())
-                    .with_token(access_token.clone());
-                if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
-                    api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
-                }
-                let api = api_builder.build();
-                if api.is_ok() {
-                    let api = api.as_ref().unwrap().clone();
-                    let repo = api.repo(Repo::with_revision(
-                        repo_name.clone(),
-                        RepoType::Model,
-                        revision.clone(),
-                    ));
-                    let url = repo.url(file_name.clone().as_str());
-                    let metadata = api.metadata(url.as_str());
-                    if metadata.is_ok() {
-                        file_size = metadata.unwrap().size as u64
-                    } else {
-                        tracing::error!(
-                            "Error on check file size on repo: {}, file: {}  with error: {}",
-                            repo_name.clone(),
-                            file_name.clone(),
-                            metadata.unwrap_err()
-                        );
-                    }
-                } else {
-                    tracing::error!(
-                        "Error on check file size on repo: {}, file: {}  with error: {}",
-                        repo_name.clone(),
-                        file_name.clone(),
-                        api.unwrap_err()
-                    );
-                }
-            }
-            let list_fetch_data = ListFetchData {
-                repo_name: repo_name.clone(),
-                file_name: file_name.clone(),
-                downloaded: exists,
-                file_size: Option::from(file_size),
-            };
-            data.push(list_fetch_data);
         })
     }
     data
@@ -215,60 +224,109 @@ pub fn get_repo_files_in_cache(
 pub fn get_file_size_in_cache(
     repo_name: String,
     file_name: String,
-    revision: String,
+    commit_hash: String,
     endpoint: Option<String>,
     access_token: Option<String>,
 ) -> u64 {
-    let config = crate::config::Config::new();
-    let path = std::path::PathBuf::from(config.get_model_dir());
-    let cache = Cache::new(path.clone());
-    let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision.clone());
-    let file_path = cache.repo(repo).get(file_name.as_str());
-    if file_path.is_some() {
-        let metadata = fs::metadata(file_path.clone().unwrap());
-        return if metadata.is_ok() {
-            metadata.unwrap().len()
-        } else {
-            let mut api_builder = ApiBuilder::new()
-                .with_cache_dir(path)
-                .with_token(access_token);
-            if endpoint.is_some()  && !endpoint.clone().unwrap().trim().is_empty() {
-                api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
-            }
-            let api = api_builder.build();
-            if api.is_ok() {
-                let api = api.unwrap();
-                let repo = api.repo(Repo::with_revision(
-                    repo_name.clone(),
-                    RepoType::Model,
-                    revision,
-                ));
-                let url = repo.url(file_name.as_str());
-                let metadata = api.metadata(url.as_str());
-                if metadata.is_ok() {
-                    metadata.unwrap().size as u64
-                } else {
-                    tracing::error!(
-                        "Error on check file size on {} with error: {}",
-                        file_path.clone().unwrap().display(),
-                        metadata.unwrap_err()
-                    );
-                    0
-                }
-            } else {
-                tracing::error!(
-                    "Error on check file size on {} with error: {}",
-                    file_path.clone().unwrap().display(),
-                    metadata.unwrap_err()
-                );
-                0
-            }
-        };
+    tracing::info!(
+        "Get repo file size in cache, repo={}, file_name={}, commit_hash={}",
+        repo_name.clone(),
+        file_name.clone(),
+        commit_hash.clone(),
+    );
+    let repo_file_info = file_service::get_repo_file_info(&repo_name, &file_name, &commit_hash);
+    if let Some(repo_file_info) = repo_file_info {
+        repo_file_info.file_size
+    } else {
+        tracing::error!(
+            "Error on check file size on repo={}, file_name={}, commit_hash={}",
+            repo_name.clone(),
+            file_name.clone(),
+            commit_hash.clone(),
+        );
+        0
     }
-    0
+    // let config = crate::config::Config::new();
+    // let path = std::path::PathBuf::from(config.get_model_dir());
+    // let cache = Cache::new(path.clone());
+    // let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision.clone());
+    // let file_path = cache.repo(repo).get(file_name.as_str());
+    // if file_path.is_some() {
+    //     let metadata = fs::metadata(file_path.clone().unwrap());
+    //     return if metadata.is_ok() {
+    //         metadata.unwrap().len()
+    //     } else {
+    //         let mut api_builder = ApiBuilder::new()
+    //             .with_cache_dir(path)
+    //             .with_token(access_token);
+    //         if endpoint.is_some() && !endpoint.clone().unwrap().trim().is_empty() {
+    //             api_builder = api_builder.with_endpoint(endpoint.clone().unwrap());
+    //         }
+    //         let api = api_builder.build();
+    //         if api.is_ok() {
+    //             let api = api.unwrap();
+    //             let repo = api.repo(Repo::with_revision(
+    //                 repo_name.clone(),
+    //                 RepoType::Model,
+    //                 revision,
+    //             ));
+    //             let url = repo.url(file_name.as_str());
+    //             let metadata = api.metadata(url.as_str());
+    //             if metadata.is_ok() {
+    //                 metadata.unwrap().size as u64
+    //             } else {
+    //                 tracing::error!(
+    //                     "Error on check file size on {} with error: {}",
+    //                     file_path.clone().unwrap().display(),
+    //                     metadata.unwrap_err()
+    //                 );
+    //                 0
+    //             }
+    //         } else {
+    //             tracing::error!(
+    //                 "Error on check file size on {} with error: {}",
+    //                 file_path.clone().unwrap().display(),
+    //                 metadata.unwrap_err()
+    //             );
+    //             0
+    //         }
+    //     };
+    // }
+    // 0
 }
 
-pub fn get_file_meta_remote(
+pub fn get_file_meta_local(
+    repo_name: String,
+    file_name: String,
+    revision: String,
+    endpoint: Option<String>,
+    access_token: Option<String>,
+) -> Option<Metadata> {
+    tracing::info!(
+        "Get repo file meta remote, repo={}, file_name={}, revision={}",
+        repo_name.clone(),
+        file_name.clone(),
+        revision.clone(),
+    );
+    let repo_file_info = file_service::search_repo_file_info(&repo_name, &file_name);
+    if let Some(repo_file_info) = repo_file_info {
+        Some(Metadata {
+            commit_hash: repo_file_info.commit_hash,
+            etag: "".to_string(),
+            size: repo_file_info.file_size as usize,
+        })
+    } else {
+        tracing::error!(
+            "Error on check file  meta remote on repo={}, file_name={}, revision={}",
+            repo_name.clone(),
+            file_name.clone(),
+            revision.clone(),
+        );
+        None
+    }
+}
+
+pub fn get_file_meta_remote (
     repo_name: String,
     file_name: String,
     revision: String,
@@ -315,6 +373,7 @@ pub fn get_file_meta_remote(
         None
     }
 }
+
 pub fn down_model_file<P: Progress>(
     repo_name: String,
     file_name: String,
@@ -347,7 +406,32 @@ pub fn get_repo_info(
     endpoint: Option<String>,
     access_token: Option<String>,
 ) -> anyhow::Result<RepoInfo> {
-    //tracing::info!("Getting repo info on {}", repo_name);
+    tracing::info!("Getting repo info on {}", repo_name);
+    let repo_file_infos = file_service::get_repo_info(repo_name.as_str());
+    tracing::info!("Getting repo info with data size {}", repo_file_infos.len());
+    if !repo_file_infos.is_empty() {
+        let mut siblings: Vec<Siblings> = vec![];
+        let mut sha: String = "".to_string();
+        repo_file_infos.iter().for_each(|repo_file_info| {
+            let sibling = Siblings {
+                rfilename: repo_file_info.file_path.clone(),
+            };
+            siblings.push(sibling);
+            sha = repo_file_info.commit_hash.clone();
+        });
+        let repo_info = RepoInfo { siblings, sha };
+        Ok(repo_info)
+    } else {
+        Err(anyhow!("Failed to get repo info： {}", repo_name.clone()))
+    }
+}
+
+pub fn get_repo_info_remote(
+    repo_name: String,
+    revision: String,
+    endpoint: Option<String>,
+    access_token: Option<String>,
+) -> anyhow::Result<RepoInfo> {
     let config = crate::config::Config::new();
     let path = std::path::PathBuf::from(config.get_model_dir());
     let mut api_builder = ApiBuilder::new()

@@ -1,9 +1,9 @@
 use crate::common::ServiceRef;
 use crate::fetch_service::{FetchFile, FetchRepo};
 use crate::fetch_service::{RunningTask, Task, TaskItem};
-use crate::model_service;
 use crate::model_service::ModelServiceArgs;
 use crate::{fetch_helper, fetch_service};
+use crate::{file_service, model_service};
 use actix_web::middleware::Logger;
 use actix_web::web::Bytes;
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
@@ -61,9 +61,13 @@ pub struct ListFetchData {
 
     pub file_name: String,
 
+    pub revision: String,
+
+    pub commit_hash: String,
+
     pub downloaded: bool,
 
-    pub file_size: Option<u64>,
+    pub file_size: u64,
 }
 
 /// Response for Start Model Server
@@ -265,18 +269,30 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
             );
             if repo_info_result.is_ok() {
                 let repo_info = repo_info_result.unwrap();
+                let repo_name = fetch_repo.repo_name.clone();
                 let commit_hash = repo_info.sha;
                 let repo_files = repo_info.siblings;
                 repo_files.iter().for_each(|repo_file| {
-                    let task_item = TaskItem {
-                        repo_name: fetch_repo.repo_name.clone(),
-                        file_name: repo_file.clone().rfilename,
-                        revision: revision.clone(),
-                        access_token: fetch_repo.access_token.clone(),
-                        file_size: None,
-                        commit_hash: Some(commit_hash.clone()),
-                    };
-                    task.task_items.push(task_item);
+                    let file_name = repo_file.rfilename.clone();
+                    let repo_file_info =
+                        file_service::search_repo_file_info(&*repo_name, &*file_name);
+                    if let Some(repo_file_info) = repo_file_info {
+                        let task_item = TaskItem {
+                            repo_name: fetch_repo.repo_name.clone(),
+                            file_name: file_name.clone(),
+                            revision: revision.clone(),
+                            access_token: fetch_repo.access_token.clone(),
+                            file_size: repo_file_info.file_size,
+                            commit_hash: repo_file_info.commit_hash,
+                        };
+                        task.task_items.push(task_item);
+                    } else {
+                        success = false;
+                        message = format!(
+                            "repo file not found on repo:{}, file name: {}",
+                            repo_name, file_name
+                        );
+                    }
                 });
             } else {
                 success = false;
@@ -290,15 +306,28 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
             if fetch_file.revision.clone().is_some() {
                 revision = fetch_file.revision.clone().unwrap();
             }
-            let task_item = TaskItem {
-                repo_name: fetch_file.repo_name.clone(),
-                file_name: fetch_file.file_name.to_string(),
-                revision,
-                access_token: fetch_file.access_token.clone(),
-                file_size: None,
-                commit_hash: None,
-            };
-            task.task_items.push(task_item);
+            let repo_file_info = file_service::search_repo_file_info(
+                &*fetch_file.repo_name.clone(),
+                &*fetch_file.file_name.to_string(),
+            );
+            if let Some(repo_file_info) = repo_file_info {
+                let task_item = TaskItem {
+                    repo_name: fetch_file.repo_name.clone(),
+                    file_name: fetch_file.file_name.to_string(),
+                    revision,
+                    access_token: fetch_file.access_token.clone(),
+                    file_size: repo_file_info.file_size,
+                    commit_hash: repo_file_info.commit_hash,
+                };
+                task.task_items.push(task_item);
+            } else {
+                success = false;
+                message = format!(
+                    "repo file not found on repo:{}, file name: {}",
+                    fetch_file.repo_name.clone(),
+                    fetch_file.file_name.to_string()
+                );
+            }
         });
     }
     if success && task.task_items.len() == 0 {
@@ -402,50 +431,65 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
     let mut message: String = "".to_string();
     let mut data: Vec<ListFetchData> = vec![];
     let mut is_no_files = true;
+    let mut file_not_found = false;
     let cache_repo_data = fetch_service::get_cache_repo_files_map();
 
     //tracing::info!("Check cache repo files: {:?}", cache_repo_data);
     tracing::debug!("Check files...");
     if req.fetch_files.len() > 0 {
         is_no_files = false;
-        req.fetch_files.iter().for_each(|fetch_file| {
+        for fetch_file in req.fetch_files.iter() {
             let mut revision = "main".to_string();
             if fetch_file.revision.clone().is_some() {
                 revision = fetch_file.revision.clone().unwrap();
             }
-            let cache_key = fetch_file.repo_name.clone() + fetch_file.file_name.as_str();
-            let cache_file_data = cache_repo_data.get(&cache_key);
-            let exists = cache_file_data.is_some();
-            let mut file_size: Option<u64> = Option::None;
-            let mut downloaded: bool = false;
-            if cache_file_data.is_some() {
-                let cache_file_data = cache_file_data.unwrap();
-                file_size = cache_file_data.file_size;
-                downloaded = cache_file_data.downloaded;
+            let repo_file_info =
+                file_service::search_repo_file_info(&*fetch_file.repo_name, &*fetch_file.file_name);
+            if let Some(repo_file_info) = repo_file_info {
+                let cache_key = fetch_service::build_cache_repo_file_key(
+                    fetch_file.repo_name.clone(),
+                    fetch_file.file_name.clone(),
+                    repo_file_info.commit_hash.clone(),
+                );
+                let cache_file_data = cache_repo_data.get(&cache_key);
+                let commit_hash: String = repo_file_info.commit_hash;
+                let file_size = repo_file_info.file_size;
+                let mut downloaded: bool = false;
+                if let Some(cache_file_data) = cache_file_data {
+                    downloaded = cache_file_data.downloaded;
+                }
+                //tracing::info!("Checking file in cache: {}, {}, {:?}", exists, cache_key, file_size );
+                let list_fetch_data = ListFetchData {
+                    repo_name: fetch_file.repo_name.clone(),
+                    file_name: fetch_file.file_name.clone(),
+                    revision,
+                    commit_hash,
+                    downloaded,
+                    file_size,
+                };
+                data.push(list_fetch_data);
+            } else {
+                file_not_found = true;
+                message = format!(
+                    "Fetch item not found on repo: {}, file: {}",
+                    fetch_file.repo_name.clone(),
+                    fetch_file.file_name.clone()
+                );
+                break;
             }
-            //tracing::info!("Checking file in cache: {}, {}, {:?}", exists, cache_key, file_size );
-            let list_fetch_data = ListFetchData {
-                repo_name: fetch_file.repo_name.clone(),
-                file_name: fetch_file.file_name.clone(),
-                downloaded,
-                file_size,
-            };
-            data.push(list_fetch_data);
-        });
+        };
     }
     tracing::debug!("Check repos ...");
     if req.fetch_repos.len() > 0 {
         is_no_files = false;
         req.fetch_repos.iter().for_each(|fetch_repo| {
-            let mut revision = "main".to_string();
-            if fetch_repo.revision.clone().is_some() {
-                revision = fetch_repo.revision.clone().unwrap();
-            }
             cache_repo_data.values().for_each(|cache_repo_file| {
                 if cache_repo_file.repo_name == fetch_repo.repo_name {
                     let list_fetch_data = ListFetchData {
                         repo_name: cache_repo_file.repo_name.clone(),
                         file_name: cache_repo_file.file_name.clone(),
+                        revision: cache_repo_file.revision.clone(),
+                        commit_hash: cache_repo_file.commit_hash.clone(),
                         downloaded: cache_repo_file.downloaded,
                         file_size: cache_repo_file.file_size,
                     };
@@ -455,7 +499,9 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
         });
     }
     tracing::debug!("Check finished for files & repos ...");
-    if is_no_files {
+    if file_not_found {
+        success = false;
+    } else if is_no_files {
         success = false;
         message = "No fetch item found".to_string();
     }

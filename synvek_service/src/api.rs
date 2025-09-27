@@ -1,5 +1,5 @@
 use crate::common::ServiceRef;
-use crate::fetch_service;
+use crate::{fetch_service, file_service};
 use crate::fetch_service::{RunningTask, Task, TaskItem};
 use crate::model_service;
 use crate::model_service::ModelServiceArgs;
@@ -71,6 +71,8 @@ pub async fn start_server() -> std::io::Result<()> {
 
     // Initialize fetch service
     fetch_service::initialize();
+    // Initialize file Server
+    file_service::init_file_service();
     // Start web server
     HttpServer::new(|| {
         let cors = Cors::default()

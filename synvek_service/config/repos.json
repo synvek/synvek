@@ -1,0 +1,488 @@
+[
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-1.7B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-4B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-8B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-32B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-2-2b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-2-9b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-2-27b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Llama-3.2-1B-Instruct-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Llama-3.2-3B-Instruct-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Llama-3.1-8B-Instruct-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Phi-3.5-vision-instruct-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Llama-4-Scout-17B-16E-Instruct-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3-1b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3-4b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3-12b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3-27b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-0.6B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-14B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-1.7B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-32B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-4B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-8B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3n-E2B-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3n-E4B-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen2-VL-2B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },{
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3-27b-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-0.6B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-14B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-1.7B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-32B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-4B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/Qwen3-8B-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3n-E2B-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/gemma-3n-E4B-it-UQFF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen2-VL-2B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },   
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen2-VL-7B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-0.6B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-1.7B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-4B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-8B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-14B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Qwen/Qwen3-32B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "black-forest-labs/FLUX.1-schnell",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": ""
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/dac_44khz",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/t5_tokenizer",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "EricB/t5-v1_1-xxl-enc-only",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "microsoft/Phi-4-multimodal-instruct",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    }
+
+]

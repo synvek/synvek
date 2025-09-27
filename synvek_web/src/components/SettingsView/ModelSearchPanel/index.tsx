@@ -93,6 +93,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
       },
     )
     setModelFormWindowVisible(false)
+    currentWorkspace.triggerTasksChangeEvent()
   }
 
   const handleModelFormWindowCancel = () => {

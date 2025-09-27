@@ -1,4 +1,5 @@
 use crate::config::Config;
+use crate::fetch_service;
 use crate::script_service::ScriptInfo;
 use crate::{config, process_service, synvek};
 use async_trait::async_trait;
@@ -12,7 +13,6 @@ use std::sync::{Arc, Mutex, Once, OnceLock};
 use std::{env, thread};
 use tokio::runtime;
 use uuid::Uuid;
-use crate::fetch_service;
 
 #[derive(Debug, Clone, Default)]
 pub enum ModelSelected {
@@ -199,7 +199,7 @@ async fn start_model_server_in_process(
     if task.is_none() {
         return Err(anyhow::anyhow!("Task not found"));
     }
-    let private_model =  task.clone().unwrap().private_model;
+    let private_model = task.clone().unwrap().private_model;
     tracing::info!("Starting model server on port {}", port);
 
     let _ = thread::spawn(move || {
@@ -268,7 +268,10 @@ async fn start_model_server_in_process(
                     }
                 }
 
-                if !args.model_type.eq("diffusion") && !args.model_type.eq("speech") {
+                if !args.model_type.eq("diffusion")
+                    && !args.model_type.eq("speech")
+                    && !args.model_type.eq("gguf")
+                {
                     start_args.push(OsString::from("--hf-cache-path"));
                     start_args.push(OsString::from(model_dir));
                 }

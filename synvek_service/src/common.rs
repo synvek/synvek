@@ -17,6 +17,11 @@ pub static MODELS_DIR_NAME: &str = "models";
 
 pub static CONFIG_FILE: &str = "config.json";
 
+pub static REPO_INFO_FILE: &str = "repos.json";
+pub static REPO_FILES_INFO_FILE: &str = "repo_files.json";
+
+pub static REPO_FILES_INFO_FILE_SETUP: &str = "repo_files_setup.json";
+
 pub static TASKS_FILE: &str = "tasks.json";
 
 pub static WORKERS_FILE: &str = "workers.json";

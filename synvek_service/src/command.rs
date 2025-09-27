@@ -5,7 +5,7 @@ use std::{env, thread};
 use std::time::Duration;
 use anyhow::{Error, Result, anyhow};
 use tokio::time::sleep;
-use crate::fetch_service;
+use crate::{fetch_service, file_service};
 use crate::worker_service::WorkerArgs;
 use crate::model_service::ModelServiceArgs;
 use crate::worker_service::WorkerType;
@@ -42,8 +42,8 @@ pub enum Commands {
     /// Add models
     Add(AddArgs),
     
-    /// Remove models
-    Remove(RemoveArgs),
+    /// Setup
+    Setup(SetupArgs),
     
     /// View models
     Info(InfoArgs),
@@ -153,11 +153,10 @@ pub struct AddArgs {
     pub version: String,
 }
 
-/// 移除模型参数
 #[derive(Parser)]
-pub struct RemoveArgs {
+pub struct SetupArgs {
     /// 模型名称
-    #[arg(long)]
+    #[arg(long, default_value = "none")]
     pub name: String,
 }
 
@@ -202,7 +201,7 @@ impl CommandHandler {
             Commands::Stop => self.handle_stop().await,
             Commands::List(args) => self.handle_list(args).await,
             Commands::Add(args) => self.handle_add(args).await,
-            Commands::Remove(args) => self.handle_remove(args).await,
+            Commands::Setup(args) => self.handle_setup(args).await,
             Commands::Info(args) => self.handle_info(args).await,
             Commands::Test(args) => self.handle_test(args).await,
         }
@@ -291,10 +290,8 @@ impl CommandHandler {
         Ok(())
     }
     
-    /// 处理移除模型命令
-    async fn handle_remove(&self, args: RemoveArgs) -> Result<()> {
-        println!("移除模型: {}", args.name);
-        // TODO: 实现移除模型逻辑
+    async fn handle_setup(&self, args: SetupArgs) -> Result<()> {
+        file_service::populate_repo_file_infos();
         Ok(())
     }
     
