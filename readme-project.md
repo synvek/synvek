@@ -10,7 +10,7 @@ Synvek is all-in-one tool to run & explore LLM  with text, image and voice local
 
 Synvek is built on Rust & Deno & Tauri & Mistral.rs/Candel. It can run & caht with  AI with single exectual application.
 
-### Mutliple model support. Chat completion, image generation or voice output in one application and one chat.
+### Mutliple models support. Chat completion, image generation or voice output in one application and one chat.
 
 ### Function call & MCP support
 

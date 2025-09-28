@@ -331,6 +331,10 @@ async fn start_model_server_in_process(
                     start_args.clone(),
                     notification.unwrap_err()
                 );
+                // Model server need to terminate in multi-process mode
+                if is_spawn_process {
+                    panic!("Model server exited to start {:?} ", start_args.clone(),);
+                }
             }
         });
     });

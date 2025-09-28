@@ -96,9 +96,9 @@ pub fn initialize_logging() {
         let file_appender = rolling::Builder::new()
             .rotation(Rotation::DAILY)
             .max_log_files(15)
-            .filename_prefix("synvek") // 文件名前缀
-            .filename_suffix("log") // 文件名后缀
-            .build("./logs") // 存储目录
+            .filename_prefix("synvek")
+            .filename_suffix("log")
+            .build("./logs")
             .expect("Failed to create file appender");
 
         let file_offset = time::UtcOffset::from_hms(8, 0, 0).unwrap();
@@ -107,49 +107,18 @@ pub fn initialize_logging() {
             format_description!("[year]-[month]-[day] [hour]:[minute]:[second]"),
         );
 
-        let (file_writer, _guard) = non_blocking(file_appender); // 非阻塞写入
+        let (file_writer, _guard) = non_blocking(file_appender);
         let file_layer = fmt::layer()
             .with_ansi(false)
-            .event_format(format().compact()) // 紧凑格式
+            .event_format(format().compact())
             .with_timer(file_timer)
-            .with_writer(file_writer.with_max_level(tracing::Level::INFO)); // 直接设置过滤级别
+            .with_writer(file_writer.with_max_level(tracing::Level::DEBUG));
 
         let subscriber = Registry::default().with(console_layer).with(file_layer);
 
         tracing::subscriber::set_global_default(subscriber).unwrap();
-        Box::leak(Box::new(_guard)); // 或存储到全局变量
+        Box::leak(Box::new(_guard));
     });
-}
-
-pub async fn start_model_engine() -> Result<(), anyhow::Error> {
-    // let args: Vec<OsString> = vec![
-    //     OsString::from("--port"),
-    //     OsString::from("1234"),
-    //     OsString::from("--isq"),
-    //     OsString::from("4"),
-    //     OsString::from("plain"),
-    //     OsString::from("-m"),
-    //     OsString::from("C:/source/works/huan/engine/models/Qwen/Qwen3-0.6B"),
-    // ];
-    // mistralrs_server::start(args).await
-    let model_args: ModelServiceArgs = ModelServiceArgs {
-        model_name: "".to_string(),
-        port: "1235".to_string(),
-        isq: Some("4".to_string()),
-        model_id: "".to_string(),
-        model_type: "plain".to_string(),
-        path: Some("C:/source/works/engine/models/Qwen/Qwen3-0.6B".to_string()),
-        token_source: None,
-        cpu: false,
-        offloaded: true,
-    };
-    model_service::start_model_server_from_command(
-        model_args,
-        "abc".to_string(),
-        "1235".to_string(),
-    )
-    .await?;
-    Ok(())
 }
 
 pub async fn start_service() -> Result<(), Box<dyn std::error::Error>> {

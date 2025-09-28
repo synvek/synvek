@@ -109,18 +109,18 @@ pub struct ExecArgs {
 
 }
 
-/// 服务启动参数
+/// Server
 #[derive(Parser)]
 pub struct ServeArgs {
-    /// 服务监听端口
+    /// Listen port
     #[arg(long, default_value_t = 8000)]
     pub port: u16,
     
-    /// 服务监听地址
+    /// Listen address
     #[arg(long, default_value = "127.0.0.1")]
     pub host: String,
     
-    /// 配置文件路径
+    /// Config path
     #[arg(long, default_value = "./config.toml")]
     pub config: PathBuf,
 }

@@ -316,7 +316,7 @@ impl Config {
         config.multi_process
     }
 }
-// 函数用于生成并保存 JSON Schema 文件
+
 pub fn generate_schema() -> Result<(), Box<dyn std::error::Error>> {
     let schema = schema_for!(SynvekConfig);
     let schema_str = serde_json::to_string_pretty(&schema)?;

@@ -377,7 +377,8 @@ fn populate_cache_repo_files() {
                         access_token: None,
                         update_time,
                     };
-                    data.push(cache_repo_file);
+                    data.push(cache_repo_file.clone());
+                    //tracing::info!("Cache repo files population: {:?}", cache_repo_file);
                 });
             });
             {
@@ -393,6 +394,34 @@ fn populate_cache_repo_files() {
             //TODO: Need to update immediately if new task added.
         }
     });
+}
+
+fn populate_cache_repo_file(
+    repo_name: String,
+    file_name: String,
+    revision: String,
+    commit_hash: String,
+    downloaded: bool,
+    file_size: u64,
+    access_token: Option<String>,
+    update_time: u64,
+) {
+    let map_ref = Arc::clone(CACHE_REPO_FILES.get().unwrap());
+    let mut map = map_ref.lock().unwrap();
+    let cache_key =
+        build_cache_repo_file_key(repo_name.clone(), file_name.clone(), commit_hash.clone());
+    let cache_repo_file = CacheRepoFile {
+        cache_key,
+        repo_name,
+        file_name,
+        revision,
+        commit_hash,
+        downloaded,
+        file_size,
+        access_token,
+        update_time,
+    };
+    map.insert(cache_repo_file.cache_key.clone(), cache_repo_file.clone());
 }
 
 pub fn get_running_task(task_name: String) -> Option<RunningTask> {
@@ -593,7 +622,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
             item.revision.clone(),
         );
         if exists {
-            let file_size = fetch_helper::get_file_size_in_cache(
+            let file_size = fetch_helper::get_file_size_in_registry(
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 item.commit_hash.clone(),
@@ -617,7 +646,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                 item.commit_hash.clone(),
             );
         } else if require_remote_meta {
-            let file_meta = fetch_helper::get_file_meta_local(
+            let file_meta = fetch_helper::get_file_meta_in_registry(
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 item.revision.clone(),
@@ -692,10 +721,11 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
         if current_task.running_task_items.len() > 0 {
             std::thread::spawn(move || {
                 tracing::info!("Thread started for task： {}", task.task_name);
+                let mut retry_index = 0;
                 while current_task.running_task_items.len() > 0
                     && has_running_task(current_task.task_name.clone())
                 {
-                    let first_running_task_item =
+                    let mut first_running_task_item =
                         current_task.running_task_items.first().unwrap().clone();
                     tracing::info!(
                         "Thread running for repo: {} with file name: {} ",
@@ -723,7 +753,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                         first_running_task_item.repo_name.clone(),
                         first_running_task_item.file_name.clone()
                     );
-                    let download_result = fetch_helper::down_model_file(
+                    let download_result = fetch_helper::download_model_file(
                         first_running_task_item.repo_name.clone(),
                         first_running_task_item.file_name.clone(),
                         first_running_task_item.revision.clone(),
@@ -740,7 +770,8 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                             first_running_task_item.file_name.clone(),
                             error.to_string()
                         );
-                        if first_running_task_item.retry_count < DOWNLOAD_RETRY_COUNT_LIMIT {
+                        if retry_index < DOWNLOAD_RETRY_COUNT_LIMIT {
+                            retry_index = retry_index + 1;
                             update_running_task_item(
                                 task.task_name.clone(),
                                 first_running_task_item.repo_name.clone(),
@@ -750,7 +781,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                                 0,
                                 0,
                                 Option::from(error.to_string()),
-                                first_running_task_item.retry_count + 1,
+                                retry_index,
                             );
                         } else {
                             tracing::error!(
@@ -761,6 +792,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                                 DOWNLOAD_RETRY_COUNT_LIMIT
                             );
                             current_task.running_task_items.remove(0);
+                            retry_index = 0;
                         }
                     } else {
                         tracing::info!(
@@ -779,6 +811,22 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                         };
                         update_finished_task_item(task.task_name.clone(), finished_task_item);
                         current_task.running_task_items.remove(0);
+                        retry_index = 0;
+                        // update model file info cache
+                        let update_time = SystemTime::now()
+                            .duration_since(SystemTime::UNIX_EPOCH)
+                            .unwrap()
+                            .as_secs();
+                        populate_cache_repo_file(
+                            first_running_task_item.repo_name.clone(),
+                            first_running_task_item.file_name.clone(),
+                            first_running_task_item.revision.clone(),
+                            first_running_task_item.commit_hash.clone(),
+                            true,
+                            first_running_task_item.total_size,
+                            first_running_task_item.access_token.clone(),
+                            update_time
+                        );
                     }
                 }
             });
