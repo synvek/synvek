@@ -75,6 +75,8 @@ export default {
   'header.navigator.no-default-image-generation-model-found': 'No image model',
   'header.navigator.no-default-text-model-found': 'No vision model',
   'header.navigator.no-default-vision-model-found': 'No text model',
+  'header.navigator.title.local-models': 'Local models',
+  'header.navigator.title.local-models-not-found': 'No local models detected',
   'image-generation-view.message-model-not-started': 'Model not started',
   'image-generation-view.message-no-default-model-found': 'Default model not found',
   'image-generation-view.message-user-prompt-is-required': 'User prompt is required.',
@@ -135,6 +137,8 @@ export default {
   'setting-view.local-models.downloaded-size': 'Downloaded Size',
   'setting-view.local-models.cpu': 'Use CPU',
   'setting-view.local-models.current-downloading-speed': 'Downloading Speed(/s)',
+  'setting-view.local-models.hint.gguf-model-auto-loaded':
+    'Hint: You can place the existing GGUF model file in the model folder, and the system will automatically recognize it',
   'setting-view.local-models.isq': 'ISQ',
   'setting-view.local-models.isq-disabled': 'Disabled',
   'setting-view.local-models.message-success-request-sent': 'Request has sent successfully',

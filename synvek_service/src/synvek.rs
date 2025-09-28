@@ -112,7 +112,7 @@ pub fn initialize_logging() {
             .with_ansi(false)
             .event_format(format().compact())
             .with_timer(file_timer)
-            .with_writer(file_writer.with_max_level(tracing::Level::DEBUG));
+            .with_writer(file_writer.with_max_level(tracing::Level::INFO));
 
         let subscriber = Registry::default().with(console_layer).with(file_layer);
 

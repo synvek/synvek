@@ -79,7 +79,7 @@ pub fn exists_in_cache(repo_name: String, file_name: String, revision: String) -
     let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision.clone());
     let cache_repo = cache.repo(repo.clone());
     let file_path = cache_repo.get(file_name.as_str());
-    tracing::debug!("Checking file in path:  {:?}", file_path);
+    tracing::info!("Checking file in path:  {:?}", file_path);
     file_path.is_some()
 }
 
@@ -421,9 +421,9 @@ pub fn get_repo_info(
     endpoint: Option<String>,
     access_token: Option<String>,
 ) -> anyhow::Result<RepoInfo> {
-    tracing::debug!("Getting repo info on {}", repo_name);
+    tracing::info!("Getting repo info on {}", repo_name);
     let repo_file_infos = file_service::get_repo_info(repo_name.as_str());
-    tracing::debug!("Getting repo info with data size {}", repo_file_infos.len());
+    tracing::info!("Getting repo info with data size {}", repo_file_infos.len());
     if !repo_file_infos.is_empty() {
         let mut siblings: Vec<Siblings> = vec![];
         let mut sha: String = "".to_string();

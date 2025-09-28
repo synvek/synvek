@@ -18,8 +18,11 @@ import {
 import { FetchFile, FetchRepo, StartModelServerRequest } from '@/components/Utils/src/RequestUtils'
 import { useIntl } from '@@/exports'
 import { AimOutlined, CaretDownOutlined, Loading3QuartersOutlined, ThunderboltFilled } from '@ant-design/icons'
+import { Typography } from 'antd'
+import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
+const { Text, Link } = Typography
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface HeaderNavigatorProps {}
 
@@ -594,8 +597,18 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       >
         <div style={{ width: '100%', display: 'flex', gap: '4px', flexDirection: 'column' }}>
           {publicTaskSections}
-          {privateTaskSections.length > 0 ? <Divider style={{ margin: '0 0' }}>Local models</Divider> : ''}
-          {privateTaskSections}
+          <Divider style={{ margin: '0 0' }}>
+            <FormattedMessage id={'header.navigator.title.local-models'} />
+          </Divider>
+          {privateTaskSections.length === 0 ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Text italic>
+                <FormattedMessage id={'header.navigator.title.local-models-not-found'} />
+              </Text>
+            </div>
+          ) : (
+            privateTaskSections
+          )}
         </div>
       </div>
     )

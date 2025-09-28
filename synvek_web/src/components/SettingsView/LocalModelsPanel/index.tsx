@@ -5,10 +5,11 @@ import TextEditWindow from '@/components/TextEditWindow'
 import { Consts, modelProviders, RequestUtils, SystemUtils, Task, UpdateFetchRequest, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { BulbFilled, DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Button, Card, Divider, message, Select, Space, Switch, theme, Tooltip } from 'antd'
+import { Button, Card, Divider, message, Select, Space, Switch, theme, Tooltip, Typography } from 'antd'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
+const { Text, Link } = Typography
 const { useToken } = theme
 
 interface LocalModelPanelProps {
@@ -519,7 +520,18 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
     <div className={styles.localModelPanel} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
       <Space direction={'vertical'} size={'large'} className={styles.localModelContent} style={{ backgroundColor: 'var(--setting-background-color)' }}>
-        {/*<div className={styles.localModelHeader} style={{ }}>*/}
+        {/*<div className={styles.localModelHint} style={{}}>*/}
+        {/*  <Text italic>*/}
+        {/*    <FormattedMessage id={'setting-view.local-models.hint.gguf-model-auto-loaded'} />*/}
+        {/*  </Text>*/}
+
+        {/*  /!*<Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.button-add.tooltip' })}>*!/*/}
+        {/*  /!*  <Button type={'primary'} onClick={handleAddRemoteModel}>*!/*/}
+        {/*  /!*    <FormattedMessage id={'setting-view.local-models.button-add'} />*!/*/}
+        {/*  /!*  </Button>*!/*/}
+        {/*  /!*</Tooltip>*!/*/}
+        {/*</div>*/}
+        {/*<div className={styles.localModelHeader} style={{}}>*/}
         {/*  <Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.button-add.tooltip' })}>*/}
         {/*    <Button type={'primary'} onClick={handleAddRemoteModel}>*/}
         {/*      <FormattedMessage id={'setting-view.local-models.button-add'} />*/}

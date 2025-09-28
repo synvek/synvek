@@ -1,5 +1,5 @@
 use crate::common::ServiceRef;
-use crate::{fetch_service, file_service};
+use crate::{config, fetch_service, file_service};
 use crate::fetch_service::{RunningTask, Task, TaskItem};
 use crate::model_service;
 use crate::model_service::ModelServiceArgs;
@@ -65,8 +65,9 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
 
 /// Start Web Server
 pub async fn start_server() -> std::io::Result<()> {
-    let host = "0.0.0.0";
-    let port = 12001;
+    let config = config::get_synvek_config();
+    let host = config.host;
+    let port = config.port;
     tracing::info!("Starting Server on host:{} and port:{}", host, port);
 
     // Initialize fetch service
