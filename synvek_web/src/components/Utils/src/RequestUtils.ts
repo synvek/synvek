@@ -1,7 +1,12 @@
 import { ChatContent } from '@/components/Utils'
+import { invoke } from '@tauri-apps/api/core'
 import axios from 'axios'
 import { ReactNode } from 'react'
 
+interface ServerConfig {
+  backend_port: number
+  agent_port: number
+}
 /**
  * 定义一些Web方法和状态信息
  */
@@ -201,6 +206,7 @@ export interface ModelInfos {
 }
 
 export interface Settings {
+  agentPort: number
   language: string
   defaultTextModel?: string
   defaultVisionModel?: string
@@ -504,33 +510,50 @@ export class RequestUtils {
   private static agentServer_: string = ''
   private static backendServer_: string = ''
 
-  public static get agentServerAddress(): string {
-    if (RequestUtils.agentServer_.length < 1) {
-      const protocol = window.location.protocol
-      const hostname = window.location.hostname
-      const port = window.location.port
+  public static agentPort = process.env.AGENT_WEB_PORT
+  public static backendPort = process.env.BACKEND_WEB_PORT
+  public static tauriInvoked: boolean = false
 
-      const WEB_HTTP = process.env.AGENT_WEB_HTTP ? process.env.AGENT_WEB_HTTP : protocol + '//'
-      const WEB_SERVER = process.env.AGENT_WEB_SERVER ? process.env.AGENT_WEB_SERVER : hostname
-      const WEB_PORT = process.env.AGENT_WEB_PORT ? ':' + process.env.AGENT_WEB_PORT : ':' + port
-      const WEB_PATH = process.env.AGENT_WEB_PATH
-      RequestUtils.agentServer_ = WEB_HTTP + WEB_SERVER + WEB_PORT + WEB_PATH
+  public static async invokeTauri() {
+    if (!RequestUtils.tauriInvoked) {
+      RequestUtils.tauriInvoked = true
+      // Invoke tauri to retrieve config info
+      try {
+        const value = await invoke('get_server_config')
+        console.log(`Tauri config retrieved: ${value}`)
+        const serverConfig = value as ServerConfig
+        if (serverConfig.agent_port) {
+          RequestUtils.agentPort = '' + serverConfig.agent_port
+        }
+        if (serverConfig.backend_port) {
+          RequestUtils.backendPort = '' + serverConfig?.backend_port
+        }
+      } catch (reason) {
+        console.log(`Tauri config error retrieved: ${reason}`)
+      }
     }
+  }
+  public static get agentServerAddress(): string {
+    const protocol = window.location.protocol
+    const hostname = window.location.hostname
+
+    const WEB_HTTP = process.env.AGENT_WEB_HTTP ? process.env.AGENT_WEB_HTTP : protocol + '//'
+    const WEB_SERVER = process.env.AGENT_WEB_SERVER ? process.env.AGENT_WEB_SERVER : hostname
+    const WEB_PORT = ':' + RequestUtils.agentPort
+    const WEB_PATH = process.env.AGENT_WEB_PATH
+    RequestUtils.agentServer_ = WEB_HTTP + WEB_SERVER + WEB_PORT + WEB_PATH
     return RequestUtils.agentServer_
   }
 
   public static get backendServerAddress(): string {
-    if (RequestUtils.backendServer_.length < 1) {
-      const protocol = window.location.protocol
-      const hostname = window.location.hostname
-      const port = window.location.port
+    const protocol = window.location.protocol
+    const hostname = window.location.hostname
 
-      const WEB_HTTP = process.env.BACKEND_WEB_HTTP ? process.env.BACKEND_WEB_HTTP : protocol + '//'
-      const WEB_SERVER = process.env.BACKEND_WEB_SERVER ? process.env.BACKEND_WEB_SERVER : hostname
-      const WEB_PORT = process.env.BACKEND_WEB_PORT ? ':' + process.env.BACKEND_WEB_PORT : ':' + port
-      const WEB_PATH = process.env.BACKEND_WEB_PATH
-      RequestUtils.backendServer_ = WEB_HTTP + WEB_SERVER + WEB_PORT + WEB_PATH
-    }
+    const WEB_HTTP = process.env.BACKEND_WEB_HTTP ? process.env.BACKEND_WEB_HTTP : protocol + '//'
+    const WEB_SERVER = process.env.BACKEND_WEB_SERVER ? process.env.BACKEND_WEB_SERVER : hostname
+    const WEB_PORT = ':' + RequestUtils.backendPort
+    const WEB_PATH = process.env.BACKEND_WEB_PATH
+    RequestUtils.backendServer_ = WEB_HTTP + WEB_SERVER + WEB_PORT + WEB_PATH
     return RequestUtils.backendServer_
   }
 
@@ -759,6 +782,7 @@ export class RequestUtils {
 
   public static updateSettings(settings: Settings) {
     const data = {
+      agentPort: settings.agentPort,
       language: settings.language,
       defaultTextModel: settings.defaultTextModel,
       defaultVisionModel: settings.defaultVisionModel,

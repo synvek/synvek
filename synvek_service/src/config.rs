@@ -16,6 +16,10 @@ pub struct SynvekConfig {
     #[serde(default = "default_port")]
     pub port: u16,
 
+    #[schemars(description = "Synvek agent port")]
+    #[serde(default = "default_agent_port")]
+    pub agent_port: u16,
+
     #[schemars(description = "First model server port number, followings will increase by 1")]
     #[serde(default = "default_model_port")]
     pub model_port: u16,
@@ -42,6 +46,11 @@ fn default_port() -> u16 {
 fn default_model_port() -> u16 {
     12002
 }
+
+fn default_agent_port() -> u16 {
+    12000
+}
+
 fn default_host() -> String {
     "0.0.0.0".to_string()
 }
@@ -57,6 +66,7 @@ impl Default for SynvekConfig {
     fn default() -> Self {
         Self {
             port: default_port(),
+            agent_port: default_agent_port(),
             model_port: default_model_port(),
             host: default_host(),
             endpoint: default_endpoint(),
@@ -98,6 +108,7 @@ fn update_synvek_config(synvek_config: SynvekConfig) {
     let mut config = config_ref.lock().unwrap();
     config.port = synvek_config.port;
     config.model_port = synvek_config.model_port;
+    config.agent_port = synvek_config.agent_port;
     config.host = synvek_config.host;
     config.endpoint = synvek_config.endpoint;
     config.multi_process = synvek_config.multi_process;
@@ -176,6 +187,7 @@ impl Config {
     fn get_default_config() -> SynvekConfig {
         SynvekConfig {
             port: 12001,
+            agent_port: 12000,
             model_port: 12002,
             host: "0.0.0.0".to_string(),
             endpoint: "https://huggingface.co".to_string(),
@@ -235,6 +247,9 @@ impl Config {
         }
         if let Some(model_port) = new_config.get(common::CONFIG_MODEL_PORT) {
             config.model_port = model_port.as_u64().unwrap() as u16;
+        }
+        if let Some(agent_port) = new_config.get(common::CONFIG_AGENT_PORT) {
+            config.agent_port = agent_port.as_u64().unwrap() as u16;
         }
         if let Some(endpoint) = new_config.get(common::CONFIG_ENDPOINT) {
             config.endpoint = endpoint.as_str().unwrap().to_owned();
@@ -299,6 +314,11 @@ impl Config {
     pub fn get_config_model_port(&self) -> u16 {
         let config = get_synvek_config();
         config.model_port
+    }
+
+    pub fn get_config_agent_port(&self) -> u16 {
+        let config = get_synvek_config();
+        config.agent_port
     }
 
     pub fn get_config_port(&self) -> u16 {

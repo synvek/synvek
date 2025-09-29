@@ -1,4 +1,5 @@
 {
+  "agentPort": 12000,
   "language": "en-US",
   "modelDir": "./models",
   "backendServerProtocol": "http://",

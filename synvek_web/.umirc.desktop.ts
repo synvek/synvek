@@ -9,7 +9,7 @@ export default defineConfig({
       'process.env.PRODUCTION': 'false',
       'process.env.AGENT_WEB_HTTP': 'http://',
       'process.env.AGENT_WEB_SERVER': 'localhost',
-      'process.env.AGENT_WEB_PORT': '8082',
+      'process.env.AGENT_WEB_PORT': '12000',
       'process.env.AGENT_WEB_PATH': '',
       'process.env.BACKEND_WEB_HTTP': 'http://',
       'process.env.BACKEND_WEB_SERVER': 'localhost',

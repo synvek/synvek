@@ -13,11 +13,18 @@ import { mcpService } from './MCPService.ts'
 import { modelServerService } from './ModelServerService.ts'
 import { ModelService, modelService } from './ModelService.ts'
 import { pluginService, PluginService } from './PluginService.ts'
-import { systemService } from './SystemService.ts'
+import { SystemService, systemService } from './SystemService.ts'
+import { RequestUtils } from './Utils/RequestUtils.ts'
 
 ModelService.initialize()
 //Don't use await because it causes build failure
 PluginService.initialize().then().catch(console.error)
+const settings = SystemService.getSettings()
+if(settings.backendServerProtocol && settings.backendServerHost) {
+  RequestUtils.serverAddress = settings.backendServerProtocol + settings.backendServerHost + ':'
+    + settings.backendServerPort + '/api' + settings.backendServerPath
+  console.log("Backend Server is setup to: " + RequestUtils.serverAddress)
+}
 
 const app = new Elysia()
   // @ts-ignore
@@ -35,5 +42,6 @@ const app = new Elysia()
   .use(mcpService)
 //.listen(Constants.PORT)
 
-serve(app.handle, { port: Constants.PORT })
+
+serve(app.handle, { port: settings.agentPort })
 console.log(`🦊 Engine is running at ${app.server?.hostname}:${app.server?.port}`)

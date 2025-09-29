@@ -10,11 +10,29 @@ use tauri::path::BaseDirectory;
 
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::runtime::Runtime;
-use synvek_service::script_service;
+use synvek_service::{config, script_service};
 
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 const DETACHED_PROCESS: u32 = 0x00000008;
 const CREATE_NEW_PROCESS_GROUP: u32 = 0x00000200;
+
+
+#[derive(serde::Serialize)]
+struct ServerConfig {
+    backend_port: u16,
+    agent_port: u16,
+}
+
+
+#[tauri::command]
+async fn get_server_config() -> Result<ServerConfig, String> {
+    println!("Server config is called from frontend");
+    let config = config::get_synvek_config();
+        Ok(ServerConfig {
+            backend_port: config.port,
+            agent_port: config.agent_port,
+        })
+}
 
 fn start_server() {
     let rt = Runtime::new().unwrap();
@@ -83,6 +101,7 @@ fn run_external_command() -> Result<String, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![get_server_config])
         .setup(move |app| {
             if cfg!(debug_assertions) {
                 // app.handle().plugin(

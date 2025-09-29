@@ -24,6 +24,7 @@ const defaultConversionData: ConversionData = {
 }
 
 const defaultSettings: Settings = {
+  agentPort: 12000,
   language: Consts.LANGUAGE_EN_US,
   pinnedFolders: [],
   pinnedConversions: [],

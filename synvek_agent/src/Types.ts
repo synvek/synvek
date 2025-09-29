@@ -87,6 +87,7 @@ export interface ModelInfo {
 }
 
 export interface Settings {
+  agentPort: number
   language: string
   defaultTextModel?: string
   defaultVisionModel?: string

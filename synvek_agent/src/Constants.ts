@@ -1,5 +1,5 @@
 export class Constants {
-  public static PORT = 8082
+  public static PORT = 12000
   public static CONVERSIONS_DIR = 'conversions'
   public static STORAGE_DIR = 'storage'
   public static MODELS_DIR = 'models'

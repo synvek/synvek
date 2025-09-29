@@ -3,6 +3,13 @@
   "title": "SynvekConfig",
   "type": "object",
   "properties": {
+    "agent_port": {
+      "description": "Synvek agent port",
+      "default": 12000,
+      "type": "integer",
+      "format": "uint16",
+      "minimum": 0.0
+    },
     "endpoint": {
       "description": "Huggingface endpoint, in case of restricted access to Huggingface",
       "default": "https://huggingface.co",

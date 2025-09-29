@@ -4,6 +4,7 @@ import { Settings } from './Types.ts'
 import { SystemUtils } from './Utils/SystemUtils.ts'
 
 const defaultSettings: Settings = {
+  agentPort: 12000,
   language: 'en-US',
   pinnedFolders: [],
   pinnedConversions: [],
@@ -14,7 +15,7 @@ const defaultSettings: Settings = {
 
 }
 
-class SystemService {
+export class SystemService {
   public static getSettings() {
     const fileName = SystemUtils.joinPath(SystemUtils.getConfigDir(), Constants.FILE_SETTINGS)
     const settingsContent = SystemUtils.readStringFromFile(fileName)
@@ -30,6 +31,7 @@ class SystemService {
     const fileName = SystemUtils.joinPath(SystemUtils.getConfigDir(), Constants.FILE_SETTINGS)
     const settingsContent = SystemUtils.readStringFromFile(fileName)
     const oldSettings = settingsContent ? (JSON.parse(settingsContent) as Settings) : defaultSettings
+    //agentPort will be skipped
     oldSettings.language = settings.language
     oldSettings.defaultAudioModel = settings.defaultAudioModel
     oldSettings.defaultTextModel = settings.defaultTextModel
@@ -66,6 +68,7 @@ export const systemService = new Elysia()
     '/settings/update',
     async ({ body, set }) => {
       const settings: Settings = {
+        agentPort: 12000, // It will be ignored since it is not updatable
         language: body.language,
         defaultTextModel: body.defaultTextModel,
         defaultVisionModel: body.defaultVisionModel,

@@ -31,6 +31,8 @@ pub static CONFIG_ENDPOINT: &str = "endpoint";
 
 pub static CONFIG_HOST: &str = "host";
 
+pub static CONFIG_AGENT_PORT: &str = "agent_port";
+
 pub static CONFIG_MODEL_PORT: &str = "model_port";
 
 pub static CONFIG_MULTI_PROCESS: &str = "multi_process";
