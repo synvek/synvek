@@ -16,6 +16,7 @@ export interface ModelOption {
 
 export type ModelCategory = 'text-to-text' | 'image-to-text' | 'speech-to-text' | 'video-to-text' | 'text-to-image' | 'text-to-speech'
 export type ModelType = 'run' | 'plain' | 'vision-plain' | 'diffusion' | 'speech' | 'uqff' | 'gguf'
+export type BackendType = 'default' | 'llama_cpp' | 'stable_diffusion_cpp' | 'whisper_cpp'
 
 export interface ModelProviderStatus {
   name: string
@@ -37,6 +38,7 @@ export interface ModelProvider {
   parameters: string
   modelOptions: ModelOption[]
   categories: ModelCategory[]
+  backends: BackendType[]
   modelType: ModelType
   supportISQ: boolean
   isAnyMoE: boolean
@@ -74,6 +76,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text'],
+    backends: ['default'],
     modelType: 'uqff',
     supportISQ: false,
     isAnyMoE: false,
@@ -112,6 +115,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text'],
+    backends: ['default'],
     modelType: 'uqff',
     supportISQ: false,
     isAnyMoE: false,
@@ -138,6 +142,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text'],
+    backends: ['default', 'llama_cpp'],
     modelType: 'gguf',
     supportISQ: false,
     isAnyMoE: false,
@@ -172,6 +177,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['image-to-text'],
+    backends: ['default'],
     modelType: 'vision-plain',
     supportISQ: true,
     isAnyMoE: false,
@@ -204,6 +210,7 @@ export const modelProviders: ModelProvider[] = [
       { name: 'Qwen/Qwen3-32B-FP8', fileSize: '64B', repos: [{ repoName: 'Qwen/Qwen3-32B-FP8' }], files: [] },
     ],
     categories: ['text-to-text'],
+    backends: ['default'],
     modelType: 'plain',
     supportISQ: true,
     isAnyMoE: false,
@@ -237,6 +244,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text'],
+    backends: ['default'],
     modelType: 'plain',
     supportISQ: true,
     isAnyMoE: false,
@@ -300,6 +308,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text'],
+    backends: ['default'],
     modelType: 'plain',
     supportISQ: true,
     isAnyMoE: false,
@@ -329,6 +338,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-image'],
+    backends: ['default'],
     modelType: 'diffusion',
     supportISQ: true,
     isAnyMoE: false,
@@ -355,6 +365,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text', 'image-to-text'],
+    backends: ['default'],
     modelType: 'vision-plain',
     supportISQ: true,
     isAnyMoE: false,
@@ -381,6 +392,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-speech'],
+    backends: ['default'],
     modelType: 'speech',
     supportISQ: true,
     isAnyMoE: false,
@@ -407,6 +419,7 @@ export const modelProviders: ModelProvider[] = [
       },
     ],
     categories: ['text-to-text', 'image-to-text', 'speech-to-text', 'video-to-text'],
+    backends: ['default'],
     modelType: 'run',
     supportISQ: false,
     isAnyMoE: false,

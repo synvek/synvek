@@ -235,6 +235,7 @@ export interface ModelServerData {
   path: string
   tokenSource: string
   cpu: boolean
+  backend: string
 }
 
 export interface GetModelServersResponse {
@@ -253,6 +254,7 @@ export interface StartModelServerRequest {
   tokenSource?: string
   cpu: boolean
   offloaded: boolean
+  backend: 'default' | 'llama_cpp' | 'stable_diffusion_cpp' | 'whisper_cpp'
 }
 
 export interface StartModelServerResponse {
@@ -827,6 +829,7 @@ export class RequestUtils {
       tokenSource: model.tokenSource,
       cpu: model.cpu,
       offloaded: model.offloaded,
+      backend: model.backend,
     }
     const config = {
       headers: {

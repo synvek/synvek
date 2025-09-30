@@ -1,4 +1,4 @@
-use std::ffi::OsString;
+use std::ffi::{c_char, c_int, CString, OsString};
 use std::path::PathBuf;
 use clap::{Parser, Subcommand, ArgAction};
 use std::{env, thread};
@@ -9,6 +9,9 @@ use crate::{fetch_service, file_service};
 use crate::worker_service::WorkerArgs;
 use crate::model_service::ModelServiceArgs;
 use crate::worker_service::WorkerType;
+use libloading::{Library, Symbol};
+
+type StartLlamaServer = unsafe fn(i32, *const *const  c_char) -> i32;
 
 /// Synvek commands
 #[derive(Parser)]
@@ -26,6 +29,9 @@ pub enum Commands {
 
     /// Run script files
     Run(RunArgs),
+
+    /// Run backend llama
+    Llama(LlamaArgs),
 
     /// Run workers
     Exec(ExecArgs),
@@ -59,6 +65,13 @@ pub struct RunArgs {
     pub extra_args: Vec<String>,
 }
 
+
+#[derive(Parser)]
+pub struct LlamaArgs {
+
+    #[arg(last = true)]
+    pub extra_args: Vec<String>,
+}
 #[derive(Parser)]
 pub struct StartArgs {
     #[arg(long)]
@@ -94,6 +107,9 @@ pub struct StartArgs {
 
     #[arg(long, action = ArgAction::SetTrue)]
     pub offloaded: bool,
+
+    #[arg(long)]
+    pub backend: String,
 }
 
 /// Service Args
@@ -198,6 +214,7 @@ impl CommandHandler {
             Commands::Run(args) => self.handle_run(args).await,
             Commands::Exec(args) => self.handle_exec(args).await,
             Commands::Serve(args) => self.handle_serve(args).await,
+            Commands::Llama(args) => self.handle_llama(args).await,
             Commands::Stop => self.handle_stop().await,
             Commands::List(args) => self.handle_list(args).await,
             Commands::Add(args) => self.handle_add(args).await,
@@ -221,6 +238,7 @@ impl CommandHandler {
             token_source: args.token_source,
             cpu: args.cpu,
             offloaded: args.offloaded,
+            backend: args.backend,
         };
         crate::model_service::start_model_server_from_command(model_args, args.task_id, args.port).await?;
         loop {
@@ -246,8 +264,7 @@ impl CommandHandler {
 
     /// 处理脚本运行命令
     async fn handle_run(&self, args: RunArgs) -> Result<()> {
-        //println!("运行脚本: {:?}", args.file);
-        // TODO: 实现服务启动逻辑
+        //println!("Execute script file: {:?}", args.file);
         let handle = thread::spawn(move || {
                 //thread::sleep(Duration::from_secs(1));
             let mut run_args: Vec<OsString> = vec![
@@ -263,11 +280,34 @@ impl CommandHandler {
 
     /// 处理服务启动命令
     async fn handle_serve(&self, args: ServeArgs) -> Result<()> {
-        println!("启动服务: {}:{}, 配置文件: {:?}", args.host, args.port, args.config);
-        // TODO: 实现服务启动逻辑
         Ok(())
     }
-    
+
+    /// 处理服务启动命令
+    async fn handle_llama(&self, args: LlamaArgs) -> Result<()> {
+        unsafe {
+            tracing::info!("Search Llama server...");
+            let lib = Library::new("backend-llama-server.dll")?;
+            tracing::info!("Loading Llama server...");
+            let start_llama_server_func: Symbol<StartLlamaServer> = lib.get(b"start_llama_server")?;
+            let rust_strings: &[&str] = &["synvek_service", "-m", "./models/Qwen3-0.6B-Q8_0.gguf", "--port", "8088"];
+            let c_strings: Vec<CString> = rust_strings
+                .iter()
+                .map(|&s| CString::new(s))
+                .collect::<Result<Vec<_>, _>>()?;
+
+            let raw_ptrs: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
+            tracing::info!("Starting Llama server...");
+            let result = start_llama_server_func(raw_ptrs.len() as c_int, raw_ptrs.as_ptr());
+            println!("Execution result: {}", result);
+        }
+        // loop {
+        //     sleep(Duration::from_secs(120)).await;
+        //     tracing::info!("Sever is still running");
+        // }
+        Ok(())
+    }
+
     /// 处理服务停止命令
     async fn handle_stop(&self) -> Result<()> {
         println!("停止服务");

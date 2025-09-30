@@ -401,6 +401,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       tokenSource: task.access_token ? task.access_token : undefined,
       cpu: !!task.cpu,
       offloaded: !!task.offloaded,
+      backend: 'default',
     }
     const startModelServerResponse = await RequestUtils.startModelServer(startModelServerRequest)
     await WorkspaceUtils.handleRequest(

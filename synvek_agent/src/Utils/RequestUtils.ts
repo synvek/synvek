@@ -14,6 +14,7 @@ export interface ModelServerData {
   token_source: string
   cpu: boolean
   offloaded: boolean
+  backend: string
 }
 
 export interface ModelServerInfo {
@@ -28,6 +29,7 @@ export interface ModelServerInfo {
   tokenSource: string
   cpu: boolean
   offloaded: boolean
+  backend: string
 }
 
 export interface GetModelServersResponse {
@@ -46,6 +48,7 @@ export interface StartModelServerRequest {
   tokenSource?: string
   cpu: boolean
   offloaded: boolean
+  backend: string
 }
 
 export interface StartModelServerResponse {
@@ -103,6 +106,7 @@ export class RequestUtils {
       token_source: model.tokenSource,
       cpu: model.cpu,
       offloaded: model.offloaded,
+      backend: model.backend,
     }
     const config = {
       headers: {

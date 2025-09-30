@@ -42,3 +42,15 @@ pub static CONFIG_PORT: &str = "port";
 pub static CACHE_REPO_FILES_SLEEP_DURATION: u64 = 7200u64;
 
 pub static DOWNLOAD_RETRY_COUNT_LIMIT: u64 = 3;
+
+pub static BACKEND_DEFAULT: &str = "default";
+
+pub static BACKEND_LLAMA_CPP: &str = "llama_cpp";
+
+pub static BACKEND_STABLE_DIFFUSION_CPP: &str = "stable_diffusion_cpp";
+
+pub static BACKEND_WHISPER_CPP: &str = "whisper_cpp";
+
+pub static BACKEND_UNKNOWN: &str = "unknown";
+
+pub static HEALTH_CHECK_COUNT: i32 = 1200;

@@ -7,3 +7,6 @@
 [submodule "third_party/hf-hub"]
 	path = third_party/hf-hub
 	url = https://github.com/synvek/hf-hub	
+[submodule "third_party/llama.cpp"]
+	path = third_party/llama.cpp
+	url = https://github.com/synvek/llama.cpp	

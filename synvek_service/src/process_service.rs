@@ -59,6 +59,8 @@ pub struct ProcessInfo {
     pub cpu: bool,
 
     pub offloaded: bool,
+    
+    pub backend: String,
 }
 
 static GLOBAL_PROCESSES: OnceLock<Arc<Mutex<HashMap<String, ProcessInfo>>>> = OnceLock::new();
@@ -164,6 +166,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
             path: model_args.path.clone(),
             cpu: model_args.cpu,
             offloaded: model_args.offloaded,
+            backend: model_args.backend,
         };
         insert_process(task_id.clone(), process_info);
 
@@ -296,9 +299,9 @@ pub async fn notify_main_process(task_id: String) -> anyhow::Result<()> {
     main_process_address.push_str("/api/v1/process/heart-tick");
     tracing::info!("Notify on: {}", main_process_address.clone());
     let response = client
-        .post(main_process_address.clone()) // 替换为实际接口地址
+        .post(main_process_address.clone()) 
         .json(&request_data)
-        .header(header::CONTENT_TYPE, "application/json") // 自定义请求头
+        .header(header::CONTENT_TYPE, "application/json")
         .send()
         .await;
     tracing::info!("Notify finished: {}", main_process_address.clone());
