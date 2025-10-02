@@ -484,5 +484,22 @@
         "endpoint": "https://hf-mirror.com",
         "access_token": null
     }
-
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
+    }
 ]

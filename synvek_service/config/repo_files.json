@@ -6971,5 +6971,145 @@
         "endpoint": "",
         "access_token": null,
         "file_size": 172
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 1819
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "README.md",
+        "file_path": "README.md",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 534
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "flux1-schnell-q2_k.gguf",
+        "file_path": "flux1-schnell-q2_k.gguf",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 4110959520
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "flux1-schnell-q3_k.gguf",
+        "file_path": "flux1-schnell-q3_k.gguf",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 5312873376
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "flux1-schnell-q4_0.gguf",
+        "file_path": "flux1-schnell-q4_0.gguf",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6884606880
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "flux1-schnell-q4_k.gguf",
+        "file_path": "flux1-schnell-q4_k.gguf",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6884606880
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-schnell-gguf",
+        "file_name": "flux1-schnell-q8_0.gguf",
+        "file_path": "flux1-schnell-q8_0.gguf",
+        "commit_hash": "c7f665ddaf9f197ff493f41fc211f5480f5f19ac",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 12801721248
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 1799
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "README.md",
+        "file_path": "README.md",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 568
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "flux1-dev-q2_k.gguf",
+        "file_path": "flux1-dev-q2_k.gguf",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 4151878816
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "flux1-dev-q3_k.gguf",
+        "file_path": "flux1-dev-q3_k.gguf",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 5353792672
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "flux1-dev-q4_0.gguf",
+        "file_path": "flux1-dev-q4_0.gguf",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6925526176
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "flux1-dev-q4_k.gguf",
+        "file_path": "flux1-dev-q4_k.gguf",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6925526176
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/FLUX.1-dev-gguf",
+        "file_name": "flux1-dev-q8_0.gguf",
+        "file_path": "flux1-dev-q8_0.gguf",
+        "commit_hash": "5498ec7d5c0ee33bb0aeb04254d518a8e4ff94cd",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 12842640544
     }
 ]

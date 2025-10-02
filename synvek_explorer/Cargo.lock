@@ -12712,6 +12712,7 @@ dependencies = [
  "futures",
  "hf-hub 0.4.2",
  "image",
+ "libloading 0.8.8",
  "log",
  "mistralrs-server",
  "pretty_yaml",
