@@ -5,7 +5,7 @@ use std::{env, thread};
 use std::time::Duration;
 use anyhow::{Error, Result, anyhow};
 use tokio::time::sleep;
-use crate::{fetch_service, file_service};
+use crate::{fetch_service, file_service, sd_service};
 use crate::worker_service::WorkerArgs;
 use crate::model_service::ModelServiceArgs;
 use crate::worker_service::WorkerType;
@@ -45,8 +45,8 @@ pub enum Commands {
     /// List models
     List(ListArgs),
     
-    /// Add models
-    Add(AddArgs),
+    /// Generate Image
+    Image(ImageArgs),
     
     /// Setup
     Setup(SetupArgs),
@@ -151,22 +151,7 @@ pub struct ListArgs {
 
 /// 添加模型参数
 #[derive(Parser)]
-pub struct AddArgs {
-    /// 模型名称
-    #[arg(long)]
-    pub name: String,
-    
-    /// 模型路径
-    #[arg(long)]
-    pub path: PathBuf,
-    
-    /// 模型类型
-    #[arg(long, default_value = "text2img")]
-    pub r#type: String,
-    
-    /// 模型版本
-    #[arg(long, default_value = "v1.5")]
-    pub version: String,
+pub struct ImageArgs {
 }
 
 #[derive(Parser)]
@@ -217,7 +202,7 @@ impl CommandHandler {
             Commands::Llama(args) => self.handle_llama(args).await,
             Commands::Stop => self.handle_stop().await,
             Commands::List(args) => self.handle_list(args).await,
-            Commands::Add(args) => self.handle_add(args).await,
+            Commands::Image(args) => self.handle_image(args).await,
             Commands::Setup(args) => self.handle_setup(args).await,
             Commands::Info(args) => self.handle_info(args).await,
             Commands::Test(args) => self.handle_test(args).await,
@@ -323,10 +308,9 @@ impl CommandHandler {
     }
     
     /// 处理添加模型命令
-    async fn handle_add(&self, args: AddArgs) -> Result<()> {
-        println!("添加模型: {}, 路径: {:?}, 类型: {}, 版本: {}", 
-                 args.name, args.path, args.r#type, args.version);
-        // TODO: 实现添加模型逻辑
+    async fn handle_image(&self, args: ImageArgs) -> Result<()> {
+        let image_args: Vec<String> = vec![];
+        let _ = sd_service::generate_image(&image_args);
         Ok(())
     }
     

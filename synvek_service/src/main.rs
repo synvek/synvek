@@ -21,6 +21,9 @@ mod worker_service;
 mod worker_api;
 mod fetch_helper;
 mod file_service;
+mod sd_service;
+mod sd_api;
+mod sd_server;
 
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;

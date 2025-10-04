@@ -20,6 +20,9 @@ pub mod system_api;
 pub mod worker_service;
 pub mod worker_api;
 pub mod file_service;
+pub mod sd_service;
+pub mod sd_api;
+pub mod sd_server;
 
 use std::ffi::OsString;
 /// 导出所有公共接口

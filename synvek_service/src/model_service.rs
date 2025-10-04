@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::fetch_service::Task;
 use crate::process_api::{HeartTickRequest, HeartTickResponse};
 use crate::script_service::ScriptInfo;
-use crate::{common, fetch_service};
+use crate::{common, fetch_service, sd_server};
 use crate::{config, process_service, synvek};
 use async_trait::async_trait;
 use clap::Subcommand;
@@ -247,6 +247,11 @@ async fn start_model_server_in_process(
                 } else if selected_backend == common::BACKEND_LLAMA_CPP {
                     populate_args_private_with_backend_llama_cpp(task, model_dir, &mut start_args);
                 } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
+                    populate_args_private_with_backend_stable_diffusion_cpp(
+                        task,
+                        model_dir,
+                        &mut start_args,
+                    );
                 } else if selected_backend == common::BACKEND_WHISPER_CPP {
                 } else {
                 }
@@ -259,6 +264,12 @@ async fn start_model_server_in_process(
                 );
             } else if selected_backend == common::BACKEND_WHISPER_CPP {
             } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
+                populate_args_with_backend_stable_diffusion_cpp(
+                    args.clone(),
+                    task,
+                    model_dir,
+                    &mut start_args,
+                );
             } else if selected_backend == common::BACKEND_DEFAULT {
                 populate_args_with_backend_default(args.clone(), task, model_dir, &mut start_args);
             }
@@ -276,7 +287,15 @@ async fn start_model_server_in_process(
                 start_llama_cpp_server(args, &start_args, task_id, port, path, is_spawn_process)
                     .await;
             } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
-                tracing::error!("Unimplemented backend detected: {}", selected_backend);
+                start_stable_diffusion_cpp_server(
+                    args,
+                    &start_args,
+                    task_id,
+                    port,
+                    path,
+                    is_spawn_process,
+                )
+                .await;
             } else if selected_backend == common::BACKEND_WHISPER_CPP {
                 tracing::error!("Unimplemented backend detected: {}", selected_backend);
             } else {
@@ -323,6 +342,22 @@ fn populate_args_private_with_backend_default(
 }
 
 fn populate_args_private_with_backend_llama_cpp(
+    task: Task,
+    model_dir: PathBuf,
+    start_args: &mut Vec<OsString>,
+) {
+    let private_model_name = task.task_name;
+    let uniform_private_model_name = private_model_name.to_uppercase();
+    let mut model_path = model_dir.clone();
+    model_path.push(private_model_name.clone());
+    let is_gguf = uniform_private_model_name.ends_with(".GGUF");
+    if is_gguf {
+        start_args.push(OsString::from("-m"));
+        start_args.push(OsString::from(model_path.clone()));
+    }
+}
+
+fn populate_args_private_with_backend_stable_diffusion_cpp(
     task: Task,
     model_dir: PathBuf,
     start_args: &mut Vec<OsString>,
@@ -400,6 +435,32 @@ fn populate_args_with_backend_default(
 }
 
 fn populate_args_with_backend_llama_cpp(
+    args: ModelServiceArgs,
+    task: Task,
+    model_dir: PathBuf,
+    start_args: &mut Vec<OsString>,
+) {
+    let mut gguf_found = false;
+    task.task_items.iter().for_each(|item| {
+        let uniform_name = item.file_name.to_uppercase();
+        if uniform_name.ends_with(".GGUF") {
+            let mut model_path = model_dir.clone();
+            let model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            model_path.push(model_dir_name);
+            model_path.push("snapshots");
+            model_path.push(item.commit_hash.clone());
+            model_path.push(item.file_name.clone());
+            gguf_found = true;
+            start_args.push(OsString::from("-m"));
+            start_args.push(OsString::from(model_path));
+        }
+    });
+    if !gguf_found {
+        tracing::error!("No GGUF found");
+    }
+}
+
+fn populate_args_with_backend_stable_diffusion_cpp(
     args: ModelServiceArgs,
     task: Task,
     model_dir: PathBuf,
@@ -521,6 +582,18 @@ async fn start_llama_cpp_server(
             tracing::error!("Failed to load backend Llama server.");
         }
     }
+}
+
+async fn start_stable_diffusion_cpp_server(
+    args: ModelServiceArgs,
+    start_args: &Vec<OsString>,
+    task_id: String,
+    port: String,
+    path: String,
+    is_spawn_process: bool,
+) {
+    let _ =
+        sd_server::start_sd_server(args, start_args, task_id, port, path, is_spawn_process).await;
 }
 
 fn start_server_monitor(task_id: String, task_port: String) {

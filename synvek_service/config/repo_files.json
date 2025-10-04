@@ -7111,5 +7111,65 @@
         "endpoint": "",
         "access_token": null,
         "file_size": 12842640544
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 1519
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": "README.md",
+        "file_path": "README.md",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 249
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": "clip_l.safetensors",
+        "file_path": "clip_l.safetensors",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 246144152
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": "t5xxl_fp16.safetensors",
+        "file_path": "t5xxl_fp16.safetensors",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 9787841024
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": "t5xxl_fp8_e4m3fn.safetensors",
+        "file_path": "t5xxl_fp8_e4m3fn.safetensors",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 4893934904
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "file_name": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+        "file_path": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+        "commit_hash": "6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 5157348688
     }
 ]

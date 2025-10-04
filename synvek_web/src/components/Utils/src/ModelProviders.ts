@@ -518,13 +518,17 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'FLUX.1-schnell-gguf-q4_0',
-        fileSize: '6.4GB',
+        fileSize: '15.76GB',
         repos: [],
-        files: [{ repoName: 'leejet/FLUX.1-schnell-gguf', repoFile: 'flux1-schnell-q4_0.gguf' }],
+        files: [
+          { repoName: 'leejet/FLUX.1-schnell-gguf', repoFile: 'flux1-schnell-q4_0.gguf' },
+          { repoName: 'comfyanonymous/flux_text_encoders', repoFile: 'clip_l.safetensors' },
+          { repoName: 'comfyanonymous/flux_text_encoders', repoFile: 't5xxl_fp16.safetensors' },
+        ],
       },
     ],
     categories: ['text-to-image'],
-    backends: ['default'],
+    backends: ['stable_diffusion_cpp'],
     modelType: 'diffusion',
     supportISQ: true,
     isAnyMoE: false,

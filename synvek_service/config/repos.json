@@ -501,5 +501,14 @@
         "revision": "main",
         "endpoint": "https://hf-mirror.com",
         "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "comfyanonymous/flux_text_encoders",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "https://hf-mirror.com",
+        "access_token": null
     }
 ]

@@ -15,6 +15,7 @@ import {
   WorkMode,
   WorkspaceUtils,
 } from '@/components/Utils'
+import { BackendType } from '@/components/Utils/src/ModelProviders'
 import { FetchFile, FetchRepo, StartModelServerRequest } from '@/components/Utils/src/RequestUtils'
 import { useIntl } from '@@/exports'
 import { AimOutlined, CaretDownOutlined, Loading3QuartersOutlined, ThunderboltFilled } from '@ant-design/icons'
@@ -385,10 +386,12 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
 
   const handleStartModelServer = async (task: Task) => {
     let modelType = 'plain'
+    let backends: BackendType[] = []
     modelProviders.forEach((modelProvider) => {
       modelProvider.modelOptions.forEach((modelOption) => {
         if (modelOption.name === task.model_id) {
           modelType = modelProvider.modelType
+          backends = modelProvider.backends
         }
       })
     })
@@ -401,7 +404,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       tokenSource: task.access_token ? task.access_token : undefined,
       cpu: !!task.cpu,
       offloaded: !!task.offloaded,
-      backend: 'default',
+      backend: backends.length > 0 ? backends[0] : 'default',
     }
     const startModelServerResponse = await RequestUtils.startModelServer(startModelServerRequest)
     await WorkspaceUtils.handleRequest(
