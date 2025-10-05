@@ -638,13 +638,23 @@ export class RequestUtils {
     return axios.post(`${RequestUtils.agentServerAddress}/chat`, data, config)
   }
 
-  public static generateImage(userMessage: string, modelName: string, count: number = 1, width: number = 256, height: number = 256) {
+  public static generateImage(
+    userMessage: string,
+    modelName: string,
+    count: number = 1,
+    width: number = 256,
+    height: number = 256,
+    seed: number = 43,
+    format: string = 'png',
+  ) {
     const data = {
       userMessage: userMessage,
       modelName: modelName,
       count: count,
       width: width,
       height: height,
+      seed: seed,
+      format: format,
     }
     const config = {
       headers: {

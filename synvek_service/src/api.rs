@@ -70,10 +70,10 @@ pub async fn start_server() -> std::io::Result<()> {
     let port = config.port;
     tracing::info!("Starting Server on host:{} and port:{}", host, port);
 
-    // Initialize fetch service
-    fetch_service::initialize();
     // Initialize file Server
     file_service::init_file_service();
+    // Initialize fetch service
+    fetch_service::initialize();
     // Start web server
     HttpServer::new(|| {
         let cors = Cors::default()

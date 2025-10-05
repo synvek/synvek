@@ -10,6 +10,7 @@ use crate::worker_service::WorkerArgs;
 use crate::model_service::ModelServiceArgs;
 use crate::worker_service::WorkerType;
 use libloading::{Library, Symbol};
+use crate::sd_service::GenerationArgs;
 
 type StartLlamaServer = unsafe fn(i32, *const *const  c_char) -> i32;
 
@@ -309,7 +310,7 @@ impl CommandHandler {
     
     /// 处理添加模型命令
     async fn handle_image(&self, args: ImageArgs) -> Result<()> {
-        let image_args: Vec<String> = vec![];
+        let image_args: GenerationArgs = GenerationArgs::default();
         let _ = sd_service::generate_image(&image_args);
         Ok(())
     }

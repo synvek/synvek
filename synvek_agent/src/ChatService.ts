@@ -237,12 +237,18 @@ class LLMService {
     //return toolModel.stream(messages)
   }
 
-  public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number) {
+  public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number, seed: number, format: string) {
     const modelServer = LLMService.buildGenerate(modelName)
+    const isDefaultBackend = modelServer.backend === 'default'
     const settings = LLMService.getSettings()
     const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/generations`
-    const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
-    return imageResponse
+    if (isDefaultBackend) {
+      const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
+      return imageResponse
+    } else {
+      const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format)
+      return imageResponse
+    }
   }
 
   public static async generateSpeech(userMessage: string, modelName: string, speed: number, format: string) {
@@ -404,8 +410,10 @@ export const chatService = new Elysia()
     '/image',
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
-      const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height)
+      const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format)
       if (imageResponse.status === 200 && imageResponse.data.created) {
+        return SystemUtils.buildResponse(true, imageResponse.data.data[0].b64_json)
+      } else if (imageResponse.status === 200 && imageResponse.data.data.length > 0) {
         return SystemUtils.buildResponse(true, imageResponse.data.data[0].b64_json)
       } else if (imageResponse.status === 200) {
         return SystemUtils.buildResponse(false, null, `Failed to generate image with message`)
@@ -420,6 +428,8 @@ export const chatService = new Elysia()
         count: t.Number(),
         width: t.Number(),
         height: t.Number(),
+        seed: t.Number(),
+        format: t.String(),
       }),
     },
   )

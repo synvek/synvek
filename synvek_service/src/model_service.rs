@@ -592,8 +592,14 @@ async fn start_stable_diffusion_cpp_server(
     path: String,
     is_spawn_process: bool,
 ) {
-    let _ =
-        sd_server::start_sd_server(args, start_args, task_id, port, path, is_spawn_process).await;
+    let start_result =
+        sd_server::start_sd_server(args, start_args, task_id.clone(), port, path, is_spawn_process).await;
+    if start_result.is_ok() {
+        tracing::info!("Stable diffusion server is finished on {:?}", start_args.clone());
+        let _ = process_service::notify_main_process(task_id).await;
+    } else {
+        tracing::info!("Stable diffusion server failed to run on {:?}", start_args.clone());
+    }
 }
 
 fn start_server_monitor(task_id: String, task_port: String) {

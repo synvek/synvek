@@ -1,10 +1,16 @@
 use libloading::{Library, Symbol};
-use std::ffi::{CStr, CString, OsString, c_char, c_int};
+use std::ffi::{CString, OsString, c_char, c_int};
 use std::marker::PhantomData;
-use std::{fs, ptr};
+use std::{ptr};
+use std::path::PathBuf;
 use std::ptr::null_mut;
+use std::sync::{Arc, Mutex, OnceLock};
 use base64::{Engine as _, engine::{self, general_purpose}, alphabet};
 use base64::engine::general_purpose::STANDARD;
+use hf_hub::{Cache, Repo, RepoType};
+use crate::fetch_service;
+use crate::model_service::ModelServiceArgs;
+use crate::{config, file_service};
 
 #[repr(C)]
 pub struct ImageOutput {
@@ -17,8 +23,105 @@ type GetImageDataLength = unsafe fn(*mut ImageOutput, usize) -> usize;
 type GetImageData = unsafe fn(*mut ImageOutput, usize) -> *const u8;
 type FreeImageData = unsafe fn(*mut ImageOutput);
 
-pub fn generate_image(image_args: &Vec<String>) -> Vec<String> {
+#[derive(Debug, Clone, Default)]
+pub struct SdConfig {
+    pub args: ModelServiceArgs,
+    pub start_args: Vec<OsString>,
+    pub task_id: String,
+    pub port: String,
+    pub path: String,
+    pub is_spawn_process: bool,
+}
+
+
+#[derive(Debug, Clone, Default)]
+pub struct GenerationArgs {
+    pub model: String,
+    pub prompt: String,
+    pub n: usize,
+    pub width: usize,
+    pub height: usize,
+    pub seed: i32,
+    pub format: String
+}
+
+static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
+
+fn init_sd_config() -> Arc<Mutex<SdConfig>> {
+    Arc::new(Mutex::new(SdConfig::default()))
+}
+
+pub fn initialize_sd_service() {
+    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+}
+
+pub fn get_sd_config() -> SdConfig {
+    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+    let sd_config_ref = Arc::clone(GLOBAL_SD_CONFIG.get().unwrap());
+    let sd_config  = sd_config_ref.lock().unwrap();
+    sd_config.clone()
+}
+
+pub fn set_sd_config(sd_config: SdConfig) {
+    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+    let sd_config_ref = Arc::clone(GLOBAL_SD_CONFIG.get().unwrap());
+    let mut old_sd_config  = sd_config_ref.lock().unwrap();
+    old_sd_config.args = sd_config.args;
+    old_sd_config.start_args = sd_config.start_args;
+    old_sd_config.task_id = sd_config.task_id;
+    old_sd_config.port = sd_config.port;
+    old_sd_config.path = sd_config.path;
+    old_sd_config.is_spawn_process = sd_config.is_spawn_process;
+}
+
+fn get_model_file_path(repo_name: String, file_name: String, revision: String, commit_hash: String) -> PathBuf {
+    let config = config::Config::new();
+    let path = config.get_model_dir();
+    let cache = Cache::new(path.clone());
+    let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision);
+    let mut file_path = cache.path().clone();
+    file_path.push(repo.folder_name());
+    file_path.push("snapshots");
+    file_path.push(commit_hash);
+    file_path.push(file_name);
+    file_path
+}
+
+pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut output: Vec<String> = vec![];
+    let config = config::Config::new();
+    let sd_config = get_sd_config();
+    let model_name = sd_config.args.model_name;
+    let model_id = sd_config.args.model_id;
+    let task = fetch_service::load_local_task(model_name);
+    let mut valid: bool = false;
+    let mut model_file_path: PathBuf = PathBuf::new();
+    let mut clip_l_path: PathBuf = PathBuf::new();
+    let mut vae_path: PathBuf = PathBuf::new();
+    let mut t5xxl_path: PathBuf = PathBuf::new();
+    if let Some(task) = task {
+        tracing::info!("Current task info: {:?}", task.clone());
+        let task_item = task.task_items[0].clone();
+        let repo_name = task_item.repo_name;
+        let file_name = task_item.file_name;
+        let revision = task_item.revision;
+        let commit_hash = task_item.commit_hash;
+        model_file_path = get_model_file_path(repo_name, file_name, revision, commit_hash);
+        valid = true;
+    }
+    let clip_l_file = file_service::search_repo_file_info("comfyanonymous/flux_text_encoders", "clip_l.safetensors");
+    let vae_file = file_service::search_repo_file_info("black-forest-labs/FLUX.1-schnell", "ae.safetensors");
+    let t5xxl_file = file_service::search_repo_file_info("comfyanonymous/flux_text_encoders", "t5xxl_fp16.safetensors");
+    match (clip_l_file, vae_file,t5xxl_file ) {
+        (Some(clip_l_file), Some(vae_file), Some(t5xxl_file)) => {
+            clip_l_path = get_model_file_path(clip_l_file.repo_name, clip_l_file.file_path, clip_l_file.revision, clip_l_file.commit_hash);
+            vae_path = get_model_file_path(vae_file.repo_name, vae_file.file_path, vae_file.revision, vae_file.commit_hash);
+            t5xxl_path = get_model_file_path(t5xxl_file.repo_name, t5xxl_file.file_path, t5xxl_file.revision, t5xxl_file.commit_hash);
+        }
+        _ => {
+            valid = false;
+        }
+    }
     unsafe {
         let lib = Library::new("synvek_backend_sd.dll");
         if let Ok(lib) = lib {
@@ -34,23 +137,18 @@ pub fn generate_image(image_args: &Vec<String>) -> Vec<String> {
                     let get_image_data_length: Symbol<GetImageDataLength> = get_image_data_length_func;
                     let get_image_data: Symbol<GetImageData> = get_image_data_func;
                     let free_image_data: Symbol<FreeImageData> = free_image_data_func;
-                    //sd.exe --diffusion-model  C:\source\works\synvek\output\models\models--leejet--FLUX.1-schnell-gguf\snapshots\c7f665ddaf9f197ff493f41fc211f5480f5f19ac\flux1-schnell-q4_0.gguf
-                    // --vae C:\source\works\synvek\output\models\models--black-forest-labs--FLUX.1-schnell\snapshots\741f7c3ce8b383c54771c7003378a50191e9efe9\ae.safetensors
-                    // --clip_l C:\source\works\synvek\output\models\models--comfyanonymous--flux_text_encoders\snapshots\6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5\clip_l.safetensors
-                    // --t5xxl C:\source\works\synvek\output\models\models--comfyanonymous--flux_text_encoders\snapshots\6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5\t5xxl_fp16.safetensors
-                    // -p "a lovely cat holding a sign says 'flux.cpp'" --cfg-scale 1.0 --sampling-method euler -v --steps 4 --clip-on-cpu
                     let start_args: Vec<String> = vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
-                        String::from("C:\\source\\works\\synvek\\output\\models\\models--leejet--FLUX.1-schnell-gguf\\snapshots\\c7f665ddaf9f197ff493f41fc211f5480f5f19ac\\flux1-schnell-q4_0.gguf", ),
+                        model_file_path.to_str().unwrap().to_string(),
                         String::from("--vae"),
-                        String::from("C:\\source\\works\\synvek\\output\\models\\models--black-forest-labs--FLUX.1-schnell\\snapshots\\741f7c3ce8b383c54771c7003378a50191e9efe9\\ae.safetensors", ),
+                        vae_path.to_str().unwrap().to_string(),
                         String::from("--clip_l"),
-                        String::from("C:\\source\\works\\synvek\\output\\models\\models--comfyanonymous--flux_text_encoders\\snapshots\\6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5\\clip_l.safetensors", ),
+                        clip_l_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
-                        String::from("C:\\source\\works\\synvek\\output\\models\\models--comfyanonymous--flux_text_encoders\\snapshots\\6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5\\t5xxl_fp16.safetensors", ),
+                        t5xxl_path.to_str().unwrap().to_string(),
                         String::from("-p"),
-                        String::from("a lovely cat holding a sign says 'flux.cpp'"),
+                        String::from(generation_args.prompt.clone()),
                         String::from("--cfg-scale"),
                         String::from("1.0"),
                         String::from("--sampling-method"),
