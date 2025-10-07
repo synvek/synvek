@@ -7,10 +7,9 @@ use crate::{config, process_service, synvek};
 use async_trait::async_trait;
 use clap::Subcommand;
 use libloading::{Library, Symbol};
-use mistralrs_server::ModelInfo;
 use reqwest::{Client, header};
 use std::collections::HashMap;
-use std::ffi::{CString, OsString, c_char, c_int};
+use std::ffi::{CStr, CString, OsString, c_char, c_int};
 use std::fmt::Debug;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU16, Ordering};
@@ -22,6 +21,9 @@ use tokio::runtime;
 use uuid::Uuid;
 
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
+type InitDefaultServer = unsafe fn(*const c_char, *const c_char, *const c_char) -> i32;
+type StartDefaultServer = unsafe fn(*const c_char, *const c_char) -> i32;
+type StopDefaultServer = unsafe fn(*const c_char) -> i32;
 
 #[derive(Debug, Clone, Default)]
 pub enum ModelSelected {
@@ -76,6 +78,44 @@ pub struct ModelServiceArgs {
     pub backend: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct ModelInfo {
+    /// Model Name： Local Model Identifier
+    pub model_name: String,
+
+    /// task id
+    pub task_id: String,
+
+    /// port
+    pub port: String,
+
+    /// If server started
+    pub started: bool,
+
+    /// in_situ_quant
+    pub isq: Option<String>,
+
+    /// Model
+    pub model_id: String,
+
+    /// Model
+    pub model_type: String,
+
+    /// Model Path
+    pub path: String,
+
+    /// Token source
+    pub token_source: Option<String>,
+
+    ///CPU
+    pub cpu: bool,
+
+    /// Offloaded
+    pub offloaded: bool,
+
+    pub backend: String,
+}
+
 pub fn get_model_servers() -> Vec<ModelInfo> {
     let synvek_config = config::get_synvek_config();
     if synvek_config.multi_process {
@@ -104,7 +144,8 @@ pub fn get_model_servers() -> Vec<ModelInfo> {
         });
         model_infos
     } else {
-        mistralrs_server::get_servers()
+        //mistralrs_server::get_servers()
+        vec![]
     }
 }
 
@@ -114,7 +155,7 @@ pub fn initialize_model_server() {
     let config = Config::new();
     let model_dir = config.get_model_dir();
     let endpoint = config.get_config_endpoint();
-    mistralrs_server::initialize_server(model_dir, endpoint);
+    //mistralrs_server::initialize_server(model_dir, endpoint);
 }
 
 pub async fn start_model_server_from_command(
@@ -281,7 +322,9 @@ async fn start_model_server_in_process(
                 "".to_string()
             };
             if selected_backend == common::BACKEND_DEFAULT {
-                start_mistral_server(args, &start_args, task_id, port, path, is_spawn_process)
+                // start_mistral_server(args, &start_args, task_id, port, path, is_spawn_process)
+                //     .await;
+                start_mistral_server_dll(args, &start_args, task_id, port, path, is_spawn_process)
                     .await;
             } else if selected_backend == common::BACKEND_LLAMA_CPP {
                 start_llama_cpp_server(args, &start_args, task_id, port, path, is_spawn_process)
@@ -311,7 +354,7 @@ pub fn stop_model_server(task_id: String) {
     if synvek_config.multi_process {
         process_service::stop_process(task_id.clone());
     } else {
-        mistralrs_server::stop_server(task_id);
+        //mistralrs_server::stop_server(task_id);
     }
 }
 
@@ -494,6 +537,55 @@ async fn start_mistral_server(
     path: String,
     is_spawn_process: bool,
 ) {
+    // let model_info = ModelInfo {
+    //     model_name: args.model_name.clone(),
+    //     task_id: task_id.clone(),
+    //     started: false,
+    //     port: port.clone(),
+    //     isq: args.isq.clone(),
+    //     model_id: args.model_id.clone().to_string(),
+    //     model_type: args.model_type.clone().to_string(),
+    //     path,
+    //     token_source: args.token_source.clone(),
+    //     cpu: args.cpu,
+    //     offloaded: args.offloaded,
+    //     backend: args.backend,
+    // };
+    // let start_result = mistralrs_server::start_server(
+    //     task_id.clone(),
+    //     start_args.clone(),
+    //     model_info,
+    //     if is_spawn_process {
+    //         process_service::notify_main_process
+    //     } else {
+    //         process_service::notify_main_process
+    //     },
+    // )
+    // .await;
+    // let notification = start_result.await;
+    // if notification.is_ok() {
+    //     tracing::info!("Model server is started on {:?}", start_args.clone());
+    // } else {
+    //     tracing::error!(
+    //         "Model server failed to start {:?} with error: {}",
+    //         start_args.clone(),
+    //         notification.unwrap_err()
+    //     );
+    //     // Model server need to terminate in multiprocess mode
+    //     if is_spawn_process {
+    //         panic!("Model server exited to start {:?} ", start_args.clone(),);
+    //     }
+    // }
+}
+
+async fn start_mistral_server_dll(
+    args: ModelServiceArgs,
+    start_args: &Vec<OsString>,
+    task_id: String,
+    port: String,
+    path: String,
+    is_spawn_process: bool,
+) {
     let model_info = ModelInfo {
         model_name: args.model_name.clone(),
         task_id: task_id.clone(),
@@ -508,33 +600,128 @@ async fn start_mistral_server(
         offloaded: args.offloaded,
         backend: args.backend,
     };
-    let start_result = mistralrs_server::start_server(
-        task_id.clone(),
-        start_args.clone(),
-        model_info,
-        if is_spawn_process {
-            process_service::notify_main_process
-        } else {
-            process_service::notify_main_process
-        },
-    )
-    .await;
-    let notification = start_result.await;
-    if notification.is_ok() {
-        tracing::info!("Model server is started on {:?}", start_args.clone());
-    } else {
-        tracing::error!(
-            "Model server failed to start {:?} with error: {}",
-            start_args.clone(),
-            notification.unwrap_err()
-        );
-        // Model server need to terminate in multiprocess mode
-        if is_spawn_process {
-            panic!("Model server exited to start {:?} ", start_args.clone(),);
+    let config = Config::new();
+    let main_process_port = config.get_config_port().to_string();
+    let model_dir = config.get_model_dir();
+    let endpoint = config.get_config_endpoint();
+    unsafe {
+        let lib = Library::new("synvek_backend_default.dll");
+        if let Ok(lib) = lib {
+            tracing::info!("Loading default backend server...");
+            let start_backend_server_func = lib.get(b"start_backend_server");
+            let init_backend_server_func = lib.get(b"init_backend_server");
+            let stop_backend_server_func = lib.get(b"stop_backend_server");
+            match (
+                start_backend_server_func,
+                init_backend_server_func,
+                stop_backend_server_func,
+            ) {
+                (
+                    Ok(start_backend_server_func),
+                    Ok(init_backend_server_func),
+                    Ok(stop_backend_server_func),
+                ) => {
+                    let start_backend_server: Symbol<StartDefaultServer> =
+                        start_backend_server_func;
+                    let init_backend_server: Symbol<InitDefaultServer> = init_backend_server_func;
+                    let stop_backend_server: Symbol<StopDefaultServer> = stop_backend_server_func;
+                    let start_args: Vec<String> = start_args
+                        .clone()
+                        .into_iter()
+                        .map(|s| s.into_string().unwrap())
+                        .collect();
+                    let start_args_string = serde_json::to_string_pretty(&start_args);
+                    tracing::info!("Check start args: {:?}", start_args);
+                    tracing::info!("Parse start args: {:?}", start_args_string);
+                    let c_task_id = CString::new(task_id.as_str());
+                    let c_model_dir = CString::new(model_dir.to_str().unwrap());
+                    let c_endpoint = CString::new(endpoint.as_str());
+                    let c_main_process_port = CString::new(main_process_port.as_str());
+                    let mut validate: bool = true;
+                    if c_model_dir.is_err() {
+                        validate = false;
+                        tracing::error!(
+                            "Failed to start backend_server_default with invalid model_dir {:?}",
+                            model_dir
+                        );
+                    }
+                    if c_task_id.is_err() {
+                        validate = false;
+                        tracing::error!(
+                            "Failed to start backend_server_default with invalid task_id {:?}",
+                            task_id
+                        );
+                    }
+                    if c_endpoint.is_err() {
+                        validate = false;
+                        tracing::error!(
+                            "Failed to start backend_server_default with invalid endpoint {:?}",
+                            endpoint
+                        );
+                    }
+                    if c_main_process_port.is_err() {
+                        validate = false;
+                        tracing::error!(
+                            "Failed to start backend_server_default with invalid port {:?}",
+                            c_main_process_port
+                        );
+                    }
+                    if validate {
+                        let result = init_backend_server(
+                            c_model_dir.unwrap().as_ptr(),
+                            c_endpoint.unwrap().as_ptr(),
+                            c_main_process_port.unwrap().as_ptr(),
+                        );
+                        if result == 0 {
+                            tracing::info!("Succeed to initialize backend_server_default");
+                        } else {
+                            tracing::info!("Failed to initialize backend_server_default");
+                        }
+                        if let Ok(start_args_string) = start_args_string {
+                            let c_start_args = CString::new(start_args_string);
+                            if let Ok(c_start_args) = c_start_args {
+                                let result = start_backend_server(
+                                    c_task_id.unwrap().as_ptr(),
+                                    c_start_args.as_ptr(),
+                                );
+                                if result == 0 {
+                                    tracing::info!(
+                                        "backend_server_default is finished successfully"
+                                    );
+                                } else {
+                                    tracing::error!(
+                                        "backend_server_fault is exit with error: {}",
+                                        result
+                                    );
+                                }
+                            } else {
+                                tracing::error!(
+                                    "Failed to start backend_server_default with invalid start_args {:?}",
+                                    start_args
+                                );
+                            }
+                        } else {
+                            tracing::error!(
+                                "Failed to start backend_server_default with invalid start_args {:?}",
+                                start_args
+                            );
+                        }
+                    }
+                }
+                _ => {
+                    tracing::error!("Failed to load functions on synvek_backend_default");
+                }
+            }
         }
     }
+    // Need to terminate in multiprocess mode  right now.
+    if is_spawn_process {
+        panic!(
+            "backend_server_default exited to start {:?} ",
+            start_args.clone(),
+        );
+    }
 }
-
 async fn start_llama_cpp_server(
     args: ModelServiceArgs,
     start_args: &Vec<OsString>,
@@ -592,13 +779,26 @@ async fn start_stable_diffusion_cpp_server(
     path: String,
     is_spawn_process: bool,
 ) {
-    let start_result =
-        sd_server::start_sd_server(args, start_args, task_id.clone(), port, path, is_spawn_process).await;
+    let start_result = sd_server::start_sd_server(
+        args,
+        start_args,
+        task_id.clone(),
+        port,
+        path,
+        is_spawn_process,
+    )
+    .await;
     if start_result.is_ok() {
-        tracing::info!("Stable diffusion server is finished on {:?}", start_args.clone());
+        tracing::info!(
+            "Stable diffusion server is finished on {:?}",
+            start_args.clone()
+        );
         let _ = process_service::notify_main_process(task_id).await;
     } else {
-        tracing::info!("Stable diffusion server failed to run on {:?}", start_args.clone());
+        tracing::info!(
+            "Stable diffusion server failed to run on {:?}",
+            start_args.clone()
+        );
     }
 }
 

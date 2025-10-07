@@ -29,7 +29,7 @@ use tracing_subscriber::fmt::time::OffsetTime;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::{EnvFilter, Registry};
+use tracing_subscriber::{Registry};
 use uuid::Uuid;
 
 pub(crate) static DEBUG: AtomicBool = AtomicBool::new(false);

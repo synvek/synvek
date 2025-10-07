@@ -8,7 +8,6 @@ use actix_web::middleware::Logger;
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
 use actix_web::{HttpRequest, get, post};
 use base64::{Engine as _, engine::general_purpose};
-use mistralrs_server::ModelInfo;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 

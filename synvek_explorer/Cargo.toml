@@ -31,7 +31,7 @@ time = { version = "0.3", features = ["macros", "parsing"] }
 tracing-log = "0.2.0"
 tracing-appender = "0.2"
 
-[features]
-cuda = ["synvek_service/cuda"]
-cudnn = ["synvek_service/cudnn"]
-accelerate = ["synvek_service/accelerate"]
+#[features]
+#cuda = ["synvek_service/cuda"]
+#cudnn = ["synvek_service/cudnn"]
+#accelerate = ["synvek_service/accelerate"]

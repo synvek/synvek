@@ -190,7 +190,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         tracing::info!("Resource release is done.");
                     }
                 }
-                _ => {}
+                _ => {
+                    tracing::error!("Failed to load functions on synvek_backend_sd");
+                }
             }
         }
     }

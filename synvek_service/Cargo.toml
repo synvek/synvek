@@ -6,9 +6,8 @@ edition = "2024"
 
 [dependencies]
 deno = {version = "2.3.5", path = "./../third_party/deno/cli"}
-mistralrs-server = {version = "0.6.0", path = "./../third_party/mistral.rs/mistralrs-server"}
+#mistralrs-server = {version = "0.6.0", path = "./../third_party/mistral.rs/mistralrs-server"}
 hf-hub = { path = "./../third_party/hf-hub", default-features = false, features = ["ureq","tokio","rustls-tls",] }
-
 actix-web = "4.11.0"
 actix-cors = "0.7.1"
 actix-web-lab = "0.2"  # 提供SSE支持
@@ -42,7 +41,7 @@ tracing-chrome = "0.7.2"
 uuid = { version = "1.7", features = ["v4", "serde"] }
 #tauri = { version = "2.5.0", features = [] }
 #rustpython = "0.4.0"
-[features]
-cuda = ["mistralrs-server/cuda"]
-cudnn = ["mistralrs-server/cudnn"]
-accelerate = ["mistralrs-server/accelerate"]
+#[features]
+#cuda = ["mistralrs-server/cuda"]
+#cudnn = ["mistralrs-server/cudnn"]
+#accelerate = ["mistralrs-server/accelerate"]

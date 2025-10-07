@@ -11,7 +11,6 @@ use actix_web::{HttpRequest, get, post};
 use async_stream::stream;
 use base64::{Engine as _, engine::general_purpose};
 use futures::stream::Stream;
-use mistralrs_server::ModelInfo;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use std::time::Duration;

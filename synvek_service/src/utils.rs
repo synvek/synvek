@@ -1,3 +1,4 @@
+use std::ffi::{CString, c_char};
 
 pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
     const BINARY_UNITS: [&str; 4] = ["B", "KiB", "MiB", "GiB"];
