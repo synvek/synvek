@@ -61,6 +61,9 @@ pub struct ProcessInfo {
     pub offloaded: bool,
     
     pub backend: String,
+
+    /// Acceleration
+    pub acceleration: String,
 }
 
 static GLOBAL_PROCESSES: OnceLock<Arc<Mutex<HashMap<String, ProcessInfo>>>> = OnceLock::new();
@@ -167,6 +170,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
             cpu: model_args.cpu,
             offloaded: model_args.offloaded,
             backend: model_args.backend,
+            acceleration: model_args.acceleration,
         };
         insert_process(task_id.clone(), process_info);
 

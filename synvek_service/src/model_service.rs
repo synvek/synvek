@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::fetch_service::Task;
 use crate::process_api::{HeartTickRequest, HeartTickResponse};
 use crate::script_service::ScriptInfo;
+use crate::utils;
 use crate::{common, fetch_service, sd_server};
 use crate::{config, process_service, synvek};
 use async_trait::async_trait;
@@ -76,6 +77,9 @@ pub struct ModelServiceArgs {
 
     /// Backend
     pub backend: String,
+
+    /// Acceleration
+    pub acceleration: String,
 }
 
 #[derive(Debug, Clone)]
@@ -114,6 +118,9 @@ pub struct ModelInfo {
     pub offloaded: bool,
 
     pub backend: String,
+
+    /// Acceleration
+    pub acceleration: String,
 }
 
 pub fn get_model_servers() -> Vec<ModelInfo> {
@@ -139,6 +146,7 @@ pub fn get_model_servers() -> Vec<ModelInfo> {
                 cpu: info.cpu,
                 offloaded: info.offloaded,
                 backend: info.backend.clone(),
+                acceleration: info.acceleration.clone(),
             };
             model_infos.push(model_info);
         });
@@ -201,6 +209,8 @@ async fn start_model_server_in_spawn_process(
         updated_args.model_id.to_string(),
         "--backend".to_string(),
         updated_args.backend.clone(),
+        "--acceleration".to_string(),
+        updated_args.acceleration.clone(),
     ];
     if args.cpu {
         process_args.push("--cpu".to_string());
@@ -231,6 +241,44 @@ async fn start_model_server_in_spawn_process(
     Ok(task_id.to_string())
 }
 
+fn validate_acceleration(backend: String, acceleration: String) -> bool {
+    let mut validation = false;
+    if backend == common::BACKEND_DEFAULT {
+        validation = if cfg!(target_os = "windows") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        } else if cfg!(target_os = "macos") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
+        } else {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        };
+    } else if backend == common::BACKEND_LLAMA_CPP {
+        validation = if cfg!(target_os = "windows") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        } else if cfg!(target_os = "macos") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
+        } else {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        };
+    } else if backend == common::BACKEND_STABLE_DIFFUSION_CPP {
+        validation = if cfg!(target_os = "windows") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        } else if cfg!(target_os = "macos") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
+        } else {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        };
+    } else if backend == common::BACKEND_WHISPER_CPP {
+        validation = if cfg!(target_os = "windows") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        } else if cfg!(target_os = "macos") {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
+        } else {
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+        };
+    }
+    validation
+}
+
 async fn start_model_server_in_process(
     args: ModelServiceArgs,
     task_id: Option<String>,
@@ -258,6 +306,11 @@ async fn start_model_server_in_process(
     let task = task.unwrap();
     let private_model = task.clone().private_model;
     let backend = args.backend.clone();
+    let acceleration = args.acceleration.clone();
+    let validation = validate_acceleration(backend.clone(), acceleration.clone());
+    if !validation {
+        return Err(anyhow::anyhow!("Unable to validate acceleration with backend"));
+    }
     tracing::info!("Starting model server on port {}", port);
 
     let _ = thread::spawn(move || {
@@ -599,13 +652,17 @@ async fn start_mistral_server_dll(
         cpu: args.cpu,
         offloaded: args.offloaded,
         backend: args.backend,
+        acceleration: "".to_string(),
     };
     let config = Config::new();
     let main_process_port = config.get_config_port().to_string();
     let model_dir = config.get_model_dir();
     let endpoint = config.get_config_endpoint();
+    let acceleration = args.acceleration.clone();
+    let base_lib_name = "synvek_backend_default";
+    let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
     unsafe {
-        let lib = Library::new("synvek_backend_default.dll");
+        let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
             tracing::info!("Loading default backend server...");
             let start_backend_server_func = lib.get(b"start_backend_server");
@@ -730,9 +787,13 @@ async fn start_llama_cpp_server(
     path: String,
     is_spawn_process: bool,
 ) {
+    let base_lib_name = "synvek_backend_llama";
+    let acceleration = args.acceleration.clone();
+    let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+
     unsafe {
         tracing::info!("Search Llama server...");
-        let lib = Library::new("backend-llama-server.dll");
+        let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
             tracing::info!("Loading Llama server...");
             let func = lib.get(b"start_llama_server");

@@ -8,6 +8,7 @@ use std::sync::{Arc, Mutex, OnceLock};
 use base64::{Engine as _, engine::{self, general_purpose}, alphabet};
 use base64::engine::general_purpose::STANDARD;
 use hf_hub::{Cache, Repo, RepoType};
+use crate::utils;
 use crate::fetch_service;
 use crate::model_service::ModelServiceArgs;
 use crate::{config, file_service};
@@ -31,6 +32,7 @@ pub struct SdConfig {
     pub port: String,
     pub path: String,
     pub is_spawn_process: bool,
+    pub acceleration: String,
 }
 
 
@@ -72,6 +74,7 @@ pub fn set_sd_config(sd_config: SdConfig) {
     old_sd_config.port = sd_config.port;
     old_sd_config.path = sd_config.path;
     old_sd_config.is_spawn_process = sd_config.is_spawn_process;
+    old_sd_config.acceleration = sd_config.acceleration;
 }
 
 fn get_model_file_path(repo_name: String, file_name: String, revision: String, commit_hash: String) -> PathBuf {
@@ -122,8 +125,12 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
             valid = false;
         }
     }
+    let base_lib_name = "synvek_backend_sd";
+    let acceleration = sd_config.acceleration.clone();
+    let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+
     unsafe {
-        let lib = Library::new("synvek_backend_sd.dll");
+        let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
             let generate_image_data_func = lib.get(b"generate_image_data");
             let get_image_count_func = lib.get(b"get_image_count");

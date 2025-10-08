@@ -312,6 +312,12 @@ export class WorkspaceUtils {
       if (oldModelServer.tokenSource !== newModelServer.tokenSource) {
         return true
       }
+      if (oldModelServer.backend !== newModelServer.backend) {
+        return true
+      }
+      if (oldModelServer.acceleration !== newModelServer.acceleration) {
+        return true
+      }
     }
     return false
   }

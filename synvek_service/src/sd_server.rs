@@ -70,6 +70,7 @@ pub async fn start_sd_server(
         port: port.clone(),
         path,
         is_spawn_process,
+        acceleration: args.acceleration,
     };
     sd_service::set_sd_config(sd_config);
     let port = port.parse::<u16>()?;

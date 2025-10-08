@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Button, Divider, Dropdown, message, theme, Tooltip } from 'antd'
+import { Button, Divider, Dropdown, MenuProps, message, theme, Tooltip, Typography } from 'antd'
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { PlayOutlined16, StopOutlined16 } from '@/components/Resource/Icons'
+import { Placeholder, PlayOutlined16, StopOutlined16 } from '@/components/Resource/Icons'
 import {
   Consts,
   modelProviders,
   ModelServerData,
+  OSType,
   RequestUtils,
   Settings,
   SystemUtils,
@@ -15,11 +16,11 @@ import {
   WorkMode,
   WorkspaceUtils,
 } from '@/components/Utils'
-import { BackendType } from '@/components/Utils/src/ModelProviders'
+import { AccelerationType, BackendType } from '@/components/Utils/src/ModelProviders'
 import { FetchFile, FetchRepo, StartModelServerRequest } from '@/components/Utils/src/RequestUtils'
 import { useIntl } from '@@/exports'
-import { AimOutlined, CaretDownOutlined, Loading3QuartersOutlined, ThunderboltFilled } from '@ant-design/icons'
-import { Typography } from 'antd'
+import { AimOutlined, CaretDownOutlined, CheckOutlined, FireOutlined, Loading3QuartersOutlined, ThunderboltFilled } from '@ant-design/icons'
+import { MenuItemType } from 'antd/es/menu/interface'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
@@ -31,6 +32,11 @@ const { useToken } = theme
 
 const FORCE_UPDATE_INDEX = 0
 
+interface ModelConfig {
+  backend: BackendType
+  acceleration: AccelerationType
+}
+
 const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
@@ -40,6 +46,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   const { token } = useToken()
   const intl = useIntl()
   const timerRef = useRef<any>(null)
+  const modelConfigRef = useRef<Map<string, ModelConfig>>(new Map())
 
   useEffect(() => {
     console.log(`Initializing HeaderNavigator now ... `)
@@ -384,9 +391,135 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     setForceUpdate(forceUpdate + 1)
   }
 
+  const getAccelerations = (backendType: BackendType): AccelerationType[] => {
+    let osType = SystemUtils.getOS()
+    if (osType === OSType.WINDOWS) {
+      if (backendType === 'default') {
+        return ['cuda', 'cpu']
+      } else if (backendType === 'llama_cpp') {
+        return ['cuda', 'cpu']
+      } else if (backendType === 'stable_diffusion_cpp') {
+        return ['cuda', 'cpu']
+      } else {
+        return ['cuda', 'cpu']
+      }
+    } else if (osType === OSType.MACOS) {
+      if (backendType === 'default') {
+        return ['metal', 'cpu']
+      } else if (backendType === 'llama_cpp') {
+        return ['metal', 'cpu']
+      } else if (backendType === 'stable_diffusion_cpp') {
+        return ['metal', 'cpu']
+      } else {
+        return ['metal', 'cpu']
+      }
+    } else if (osType === OSType.LINUX) {
+      if (backendType === 'default') {
+        return ['cuda', 'cpu']
+      } else if (backendType === 'llama_cpp') {
+        return ['cuda', 'cpu']
+      } else if (backendType === 'stable_diffusion_cpp') {
+        return ['cuda', 'cpu']
+      } else {
+        return ['cuda', 'cpu']
+      }
+    } else if (osType === OSType.IOS) {
+      if (backendType === 'default') {
+        return ['metal', 'cpu']
+      } else if (backendType === 'llama_cpp') {
+        return ['metal', 'cpu']
+      } else if (backendType === 'stable_diffusion_cpp') {
+        return ['metal', 'cpu']
+      } else {
+        return ['metal', 'cpu']
+      }
+    } else if (osType === OSType.ANDROID) {
+      if (backendType === 'default') {
+        return ['webgpu', 'cpu']
+      } else if (backendType === 'llama_cpp') {
+        return ['webgpu', 'cpu']
+      } else if (backendType === 'stable_diffusion_cpp') {
+        return ['webgpu', 'cpu']
+      } else {
+        return ['webgpu', 'cpu']
+      }
+    }
+    return []
+  }
+
+  const handleBackendMenuClick = (task: Task, backend: BackendType, acceleration: AccelerationType) => {
+    const modelConfig: ModelConfig = {
+      backend: backend,
+      acceleration: acceleration,
+    }
+    modelConfigRef.current.set(task.task_name, modelConfig)
+  }
+  const populateBackendMenuItems = (task: Task, backendType: BackendType, items: MenuProps['items']) => {
+    let accelerations = getAccelerations(backendType)
+    if (accelerations) {
+      accelerations.forEach((acceleration) => {
+        items?.push({
+          key: backendType + ':' + acceleration,
+          label: backendType + ':' + acceleration,
+          onClick: () => handleBackendMenuClick(task, backendType, acceleration),
+        })
+      })
+    }
+  }
+
+  const generateBackendMenuItems = (task: Task) => {
+    let items: MenuProps['items'] = []
+    if (task.private_model) {
+      populateBackendMenuItems(task, 'llama_cpp', items)
+      populateBackendMenuItems(task, 'stable_diffusion_cpp', items)
+      populateBackendMenuItems(task, 'whisper_cpp', items)
+      populateBackendMenuItems(task, 'default', items)
+    } else {
+      modelProviders.forEach((modelProvider) => {
+        modelProvider.modelOptions.forEach((modelOption) => {
+          if (modelOption.name === task.model_id) {
+            modelProvider.backends.forEach((backend) => {
+              populateBackendMenuItems(task, backend, items)
+            })
+          }
+        })
+      })
+    }
+    const modelConfig = modelConfigRef.current.get(task.task_name)
+    if (modelConfig) {
+      items.forEach((item) => {
+        const menuItem = item as MenuItemType
+        if (item && item.key === `${modelConfig.backend}:${modelConfig.acceleration}`) {
+          menuItem.icon = <CheckOutlined />
+        } else {
+          menuItem.icon = <Placeholder />
+        }
+      })
+    } else {
+      items.forEach((item, index) => {
+        const menuItem = item as MenuItemType
+        if (index === 0) {
+          if (item) {
+            const keyStr = (item.key as string).split(':')
+            const modelConfig: ModelConfig = {
+              backend: keyStr[0] as BackendType,
+              acceleration: keyStr[1] as AccelerationType,
+            }
+            modelConfigRef.current.set(task.task_name, modelConfig)
+          }
+          menuItem.icon = <CheckOutlined />
+        } else {
+          menuItem.icon = <Placeholder />
+        }
+      })
+    }
+    return items
+  }
+
   const handleStartModelServer = async (task: Task) => {
     let modelType = 'plain'
     let backends: BackendType[] = []
+    let modelConfig = modelConfigRef.current.get(task.task_name)
     modelProviders.forEach((modelProvider) => {
       modelProvider.modelOptions.forEach((modelOption) => {
         if (modelOption.name === task.model_id) {
@@ -404,7 +537,8 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       tokenSource: task.access_token ? task.access_token : undefined,
       cpu: !!task.cpu,
       offloaded: !!task.offloaded,
-      backend: backends.length > 0 ? backends[0] : 'default',
+      backend: modelConfig ? modelConfig.backend : backends.length > 0 ? backends[0] : 'default',
+      acceleration: modelConfig ? modelConfig.acceleration : 'cpu',
     }
     const startModelServerResponse = await RequestUtils.startModelServer(startModelServerRequest)
     await WorkspaceUtils.handleRequest(
@@ -558,6 +692,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-start' })}>
                 <Button
+                  size={'small'}
                   type={'text'}
                   icon={<PlayOutlined16 style={{ color: starting || !modelDownloaded ? token.colorTextDisabled : token.colorSuccess }} />}
                   hidden={started}
@@ -567,6 +702,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
               </Tooltip>
               <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-stop' })}>
                 <Button
+                  size={'small'}
                   type={'text'}
                   icon={<StopOutlined16 style={{ color: token.colorError }} />}
                   hidden={!started}
@@ -575,7 +711,18 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                 ></Button>
               </Tooltip>
               <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-set-as-default' })}>
-                <Button type={'text'} icon={<AimOutlined />} disabled={isDefault || !modelDownloaded} onClick={() => handleDefaultModelChange(task)}></Button>
+                <Button
+                  size={'small'}
+                  type={'text'}
+                  icon={<AimOutlined />}
+                  disabled={isDefault || !modelDownloaded}
+                  onClick={() => handleDefaultModelChange(task)}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-backend-acceleration' })}>
+                <Dropdown menu={{ items: generateBackendMenuItems(task) }}>
+                  <Button size={'small'} type={'text'} icon={<FireOutlined />} />
+                </Dropdown>
               </Tooltip>
             </div>
           </div>
@@ -589,7 +736,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     return (
       <div
         style={{
-          width: '350px',
+          width: '450px',
           maxHeight: '400px',
           backgroundColor: token.colorBorderSecondary,
           borderRadius: '8px',

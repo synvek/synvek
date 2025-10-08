@@ -7,6 +7,7 @@ mod config;
 mod error;
 mod common;
 
+mod utils;
 mod model_service;
 
 mod script_service;

@@ -111,6 +111,10 @@ pub struct StartArgs {
 
     #[arg(long)]
     pub backend: String,
+
+    /// Acceleration
+    #[arg(long)]
+    pub acceleration: String,
 }
 
 /// Service Args
@@ -225,6 +229,7 @@ impl CommandHandler {
             cpu: args.cpu,
             offloaded: args.offloaded,
             backend: args.backend,
+            acceleration: args.acceleration,
         };
         crate::model_service::start_model_server_from_command(model_args, args.task_id, args.port).await?;
         loop {

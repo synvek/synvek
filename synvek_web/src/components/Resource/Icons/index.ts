@@ -1,5 +1,6 @@
 export { AddConversion } from './src/AddConversion'
 export { AddFolder } from './src/AddFolder'
+export { Placeholder } from './src/Placeholder'
 export { PlayFilled16 } from './src/PlayFilled16'
 export { PlayOutlined16 } from './src/PlayOutlined16'
 export { Sidebar } from './src/Sidebar'

@@ -53,4 +53,19 @@ pub static BACKEND_WHISPER_CPP: &str = "whisper_cpp";
 
 pub static BACKEND_UNKNOWN: &str = "unknown";
 
+pub static ACCELERATION_CPU: &str = "cpu";
+pub static ACCELERATION_CPU_MKL: &str = "cpu-mkl";
+pub static ACCELERATION_CPU_ACC: &str = "cpu-accelerate";
+pub static ACCELERATION_CUDA: &str = "cuda";
+
+pub static ACCELERATION_VULKAN: &str = "vulkan";
+
+pub static ACCELERATION_OPENCL: &str = "opencl";
+
+pub static ACCELERATION_WEBGPU: &str = "webgpu";
+
+pub static ACCELERATION_METAL: &str = "metal";
+
+pub static ACCELERATION_UNKNOWN: &str = "unknown";
+
 pub static HEALTH_CHECK_COUNT: i32 = 1200;

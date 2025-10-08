@@ -17,6 +17,7 @@ export interface ModelOption {
 export type ModelCategory = 'text-to-text' | 'image-to-text' | 'speech-to-text' | 'video-to-text' | 'text-to-image' | 'text-to-speech'
 export type ModelType = 'run' | 'plain' | 'vision-plain' | 'diffusion' | 'speech' | 'uqff' | 'gguf'
 export type BackendType = 'default' | 'llama_cpp' | 'stable_diffusion_cpp' | 'whisper_cpp'
+export type AccelerationType = 'cpu' | 'cuda' | 'metal' | 'cpu-mkl' | 'cpu-accelerate' | 'vulkan' | 'opencl' | 'webgpu'
 
 export interface ModelProviderStatus {
   name: string

@@ -65,6 +65,7 @@ export default {
   'header.navigator.message-success-request-sent': '操作已成功提交',
   'header.navigator.message-failure-request-sent': '操作提交失败:',
   'header.navigator.message-error-request-sent': '操作提交错误:',
+  'header.navigator.model-backend-acceleration': '选择后端引擎加速模式',
   'header.navigator.model-loading': '加载中...',
   'header.navigator.model-running': '运行中...',
   'header.navigator.model-stop': '停止',

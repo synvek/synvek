@@ -52,6 +52,9 @@ pub struct ModelServerData {
     
     ///Backend
     pub backend: String,
+
+    /// Acceleration
+    pub acceleration: String,
 }
 
 /// Request for Start Model Server
@@ -82,7 +85,10 @@ pub struct StartModelServerRequest {
     pub offloaded: bool,
 
     ///Backend
-    pub backend: String
+    pub backend: String,
+
+    /// Acceleration
+    pub acceleration: String,
 }
 
 /// Response for Start Model Server
@@ -150,6 +156,7 @@ impl From<ModelInfo> for ModelServerData {
             cpu: model_info.cpu,
             offloaded: model_info.offloaded,
             backend: model_info.backend,
+            acceleration: model_info.acceleration,
         }
     }
 }
@@ -184,7 +191,8 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
         token_source: req.token_source.clone(),
         cpu: req.cpu,
         offloaded: req.offloaded,
-        backend: req.backend.clone()
+        backend: req.backend.clone(),
+        acceleration: req.acceleration.clone(),
     };
     let config = config::get_synvek_config();
     let multi_process = config.multi_process;
@@ -204,6 +212,7 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
                 cpu: req.cpu,
                 offloaded: req.offloaded,
                 backend: req.backend.clone(),
+                acceleration: req.acceleration.clone(),
             };
             let response = StartModelServerResponse {
                 success: true,

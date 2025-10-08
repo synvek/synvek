@@ -39,6 +39,7 @@ export const modelServerService = new Elysia({ prefix: 'server' })
               cpu: value.cpu,
               offloaded: value.offloaded,
               backend: value.backend,
+              acceleration: value.acceleration,
             }
           })
           ModelServerService.setModelServers(modelServerInfos)
@@ -72,6 +73,7 @@ export const modelServerService = new Elysia({ prefix: 'server' })
         cpu: body.cpu,
         offloaded: body.offloaded,
         backend: body.backend,
+        acceleration: body.acceleration,
       }
       let response: string = ''
       const modelServerResponse = await RequestUtils.startModelServer(request)
@@ -92,6 +94,7 @@ export const modelServerService = new Elysia({ prefix: 'server' })
                 cpu: data.cpu,
                 offloaded: data.offloaded,
                 backend: data.backend,
+                acceleration: data.acceleration,
               }
             : null
           response = SystemUtils.buildResponse(true, modelServerInfo)
@@ -116,6 +119,7 @@ export const modelServerService = new Elysia({ prefix: 'server' })
         cpu: t.Boolean(),
         offloaded: t.Boolean(),
         backend: t.String(),
+        acceleration: t.String(),
       }),
     },
   )

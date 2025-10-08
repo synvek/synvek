@@ -15,6 +15,7 @@ export interface ModelServerData {
   cpu: boolean
   offloaded: boolean
   backend: string
+  acceleration: string
 }
 
 export interface ModelServerInfo {
@@ -30,6 +31,7 @@ export interface ModelServerInfo {
   cpu: boolean
   offloaded: boolean
   backend: string
+  acceleration: string
 }
 
 export interface GetModelServersResponse {
@@ -49,6 +51,7 @@ export interface StartModelServerRequest {
   cpu: boolean
   offloaded: boolean
   backend: string
+  acceleration: string
 }
 
 export interface StartModelServerResponse {
@@ -107,6 +110,7 @@ export class RequestUtils {
       cpu: model.cpu,
       offloaded: model.offloaded,
       backend: model.backend,
+      acceleration: model.acceleration,
     }
     const config = {
       headers: {

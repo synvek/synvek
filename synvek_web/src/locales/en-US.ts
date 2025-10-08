@@ -65,6 +65,7 @@ export default {
   'header.navigator.message-success-request-sent': 'Request has sent successfully',
   'header.navigator.message-failure-request-sent': 'Request is sent with failure:',
   'header.navigator.message-error-request-sent': 'Request is sent with error:',
+  'header.navigator.model-backend-acceleration': 'Choose backend & acceleration',
   'header.navigator.model-loading': 'Loading...',
   'header.navigator.model-running': 'Running...',
   'header.navigator.model-stop': 'Stop',

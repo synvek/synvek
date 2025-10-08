@@ -1,4 +1,6 @@
+use std::error::Error;
 use std::ffi::{CString, c_char};
+use libloading::Library;
 
 pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
     const BINARY_UNITS: [&str; 4] = ["B", "KiB", "MiB", "GiB"];
@@ -21,4 +23,16 @@ pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
     }
 
     format!("{:.2}{}", size, units[unit_index])
+}
+
+pub fn get_load_library_name(base_name: &str, acceleration: &str) -> String {
+    let lib_name = if cfg!(target_os = "windows") {
+        format!("{}_{}.dll", base_name, acceleration) // Windows: `mylib_cuda.dll`
+    } else if cfg!(target_os = "macos") {
+        format!("lib{}_{}.dylib", base_name, acceleration) // macOS: `libmylib_cuda.dylib`
+    } else {
+        format!("lib{}_{}.so", base_name, acceleration) // Linux: `libmylib_cuda.so`
+    };
+
+    lib_name
 }
