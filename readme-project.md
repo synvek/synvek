@@ -4,11 +4,15 @@
 
 ## About Synvek
 
-Synvek is all-in-one GUI application to run & explore LLM with text, image and voice locally.  
+Synvek is all-in-one GUI application to manage & run & explore LLM with text, image and voice locally.  
 
 ## Main Features
 
-Synvek is built on Rust & Deno & Tauri & Mistral.rs/Candle. It can run & chat with local AI by  single application.No python or node required
+It is powered by Rust & Deno & Tauri & llama.cpp/stable-diffusion.cpp/Mistral.rs/Candle. It can run & chat with local AI by  single application. No python or node required.
+
+
+You can chat with multiple LLMs in one conversion including text, image generation and so on.
+
 
 ### Mutliple models support. Chat completion, image generation or voice output in one application and one chat. 
 
@@ -63,6 +67,8 @@ Synvek is built on Rust & Deno & Tauri & Mistral.rs/Candle. It can run & chat wi
 git clone https://github.com/synvek/deno.git
 git clone https://github.com/synvek/mistral.rs.git
 git clone https://github.com/synvek/hf-hub.git
+git clone https://github.com/synvek/llama.cpp.git
+git clone https://github.com/synvek/stable-diffusion.cpp.git
 
 - Be noted: git submodule isn't supported yet.
 
@@ -96,5 +102,53 @@ synvek_explorer will static link to synvek_service into single application and s
 - Local run with GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
 - Local run with CPU: cargo run --package synvek_explorer --bin synvek_explorer
 - Debug & Run requires output as working folder.
+
+### Build dependences
+
+#### Build backend: llama.cpp
+
+- Build llama.cpp with cuda: 
+
+cmake -B build -DGGML_CUDA=ON -DBUILD_SHARED_LIBS=OFF
+cmake --build build --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
+
+- Build llama.cpp with cpu: 
+
+cmake -B build -DBUILD_SHARED_LIBS=OFF
+cmake --build build --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cpu.dll and copy to output folder
+
+#### Build backend: stable-diffusion.cpp
+
+- Build stable-diffusion.cpp with cuda: 
+
+cmake -B build -DSD_CUDA=ON
+cmake --build build --config Release --target synvek_backend_sd -j 14
+
+Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
+
+- Build stable-diffusion.cpp with cpu: 
+
+cmake -B build
+cmake --build build --config Release --target synvek_backend_sd -j 14
+
+Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
+
+#### Build backend default: mistral.rs
+
+- Build mistral.rs with cuda: 
+
+cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
+
+Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_cuda.dll and copy to output folder
+
+- Build mistral.rs with cpu: 
+
+cargo build --profile release --package mistralrs-server --lib
+
+Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_cpu.dll and copy to output folder
 
 ## Support & Feedback

@@ -20,6 +20,7 @@ use std::time::Duration;
 use std::{env, thread};
 use tokio::runtime;
 use uuid::Uuid;
+use crate::process_service::notify_main_process;
 
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
 type InitDefaultServer = unsafe fn(*const c_char, *const c_char, *const c_char) -> i32;
@@ -301,6 +302,13 @@ async fn start_model_server_in_process(
     let moved_task_id = task_id.clone();
     let task = fetch_service::load_local_task(args.clone().model_name);
     if task.is_none() {
+        // Need to terminate in multiprocess mode  right now.
+        if is_spawn_process {
+            panic!(
+                "Failed to start model server with reason: task not found, args = {:?} ",
+                args.clone(),
+            );
+        }
         return Err(anyhow::anyhow!("Task not found"));
     }
     let task = task.unwrap();
@@ -309,6 +317,13 @@ async fn start_model_server_in_process(
     let acceleration = args.acceleration.clone();
     let validation = validate_acceleration(backend.clone(), acceleration.clone());
     if !validation {
+        // Need to terminate in multiprocess mode  right now.
+        if is_spawn_process {
+            panic!(
+                "Failed to start model server with reason: invalid acceleration, args = {:?} ",
+                args.clone(),
+            );
+        }
         return Err(anyhow::anyhow!("Unable to validate acceleration with backend"));
     }
     tracing::info!("Starting model server on port {}", port);
@@ -792,24 +807,13 @@ async fn start_llama_cpp_server(
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
 
     unsafe {
-        tracing::info!("Search Llama server...");
+        tracing::info!("Search Llama server with name: {}", lib_name.clone());
         let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
             tracing::info!("Loading Llama server...");
             let func = lib.get(b"start_llama_server");
             if let Ok(func) = func {
                 let start_llama_server_func: Symbol<StartLlamaServer> = func;
-                // let rust_strings: &[&str] = &[
-                //     "synvek_service",
-                //     "-m",
-                //     "./models/Qwen3-0.6B-Q8_0.gguf",
-                //     "--port",
-                //     "8088",
-                // ];
-                // let c_strings = rust_strings
-                //     .iter()
-                //     .map(|&s| CString::new(s))
-                //     .collect::<anyhow::Result<Vec<_>, _>>();
                 let c_strings = start_args
                     .iter()
                     .map(|s| CString::new(s.to_str().unwrap()))
@@ -825,9 +829,23 @@ async fn start_llama_cpp_server(
                 }
             } else {
                 tracing::error!("Failed to load functions of backend Llama server.");
+                // Need to terminate in multiprocess mode  right now.
+                if is_spawn_process {
+                    panic!(
+                        "Failed to load functions of backend Llama server, args = {:?} ",
+                        args.clone(),
+                    );
+                }
             }
         } else {
             tracing::error!("Failed to load backend Llama server.");
+            // Need to terminate in multiprocess mode  right now.
+            if is_spawn_process {
+                panic!(
+                    "Failed to load backend Llama server, args = {:?} ",
+                    args.clone(),
+                );
+            }
         }
     }
 }
@@ -888,7 +906,8 @@ fn start_server_monitor(task_id: String, task_port: String) {
                         if response.status().is_success() {
                             let response_data = response.text().await;
                             if let Ok(response_data) = response_data {
-                                tracing::info!("Server is ready to serve task_id: {} and response: {:?}",task_id, response_data );
+                                tracing::info!("Server is ready to serve task_id: {} and response: {:?}",task_id.clone(), response_data );
+                                let _ = notify_main_process(task_id.clone()).await;
                                 break;
                             } else {
                                 tracing::error!( "Failed to check server process with task_id: {} and reason: {}", task_id, response_data.unwrap_err() );
