@@ -3,17 +3,22 @@ use std::process::Command;
 use std::{env, thread};
 use tauri::{App, Manager, PhysicalSize, WindowEvent};
 
+
+#[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
 use std::path::PathBuf;
 use tauri::path::BaseDirectory;
-// 注意 Windows 特有特性
 
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::runtime::Runtime;
 use synvek_service::{config, script_service};
 
+
+#[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
+#[cfg(target_os = "windows")]
 const DETACHED_PROCESS: u32 = 0x00000008;
+#[cfg(target_os = "windows")]
 const CREATE_NEW_PROCESS_GROUP: u32 = 0x00000200;
 
 
@@ -88,9 +93,12 @@ fn start_agent(script_path: OsString) {
 fn run_external_command() -> Result<String, String> {
     let current_exe = env::current_exe().unwrap();
     let current_dir = env::current_dir().unwrap();
-    let output = Command::new("git")
-        .creation_flags(CREATE_NO_WINDOW)
-        .current_dir(current_dir)
+
+    let mut command = Command::new("git");
+
+    #[cfg(target_os = "windows")]
+    command.creation_flags(CREATE_NO_WINDOW);
+    let output = command.current_dir(current_dir)
         //.args(["start", "--task-id", "d0428737-b59a-4f4d-929e-452ca0b104ea", "--port", "12002", "--model-type", "plain", "--model-name", "Qwen3-0.6B", "--model-id", "Qwen/Qwen3-0.6B", "--path", "C:\\source\\works\\synvek\\synvek_service\\models\\models--Qwen--Qwen3-0.6B"])
         .spawn()
         .expect("Failed to spawn child process")
