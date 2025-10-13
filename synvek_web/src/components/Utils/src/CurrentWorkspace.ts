@@ -17,7 +17,7 @@ export enum WorkMode {
 }
 
 const defaultConversionData: ConversionData = {
-  conversionId: 0,
+  conversionId: 1,
   conversionName: 'default',
   scrollTop: 0,
   chatMessages: [],
