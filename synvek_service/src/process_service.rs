@@ -16,13 +16,22 @@ use std::time::{Duration, SystemTime};
 use std::{env, thread};
 use std::thread::sleep;
 use uuid::Uuid;
+#[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt; // 注意 Windows 特有特性
 
 use tokio::io::{AsyncBufReadExt, BufReader};
 
+
+#[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
+
+#[cfg(target_os = "windows")]
 const DETACHED_PROCESS: u32 = 0x00000008;
+
+#[cfg(target_os = "windows")]
 const CREATE_NEW_PROCESS_GROUP: u32 = 0x00000200;
+
+#[cfg(target_os = "windows")]
 const CREATE_NEW_CONSOLE: u32 = 0x00000010;
 
 #[derive(Clone, Debug)]
