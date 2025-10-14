@@ -33,6 +33,6 @@ use synvek_service::{fetch_service, start_synvek_service, synvek};
 
 #[actix_web::main]
 async fn main() -> Result<(), anyhow::Error> {
-    start_synvek_service().await?;
+    start_synvek_service(true).await?;
     Ok(())
 }

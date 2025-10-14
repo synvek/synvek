@@ -121,6 +121,12 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
 
+- 使用Metal支持构建llama.cpp: 
+
+同CPU构建
+
+注意: 需要将synvek_backend_llama.dll synvek_backend_llama_metal.dll并复制到output目录
+
 #### 构建推理引擎: stable-diffusion.cpp
 
 - 使用cuda支持构建stable-diffusion.cpp: 
@@ -136,6 +142,12 @@ cmake -B build
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cpu.dll并复制到output目录
+
+- 使用Metal支持构建stable-diffusion.cpp: 
+
+同CPU构建
+
+注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_metal.dll并复制到output目录
 
 #### 构建推理引擎 default: mistral.rs
 
@@ -155,5 +167,11 @@ cargo build --profile release --package mistralrs-server --features "cuda cudnn"
 cargo build --profile release --package mistralrs-server --lib
 
 注意: 需要将synvek_backend_default.dll 改成synvek_backend_default_cpu.dll并复制到output目录
+
+- 使用Metal支持构建mistral.rs: 
+
+cargo build --profile release --package mistralrs-server  --features "metal" --lib
+
+注意: 需要将synvek_backend_default.dll 改成synvek_backend_default_metal.dll并复制到output目录
 
 ## 支持和反馈

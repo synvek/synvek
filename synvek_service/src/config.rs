@@ -125,7 +125,6 @@ pub fn get_synvek_config() -> SynvekConfig {
 }
 
 impl Config {
-    /// 创建新的配置实例
     pub fn new() -> Self {
         if Self::is_portal_available() {
             Self::from_working_dir()
@@ -149,20 +148,20 @@ impl Config {
             )
         });
 
-        let config_dir = proj_dirs.config_dir();
-        std::fs::create_dir_all(config_dir).unwrap_or_else(|e| {
-            panic!(
-                "Failed to create config directory at {}: {}",
-                config_dir.display(),
-                e
-            )
-        });
-
         let data_dir = proj_dirs.data_dir();
         std::fs::create_dir_all(data_dir).unwrap_or_else(|e| {
             panic!(
                 "Failed to create data directory at {}: {}",
                 data_dir.display(),
+                e
+            )
+        });
+
+        let config_dir = data_dir.join(common::CONFIG_DIR_NAME);
+        std::fs::create_dir_all(config_dir.as_path()).unwrap_or_else(|e| {
+            panic!(
+                "Failed to create config directory at {}: {}",
+                config_dir.display(),
                 e
             )
         });
@@ -182,7 +181,6 @@ impl Config {
             data_dir: data_dir.to_owned(),
         }
     }
-    /// 从文件加载配置
 
     fn get_default_config() -> SynvekConfig {
         SynvekConfig {
@@ -214,8 +212,9 @@ impl Config {
             let mut root = root.unwrap();
             root.push(common::CONFIG_DIR_NAME);
             root.push(common::CONFIG_FILE);
-            if root.try_exists().is_ok() {
-                return true;
+            let exists = root.try_exists();
+            if let Ok(exists) = exists {
+                return exists;
             }
         }
         false
@@ -296,14 +295,16 @@ impl Config {
     pub fn get_config_dir(&self) -> PathBuf {
         let mut config_path = self.config_dir.clone();
         config_path
-        // config_path.push(common::CONFIG_DIR_NAME);
-        // PathBuf::from("C:/source/works/huan/engine/config")
+    }
+
+    pub fn get_data_dir(&self) -> PathBuf {
+        let mut data_dir = self.data_dir.clone();
+        data_dir
     }
     pub fn get_model_dir(&self) -> PathBuf {
         let mut config_path = self.cache_dir.clone();
         config_path.push(common::MODELS_DIR_NAME);
         config_path
-        //PathBuf::from("C:/source/works/huan/engine/models")
     }
 
     pub fn get_config_endpoint(&self) -> String {

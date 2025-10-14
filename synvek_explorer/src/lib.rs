@@ -1,12 +1,12 @@
 use std::ffi::OsString;
 use std::process::Command;
-use std::{env, thread};
+use std::{env, fs, thread};
 use tauri::{App, Manager, PhysicalSize, WindowEvent};
 
 
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tauri::path::BaseDirectory;
 
 use tokio::io::{AsyncBufReadExt, BufReader};
@@ -89,6 +89,62 @@ fn start_agent(script_path: OsString) {
     .expect("Failed to run synvek agent");
 }
 
+fn copy_folder(src: &Path, dest: &Path) -> Result<(), std::io::Error> {
+    fs::create_dir_all(dest)?;
+    println!("Checking dir {:?} to dir {:?}", src, dest);
+    let src_dir = fs::read_dir(src);
+    println!("Checking source dir {:?}", src_dir);
+    if let Ok(src_dir) = src_dir {
+        println!("Succeed to check source dir {:?}", src_dir);
+        for entry in src_dir {
+            if let Ok(entry) = entry {
+                println!("Succeed to checking entry {:?}", entry);
+                let src_path = entry.path();
+                let file_name = entry.file_name();
+                let dest_path = dest.join(&file_name);
+                println!("Prepare copy {:?} {:?} to {:?}", file_name, src_path, dest_path);
+
+                if src_path.is_file() {
+                    if dest_path.exists() {
+                       println!("Already exists and skip copy {:?} to {:?}", src_path, dest_path);
+                    } else {
+                        fs::copy(&src_path, &dest_path)?;
+                        println!("Copy file {:?} to {:?}", src_path.display(), dest_path.display());
+                    }
+                } else if src_path.is_dir() {
+                    copy_folder(&src_path, &dest_path)?;
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
+
+/// Check and populate data folder
+fn setup_app_data(app: &mut App) -> Result<(), String> {
+    let config = config::Config::new();
+    let data_dir = config.get_data_dir();
+    println!("Data dir: {:?}", data_dir);
+
+    let resources = vec!["resources/agent_plugins/", "resources/service_plugins/", "resources/config/", "resources/storage/" ];
+
+    for resource in resources {
+        let bundled_file_path = app.path().resolve(resource, tauri::path::BaseDirectory::Resource)
+        .map_err(|e| format!("Failed to resolve resource dir: {}", e))?;
+        println!("Process resource: {:?}", bundled_file_path);
+        // Skip prefix resources/
+        let target_dir = &resource[10..];
+        let target_file_path = data_dir.join(target_dir);
+        println!("Target resource: {:?}", target_file_path);
+        let result = copy_folder(&bundled_file_path, &target_file_path);
+        if let Err(e) = result {
+            return Err(format!("Failed to copy resource: {:?}", e));
+        }
+    }
+    Ok(())
+}
+
 #[tauri::command]
 fn run_external_command() -> Result<String, String> {
     let current_exe = env::current_exe().unwrap();
@@ -118,11 +174,33 @@ pub fn run() {
                 //     .build(),
                 // )?;
             }
-            let resource_path = app
-                .path()
-                .resolve("resources/synvek_agent/synvek_agent.cjs", BaseDirectory::Resource)?;
+
+            println!("Current dir: {:?}", std::env::current_dir());
+            println!("Working exe: {:?}", std::env::current_exe());
+
+            setup_app_data(app)?;
 
             synvek_service::synvek::initialize();
+
+            let resource_path = app
+                .path()
+                .resolve("resources/synvek_agent/synvek_agent.cjs", BaseDirectory::Resource);
+
+            if resource_path.is_ok() {
+                tracing::info!("Resource path is ok");
+            } else {
+                tracing::info!("Resource path is err: {}", resource_path.unwrap_err());
+            };
+            let resource_path = app
+                .path()
+                .resolve("resources/synvek_agent/synvek_agent.cjs", BaseDirectory::Resource)
+                .map_err(|_| {
+                    let resource_dir = app.path().resource_dir();
+                    tracing::info!("Resource dir: {:?}", resource_dir);
+                    tracing::info!("Current dir: {:?}", std::env::current_dir());
+                    "Failed to resolve resource path"
+                })?;
+            tracing::info!("Resource path={:?}", resource_path.display());
 
             tracing::info!("synvek explorer is initializing");
             let _ = thread::spawn(move || {

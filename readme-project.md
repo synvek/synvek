@@ -121,6 +121,12 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cpu.dll and copy to output folder
 
+- Build llama.cpp with metal: 
+
+Same as with cpu.
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll and copy to output folder
+
 #### Build backend: stable-diffusion.cpp
 
 - Build stable-diffusion.cpp with cuda: 
@@ -136,6 +142,12 @@ cmake -B build
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
+
+- Build stable-diffusion.cpp with metal: 
+
+Same as with cpu.
+
+Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and copy to output folder
 
 #### Build backend default: mistral.rs
 
@@ -154,5 +166,11 @@ Noted: Need check your driver compute capability and choose correct synvek_backe
 cargo build --profile release --package mistralrs-server --lib
 
 Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_cpu.dll and copy to output folder
+
+- Build mistral.rs with metal: 
+
+cargo build --profile release --package mistralrs-server  --features "metal" --lib
+
+Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_metal.dll and copy to output folder
 
 ## Support & Feedback

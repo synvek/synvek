@@ -2,7 +2,7 @@
   "$schema": "./../synvek_web/node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "synvek_explorer",
   "version": "0.1.0",
-  "identifier": "com.synvek.net",
+  "identifier": "com.synvek.synvek",
   "build": {
     "frontendDist": "./../synvek_web/build",
     //"devUrl": "http://localhost:8000",
@@ -42,6 +42,14 @@
     ],
     "resources": {
       "./../synvek_agent/build/synvek_agent.cjs": "resources/synvek_agent/synvek_agent.cjs",
+      "./../synvek_service/agent_plugins/**/*": "resources/agent_plugins/",
+      "./../synvek_service/service_plugins/**/*": "resources/service_plugins/",
+      "./../synvek_service/config/**/*": "resources/config/",
+      "./../synvek_service/storage/**/*": "resources/storage/"
+    },
+    "macOS": {
+      "files": {
+      }
     }
   }
 }

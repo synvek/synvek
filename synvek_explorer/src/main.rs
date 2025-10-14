@@ -17,7 +17,7 @@ fn start_synvek_service() {
     rt.block_on(async {
         tokio::task::spawn_blocking(|| {
             let rt_blocking = Runtime::new().unwrap();
-            rt_blocking.block_on(synvek_service::start_synvek_service())
+            rt_blocking.block_on(synvek_service::start_synvek_service(false))
         })
         .await
         .unwrap()
@@ -53,14 +53,12 @@ fn start_agent() {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    tracing::debug!("Starting synvek explorer with args: {:?}", args);
 
+    println!("Starting synvek explorer with args: {:?}", args);
     //Start tauri without args, or start synvek service with args
     if args.len() < 2 {
-        tracing::info!("Synvek explorer is starting");
         synvek_explorer_lib::run();
     } else {
-        tracing::info!("Synvek service is starting");
         let _ = thread::spawn(move || {
             start_synvek_service();
         });

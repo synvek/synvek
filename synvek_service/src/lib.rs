@@ -30,8 +30,12 @@ pub use error::*;
 pub use common::*;
 
 
-pub async fn start_synvek_service() -> Result<(), anyhow::Error> {
-    synvek::initialize();
+
+///Start synvek service.
+pub async fn start_synvek_service(require_init: bool) -> Result<(), anyhow::Error> {
+    if require_init {
+        synvek::initialize();
+    }
 
     //let _ = config::generate_schema();
     let _ = synvek::start_service().await;

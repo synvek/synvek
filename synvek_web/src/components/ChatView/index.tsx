@@ -498,7 +498,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     return `${historyMessageHead} ${historyMessageContent} \n ## Please answer based on above chat history. \n`
   }
 
-  const handleChatRequest = (chatContent: ChatContent[], chatAttachments: ChatAttachment[], defaultTextModel: string) => {
+  const handleChatRequest = async (chatContent: ChatContent[], chatAttachments: ChatAttachment[], defaultTextModel: string) => {
     let imageInfo = ``
     let imageIndex = 1
     fileList.forEach(() => {
@@ -518,6 +518,23 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         modelName = 'default'
       }
     })
+    const userChatMessage: ChatMessage = {
+      chatId: null,
+      key: SystemUtils.generateUUID(),
+      fromUser: true,
+      content: chatContent,
+      time: moment().valueOf(),
+      thinkStartTime: null,
+      thinkEndTime: null,
+      attachments: chatAttachments,
+      toolCalls: [],
+      toolCallChunks: [],
+      invalidToolCalls: [],
+      sourceType: null,
+      success: true,
+    }
+    currentWorkspace.selectedConversionData.chatMessages.push(userChatMessage)
+    await addChat(true)
     const response = RequestUtils.chat(
       chatContent,
       [{ type: 'text', text: systemPrompt }],
@@ -537,23 +554,6 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         }
         const reader = body.getReader()
         const decoder = new TextDecoder()
-        const userChatMessage: ChatMessage = {
-          chatId: null,
-          key: SystemUtils.generateUUID(),
-          fromUser: true,
-          content: chatContent,
-          time: moment().valueOf(),
-          thinkStartTime: null,
-          thinkEndTime: null,
-          attachments: chatAttachments,
-          toolCalls: [],
-          toolCallChunks: [],
-          invalidToolCalls: [],
-          sourceType: null,
-          success: true,
-        }
-        currentWorkspace.selectedConversionData.chatMessages.push(userChatMessage)
-        await addChat(true)
         const chatMessage: ChatMessage = {
           chatId: null,
           key: SystemUtils.generateUUID(),
