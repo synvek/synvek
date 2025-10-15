@@ -111,7 +111,7 @@ export default (props: any) => {
   return (
     <div data-tauri-drag-region className={styles.sidebar} style={{ backgroundColor: token.colorFillAlter, borderRight: `${token.colorBorder} solid 1px` }}>
       <div data-tauri-drag-region className={styles.controlBar}>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-chat' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-chat' })}>
           <Button
             icon={<MessageOutlined />}
             variant={'text'}
@@ -120,7 +120,7 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Chat)}
           />
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-image-generation' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-image-generation' })}>
           <Button
             icon={<PictureOutlined />}
             variant={'text'}
@@ -129,7 +129,7 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Image)}
           />
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-audio' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-audio' })}>
           {/*<Button*/}
           {/*  icon={<SoundOutlined />}*/}
           {/*  variant={'text'}*/}
@@ -138,7 +138,7 @@ export default (props: any) => {
           {/*  onClick={() => handleWorkModeChange(WorkMode.Audio)}*/}
           {/*></Button>*/}
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-translation' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-translation' })}>
           <Button
             icon={<TranslationOutlined />}
             variant={'text'}
@@ -147,7 +147,7 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Translate)}
           />
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-applications' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-applications' })}>
           {/*<Button*/}
           {/*  icon={<AppstoreOutlined />}*/}
           {/*  variant={'text'}*/}
@@ -167,7 +167,7 @@ export default (props: any) => {
         </Tooltip>
       </div>
       <div data-tauri-drag-region className={styles.settingBar}>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-help' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-help' })}>
           {/*<Button*/}
           {/*  icon={<QuestionOutlined />}*/}
           {/*  variant={'text'}*/}
@@ -176,10 +176,10 @@ export default (props: any) => {
           {/*  onClick={() => handleWorkModeChange(WorkMode.Help)}*/}
           {/*></Button>*/}
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: darkTheme ? 'sidebar.button-tooltip-theme-dark' : 'sidebar.button-tooltip-theme-light' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: darkTheme ? 'sidebar.button-tooltip-theme-dark' : 'sidebar.button-tooltip-theme-light' })}>
           <Button icon={darkTheme ? <MoonOutlined /> : <SunOutlined />} type={'text'} className={styles.button} onClick={() => handleThemeChange()} />
         </Tooltip>
-        <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-settings' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-settings' })}>
           <Button
             icon={<SettingOutlined />}
             variant={'text'}

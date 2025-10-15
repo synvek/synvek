@@ -5,7 +5,7 @@
   "identifier": "com.synvek.synvek",
   "build": {
     "frontendDist": "./../synvek_web/build",
-    //"devUrl": "http://localhost:8000",
+    "devUrl": "http://localhost:8000",
     "devUrl": null,
     "beforeDevCommand": null,
     "beforeBuildCommand": null
@@ -16,14 +16,11 @@
         "title": "Synvek Explorer",
         "width": 1024,
         "height": 768,
-        "resizable": true,
-        "visible": true,
         "label": "main",
-        "center": true,
-        "create": true,
         "devtools": true,
-        "fullscreen": false,
-        "decorations": false
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "decorations": true
       }
     ],
     "security": {

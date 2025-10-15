@@ -30,6 +30,10 @@ tracing-subscriber = { version = "0.3", features = ["time"] }
 time = { version = "0.3", features = ["macros", "parsing"] }
 tracing-log = "0.2.0"
 tracing-appender = "0.2"
+tauri-plugin-decorum = "1.1.1"
+
+[target."cfg(target_os = \"macos\")".dependencies]
+cocoa = "0.26"
 
 #[features]
 #cuda = ["synvek_service/cuda"]
