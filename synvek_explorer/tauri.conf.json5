@@ -1,11 +1,11 @@
 {
   "$schema": "./../synvek_web/node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "synvek_explorer",
+  "productName": "SynvekExplorer",
   "version": "0.1.0",
   "identifier": "com.synvek.synvek",
   "build": {
     "frontendDist": "./../synvek_web/build",
-    "devUrl": "http://localhost:8000",
+    //"devUrl": "http://localhost:8000",
     "devUrl": null,
     "beforeDevCommand": null,
     "beforeBuildCommand": null
@@ -45,8 +45,14 @@
       "./../synvek_service/storage/**/*": "resources/storage/"
     },
     "macOS": {
-      "files": {
-      }
+      "frameworks": [
+        "./../output/libsynvek_backend_default_cpu.dylib",
+        "./../output/libsynvek_backend_default_metal.dylib",
+        "./../output/libsynvek_backend_llama_cpu.dylib",
+        "./../output/libsynvek_backend_llama_metal.dylib",
+        "./../output/libsynvek_backend_sd_cpu.dylib",
+        "./../output/libsynvek_backend_sd_metal.dylib"
+      ]
     }
   }
 }

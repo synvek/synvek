@@ -6,6 +6,7 @@ import { Constants } from '../Constants.ts'
 import { Runtime, Settings } from '../Types.ts'
 
 const defaultSettings: Settings = {
+  agentPort: 12000,
   language: 'en-US',
   pinnedFolders: [],
   pinnedConversions: [],
@@ -13,10 +14,26 @@ const defaultSettings: Settings = {
   activatedToolPlugins: [],
   activatedMCPServices: [],
   currentUserName: 'Me'
-
 }
 
 export class SystemUtils {
+
+  public static cwd: string | null = null
+
+  public static initialize() {
+    const args = process.argv.slice(2)
+    console.log(`Synvek agent arguments = ${args}`)
+    if (args.length >= 2) {
+      if(args[0] === '--cwd') {
+        SystemUtils.cwd = args[1]
+        console.log(`Synvek agent will use working dir:${SystemUtils.cwd}`)
+      } else {
+        console.log('No argument detected for Synvek agent execution')
+      }
+    } else {
+      console.log('No argument detected for Synvek agent execution')
+    }
+  }
   public static getRuntime() {
     return Runtime.BUN
   }
@@ -44,11 +61,11 @@ export class SystemUtils {
   }
 
   public static getDataDir() {
-    return process.cwd()
+    return SystemUtils.cwd ? SystemUtils.cwd : process.cwd()
   }
 
   public static getWorkingDir() {
-    return process.cwd()
+    return SystemUtils.cwd ? SystemUtils.cwd : process.cwd()
   }
 
   public static getConversionsDir() {

@@ -17,7 +17,7 @@ fn start_synvek_service() {
     rt.block_on(async {
         tokio::task::spawn_blocking(|| {
             let rt_blocking = Runtime::new().unwrap();
-            rt_blocking.block_on(synvek_service::start_synvek_service(false))
+            rt_blocking.block_on(synvek_service::start_synvek_service(true))
         })
         .await
         .unwrap()

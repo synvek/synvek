@@ -12,6 +12,7 @@ use std::path::{Path, PathBuf};
 use tauri::path::BaseDirectory;
 
 use synvek_service::{config, script_service};
+use tauri_plugin_log::{Target, TargetKind};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::runtime::Runtime;
 
@@ -69,7 +70,9 @@ fn start_agent(script_path: OsString) {
             // };
             // tracing::info!("Starting synvek agent with script {}", normalized_str);
 
-            // 2. 将处理后的字符串转换为 PathBuf
+            let config = config::Config::new();
+            let data_dir = config.get_data_dir();
+            let cwd = format!("--cwd=\"{:?}\"", data_dir);
             let path_buf = PathBuf::from(old_script_path.clone());
             let script_args: Vec<OsString> = vec![
                 OsString::from("run"),
@@ -81,7 +84,10 @@ fn start_agent(script_path: OsString) {
                 OsString::from("--allow-net"),
                 OsString::from("--allow-read"),
                 OsString::from("--allow-write"),
+                OsString::from("--allow-write"),
                 OsString::from(old_script_path.clone()),
+                OsString::from("--cwd"),
+                OsString::from(data_dir.clone()),
             ];
             rt_blocking.block_on(script_service::start_script(script_args))
         })
@@ -195,6 +201,12 @@ pub fn run() {
                 //     .build(),
                 // )?;
             }
+            // app.handle().plugin(
+            //   tauri_plugin_log::Builder::default()
+            //       .target(Target::new(TargetKind::LogDir{file_name: None}))
+            //     .level(log::LevelFilter::Info)
+            //     .build(),
+            // )?;
 
             println!("Current dir: {:?}", std::env::current_dir());
             println!("Working exe: {:?}", std::env::current_exe());
@@ -240,7 +252,7 @@ pub fn run() {
             main_window.create_overlay_titlebar().unwrap();
 
             // Some macOS-specific helpers
-            #[cfg(target_os = "macos")] 
+            #[cfg(target_os = "macos")]
             {
                 // Set a custom inset to the traffic lights
                 main_window.set_traffic_lights_inset(12.0, 16.0).unwrap();
@@ -260,21 +272,21 @@ pub fn run() {
             //     .center()
             //     //.decorations(false)
             //     .inner_size(1024.0, 768.0);
-            // 
+            //
             // #[cfg(target_os = "macos")]
             // let win_builder = win_builder.title_bar_style(TitleBarStyle::Transparent).hidden_title(true);
-            // 
+            //
             // let window = win_builder.build().unwrap();
             // let out_size = window.outer_size().map_err(|e| e.to_string())?;
             // let inner_size = window.inner_size().map_err(|e| e.to_string())?;
-            // 
+            //
             // tracing::info!("out_size: inner_size = {:?} : {:?}", out_size.height, inner_size.height);
-            // 
+            //
             // #[cfg(target_os = "macos")]
             // {
             //     use cocoa::appkit::{NSColor, NSWindow};
             //     use cocoa::base::{id, nil};
-            // 
+            //
             //     let ns_window = window.ns_window().unwrap() as id;
             //     unsafe {
             //         let bg_color = NSColor::colorWithRed_green_blue_alpha_(

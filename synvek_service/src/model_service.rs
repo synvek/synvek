@@ -23,7 +23,7 @@ use uuid::Uuid;
 use crate::process_service::notify_main_process;
 
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
-type InitDefaultServer = unsafe fn(*const c_char, *const c_char, *const c_char) -> i32;
+type InitDefaultServer = unsafe fn(*const c_char, *const c_char, *const c_char, *const c_char) -> i32;
 type StartDefaultServer = unsafe fn(*const c_char, *const c_char) -> i32;
 type StopDefaultServer = unsafe fn(*const c_char) -> i32;
 
@@ -289,6 +289,7 @@ async fn start_model_server_in_process(
     let new_port_number = synvek::inc_port_number();
     let config = Config::new();
     let model_dir = config.get_model_dir();
+    let log_dir = config.get_log_dir();
     let task_id = if task_id.is_some() {
         task_id.unwrap()
     } else {
@@ -352,7 +353,7 @@ async fn start_model_server_in_process(
             }
             if private_model {
                 if selected_backend == common::BACKEND_DEFAULT {
-                    populate_args_private_with_backend_default(task, model_dir, &mut start_args);
+                    populate_args_private_with_backend_default(task, model_dir, log_dir, &mut start_args);
                 } else if selected_backend == common::BACKEND_LLAMA_CPP {
                     populate_args_private_with_backend_llama_cpp(task, model_dir, &mut start_args);
                 } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
@@ -380,7 +381,7 @@ async fn start_model_server_in_process(
                     &mut start_args,
                 );
             } else if selected_backend == common::BACKEND_DEFAULT {
-                populate_args_with_backend_default(args.clone(), task, model_dir, &mut start_args);
+                populate_args_with_backend_default(args.clone(), task, model_dir, log_dir, &mut start_args);
             }
             tracing::info!("Starting model server {:?}", start_args);
             let path = args.path.clone();
@@ -429,14 +430,19 @@ pub fn stop_model_server(task_id: String) {
 fn populate_args_private_with_backend_default(
     task: Task,
     model_dir: PathBuf,
+    log_dir: PathBuf,
     start_args: &mut Vec<OsString>,
 ) {
     let private_model_name = task.task_name;
     let uniform_private_model_name = private_model_name.to_uppercase();
-    let mut model_path = model_dir.clone();
+    let mut model_path = model_dir.clone();    
     model_path.push(private_model_name.clone());
     let is_gguf = uniform_private_model_name.ends_with(".GGUF");
     let is_uqff = uniform_private_model_name.ends_with(".UQFF");
+    let mut log_file = log_dir.clone();
+    log_file.push("backend_default.log");
+    start_args.push(OsString::from("--log"));
+    start_args.push(OsString::from(log_file.clone()));
     if is_gguf {
         start_args.push(OsString::from("gguf"));
         start_args.push(OsString::from("-f"));
@@ -488,6 +494,7 @@ fn populate_args_with_backend_default(
     args: ModelServiceArgs,
     task: Task,
     model_dir: PathBuf,
+    log_dir: PathBuf,
     start_args: &mut Vec<OsString>,
 ) {
     if args.isq.is_some() && !args.model_type.eq("diffusion") {
@@ -503,6 +510,12 @@ fn populate_args_with_backend_default(
     if args.cpu {
         start_args.push(OsString::from("--cpu"));
     }
+
+    let mut log_file = log_dir.clone();
+    log_file.push("backend_default.log");
+    start_args.push(OsString::from("--log"));
+    start_args.push(OsString::from(log_file));
+
     // enable_thinking: bool,
     // start_args.push(OsString::from("--enable-thinking"));
     if args.model_type.eq("uqff") {
@@ -511,6 +524,7 @@ fn populate_args_with_backend_default(
         start_args.push(OsString::from(args.model_type.clone()));
     }
 
+    
     start_args.push(OsString::from("-m"));
     start_args.push(OsString::from(args.model_id.clone()));
 
@@ -672,6 +686,7 @@ async fn start_mistral_server_dll(
     let config = Config::new();
     let main_process_port = config.get_config_port().to_string();
     let model_dir = config.get_model_dir();
+    let log_dir = config.get_log_dir();
     let endpoint = config.get_config_endpoint();
     let acceleration = args.acceleration.clone();
     let base_lib_name = "synvek_backend_default";
@@ -709,6 +724,7 @@ async fn start_mistral_server_dll(
                     let c_model_dir = CString::new(model_dir.to_str().unwrap());
                     let c_endpoint = CString::new(endpoint.as_str());
                     let c_main_process_port = CString::new(main_process_port.as_str());
+                    let c_log_dir = CString::new(log_dir.to_str().unwrap());
                     let mut validate: bool = true;
                     if c_model_dir.is_err() {
                         validate = false;
@@ -731,6 +747,13 @@ async fn start_mistral_server_dll(
                             endpoint
                         );
                     }
+                    if c_log_dir.is_err() {
+                        validate = false;
+                        tracing::error!(
+                            "Failed to start backend_server_default with invalid log_dir {:?}",
+                            c_main_process_port
+                        );
+                    }
                     if c_main_process_port.is_err() {
                         validate = false;
                         tracing::error!(
@@ -743,6 +766,7 @@ async fn start_mistral_server_dll(
                             c_model_dir.unwrap().as_ptr(),
                             c_endpoint.unwrap().as_ptr(),
                             c_main_process_port.unwrap().as_ptr(),
+                            c_log_dir.unwrap().as_ptr(),
                         );
                         if result == 0 {
                             tracing::info!("Succeed to initialize backend_server_default");

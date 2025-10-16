@@ -102,6 +102,8 @@ synvek_explorer will static link to synvek_service into single application and s
 - Local run with GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
 - Local run with CPU: cargo run --package synvek_explorer --bin synvek_explorer
 - Debug & Run requires output as working folder.
+- Deploy：./../synvek_web/node_modules/.bin/tauri build
+   Please check local installation location for tauri.
 
 ### Build dependences
 
@@ -116,14 +118,15 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll 
 
 - Build llama.cpp with cpu: 
 
-cmake -B build -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cpu.dll and copy to output folder
 
 - Build llama.cpp with metal: 
 
-Same as with cpu.
+cmake -B build -DBUILD_SHARED_LIBS=OFF
+cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll and copy to output folder
 
@@ -145,7 +148,8 @@ Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and cop
 
 - Build stable-diffusion.cpp with metal: 
 
-Same as with cpu.
+cmake -B build -DSD_METAL=ON
+cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and copy to output folder
 

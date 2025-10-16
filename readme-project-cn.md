@@ -102,7 +102,9 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 - 本地运行使用GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
 - 本地运行使用CPU: cargo run --package synvek_explorer --bin synvek_explorer
 - 调试和运行必须指定output路径作为工作目录.
-
+- 打包：./../synvek_web/node_modules/.bin/tauri build
+   需要检查确认tauri的安装位置.
+   
 ### 构建依赖
 
 #### 构建推理引擎: llama.cpp
@@ -116,14 +118,15 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 - 使用CPU支持构建llama.cpp: 
 
-cmake -B build -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
 
 - 使用Metal支持构建llama.cpp: 
 
-同CPU构建
+cmake -B build -DBUILD_SHARED_LIBS=OFF
+cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_metal.dll并复制到output目录
 
@@ -145,7 +148,8 @@ cmake --build build --config Release --target synvek_backend_sd -j 14
 
 - 使用Metal支持构建stable-diffusion.cpp: 
 
-同CPU构建
+cmake -B build -DSD_METAL=ON
+cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_metal.dll并复制到output目录
 

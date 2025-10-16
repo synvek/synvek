@@ -15,7 +15,9 @@ import { ModelService, modelService } from './ModelService.ts'
 import { pluginService, PluginService } from './PluginService.ts'
 import { SystemService, systemService } from './SystemService.ts'
 import { RequestUtils } from './Utils/RequestUtils.ts'
+import { SystemUtils } from './Utils/SystemUtils.ts'
 
+SystemUtils.initialize()
 ModelService.initialize()
 //Don't use await because it causes build failure
 PluginService.initialize().then().catch(console.error)

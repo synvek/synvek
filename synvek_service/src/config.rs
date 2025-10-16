@@ -302,11 +302,16 @@ impl Config {
         data_dir
     }
     pub fn get_model_dir(&self) -> PathBuf {
-        let mut config_path = self.cache_dir.clone();
+        let mut config_path = self.data_dir.clone();
         config_path.push(common::MODELS_DIR_NAME);
         config_path
     }
 
+    pub fn get_log_dir(&self) -> PathBuf {
+        let mut config_path = self.data_dir.clone();
+        config_path.push(common::LOG_DIR_NAME);
+        config_path
+    }
     pub fn get_config_endpoint(&self) -> String {
         let config = get_synvek_config();
         config.endpoint

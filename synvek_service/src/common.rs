@@ -15,6 +15,8 @@ pub static GLOBAL_PROJECT_ORGANIZATION_NAME: &str = "synvek";
 pub static CONFIG_DIR_NAME: &str = "config";
 pub static MODELS_DIR_NAME: &str = "models";
 
+pub static LOG_DIR_NAME: &str = "logs";
+
 pub static CONFIG_FILE: &str = "config.json";
 
 pub static REPO_INFO_FILE: &str = "repos.json";

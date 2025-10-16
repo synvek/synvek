@@ -82,6 +82,8 @@ pub fn get_global_settings() -> Settings {
     }
 }
 pub fn initialize_logging() {
+    let config = config::Config::new();
+    let log_dir = config.get_log_dir();
     LOGGER.get_or_init(|| {
         let console_offset = time::UtcOffset::from_hms(8, 0, 0).unwrap();
         let console_timer = OffsetTime::new(
@@ -92,13 +94,12 @@ pub fn initialize_logging() {
             .with_timer(console_timer)
             .with_writer(std::io::stdout.with_max_level(tracing::Level::INFO));
 
-        // 2. 配置文件输出 + 按大小分割
         let file_appender = rolling::Builder::new()
             .rotation(Rotation::DAILY)
             .max_log_files(15)
             .filename_prefix("synvek")
             .filename_suffix("log")
-            .build("./logs")
+            .build(log_dir)
             .expect("Failed to create file appender");
 
         let file_offset = time::UtcOffset::from_hms(8, 0, 0).unwrap();
