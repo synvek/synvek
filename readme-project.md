@@ -102,7 +102,8 @@ synvek_explorer will static link to synvek_service into single application and s
 - Local run with GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
 - Local run with CPU: cargo run --package synvek_explorer --bin synvek_explorer
 - Debug & Run requires output as working folder.
-- Deploy：./../synvek_web/node_modules/.bin/tauri build
+- Deploy：(MacOS) ./../synvek_web/node_modules/.bin/tauri build
+- Deploy：(Windows) ..\synvek_web\node_modules\.bin\tauri build
    Please check local installation location for tauri.
 
 ### Build dependences

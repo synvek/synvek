@@ -3,6 +3,7 @@ build/
 target/
 third_party/
 node_modules
+.idea/
 /.vscode
 /synvek_web/.env.local
 /synvek_web/.idea

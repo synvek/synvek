@@ -42,7 +42,13 @@
       "./../synvek_service/agent_plugins/**/*": "resources/agent_plugins/",
       "./../synvek_service/service_plugins/**/*": "resources/service_plugins/",
       "./../synvek_service/config/**/*": "resources/config/",
-      "./../synvek_service/storage/**/*": "resources/storage/"
+      "./../synvek_service/storage/**/*": "resources/storage/",
+      "./../output/*":  'lib/',
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "offlineInstaller"
+      },
     },
     "macOS": {
       "frameworks": [

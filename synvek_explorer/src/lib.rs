@@ -2,9 +2,12 @@ use std::ffi::OsString;
 use std::process::Command;
 use std::{env, fs, thread};
 use tauri::{
-    App, Manager, PhysicalSize, TitleBarStyle, WebviewUrl, WebviewWindowBuilder, WindowEvent,
+    App, Manager, PhysicalSize, WebviewUrl, WebviewWindowBuilder, WindowEvent,
 };
 use tauri_plugin_decorum::WebviewWindowExt;
+
+#[cfg(target_os = "macos")]
+use tauri::{TitleBarStyle, };
 
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;

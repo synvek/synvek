@@ -102,7 +102,8 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 - 本地运行使用GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
 - 本地运行使用CPU: cargo run --package synvek_explorer --bin synvek_explorer
 - 调试和运行必须指定output路径作为工作目录.
-- 打包：./../synvek_web/node_modules/.bin/tauri build
+- 打包(MacOS)：./../synvek_web/node_modules/.bin/tauri build
+- 打包(Windows) ..\synvek_web\node_modules\.bin\tauri build
    需要检查确认tauri的安装位置.
    
 ### 构建依赖
