@@ -8,9 +8,9 @@ pub type Timestamp = SystemTime;
 /// 服务引用类型
 pub type ServiceRef<T> = Arc<T>;
 
-pub static GLOBAL_PROJECT_APPLICATION_NAME: &str = "synvek";
+pub static GLOBAL_PROJECT_APPLICATION_NAME: &str = "SynvekExplorer`";
 pub static GLOBAL_PROJECT_QUALIFIER_NAME: &str = "com";
-pub static GLOBAL_PROJECT_ORGANIZATION_NAME: &str = "synvek";
+pub static GLOBAL_PROJECT_ORGANIZATION_NAME: &str = "Synvek";
 
 pub static CONFIG_DIR_NAME: &str = "config";
 pub static MODELS_DIR_NAME: &str = "models";
@@ -56,9 +56,14 @@ pub static BACKEND_WHISPER_CPP: &str = "whisper_cpp";
 pub static BACKEND_UNKNOWN: &str = "unknown";
 
 pub static ACCELERATION_CPU: &str = "cpu";
+
 pub static ACCELERATION_CPU_MKL: &str = "cpu-mkl";
+
 pub static ACCELERATION_CPU_ACC: &str = "cpu-accelerate";
+
 pub static ACCELERATION_CUDA: &str = "cuda";
+
+pub static ACCELERATION_CUDA_LEGACY: &str = "cuda_legacy";
 
 pub static ACCELERATION_VULKAN: &str = "vulkan";
 

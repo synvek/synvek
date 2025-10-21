@@ -19,18 +19,20 @@ tauri-build = { version = "2.2.0", features = ["config-json5"] }
 
 [dependencies]
 synvek_service = {version = "0.1.0",path = "./../synvek_service" }
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
+
 log = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 tauri = { version = "2.5.0", features = ["devtools", "config-json5"] }
+tauri-plugin-decorum = "1.1.1"
 tauri-plugin-log = "2.0.0-rc"
+time = { version = "0.3", features = ["macros", "parsing"] }
 tokio = "1.45.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["time"] }
-time = { version = "0.3", features = ["macros", "parsing"] }
 tracing-log = "0.2.0"
 tracing-appender = "0.2"
-tauri-plugin-decorum = "1.1.1"
+zip = "0.6.6"
 
 [target."cfg(target_os = \"macos\")".dependencies]
 cocoa = "0.26"

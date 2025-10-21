@@ -395,13 +395,13 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     let osType = SystemUtils.getOS()
     if (osType === OSType.WINDOWS) {
       if (backendType === 'default') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       }
     } else if (osType === OSType.MACOS) {
       if (backendType === 'default') {
@@ -415,13 +415,13 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       }
     } else if (osType === OSType.LINUX) {
       if (backendType === 'default') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       } else {
-        return ['cuda', 'cpu']
+        return ['cuda', 'cuda_legacy', 'cpu']
       }
     } else if (osType === OSType.IOS) {
       if (backendType === 'default') {
@@ -454,6 +454,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     }
     modelConfigRef.current.set(task.task_name, modelConfig)
   }
+
   const populateBackendMenuItems = (task: Task, backendType: BackendType, items: MenuProps['items']) => {
     let accelerations = getAccelerations(backendType)
     if (accelerations) {

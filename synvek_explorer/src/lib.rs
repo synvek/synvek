@@ -1,6 +1,7 @@
 use std::ffi::OsString;
 use std::process::Command;
 use std::{env, fs, thread};
+use std::fs::File;
 use tauri::{
     App, Manager, PhysicalSize, WebviewUrl, WebviewWindowBuilder, WindowEvent,
 };
@@ -168,6 +169,83 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
         let result = copy_folder(&bundled_file_path, &target_file_path);
         if let Err(e) = result {
             return Err(format!("Failed to copy resource: {:?}", e));
+        }
+    }
+
+    //nsis installer have size limitation, we need to compress file and decompress them when opening on first launch
+    #[cfg(target_os = "windows")]
+    setup_backend_files(app)?;
+
+    Ok(())
+}
+
+fn setup_backend_files(app: &mut App)-> Result<(), String> {
+    let config = config::Config::new();
+    let data_dir = config.get_data_dir();
+    let mut require_compress = false;
+    let backend_files = vec! [
+        "synvek_backend_default_cpu.dll",
+        "synvek_backend_default_cuda.dll",
+        "synvek_backend_default_cuda_legacy.dll",
+        "synvek_backend_llama_cpu.dll",
+        "synvek_backend_llama_cuda.dll",
+        "synvek_backend_llama_cuda_legacy.dll",
+        "synvek_backend_sd_cpu.dll",
+        "synvek_backend_sd_cuda.dll",
+        "synvek_backend_sd_cuda_legacy.dll",
+    ];
+    for backend_file in backend_files {
+        let backend_file_path = data_dir.join(backend_file);
+        let file_exists = backend_file_path.try_exists();
+        if let Ok(file_exists) = file_exists {
+            if !file_exists {
+                require_compress = true;
+            }
+        }
+    }
+    if !require_compress {
+        println!("All backend files exist in {:?}", data_dir);
+        return Ok(());
+    }
+    let backends = vec![
+        "backend/backend.zip",
+    ];
+    for backend in backends {
+        let bundled_file_path = app
+            .path()
+            .resolve(backend, tauri::path::BaseDirectory::Resource)
+            .map_err(|e| format!("Failed to resolve resource dir: {}", e))?;
+        println!("Process backend: {:?}", bundled_file_path.clone());
+        println!("Target resource: {:?}", data_dir.clone());
+        let backend_file = File::open(bundled_file_path.clone());
+        if let Ok(backend_file) = backend_file {
+            let mut archive = zip::ZipArchive::new(backend_file).unwrap();
+            for i in 0..archive.len() {
+                let mut file = archive.by_index(i).unwrap();
+                let out_path = match file.enclosed_name() {
+                    Some(path) => PathBuf::from(data_dir.clone()).join(path),
+                    None => continue,
+                };
+                println!("Process backend file: {:?}", out_path.clone());
+                if (&*file.name()).ends_with('/') {
+                    fs::create_dir_all(&out_path).unwrap();
+                } else {
+                    if let Some(parent) = out_path.parent() {
+                        if !parent.exists() {
+                            fs::create_dir_all(&parent).unwrap();
+                        }
+                    }
+                    if !out_path.exists() {
+                        let mut outfile = fs::File::create(&out_path).unwrap();
+                        std::io::copy(&mut file, &mut outfile).unwrap();
+                        println!("Process backend file succeed: {:?}", out_path.clone());
+                    } else {
+                        println!("Backend file exists and skip on: {:?}", out_path.clone());
+                    }
+                }
+            }
+        } else {
+            println!("Failed to process resource: {:?}", bundled_file_path.clone());
         }
     }
     Ok(())

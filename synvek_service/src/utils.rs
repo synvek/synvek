@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::ffi::{CString, c_char};
 use libloading::Library;
+use crate::config::Config;
 
 pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
     const BINARY_UNITS: [&str; 4] = ["B", "KiB", "MiB", "GiB"];
@@ -35,4 +36,19 @@ pub fn get_load_library_name(base_name: &str, acceleration: &str) -> String {
     };
 
     lib_name
+}
+
+pub fn get_lib_path(lib_name: String) -> String {
+    let mut lib_path = lib_name.clone();
+
+    #[cfg(target_os = "windows")]
+    {
+        let config = Config::new();
+        let mut lib_dir = config.get_data_dir();
+        lib_dir.push(lib_name);
+        lib_path = lib_dir.display().to_string();
+    }
+
+    tracing::info!("Currently lib_path is : {}", lib_path);
+    lib_path
 }

@@ -128,6 +128,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let base_lib_name = "synvek_backend_sd";
     let acceleration = sd_config.acceleration.clone();
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+    let lib_name = utils::get_lib_path(lib_name);
 
     tracing::info!("synvek_backend_sd lib_name: {}", lib_name);
     unsafe {

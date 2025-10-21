@@ -246,35 +246,35 @@ fn validate_acceleration(backend: String, acceleration: String) -> bool {
     let mut validation = false;
     if backend == common::BACKEND_DEFAULT {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_LLAMA_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_STABLE_DIFFUSION_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_WHISPER_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA
+            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     }
     validation
@@ -687,10 +687,13 @@ async fn start_mistral_server_dll(
     let main_process_port = config.get_config_port().to_string();
     let model_dir = config.get_model_dir();
     let log_dir = config.get_log_dir();
+    let mut lib_dir = config.get_data_dir();
     let endpoint = config.get_config_endpoint();
     let acceleration = args.acceleration.clone();
     let base_lib_name = "synvek_backend_default";
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+    let lib_name = utils::get_lib_path(lib_name);
+
     unsafe {
         let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
@@ -829,6 +832,7 @@ async fn start_llama_cpp_server(
     let base_lib_name = "synvek_backend_llama";
     let acceleration = args.acceleration.clone();
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+    let lib_name = utils::get_lib_path(lib_name);
 
     unsafe {
         tracing::info!("Search Llama server with name: {}", lib_name.clone());

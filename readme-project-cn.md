@@ -112,10 +112,15 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 - 使用cuda支持构建llama.cpp: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75;80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
+
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF
+cmake --build build --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda_legacy.dll并复制到output目录
 
 - 使用CPU支持构建llama.cpp: 
 
@@ -135,10 +140,15 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75;80;86;89;90;120"
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120"
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录
+
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75"
+cmake --build build --config Release --target synvek_backend_sd -j 14
+
+注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda_legacy.dll并复制到output目录
 
 - 使用CPU支持构建stable-diffusion.cpp: 
 
@@ -161,11 +171,14 @@ cmake --build build --config Release --target synvek_backend_sd -j 14
 针对计算能力8.x及以上(RTX 3090 Ti RTX 3090 RTX 3080 Ti RTX 3080 RTX 3070 Ti RTX 3070 RTX 3060 Ti RTX 3060 RTX 3050 Ti RTX 3050)
 set CUDA_COMPUTE_CAP=89
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
+
+注意: 需要基于显卡计算能力选择相应的synvek_backend_default.dll并改成synvek_backend_default_cuda.dll并复制到output目录,
+
 针对计算能力7.x及以下(GTX 1650 Ti TITAN RTX RTX 2080 Ti RTX 2080 RTX 2070 RTX 2060)
 set CUDA_COMPUTE_CAP=75
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
 
-注意: 需要基于显卡计算能力选择相应的synvek_backend_default.dll并改成synvek_backend_default_cuda.dll并复制到output目录,
+注意: 需要基于显卡计算能力选择相应的synvek_backend_default.dll并改成synvek_backend_default_cuda_legacy.dll并复制到output目录,
 
 - 使用CPU支持构建mistral.rs: 
 
