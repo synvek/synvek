@@ -1,6 +1,8 @@
+use std::env;
 use std::error::Error;
 use std::ffi::{CString, c_char};
 use libloading::Library;
+use crate::common;
 use crate::config::Config;
 
 pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
@@ -38,17 +40,36 @@ pub fn get_load_library_name(base_name: &str, acceleration: &str) -> String {
     lib_name
 }
 
-pub fn get_lib_path(lib_name: String) -> String {
-    let mut lib_path = lib_name.clone();
-
-    #[cfg(target_os = "windows")]
-    {
+/// Get backend path based on environment
+///
+pub fn get_backend_path(lib_name: String) -> String {
+    let mut backend_path = lib_name.clone();
+    let is_portal = Config::is_portal_available();
+    if is_portal {
         let config = Config::new();
-        let mut lib_dir = config.get_data_dir();
-        lib_dir.push(lib_name);
-        lib_path = lib_dir.display().to_string();
+        let mut backend_dir = config.get_data_dir();
+        backend_dir.push(common::BACKEND_DIR_NAME);
+        backend_dir.push(lib_name);
+        backend_path = backend_dir.display().to_string();
+    } else {
+        #[cfg(target_os = "windows")]
+        {
+            let config = Config::new();
+            let mut backend_dir = config.get_data_dir();
+            backend_dir.push(common::BACKEND_DIR_NAME);
+            backend_dir.push(lib_name);
+            backend_path = backend_dir.display().to_string();
+        }
+        #[cfg(target_os = "linux")]
+        {
+            let curr_path = env::current_exe().unwrap();
+            let mut backend_dir = curr_path.parent().unwrap().to_owned();
+            backend_dir.push(common::BACKEND_DIR_NAME);
+            backend_dir.push(lib_name);
+            backend_path = backend_dir.display().to_string();
+        }
     }
 
-    tracing::info!("Currently lib_path is : {}", lib_path);
-    lib_path
+    tracing::info!("Currently lib_path is : {}", backend_path);
+    backend_path
 }

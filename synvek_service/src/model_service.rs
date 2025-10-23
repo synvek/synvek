@@ -692,7 +692,7 @@ async fn start_mistral_server_dll(
     let acceleration = args.acceleration.clone();
     let base_lib_name = "synvek_backend_default";
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
-    let lib_name = utils::get_lib_path(lib_name);
+    let lib_name = utils::get_backend_path(lib_name);
 
     unsafe {
         let lib = Library::new(lib_name);
@@ -832,7 +832,7 @@ async fn start_llama_cpp_server(
     let base_lib_name = "synvek_backend_llama";
     let acceleration = args.acceleration.clone();
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
-    let lib_name = utils::get_lib_path(lib_name);
+    let lib_name = utils::get_backend_path(lib_name);
 
     unsafe {
         tracing::info!("Search Llama server with name: {}", lib_name.clone());

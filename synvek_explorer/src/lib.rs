@@ -182,6 +182,7 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
 fn setup_backend_files(app: &mut App)-> Result<(), String> {
     let config = config::Config::new();
     let data_dir = config.get_data_dir();
+    let backend_dir = data_dir.join("backend");
     let mut require_compress = false;
     let backend_files = vec! [
         "synvek_backend_default_cpu.dll",
@@ -195,7 +196,7 @@ fn setup_backend_files(app: &mut App)-> Result<(), String> {
         "synvek_backend_sd_cuda_legacy.dll",
     ];
     for backend_file in backend_files {
-        let backend_file_path = data_dir.join(backend_file);
+        let backend_file_path = backend_dir.join(backend_file);
         let file_exists = backend_file_path.try_exists();
         if let Ok(file_exists) = file_exists {
             if !file_exists {
@@ -204,7 +205,7 @@ fn setup_backend_files(app: &mut App)-> Result<(), String> {
         }
     }
     if !require_compress {
-        println!("All backend files exist in {:?}", data_dir);
+        println!("All backend files exist in {:?}", backend_dir);
         return Ok(());
     }
     let backends = vec![
@@ -216,14 +217,14 @@ fn setup_backend_files(app: &mut App)-> Result<(), String> {
             .resolve(backend, tauri::path::BaseDirectory::Resource)
             .map_err(|e| format!("Failed to resolve resource dir: {}", e))?;
         println!("Process backend: {:?}", bundled_file_path.clone());
-        println!("Target resource: {:?}", data_dir.clone());
+        println!("Target resource: {:?}", backend_dir.clone());
         let backend_file = File::open(bundled_file_path.clone());
         if let Ok(backend_file) = backend_file {
             let mut archive = zip::ZipArchive::new(backend_file).unwrap();
             for i in 0..archive.len() {
                 let mut file = archive.by_index(i).unwrap();
                 let out_path = match file.enclosed_name() {
-                    Some(path) => PathBuf::from(data_dir.clone()).join(path),
+                    Some(path) => PathBuf::from(backend_dir.clone()).join(path),
                     None => continue,
                 };
                 println!("Process backend file: {:?}", out_path.clone());

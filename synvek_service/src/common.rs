@@ -17,6 +17,8 @@ pub static MODELS_DIR_NAME: &str = "models";
 
 pub static LOG_DIR_NAME: &str = "logs";
 
+pub static BACKEND_DIR_NAME: &str = "backend";
+
 pub static CONFIG_FILE: &str = "config.json";
 
 pub static REPO_INFO_FILE: &str = "repos.json";
