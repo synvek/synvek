@@ -331,6 +331,8 @@ pub fn run() {
             });
 
             let main_window = app.get_webview_window("main").unwrap();
+
+            #[cfg(any(target_os = "windows", target_os = "macos"))]
             main_window.create_overlay_titlebar().unwrap();
 
             // Some macOS-specific helpers
