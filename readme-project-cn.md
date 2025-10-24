@@ -70,6 +70,7 @@ git clone https://github.com/synvek/llama.cpp.git
 git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
 
 - 注意： 暂不支持使用git submodule.
+- 如果忘记checkout submodule可以重新拉取： git submodule update --init --recursive
 
 ### 准备输出路径。这里使用output
 
@@ -99,12 +100,10 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 ### 构建和运行tauri模块: synvek_explorer
 
 synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek_service并不是必须项。但构建synvek_service可以方便本地开发和调试
-- 本地运行使用GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
-- 本地运行使用CPU: cargo run --package synvek_explorer --bin synvek_explorer
+- 本地运行: cargo run --package synvek_explorer --bin synvek_explorer
 - 调试和运行必须指定output路径作为工作目录.
-- 打包(MacOS)：./../synvek_web/node_modules/.bin/tauri build
-- 打包(Windows) ..\synvek_web\node_modules\.bin\tauri build
-   需要检查确认tauri的安装位置.
+- 打包准备：cargo install tauri-cli --version "^2.0.0" --locked
+- 打包：cargo tauri build
    
 ### 构建依赖
 
@@ -112,19 +111,19 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 - 使用cuda支持构建llama.cpp: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda_legacy.dll并复制到output目录
 
 - 使用CPU支持构建llama.cpp: 
 
-cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
@@ -140,26 +139,26 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120"
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75"
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda_legacy.dll并复制到output目录
 
 - 使用CPU支持构建stable-diffusion.cpp: 
 
-cmake -B build
+cmake -B build -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cpu.dll并复制到output目录
 
 - 使用Metal支持构建stable-diffusion.cpp: 
 
-cmake -B build -DSD_METAL=ON
+cmake -B build -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_metal.dll并复制到output目录

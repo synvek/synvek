@@ -71,6 +71,7 @@ git clone https://github.com/synvek/llama.cpp.git
 git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
 
 - Be noted: git submodule isn't supported yet.
+- If forget checkout submodule, use command： git submodule update --init --recursive
 
 ### Prepare output folder
 
@@ -99,12 +100,10 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 ### Build & run tauri module: synvek_explorer
 
 synvek_explorer will static link to synvek_service into single application and so build of synvek_service is not necessary for release build. It is useful for develop & debug.
-- Local run with GPU/CUDA: cargo run --package synvek_explorer --features "cuda cudnn" --bin synvek_explorer
-- Local run with CPU: cargo run --package synvek_explorer --bin synvek_explorer
-- Debug & Run requires output as working folder.
-- Deploy：(MacOS) ./../synvek_web/node_modules/.bin/tauri build
-- Deploy：(Windows) ..\synvek_web\node_modules\.bin\tauri build
-   Please check local installation location for tauri.
+- Local run: cargo run --package synvek_explorer --bin synvek_explorer
+- Debug & Run requires output as working folder. 
+- Deploy Setup：cargo install tauri-cli --version "^2.0.0" --locked
+- Deploy：cargo tauri build
 
 ### Build dependences
 
@@ -112,19 +111,19 @@ synvek_explorer will static link to synvek_service into single application and s
 
 - Build llama.cpp with cuda: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda_legacy.dll and copy to output folder
 
 - Build llama.cpp with cpu: 
 
-cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF
+cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cpu.dll and copy to output folder
@@ -140,26 +139,26 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll
 
 - Build stable-diffusion.cpp with cuda: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120"
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75"
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda_legacy.dll and copy to output folder
 
 - Build stable-diffusion.cpp with cpu: 
 
-cmake -B build
+cmake -B build -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
 
 - Build stable-diffusion.cpp with metal: 
 
-cmake -B build -DSD_METAL=ON
+cmake -B build -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and copy to output folder
