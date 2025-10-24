@@ -60,14 +60,6 @@ pub fn get_backend_path(lib_name: String) -> String {
             backend_dir.push(lib_name);
             backend_path = backend_dir.display().to_string();
         }
-        #[cfg(target_os = "linux")]
-        {
-            let curr_path = env::current_exe().unwrap();
-            let mut backend_dir = curr_path.parent().unwrap().to_owned();
-            backend_dir.push(common::BACKEND_DIR_NAME);
-            backend_dir.push(lib_name);
-            backend_path = backend_dir.display().to_string();
-        }
     }
 
     tracing::info!("Currently lib_path is : {}", backend_path);

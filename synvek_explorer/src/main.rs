@@ -52,6 +52,12 @@ fn start_agent() {
 }
 
 fn main() {
+
+    #[cfg(target_os = "linux")]
+    unsafe {
+        std::env::set_var("LD_LIBRARY_PATH", "/usr/lib/SynvekExplorer/backend");
+    }
+
     let args: Vec<String> = env::args().collect();
 
     println!("Starting synvek explorer with args: {:?}", args);
