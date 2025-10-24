@@ -55,7 +55,7 @@ fn main() {
 
     #[cfg(target_os = "linux")]
     unsafe {
-        std::env::set_var("LD_LIBRARY_PATH", "/usr/lib/SynvekExplorer/backend");
+        std::env::set_var("LD_LIBRARY_PATH", "/usr/lib/SynvekExplorer/backend:./backend");
     }
 
     let args: Vec<String> = env::args().collect();
