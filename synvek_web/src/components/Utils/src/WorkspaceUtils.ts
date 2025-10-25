@@ -65,7 +65,8 @@ export class WorkspaceUtils {
       oldSettings.defaultImageGenerationModel !== newSettings.defaultImageGenerationModel ||
       oldSettings.defaultAudioModel !== newSettings.defaultAudioModel ||
       oldSettings.defaultTranslationModel !== newSettings.defaultTranslationModel ||
-      oldSettings.defaultApplicationModel !== newSettings.defaultApplicationModel
+      oldSettings.defaultApplicationModel !== newSettings.defaultApplicationModel ||
+      oldSettings.selectedConversionId !== newSettings.selectedConversionId
     )
   }
 

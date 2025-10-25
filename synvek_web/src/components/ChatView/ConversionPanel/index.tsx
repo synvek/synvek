@@ -59,8 +59,8 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   useEffect(() => {
     if (dirty) {
       setDirty(false)
-      fetchData().then((r) => {
-        fetchChatData().then((r) => {})
+      fetchData().then(() => {
+        fetchChatData().then(() => {})
       })
     } else {
       generateTreeData(foldersRef.current, conversionsRef.current)
@@ -171,7 +171,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const fetchChatData = async () => {
     if (!currentWorkspace.settings.selectedConversionId && !currentWorkspace.selectedConversionData.conversionId) {
       //Initialize conversion.
-      // Skip initialization because it cause wrong initialization with bad network
+      // Skip initialization because it causes wrong initialization with bad network
       // const conversionData = await RequestUtils.addConversion(currentWorkspace.selectedConversionData.conversionName, null)
       // WorkspaceUtils.handleRequest(
       //   messageApi,
