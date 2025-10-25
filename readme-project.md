@@ -111,15 +111,10 @@ synvek_explorer will static link to synvek_service into single application and s
 
 - Build llama.cpp with cuda: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
-
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_llama -j 14
-
-Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda_legacy.dll and copy to output folder
 
 - Build llama.cpp with cpu: 
 
@@ -139,15 +134,10 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll
 
 - Build stable-diffusion.cpp with cuda: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
-
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;75" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
-
-Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda_legacy.dll and copy to output folder
 
 - Build stable-diffusion.cpp with cpu: 
 
@@ -167,13 +157,11 @@ Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and c
 
 - Build mistral.rs with cuda: 
 For compute capability 8.x or above(RTX 3090 Ti RTX 3090 RTX 3080 Ti RTX 3080 RTX 3070 Ti RTX 3070 RTX 3060 Ti RTX 3060 RTX 3050 Ti RTX 3050)
-set CUDA_COMPUTE_CAP=89
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
 
 Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_cuda.dll and copy to output folder. 
 
 For compute capability 7.x or below(GTX 1650 Ti TITAN RTX RTX 2080 Ti RTX 2080 RTX 2070 RTX 2060)
-set CUDA_COMPUTE_CAP=75
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
 
 Noted: Need to rename synvek_backend_default.dll  to synvek_backend_default_cuda_legacy.dll and copy to output folder. 

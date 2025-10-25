@@ -8,7 +8,7 @@ pub type Timestamp = SystemTime;
 /// 服务引用类型
 pub type ServiceRef<T> = Arc<T>;
 
-pub static GLOBAL_PROJECT_APPLICATION_NAME: &str = "SynvekExplorer`";
+pub static GLOBAL_PROJECT_APPLICATION_NAME: &str = "SynvekExplorer";
 pub static GLOBAL_PROJECT_QUALIFIER_NAME: &str = "com";
 pub static GLOBAL_PROJECT_ORGANIZATION_NAME: &str = "Synvek";
 

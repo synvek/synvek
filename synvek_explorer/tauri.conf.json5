@@ -43,7 +43,7 @@
       "./../synvek_service/service_plugins/**/*": "resources/service_plugins/",
       "./../synvek_service/config/**/*": "resources/config/",
       "./../synvek_service/storage/**/*": "resources/storage/",
-      "./../output/*":  'backend/',
+      "./../output/*":  "backend/",
     },
     "windows": {
       "webviewInstallMode": {
