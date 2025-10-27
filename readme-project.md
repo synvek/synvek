@@ -102,6 +102,7 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 synvek_explorer will static link to synvek_service into single application and so build of synvek_service is not necessary for release build. It is useful for develop & debug.
 - Local run: cargo run --package synvek_explorer --bin synvek_explorer
 - Debug & Run requires output as working folder. 
+    cargo run --manifest-path ./../synvek_explorer/Cargo.toml --package synvek_explorer --bin synvek_explorer
 - Deploy Setup：cargo install tauri-cli --version "^2.0.0" --locked
 - Deploy：cargo tauri build
 

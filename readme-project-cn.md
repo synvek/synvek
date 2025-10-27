@@ -102,6 +102,7 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek_service并不是必须项。但构建synvek_service可以方便本地开发和调试
 - 本地运行: cargo run --package synvek_explorer --bin synvek_explorer
 - 调试和运行必须指定output路径作为工作目录.
+    cargo run --manifest-path ./../synvek_explorer/Cargo.toml --package synvek_explorer --bin synvek_explorer
 - 打包准备：cargo install tauri-cli --version "^2.0.0" --locked
 - 打包：cargo tauri build
    
