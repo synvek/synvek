@@ -111,22 +111,22 @@ synvek_explorer will static link to synvek_service into single application and s
 
 - Build llama.cpp with cuda: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
 
 - Build llama.cpp with cpu: 
 
-cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cpu.dll and copy to output folder
 
 - Build llama.cpp with metal: 
 
-cmake -B build -DBUILD_SHARED_LIBS=OFF
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_metal -DBUILD_SHARED_LIBS=OFF
+cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll and copy to output folder
 
@@ -134,22 +134,22 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll
 
 - Build stable-diffusion.cpp with cuda: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
 
 - Build stable-diffusion.cpp with cpu: 
 
-cmake -B build -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
 
 - Build stable-diffusion.cpp with metal: 
 
-cmake -B build -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_metal --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and copy to output folder
 

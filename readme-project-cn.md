@@ -111,22 +111,22 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 - 使用cuda支持构建llama.cpp: 
 
-cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
 
 - 使用CPU支持构建llama.cpp: 
 
-cmake -B build -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
 
 - 使用Metal支持构建llama.cpp: 
 
-cmake -B build -DBUILD_SHARED_LIBS=OFF
-cmake --build build --config Release --target synvek_backend_llama -j 14
+cmake -B build_metal -DBUILD_SHARED_LIBS=OFF
+cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_metal.dll并复制到output目录
 
@@ -134,22 +134,22 @@ cmake --build build --config Release --target synvek_backend_llama -j 14
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录
 
 - 使用CPU支持构建stable-diffusion.cpp: 
 
-cmake -B build -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cpu.dll并复制到output目录
 
 - 使用Metal支持构建stable-diffusion.cpp: 
 
-cmake -B build -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build --config Release --target synvek_backend_sd -j 14
+cmake -B build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_metal --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_metal.dll并复制到output目录
 
