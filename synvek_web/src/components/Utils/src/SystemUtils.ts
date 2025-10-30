@@ -223,4 +223,41 @@ export class SystemUtils {
 
     return parsedValue.every((item) => typeof item === 'string')
   }
+
+  /**
+   * User friendly format for time duration
+   * @param milliseconds
+   * @param showAll
+   * @param maxUnits
+   * @returns
+   */
+  public static formatDuration(milliseconds: number, showAll: boolean, maxUnits: number): string {
+    const SECOND_MS = 1000
+    const MINUTE_MS = 60 * SECOND_MS
+    const HOUR_MS = 60 * MINUTE_MS
+    const DAY_MS = 24 * HOUR_MS
+
+    let remainingMs = Math.abs(milliseconds)
+    const days = Math.floor(remainingMs / DAY_MS)
+    remainingMs %= DAY_MS
+    const hours = Math.floor(remainingMs / HOUR_MS)
+    remainingMs %= HOUR_MS
+    const minutes = Math.floor(remainingMs / MINUTE_MS)
+    remainingMs %= MINUTE_MS
+    const seconds = Math.floor(remainingMs / SECOND_MS)
+
+    const parts = []
+    if (days > 0 || showAll) parts.push(`${days}d`)
+    if (hours > 0 || showAll) parts.push(`${hours}h`)
+    if (minutes > 0 || showAll) parts.push(`${minutes}m`)
+    if (seconds > 0 || showAll) parts.push(`${seconds}s`)
+
+    const finalParts = maxUnits ? parts.slice(0, maxUnits) : parts
+
+    if (finalParts.length === 0) {
+      return `0s`
+    }
+
+    return finalParts.join('')
+  }
 }

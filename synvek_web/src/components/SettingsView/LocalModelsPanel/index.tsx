@@ -314,6 +314,11 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
       let modelDownloadedPercent = modelDownloadedSize <= 0 || modelTotalSize <= 0 ? 0 : Number((100.0 * modelDownloadedSize) / modelTotalSize).toFixed(2)
       let modelTotalSizeDescription = SystemUtils.formatFileSize(modelTotalSize)
       let modelDownloadSpeedDescription = SystemUtils.formatFileSize(modelDownloadSpeed) + '/s'
+      let remainingTimeDescription = '-'
+      if (modelDownloadSpeed > 0) {
+        let remainingTime = (modelTotalSize - modelDownloadedSize) / modelDownloadSpeed
+        remainingTimeDescription = SystemUtils.formatDuration(remainingTime * 1000, false, 1)
+      }
 
       return (
         <Card
@@ -509,6 +514,13 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
               <FormattedMessage id={'setting-view.local-models.current-downloading-speed'} />
             </div>
             <div>{modelDownloadSpeedDescription}</div>
+          </div>
+          <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
+          <div className={styles.localModelItemPropertyContainer}>
+            <div>
+              <FormattedMessage id={'setting-view.local-models.current-downloading-remaining-time'} />
+            </div>
+            <div>{remainingTimeDescription}</div>
           </div>
         </Card>
       )

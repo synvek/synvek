@@ -138,6 +138,7 @@ export default {
   'setting-view.local-models.downloaded-size': '已下载大小',
   'setting-view.local-models.cpu': '使用CPU',
   'setting-view.local-models.current-downloading-speed': '下载速度(每秒)',
+  'setting-view.local-models.current-downloading-remaining-time': '剩余时间',
   'setting-view.local-models.isq': 'ISQ',
   'setting-view.local-models.hint.gguf-model-auto-loaded': '提示: 您可将现有GGUF模型文件放到模型文件夹下，系统会自动识别',
   'setting-view.local-models.isq-disabled': '未启用',

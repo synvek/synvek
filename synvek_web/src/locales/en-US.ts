@@ -138,6 +138,7 @@ export default {
   'setting-view.local-models.downloaded-size': 'Downloaded Size',
   'setting-view.local-models.cpu': 'Use CPU',
   'setting-view.local-models.current-downloading-speed': 'Downloading Speed(/s)',
+  'setting-view.local-models.current-downloading-remaining-time': 'Remaining Time',
   'setting-view.local-models.hint.gguf-model-auto-loaded':
     'Hint: You can place the existing GGUF model file in the model folder, and the system will automatically recognize it',
   'setting-view.local-models.isq': 'ISQ',
