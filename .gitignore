@@ -1,7 +1,7 @@
 output/
 build/
 target/
-third_party/
+third_party2/
 node_modules
 .idea/
 /.vscode

@@ -1,18 +1,20 @@
-[submodule "third_party/deno"]
-	path = third_party/deno
-	url = https://github.com/synvek/deno
+[submodule "third_party/hf-hub"]
+	path = third_party/hf-hub
+	url = https://github.com/synvek/hf-hub
+	branch = synvek_dev
+[submodule "third_party/stable-diffusion.cpp"]
+	path = third_party/stable-diffusion.cpp
+	url = https://github.com/synvek/stable-diffusion.cpp
+	branch = synvek_dev
 [submodule "third_party/mistral.rs"]
 	path = third_party/mistral.rs
 	url = https://github.com/synvek/mistral.rs
-[submodule "third_party/hf-hub"]
-	path = third_party/hf-hub
-	url = https://github.com/synvek/hf-hub	
+	branch = synvek_dev
 [submodule "third_party/llama.cpp"]
 	path = third_party/llama.cpp
-	url = https://github.com/synvek/llama.cpp	
-[submodule "third_party/stable-diffusion.cpp"]
-	path = third_party/stable-diffusion.cpp
-	url = https://github.com/synvek/stable-diffusion.cpp	
-[submodule "third_party/whisper.cpp"]
-	path = third_party/whisper.cpp
-	url = https://github.com/synvek/whisper.cpp			
+	url = https://github.com/synvek/llama.cpp
+	branch = synvek_dev
+[submodule "third_party/deno"]
+	path = third_party/deno
+	url = https://github.com/synvek/deno
+	branch = synvek_dev
