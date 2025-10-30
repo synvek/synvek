@@ -6,22 +6,22 @@ on:
 jobs:
   build-windows:
     name: Build on Windows
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     steps:
     - name: Install CUDA 12.9
-      id: cuda-toolkit
-      uses: Jimver/cuda-toolkit@v0.2.28 
-      with:
-        cuda: '12.9.1'
-        method: 'network'
-        sub-packages:  '["nvcc", "cudart", "cublas", "cublas_dev", "thrust", "visual_studio_integration"]'
+      run: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        
+        choco install cuda -y --version=12.9.1
+        shell: pwsh
 
     - name: Verify Cuda
       run: |
-        echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"
-        echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
         nvcc --version
+        nvidia-smi
 
     - name: Checkout repository
       uses: actions/checkout@v4
