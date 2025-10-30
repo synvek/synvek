@@ -24,7 +24,9 @@ jobs:
       uses: Jimver/cuda-toolkit@v0.2.28 
       with:
         cuda: '12.9.1'
-          
+        use-github-cache: false
+        use-local-cache: false
+
     - name: Verify Cuda
       run: |
         echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"
