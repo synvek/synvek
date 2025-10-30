@@ -30,7 +30,6 @@ jobs:
     - name: Verify Cuda
       run: |
         nvcc --version
-        nvidia-smi
 
     - name: Checkout repository
       uses: actions/checkout@v4
