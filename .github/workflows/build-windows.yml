@@ -16,8 +16,8 @@ jobs:
         # sub-packages:  '["nvcc", "visual_studio_integration"]'
         # non-cuda-sub-packages: '[]'
         method: network
-        # use-github-cache: false
-        # use-local-cache: false
+        use-github-cache: false
+        use-local-cache: false
 
     - name: Verify Cuda
       run: |
