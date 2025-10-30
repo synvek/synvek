@@ -17,9 +17,9 @@ jobs:
     
     - name: Install CUDA
       run: |
-        .\cuda_12.9.0_installer.exe -s -npt -noeula -toolkit
+        .\cuda_12.9.1_installer.exe -s -npt -noeula -toolkit
       shell: cmd
-      
+
     - name: Set Environment Variables
       run: |
         # 将CUDA路径添加到系统PATH中
