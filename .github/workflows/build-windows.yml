@@ -23,7 +23,7 @@ jobs:
     - name: Install CUDA 12.9
       uses: Jimver/cuda-toolkit@v0.2.28 
       with:
-        cuda: '12.9'
+        cuda: '12.9.5'
           
     - name: Verify Cuda
       run: |
