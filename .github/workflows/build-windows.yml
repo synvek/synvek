@@ -6,7 +6,7 @@ on:
 jobs:
   build-windows:
     name: Build on Windows
-    runs-on: windows-2022
+    runs-on: windows-2019
 
     steps:
     - name: Install CUDA 12.9
