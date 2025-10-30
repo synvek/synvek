@@ -10,14 +10,12 @@ jobs:
 
     steps:
     - name: Install CUDA 12.9
+      id: cuda-toolkit
       uses: Jimver/cuda-toolkit@v0.2.28 
       with:
         cuda: '12.9.1'
-        # sub-packages:  '["nvcc", "visual_studio_integration"]'
-        # non-cuda-sub-packages: '[]'
-        method: network
-        use-github-cache: false
-        use-local-cache: false
+        method: 'network'
+        sub-packages:  '["nvcc", "cudart", "cublas", "cublas_dev", "thrust", "visual_studio_integration"]'
 
     - name: Verify Cuda
       run: |
