@@ -20,16 +20,26 @@ jobs:
         .\cuda_12.9.1_installer.exe -s -npt -noeula -toolkit
       shell: cmd
 
-    - name: Set Environment Variables
+    - name: Set Environment Variables1
       run: |
-        # 将CUDA路径添加到系统PATH中
+        echo "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9" >> $env:GITHUB_ENV
+
+    - name: Verify Cuda1
+      run: |
+        nvcc --version
+        echo "CUDA_PATH is set to: $env:CUDA_PATH"
+
+    - name: Set Environment Variables2
+      run: |
         $cudaPath = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9"
         echo "CUDA_PATH=$cudaPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "$cudaPath\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9" >> $env:GITHUB_ENV
           
-    - name: Verify Cuda
+    - name: Verify Cuda2
       run: |
         nvcc --version
+        echo "CUDA_PATH is set to: $env:CUDA_PATH"
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -48,7 +58,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCUDAToolkitDir="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9"
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
 
     # - name: Configure and build backend-> llama.cpp cpu 
@@ -58,7 +68,7 @@ jobs:
 
     # - name: Configure and build backend-> stable-diffusion.cpp cuda 
     #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCUDAToolkitDir="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9"
     #     cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
 
     # - name: Configure and build backend-> stable-diffusion.cpp cpu 
