@@ -9,6 +9,11 @@ jobs:
     runs-on: windows-2022
 
     steps:
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+        
     - name: Install Deno via PowerShell
       run: |
         irm https://deno.land/install.sh | iex

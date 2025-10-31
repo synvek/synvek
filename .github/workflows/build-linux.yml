@@ -9,6 +9,24 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+    - name: Cleanup
+      run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
+
+    - name: Disk space check
+      run: |
+        available_gb=$(df / | awk 'NR==2 {print $4}' | sed 's/G//')
+        echo "Disk space - ${available_gb}GB available"
+        echo "Check nodejs"
+        which node
+        echo "Check rustc"
+        which rustc
+        echo "Check deno"
+        which deno
+
     - name: Initialize
       run: |
         sudo apt update
@@ -43,6 +61,16 @@ jobs:
         echo "CARGO_HOME=$HOME/.cargo" >> $GITHUB_ENV
         echo "RUSTUP_HOME=$HOME/.rustup" >> $GITHUB_ENV
 
+    - name: Cleanup for tools
+      run: |
+        npm cache clean --force
+        cargo clean
+        deno clean
+
+    - name: Disk space check before checkout code
+      run: |
+        available_gb=$(df / | awk 'NR==2 {print $4}' | sed 's/G//')
+        echo "Disk space - ${available_gb}GB available"
 
     # - name: Install CUDA
     #   run: |
