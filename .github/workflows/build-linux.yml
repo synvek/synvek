@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-windows:
-    name: Build on Windows
+  build-linux:
+    name: Build on linux
     runs-on: ubuntu-22.04
 
     steps:
@@ -14,7 +14,14 @@ jobs:
         sudo apt update
         sudo apt install -y wget build-essential cmake libglib2.0-dev  libgdk-pixbuf2.0-dev libgtk-3-dev  libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libclang-dev libssl-dev unzip
 
-    - name: Install node
+    - name: Install CUDA
+      uses: Jimver/cuda-toolkit@v0.2.28
+      with:
+        cuda: 12.9.1
+        method: network
+        linux-local-args: '[["--toolkit"]]'
+        
+    - name: Install Node
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
         . "$HOME/.nvm/nvm.sh"
@@ -22,25 +29,33 @@ jobs:
         node -v 
         npm -v 
 
-    - name: Install deno
+    - name: Install Deno
       run: |
         curl -fsSL https://deno.land/install.sh | sh
-    
-        # 设置环境变量
+
         echo "$HOME/.deno/bin" >> $GITHUB_PATH
     
-    - name: Install CUDA
+    - name: Install Rust
       run: |
-        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-        sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-        wget https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
-        sudo dpkg -i cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
-        sudo cp /var/cuda-repo-ubuntu2204-12-9-local/cuda-*-keyring.gpg /usr/share/keyrings/
-        sudo apt-get update
-        sudo apt-get -y install cuda-toolkit-12-9
-        echo "CUDA_HOME=/usr/local/cuda" >> $GITHUB_ENV
-        echo "/usr/local/cuda/bin" >> $GITHUB_PATH
-        echo "/usr/local/cuda/lib64" >> $GITHUB_PATH
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        echo "CARGO_HOME=$HOME/.cargo" >> $GITHUB_ENV
+        echo "RUSTUP_HOME=$HOME/.rustup" >> $GITHUB_ENV
+
+
+    # - name: Install CUDA
+    #   run: |
+    #     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+    #     sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+    #     wget https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
+    #     sudo dpkg -i cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
+    #     sudo cp /var/cuda-repo-ubuntu2204-12-9-local/cuda-*-keyring.gpg /usr/share/keyrings/
+    #     sudo apt-get update
+    #     sudo apt-get -y install cuda-toolkit-12-9
+    #     echo "CUDA_HOME=/usr/local/cuda" >> $GITHUB_ENV
+    #     echo "/usr/local/cuda/bin" >> $GITHUB_PATH
+    #     echo "/usr/local/cuda/lib64" >> $GITHUB_PATH
        
     - name: Verify Cuda
       run: |
