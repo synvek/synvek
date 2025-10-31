@@ -46,14 +46,10 @@ jobs:
       run: |
         echo "Build will start"
 
-    #- name: Install build tools
-    #  run: |
-    #    winget 
-
-    # - name: Configure and build backend-> llama.cpp cuda 
-    #   run: |
-    #     cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
+    - name: Configure and build backend-> llama.cpp cuda 
+      run: |
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
 
     # - name: Configure and build backend-> llama.cpp cpu 
     #   run: |
@@ -70,54 +66,55 @@ jobs:
     #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     #     cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 
 
-    - name: Configure and build backend-> mistral.rs cuda 
-      run: |
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "cuda cudnn" --lib
-
     # - name: Configure and build backend-> mistral.rs cpu 
     #   run: |
     #     cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
 
-    # - name: Configure and build synvek_web
-    #   run: |
-    #     npm install
-    #     npm run desktop:build
-    #   working-directory: ./synvek_web
+    - name: Configure and build synvek_web
+      run: |
+        npm install
+        npm run desktop:build
+      working-directory: ./synvek_web
 
-    # - name: Configure and build synvek_agent
-    #   run: |
-    #     deno install --allow-scripts=npm:ssh2@1.16.0
-    #     deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
-    #   working-directory: ./synvek_agent
+    - name: Configure and build synvek_agent
+      run: |
+        deno install --allow-scripts=npm:ssh2@1.16.0
+        deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
+      working-directory: ./synvek_agent
 
-    # - name: Copy artifacts & reasources for synvek_explorer
-    #   run: |
-    #     mkdir output2
-    #     copy synvek/agent_plugins output22 /Y
-    #     copy synvek/config output2 /Y
-    #     copy synvek/service_plugins output2 /Y
-    #     copy synvek/storage output2 /Y
-    #     copy build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output2 /Y
-    #     rename output2/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
-    #     copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output2 /Y
-    #     rename output2/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
-    #     copy build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output2 /Y
-    #     rename output2/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
-    #     copy build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output2 /Y
-    #     rename output2/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
-    #     copy build/mistral.rs/build_cuda/release/synvek_backend_default.dll output2 /Y
-    #     rename output2/synvek_backend_default.dll synvek_backend_default_cuda.dll 
-    #     copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output2 /Y
-    #     rename output2/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+    - name: Copy reasources for synvek_explorer
+      run: |
+        mkdir output
+        copy synvek_service/agent_plugins output /Y
+        copy synvek_service/config output /Y
+        copy synvek_service/service_plugins output /Y
+        copy synvek_service/storage output /Y
+        copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output /Y
+        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+    #     copy build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output /Y
+    #     rename output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
+    #     copy build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output /Y
+    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
+    #     copy build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output /Y
+    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
+    #     copy build/mistral.rs/build_cuda/release/synvek_backend_default.dll output /Y
+    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+    #     copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output /Y
+    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
 
-    # - name: Configure and build synvek_explorer
-    #   run: |
-    #     cargo tauri build
-    #   working-directory: ./synvek_explorer
+    - name: Configure and build synvek_explorer
+      run: |
+        cargo tauri build
+      working-directory: ./synvek_explorer
 
-    #- name: Upload Build Artifact
-    #  uses: actions/upload-artifact@v4
-    #  with:
-    #    name: llama-cuda-binaries
-    #    path: build/bin/        # 上传生成的可执行文件目录
-    #    retention-days: 7       # 产物在 GitHub 上保留的天数
+    - name: Copy artifacts
+      run: |
+        mkdir artifacts
+        copy synvek_explorer/target/release/bundle/nsis artifacts /Y
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: synvek-explorer-artifacts
+        path: artifacts
+        retention-days: 7       
