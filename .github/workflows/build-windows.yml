@@ -16,12 +16,7 @@ jobs:
         
     - name: Install Deno via PowerShell
       run: |
-        irm https://deno.land/install.sh | iex
-        
-        $denoPath = "$HOME\.deno\bin"
-        echo "DENO_INSTALL=$HOME\.deno" >> $env:GITHUB_ENV
-        echo "$denoPath" >> $env:GITHUB_PATH
-      shell: pwsh
+       npm install -g deno
 
     - name: Install Rust
       run: |
