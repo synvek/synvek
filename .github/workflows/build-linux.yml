@@ -47,7 +47,7 @@ jobs:
 
     - name: Cleanup for cuda installation
       run: |
-        rm cuda_keyring.cuda
+        rm cuda_keyring.deb
 
     - name: Verify Cuda
       run: |
@@ -77,8 +77,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
       run: |
-        copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output /Y
-        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+        cp build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output 
+        rn output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
         rm -rf  build/llama.cpp/build_cuda
 
     - name: Disk space after build backend-> llama.cpp cuda 
@@ -136,20 +136,20 @@ jobs:
 
     - name: Copy reasources for synvek_explorer
       run: |
-        copy synvek_service/agent_plugins output /Y
-        copy synvek_service/config output /Y
-        copy synvek_service/service_plugins output /Y
-        copy synvek_service/storage output /Y
-    #     copy build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output /Y
-    #     rename output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
-    #     copy build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output /Y
-    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
-    #     copy build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output /Y
-    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
-    #     copy build/mistral.rs/build_cuda/release/synvek_backend_default.dll output /Y
-    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
-    #     copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output /Y
-    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+        cp synvek_service/agent_plugins output 
+        cp synvek_service/config output 
+        cp synvek_service/service_plugins output 
+        cp synvek_service/storage output 
+    #     cp build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output 
+    #     mv output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
+    #     cp build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output 
+    #     mv output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
+    #     cp build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output 
+    #     mv output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
+    #     cp build/mistral.rs/build_cuda/release/synvek_backend_default.dll output 
+    #     mv output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+    #     cp build/mistral.rs/build_cpu/release/synvek_backend_default.dll output 
+    #     mv output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
 
     - name: Configure and build synvek_explorer
       run: |
