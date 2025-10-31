@@ -18,14 +18,7 @@ jobs:
 
     - name: Disk space check
       run: |
-        available_gb=$(df / | awk 'NR==2 {print $4}' | sed 's/G//')
-        echo "Disk space - ${available_gb}GB available"
-        echo "Check nodejs"
-        which node
-        echo "Check rustc"
-        which rustc
-        echo "Check deno"
-        which deno
+        df
 
     - name: Initialize
       run: |
@@ -69,8 +62,7 @@ jobs:
 
     - name: Disk space check before checkout code
       run: |
-        available_gb=$(df / | awk 'NR==2 {print $4}' | sed 's/G//')
-        echo "Disk space - ${available_gb}GB available"
+        df
 
     # - name: Install CUDA
     #   run: |
