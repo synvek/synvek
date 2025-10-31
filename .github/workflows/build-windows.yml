@@ -1,4 +1,4 @@
-name: Build synvek
+name: Build synvek on windows
 
 on:
   workflow_dispatch:
@@ -9,6 +9,24 @@ jobs:
     runs-on: windows-2022
 
     steps:
+    - name: Install Deno via PowerShell
+      run: |
+        irm https://deno.land/install.sh | iex
+        
+        $denoPath = "$HOME\.deno\bin"
+        echo "DENO_INSTALL=$HOME\.deno" >> $env:GITHUB_ENV
+        echo "$denoPath" >> $env:GITHUB_PATH
+      shell: pwsh
+
+    - name: Install Rust
+      run: |
+        curl -sSf -L https://sh.rustup.rs | sh -s -- -y
+        
+        echo "$HOME/.cargo/bin" >> $env:GITHUB_PATH
+        echo "CARGO_HOME=$HOME/.cargo" >> $env:GITHUB_ENV
+        echo "RUSTUP_HOME=$HOME/.rustup" >> $env:GITHUB_ENV
+      shell: pwsh
+
     - name: Download CUDA
       run: |
         $cudaVersion = "12.9.1"
@@ -50,7 +68,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
 
     # - name: Configure and build backend-> llama.cpp cpu 
@@ -60,7 +78,7 @@ jobs:
 
     # - name: Configure and build backend-> stable-diffusion.cpp cuda 
     #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     #     cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
 
     # - name: Configure and build backend-> stable-diffusion.cpp cpu 
@@ -117,6 +135,6 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: synvek-explorer-artifacts
+        name: synvek-explorer-artifacts-windows
         path: artifacts
         retention-days: 7       
