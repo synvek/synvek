@@ -1,0 +1,135 @@
+name: Build synvek on linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Build on Windows
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Initialize
+      run: |
+        sudo apt update
+        sudo apt install -y wget build-essential cmake libglib2.0-dev  libgdk-pixbuf2.0-dev libgtk-3-dev  libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libclang-dev libssl-dev unzip
+
+    - name: Install node
+      run: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+        . "$HOME/.nvm/nvm.sh"
+        nvm install 20
+        node -v 
+        npm -v 
+
+    - name: Install deno
+      run: |
+        curl -fsSL https://deno.land/install.sh | sh
+    
+        # 设置环境变量
+        echo "$HOME/.deno/bin" >> $GITHUB_PATH
+    
+    - name: Install CUDA
+      run: |
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+        sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+        wget https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
+        sudo dpkg -i cuda-repo-ubuntu2204-12-9-local_12.9.1-575.57.08-1_amd64.deb
+        sudo cp /var/cuda-repo-ubuntu2204-12-9-local/cuda-*-keyring.gpg /usr/share/keyrings/
+        sudo apt-get update
+        sudo apt-get -y install cuda-toolkit-12-9
+        echo "CUDA_HOME=/usr/local/cuda" >> $GITHUB_ENV
+        echo "/usr/local/cuda/bin" >> $GITHUB_PATH
+        echo "/usr/local/cuda/lib64" >> $GITHUB_PATH
+       
+    - name: Verify Cuda
+      run: |
+        nvcc --version
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive    
+
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2.16
+      with:
+        key: windows release
+        evict-old-files: 1d
+
+    - name: Environment Information
+      run: |
+        echo "Build will start"
+
+    - name: Configure and build backend-> llama.cpp cuda 
+      run: |
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
+
+    # - name: Configure and build backend-> llama.cpp cpu 
+    #   run: |
+    #     cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 
+
+    # - name: Configure and build backend-> stable-diffusion.cpp cuda 
+    #   run: |
+    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
+
+    # - name: Configure and build backend-> stable-diffusion.cpp cpu 
+    #   run: |
+    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 
+
+    # - name: Configure and build backend-> mistral.rs cpu 
+    #   run: |
+    #     cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Configure and build synvek_web
+      run: |
+        npm install
+        npm run desktop:build
+      working-directory: ./synvek_web
+
+    - name: Configure and build synvek_agent
+      run: |
+        deno install --allow-scripts=npm:ssh2@1.16.0
+        deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
+      working-directory: ./synvek_agent
+
+    - name: Copy reasources for synvek_explorer
+      run: |
+        mkdir output
+        copy synvek_service/agent_plugins output /Y
+        copy synvek_service/config output /Y
+        copy synvek_service/service_plugins output /Y
+        copy synvek_service/storage output /Y
+        copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output /Y
+        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+    #     copy build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output /Y
+    #     rename output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
+    #     copy build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output /Y
+    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
+    #     copy build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output /Y
+    #     rename output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
+    #     copy build/mistral.rs/build_cuda/release/synvek_backend_default.dll output /Y
+    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+    #     copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output /Y
+    #     rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+
+    - name: Configure and build synvek_explorer
+      run: |
+        cargo tauri build
+      working-directory: ./synvek_explorer
+
+    - name: Copy artifacts
+      run: |
+        mkdir artifacts
+        copy synvek_explorer/target/release/bundle/nsis artifacts /Y
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: synvek-explorer-artifacts-linux
+        path: artifacts
+        retention-days: 7       
