@@ -35,8 +35,16 @@ jobs:
     
     - name: Cleanup for tools
       run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         deno clean
+
+    - name: Disk space check before checkout code1
+      run: |
+        ls
 
     - name: Disk space check before checkout code
       run: |
