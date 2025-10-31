@@ -30,7 +30,6 @@ jobs:
     - name: Install Deno
       run: |
         curl -fsSL https://deno.land/install.sh | sh
-
         echo "$HOME/.deno/bin" >> $GITHUB_PATH
     
     - name: Cleanup for tools
@@ -42,31 +41,49 @@ jobs:
         npm cache clean --force
         deno clean
 
-    - name: Disk space check before checkout code1
+    - name: Disk space check afater cuda installation
       run: |
         ls
 
-    - name: Disk space check before checkout code
+    - name: Cleanup for cuda installation
       run: |
-        df
+        rm cuda_keyring.cuda
 
     - name: Verify Cuda
       run: |
         nvcc --version
+
+    - name: Disk space before code checkin
+      run: |
+        df
+
+    - name: Prepare for synvek_explorer
+      run: |
+        mkdir output
 
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         submodules: recursive    
 
-    - name: Environment Information
+    - name: Disk space after code checkin
       run: |
-        echo "Build will start"
+        df
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
         cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
+      run: |
+        copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output /Y
+        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+        rm -rf  build/llama.cpp/build_cuda
+
+    - name: Disk space after build backend-> llama.cpp cuda 
+      run: |
+        df
 
     # - name: Configure and build backend-> llama.cpp cpu 
     #   run: |
@@ -93,21 +110,36 @@ jobs:
         npm run desktop:build
       working-directory: ./synvek_web
 
+    - name: Cleanup for synvek_web
+      run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
+        npm cache clean --force
+        deno clean
+
     - name: Configure and build synvek_agent
       run: |
         deno install --allow-scripts=npm:ssh2@1.16.0
         deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
       working-directory: ./synvek_agent
 
+    - name: Cleanup for synvek_agent
+      run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
+        npm cache clean --force
+        deno clean
+
     - name: Copy reasources for synvek_explorer
       run: |
-        mkdir output
         copy synvek_service/agent_plugins output /Y
         copy synvek_service/config output /Y
         copy synvek_service/service_plugins output /Y
         copy synvek_service/storage output /Y
-        copy build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output /Y
-        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
     #     copy build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output /Y
     #     rename output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
     #     copy build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output /Y
