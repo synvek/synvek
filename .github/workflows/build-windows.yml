@@ -25,7 +25,9 @@ jobs:
         echo "CUDA_PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
         echo "CUDACXX=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/nvcc.exe" >> $env:GITHUB_ENV
         echo "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin" >> $env:GITHUB_PATH
-
+        echo "CudaToolkitDir=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        echo "CUDA_PATH_V12_9=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        
     - name: Verify Cuda
       run: |
         nvcc --version
