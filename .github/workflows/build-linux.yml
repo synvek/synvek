@@ -41,15 +41,6 @@ jobs:
         npm cache clean --force
         deno clean
 
-    - name: Disk space check afater cuda installation
-      run: |
-        df
-        ls -l
-
-    - name: Cleanup for cuda installation
-      run: |
-        rm cuda_keyring.deb
-
     - name: Verify Cuda
       run: |
         nvcc --version
@@ -78,32 +69,80 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
       run: |
-        cp build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output 
-        rn output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+        cp build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output 
+        mv output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
         rm -rf  build/llama.cpp/build_cuda
 
     - name: Disk space after build backend-> llama.cpp cuda 
       run: |
         df
 
-    # - name: Configure and build backend-> llama.cpp cpu 
-    #   run: |
-    #     cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 
+    - name: Configure and build backend-> llama.cpp cpu 
+      run: |
+        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
 
-    # - name: Configure and build backend-> stable-diffusion.cpp cuda 
-    #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
+      run: |
+        cp build/llama.cpp/build_cpu/bin/synvek_backend_llama.dll output 
+        rn output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+        rm -rf  build/llama.cpp/build_cpu
 
-    # - name: Configure and build backend-> stable-diffusion.cpp cpu 
-    #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 
+    - name: Disk space after build backend-> llama.cpp cpu 
+      run: |
+        df
 
-    # - name: Configure and build backend-> mistral.rs cpu 
-    #   run: |
-    #     cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+    - name: Configure and build backend-> stable-diffusion.cpp cuda 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j  4
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
+      run: |
+        cp build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output 
+        mv output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
+        rm -rf  build/stable-diffusion.cpp/build_cuda
+
+    - name: Disk space after build backend-> stable-diffusion.cpp cuda 
+      run: |
+        df
+        
+    - name: Configure and build backend-> stable-diffusion.cpp cpu 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
+      run: |
+        cp build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output 
+        mv output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
+        rm -rf  build/stable-diffusion.cpp/build_cpu
+
+    - name: Disk space after build backend-> stable-diffusion.cpp cpu 
+      run: |
+        df
+        
+    - name: Configure and build backend-> mistral.rs cpu 
+      run: |
+        cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
+      run: |
+        cp build/mistral.rs/build_cpu/release/synvek_backend_default.dll output 
+        mv output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+        rm -rf  build/mistral.rs/build_cpu
+
+    - name: Disk space after build backend-> mistral.rs.cpp cuda 
+      run: |
+        df
+        
+    - name: Remove cuda for dispace
+      run: |
+        sudo apt remove -y cuda-12-9
+
+    - name: Disk space after Remove cuda
+      run: |
+        df
 
     - name: Configure and build synvek_web
       run: |
@@ -118,7 +157,11 @@ jobs:
         sudo rm -rf /var/tmp/*        
         sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
-        deno clean
+        rm -rf synvek_web/node_modules
+
+    - name: Disk space after build synvek_web
+      run: |
+        df
 
     - name: Configure and build synvek_agent
       run: |
@@ -134,6 +177,11 @@ jobs:
         sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         deno clean
+        rm -rf synvek_web/node_modules
+
+    - name: Disk space after build synvek_agent
+      run: |
+        df
 
     - name: Copy reasources for synvek_explorer
       run: |
@@ -141,26 +189,20 @@ jobs:
         cp synvek_service/config output 
         cp synvek_service/service_plugins output 
         cp synvek_service/storage output 
-    #     cp build/llama.cpp/build_cuda/bin/synvek_backend_llama.dll output 
-    #     mv output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
-    #     cp build/stable-diffusion.cpp/build_cuda/bin/synvek_backend_sd.dll output 
-    #     mv output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
-    #     cp build/stable-diffusion.cpp/build_cpu/bin/synvek_backend_sd.dll output 
-    #     mv output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
-    #     cp build/mistral.rs/build_cuda/release/synvek_backend_default.dll output 
-    #     mv output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
-    #     cp build/mistral.rs/build_cpu/release/synvek_backend_default.dll output 
-    #     mv output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
 
     - name: Configure and build synvek_explorer
       run: |
         cargo tauri build
       working-directory: ./synvek_explorer
 
+    - name: Disk space after build synvek_agent
+      run: |
+        df
+
     - name: Copy artifacts
       run: |
         mkdir artifacts
-        copy synvek_explorer/target/release/bundle/nsis artifacts /Y
+        cp synvek_explorer/target/release/bundle artifacts /Y
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
