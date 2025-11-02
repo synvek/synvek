@@ -145,15 +145,16 @@ jobs:
         copy synvek_service/service_plugins output 
         copy synvek_service/storage output 
         copy build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.dll output 
-        rename output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
+        ren output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
         copy build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll output 
-        rename output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
+        ren output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
         copy build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll output 
-        rename output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
+        ren output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
         copy build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.dll output 
-        rename output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
+        ren output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
         copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output 
-        rename output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+        ren output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
+      shell: cmd
 
     - name: Disk space check
       run: |
