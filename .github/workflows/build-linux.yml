@@ -182,10 +182,10 @@ jobs:
 
     - name: Copy reasources for synvek_explorer
       run: |
-        cp synvek_service/agent_plugins output 
-        cp synvek_service/config output 
-        cp synvek_service/service_plugins output 
-        cp synvek_service/storage output 
+        cp -r synvek_service/agent_plugins output 
+        cp -r synvek_service/config output 
+        cp -r synvek_service/service_plugins output 
+        cp -r synvek_service/storage output 
 
     - name: Configure and build synvek_explorer
       run: |
@@ -200,7 +200,7 @@ jobs:
     - name: Copy artifacts
       run: |
         mkdir artifacts
-        cp synvek_explorer/target/libbundle artifacts /Y
+        cp synvek_explorer/target/release/bundle/deb/*.deb artifacts
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
