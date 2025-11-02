@@ -69,7 +69,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
       run: |
-        cp build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.so output 
+        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output 
         mv output/synvek_backend_llama.so synvek_backend_llama_cuda.so 
         rm -rf  build/llama.cpp/build_cuda
 
@@ -84,7 +84,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
       run: |
-        cp build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.so output 
+        cp build/llama.cpp/build_cpu/bin/libsynvek_backend_llama.so output 
         rn output/synvek_backend_llama.so synvek_backend_llama_cpu.so 
         rm -rf  build/llama.cpp/build_cpu
 
@@ -99,7 +99,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
       run: |
-        cp build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.so output 
+        cp build/stable-diffusion.cpp/build_cuda/bin/libsynvek_backend_sd.so output 
         mv output/synvek_backend_sd.so synvek_backend_sd_cuda.so 
         rm -rf  build/stable-diffusion.cpp/build_cuda
 
@@ -114,7 +114,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
       run: |
-        cp build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.so output 
+        cp build/stable-diffusion.cpp/build_cpu/bin/libsynvek_backend_sd.so output 
         mv output/synvek_backend_sd.so synvek_backend_sd_cpu.so 
         rm -rf  build/stable-diffusion.cpp/build_cpu
 
@@ -128,7 +128,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
       run: |
-        cp build/mistral.rs/build_cpu/release/synvek_backend_default.so output 
+        cp build/mistral.rs/build_cpu/libsynvek_backend_default.so output 
         mv output/synvek_backend_default.so synvek_backend_default_cuda.so 
         rm -rf  build/mistral.rs/build_cpu
 
@@ -202,7 +202,7 @@ jobs:
     - name: Copy artifacts
       run: |
         mkdir artifacts
-        cp synvek_explorer/target/release/bundle artifacts /Y
+        cp synvek_explorer/target/libbundle artifacts /Y
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
