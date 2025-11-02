@@ -48,8 +48,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp metal 
       run: |
-        cp build/llama.cpp/build_metal/bin/libsynvek_backend_llama.so output 
-        mv output/libsynvek_backend_llama.so libsynvek_backend_llama_metal.so 
+        cp build/llama.cpp/build_metal/bin/libsynvek_backend_llama.dylib output 
+        mv output/libsynvek_backend_llama.dylib libsynvek_backend_llama_metal.dylib 
         rm -rf  build/llama.cpp/build_metal
 
     - name: Disk space after build backend-> llama.cpp metal 
@@ -63,8 +63,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
       run: |
-        cp build/llama.cpp/build_cpu/bin/libsynvek_backend_llama.so output 
-        rn output/libsynvek_backend_llama.so libsynvek_backend_llama_cpu.so 
+        cp build/llama.cpp/build_cpu/bin/libsynvek_backend_llama.dylib output 
+        rn output/libsynvek_backend_llama.dylib libsynvek_backend_llama_cpu.dylib 
         rm -rf  build/llama.cpp/build_cpu
 
     - name: Disk space after build backend-> llama.cpp cpu 
@@ -78,8 +78,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
       run: |
-        cp build/stable-diffusion.cpp/build_metal/bin/libsynvek_backend_sd.so output 
-        mv output/libsynvek_backend_sd.so libsynvek_backend_sd_metal.so 
+        cp build/stable-diffusion.cpp/build_metal/bin/libsynvek_backend_sd.dylib output 
+        mv output/libsynvek_backend_sd.dylib libsynvek_backend_sd_metal.dylib 
         rm -rf  build/stable-diffusion.cpp/build_metal
 
     - name: Disk space after build backend-> stable-diffusion.cpp metal 
@@ -93,8 +93,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
       run: |
-        cp build/stable-diffusion.cpp/build_cpu/bin/libsynvek_backend_sd.so output 
-        mv output/libsynvek_backend_sd.so libsynvek_backend_sd_cpu.so 
+        cp build/stable-diffusion.cpp/build_cpu/bin/libsynvek_backend_sd.dylib output 
+        mv output/libsynvek_backend_sd.dylib libsynvek_backend_sd_cpu.dylib 
         rm -rf  build/stable-diffusion.cpp/build_cpu
 
     - name: Disk space after build backend-> stable-diffusion.cpp cpu 
@@ -107,8 +107,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
       run: |
-        cp build/mistral.rs/build_metal/libsynvek_backend_default.so output 
-        mv output/libsynvek_backend_default.so libsynvek_backend_default_metal.so 
+        cp build/mistral.rs/build_metal/libsynvek_backend_default.dylib output 
+        mv output/libsynvek_backend_default.dylib libsynvek_backend_default_metal.dylib 
         rm -rf  build/mistral.rs/build_metal
 
     - name: Disk space after build backend-> mistral.rs.cpp metal 
@@ -121,8 +121,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
       run: |
-        cp build/mistral.rs/build_cpu/libsynvek_backend_default.so output 
-        mv output/libsynvek_backend_default.so libsynvek_backend_default_cpu.so 
+        cp build/mistral.rs/build_cpu/libsynvek_backend_default.dylib output 
+        mv output/libsynvek_backend_default.dylib libsynvek_backend_default_cpu.dylib 
         rm -rf  build/mistral.rs/build_cpu
 
     - name: Disk space after build backend-> mistral.rs.cpp mecputal 
