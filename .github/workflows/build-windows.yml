@@ -138,23 +138,24 @@ jobs:
         echo "Disk space - ${available_gb}GB available"
         
     - name: Copy reasources for synvek_explorer
+      shell: pwsh
       run: |
-        mkdir output
-        copy synvek_service/agent_plugins output 
-        copy synvek_service/config output 
-        copy synvek_service/service_plugins output 
-        copy synvek_service/storage output 
-        copy build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.dll output 
-        ren output/synvek_backend_llama.dll synvek_backend_llama_cpu.dll 
-        copy build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll output 
-        ren output/synvek_backend_llama.dll synvek_backend_llama_cuda.dll 
-        copy build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll output 
-        ren output/synvek_backend_sd.dll synvek_backend_sd_cuda.dll 
-        copy build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.dll output 
-        ren output/synvek_backend_sd.dll synvek_backend_sd_cpu.dll 
-        copy build/mistral.rs/build_cpu/release/synvek_backend_default.dll output 
-        ren output/synvek_backend_default.dll synvek_backend_default_cuda.dll 
-      shell: cmd
+        New-Item -ItemType Directory -Path "output" -Force | Out-Null
+        Copy-Item "synvek_service/agent_plugins" "output/" 
+        Copy-Item "synvek_service/config" "output/" 
+        Copy-Item "synvek_service/service_plugins" "output/" 
+        Copy-Item "synvek_service/storage" "output/" 
+        Copy-Item "build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.dll" "output/" 
+        Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cpu.dll"
+        Copy-Item "build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll" "output/" 
+        Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cuda.dll" 
+        Copy-Item "build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll" "output/" 
+        Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cuda.dll" 
+        Copy-Item "build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.dll" "output/" 
+        Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cpu.dll" 
+        Copy-Item "build/mistral.rs/build_cpu/release/synvek_backend_default.dll" "output/" 
+        Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda.dll" 
+
 
     - name: Disk space check
       run: |
