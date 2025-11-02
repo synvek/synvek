@@ -189,6 +189,7 @@ jobs:
 
     - name: Configure and build synvek_explorer
       run: |
+        cargo install tauri-cli --version "^2.0.0" --locked
         cargo tauri build
       working-directory: ./synvek_explorer
 
