@@ -175,8 +175,8 @@ jobs:
         
     - name: Copy artifacts
       run: |
-        mkdir artifacts
-        copy synvek_explorer/target/release/bundle/nsis artifacts /Y
+        New-Item -ItemType Directory -Path "artifacts" -Force | Out-Null
+        Copy-Item "synvek_explorer/target/release/bundle/nsis" "artifacts/"
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
