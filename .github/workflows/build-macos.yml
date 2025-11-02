@@ -30,7 +30,7 @@ jobs:
 
     - name: Prepare for synvek_explorer
       run: |
-        mkdir output
+        mkdir -p output
 
     - name: Checkout repository
       uses: actions/checkout@v4
