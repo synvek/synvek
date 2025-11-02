@@ -2,6 +2,7 @@ name: Build synvek on windows
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build-windows:
@@ -68,7 +69,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
 
     - name: Disk space check
@@ -88,7 +89,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
 
     - name: Disk space check
@@ -176,7 +177,7 @@ jobs:
     - name: Copy artifacts
       run: |
         New-Item -ItemType Directory -Path "artifacts" -Force | Out-Null
-        Copy-Item "synvek_explorer/target/release/bundle/nsis" "artifacts/"
+        Copy-Item "synvek_explorer/target/release/bundle/nsis/*.exe" "artifacts/"
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
