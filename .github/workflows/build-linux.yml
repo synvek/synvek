@@ -137,7 +137,18 @@ jobs:
         
     - name: Remove cuda for dispace
       run: |
-        sudo apt remove -y cuda-12-9
+        dpkg -l | grep cuda || true
+
+        sudo apt purge --autoremove -y "*cuda*" "*cudnn*" "*nvidia*"
+
+        sudo rm -rf /usr/local/cuda*
+        sudo rm -rf /opt/nvidia/
+
+        if ! command -v nvcc &> /dev/null; then
+          echo "Cuda is removed"
+        else
+          echo "nvcc still exists"
+        fi
 
     - name: Disk space after Remove cuda
       run: |
