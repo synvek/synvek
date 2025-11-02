@@ -125,7 +125,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
       run: |
-        cp build/mistral.rs/build_cpu/libsynvek_backend_default.so output/ 
+        cp build/mistral.rs/build_cpu/release/libsynvek_backend_default.so output/ 
         mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cpu.so 
         rm -rf  build/mistral.rs/build_cpu
 

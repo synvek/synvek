@@ -121,9 +121,9 @@ jobs:
       run: |
         cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal" --lib
 
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs metal 
       run: |
-        cp build/mistral.rs/build_metal/libsynvek_backend_default.dylib output 
+        cp build/mistral.rs/build_metal/release/libsynvek_backend_default.dylib output 
         mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_metal.dylib 
         rm -rf  build/mistral.rs/build_metal
 
@@ -137,11 +137,11 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
       run: |
-        cp build/mistral.rs/build_cpu/libsynvek_backend_default.dylib output 
+        cp build/mistral.rs/build_cpu/release/libsynvek_backend_default.dylib output 
         mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_cpu.dylib 
         rm -rf  build/mistral.rs/build_cpu
 
-    - name: Disk space after build backend-> mistral.rs.cpp mecputal 
+    - name: Disk space after build backend-> mistral.rs.cpp cpu 
       run: |
         df
         
