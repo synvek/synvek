@@ -48,9 +48,22 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp metal 
       run: |
-        cp build/llama.cpp/build_metal/bin/libsynvek_backend_llama.dylib output 
-        mv output/libsynvek_backend_llama.dylib output/libsynvek_backend_llama_metal.dylib 
-        rm -rf  build/llama.cpp/build_metal
+         echo "Checking for source file..."
+         ls -la "build/llama.cpp/build_metal/bin/libsynvek_backend_llama.dylib"
+          
+         echo "Copying file..."
+         cp "build/llama.cpp/build_metal/bin/libsynvek_backend_llama.dylib" output/
+          
+         echo "Verifying copy operation..."
+         ls -la output/
+          
+         echo "Renaming file..."
+         mv "output/libsynvek_backend_llama.dylib" "output/libsynvek_backend_llama_metal.dylib"
+          
+         echo "Final verification..."
+         ls -la output/libsynvek_backend_llama_metal.dylib
+         echo "Operation completed successfully!"
+         rm -rf  build/llama.cpp/build_metal
 
     - name: Disk space after build backend-> llama.cpp metal 
       run: |
