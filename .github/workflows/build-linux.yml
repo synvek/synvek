@@ -49,10 +49,6 @@ jobs:
       run: |
         df
 
-    - name: Prepare for synvek_explorer
-      run: |
-        mkdir output
-
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -69,6 +65,7 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
       run: |
+        mkdir output
         cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output/ 
         mv output/libsynvek_backend_llama.so output/libsynvek_backend_llama_cuda.so 
         rm -rf  build/llama.cpp/build_cuda
