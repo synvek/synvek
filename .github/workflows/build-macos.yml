@@ -1,31 +1,18 @@
-name: Build synvek on linux
+name: Build synvek on macos
 
 on:
   workflow_dispatch:
 
 jobs:
   build-linux:
-    name: Build on linux
-    runs-on: ubuntu-22.04
+    name: Build on macos
+    runs-on: macos-latest
 
     steps:
-    - name: Cleanup
-      run: |
-        sudo apt clean        
-        sudo rm -rf /tmp/*
-        sudo rm -rf /var/tmp/*        
-        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
 
     - name: Disk space check
       run: |
         df
-
-    - name: Install CUDA
-      uses: Jimver/cuda-toolkit@v0.2.28
-      with:
-        cuda: 12.9.1
-        method: network
-        linux-local-args: '[["--toolkit"]]'
 
     - name: Install Deno
       run: |
@@ -34,16 +21,8 @@ jobs:
     
     - name: Cleanup for tools
       run: |
-        sudo apt clean        
-        sudo rm -rf /tmp/*
-        sudo rm -rf /var/tmp/*        
-        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         deno clean
-
-    - name: Verify Cuda
-      run: |
-        nvcc --version
 
     - name: Disk space before code checkin
       run: |
@@ -62,18 +41,18 @@ jobs:
       run: |
         df
 
-    - name: Configure and build backend-> llama.cpp cuda 
+    - name: Configure and build backend-> llama.cpp metal 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_metal -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_metal --config Release --target synvek_backend_llama -j 4
 
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp metal 
       run: |
-        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output 
-        mv output/libsynvek_backend_llama.so libsynvek_backend_llama_cuda.so 
-        rm -rf  build/llama.cpp/build_cuda
+        cp build/llama.cpp/build_metal/bin/libsynvek_backend_llama.so output 
+        mv output/libsynvek_backend_llama.so libsynvek_backend_llama_metal.so 
+        rm -rf  build/llama.cpp/build_metal
 
-    - name: Disk space after build backend-> llama.cpp cuda 
+    - name: Disk space after build backend-> llama.cpp metal 
       run: |
         df
 
@@ -92,18 +71,18 @@ jobs:
       run: |
         df
 
-    - name: Configure and build backend-> stable-diffusion.cpp cuda 
+    - name: Configure and build backend-> stable-diffusion.cpp metal 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="86-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j  4
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_metal --config Release --target synvek_backend_sd -j  4
 
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
       run: |
-        cp build/stable-diffusion.cpp/build_cuda/bin/libsynvek_backend_sd.so output 
-        mv output/libsynvek_backend_sd.so libsynvek_backend_sd_cuda.so 
-        rm -rf  build/stable-diffusion.cpp/build_cuda
+        cp build/stable-diffusion.cpp/build_metal/bin/libsynvek_backend_sd.so output 
+        mv output/libsynvek_backend_sd.so libsynvek_backend_sd_metal.so 
+        rm -rf  build/stable-diffusion.cpp/build_metal
 
-    - name: Disk space after build backend-> stable-diffusion.cpp cuda 
+    - name: Disk space after build backend-> stable-diffusion.cpp metal 
       run: |
         df
         
@@ -122,6 +101,20 @@ jobs:
       run: |
         df
         
+    - name: Configure and build backend-> mistral.rs metal 
+      run: |
+        cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal" --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
+      run: |
+        cp build/mistral.rs/build_metal/libsynvek_backend_default.so output 
+        mv output/libsynvek_backend_default.so libsynvek_backend_default_metal.so 
+        rm -rf  build/mistral.rs/build_metal
+
+    - name: Disk space after build backend-> mistral.rs.cpp metal 
+      run: |
+        df
+
     - name: Configure and build backend-> mistral.rs cpu 
       run: |
         cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
@@ -132,18 +125,10 @@ jobs:
         mv output/libsynvek_backend_default.so libsynvek_backend_default_cpu.so 
         rm -rf  build/mistral.rs/build_cpu
 
-    - name: Disk space after build backend-> mistral.rs.cpp cpu 
+    - name: Disk space after build backend-> mistral.rs.cpp mecputal 
       run: |
         df
         
-    - name: Remove cuda for dispace
-      run: |
-        sudo apt remove -y cuda-12-9
-
-    - name: Disk space after Remove cuda
-      run: |
-        df
-
     - name: Configure and build synvek_web
       run: |
         npm install
@@ -152,10 +137,6 @@ jobs:
 
     - name: Cleanup for synvek_web
       run: |
-        sudo apt clean        
-        sudo rm -rf /tmp/*
-        sudo rm -rf /var/tmp/*        
-        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         rm -rf synvek_web/node_modules
 
@@ -171,10 +152,6 @@ jobs:
 
     - name: Cleanup for synvek_agent
       run: |
-        sudo apt clean        
-        sudo rm -rf /tmp/*
-        sudo rm -rf /var/tmp/*        
-        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         deno clean
         rm -rf synvek_web/node_modules
