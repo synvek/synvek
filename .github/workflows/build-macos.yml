@@ -28,10 +28,10 @@ jobs:
       run: |
         df
 
-    - name: Prepare for synvek_explorer
-      run: |
-        mkdir -p output
-        ls output/
+    # - name: Prepare for synvek_explorer
+    #   run: |
+    #     mkdir -p output
+    #     ls output/
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -49,6 +49,8 @@ jobs:
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp metal 
       run: |
+         mkdir output
+         ls output/
          echo "Checking for source file..."
          ls -la "build/llama.cpp/build_metal/bin/libsynvek_backend_llama.dylib"
           
