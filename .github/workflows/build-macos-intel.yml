@@ -1,4 +1,4 @@
-name: Build synvek on macos
+name: Build synvek on macos intel
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-linux:
-    name: Build on macos
+    name: Build on macos intel
     runs-on: macos-15-intel
 
     steps:
@@ -202,6 +202,6 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: synvek-explorer-artifacts-macos
+        name: synvek-explorer-artifacts-macos-intel
         path: artifacts
         retention-days: 7       
