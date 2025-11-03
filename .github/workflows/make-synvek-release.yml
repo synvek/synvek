@@ -34,10 +34,6 @@ jobs:
       # - build-macos-intel
 
     steps:
-      - name: Setup
-        run: |
-          sudo apt install unzip
-
       - name: Disk space check
         run: |
           df
@@ -49,10 +45,8 @@ jobs:
 
       - name: Process artifacts
         run: |
-          mv artifacts/synvek-explorer-artifacts-macos artifacts/synvek-explorer-artifacts-macos.zip
-          ls artifacts/
           mkdir -p artifacts/release
-          unzip artifacts/synvek-explorer-artifacts-macos.zip -d  artifacts/release
+          mv artifacts/synvek-explorer-artifacts-macos/* artifacts/release/
 
       - uses: ncipollo/release-action@v1
         with:
