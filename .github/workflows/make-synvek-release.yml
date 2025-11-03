@@ -9,17 +9,17 @@ on:
           type: string
 
 jobs:
-  build-windows:
-    uses: ./.github/workflows/build-windows.yml
+  # build-windows:
+  #   uses: ./.github/workflows/build-windows.yml
 
-  build-linux:
-    uses: ./.github/workflows/build-linux.yml
+  # build-linux:
+  #   uses: ./.github/workflows/build-linux.yml
 
   build-macos-arm64:
     uses: ./.github/workflows/build-macos.yml
 
-  build-macos-intel:
-    uses: ./.github/workflows/build-macos-intel.yml
+  # build-macos-intel:
+  #   uses: ./.github/workflows/build-macos-intel.yml
 
   main-job:
     permissions:
