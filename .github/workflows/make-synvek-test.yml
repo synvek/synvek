@@ -28,6 +28,8 @@ jobs:
 
       - name: Process artifacts
         run: |
-          ls artifacts/
-          ls artifacts/synvek-explorer-artifacts-macos
+          ls -la artifacts/
+          echo "ss"
+          ls -la artifacts/synvek-explorer-artifacts-macos
+          echo "s2s"
 
