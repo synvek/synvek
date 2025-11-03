@@ -8,11 +8,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: create file
+        run: |
+          mkdir artifacts
+          echo "Hello" > test.txt
+          mv test.txt artifacts/test.txt
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: synvek-explorer-artifacts-macos
+          path: artifacts
+          retention-days: 2       
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          run-id: 190150094012
 
       - name: Process artifacts
         run: |
