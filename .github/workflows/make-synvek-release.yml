@@ -49,15 +49,10 @@ jobs:
 
       - name: Process artifacts
         run: |
-          ls artifacts/
           mv artifacts/synvek-explorer-artifacts-macos artifacts/synvek-explorer-artifacts-macos.zip
           ls artifacts/
-
-      - name: Process artifacts
-        run: |
-          ls artifacts/
           mkdir -p artifacts/release
-          unzip artifacts/*.zip -d  artifacts/release
+          unzip artifacts/synvek-explorer-artifacts-macos.zip -d  artifacts/release
 
       - uses: ncipollo/release-action@v1
         with:
