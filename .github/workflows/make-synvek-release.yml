@@ -49,6 +49,7 @@ jobs:
 
       - name: Process artifacts
         run: |
+          mv artifacts/synvek-explorer-artifacts-macos artifacts/synvek-explorer-artifacts-macos.zip
           mkdir -p artifacts/release
           unzip artifacts/*.zip -d  artifacts/release
 
