@@ -55,5 +55,5 @@ jobs:
           allowUpdates: true
           draft: true
           prerelease: true
-          artifacts: "artifacts/release"
+          artifacts: "artifacts/release/*.*"
 
