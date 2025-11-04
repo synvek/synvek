@@ -85,7 +85,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-user-prompt-is-required' }))
       return
     }
-    const imageData = await RequestUtils.generateImage(userText, userText, 1, size.width, size.height)
+    const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
+    const imageData = await RequestUtils.generateImage(userText, userText, 1, size.width, size.height, seedNumber)
     await WorkspaceUtils.handleRequest(
       messageApi,
       imageData,

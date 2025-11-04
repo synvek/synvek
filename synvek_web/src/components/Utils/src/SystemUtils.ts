@@ -50,6 +50,7 @@ export class SystemUtils {
     alert(message)
     console.log(message)
   }
+
   public static generateUUID(): string {
     let d = new Date().getTime()
     if (window.performance && typeof window.performance.now === 'function') {
@@ -62,6 +63,13 @@ export class SystemUtils {
     })
     return id
   }
+
+  public static generateRandomInteger(min: number, max: number): number {
+    const minValue = Math.ceil(min)
+    const maxValue = Math.floor(max)
+    return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
+  }
+
   public static parseUrl(url: string) {
     const urlObj = {
       protocol: /^(.+):\/\//,

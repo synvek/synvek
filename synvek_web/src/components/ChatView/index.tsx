@@ -713,7 +713,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       //setCurrentScrollTop(chatSectionsRef.current.scrollHeight)
       currentWorkspace.selectedConversionData.scrollTop = chatSectionsRef.current.scrollHeight
     }
-    const response = await RequestUtils.generateImage(chatContent[0].text, defaultTextModel)
+    const seed = SystemUtils.generateRandomInteger(1, 999999)
+    const response = await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed)
     await WorkspaceUtils.handleRequest(
       messageApi,
       response,
@@ -1123,7 +1124,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const enableTools = chatMessage.toolCalls.length > 0 || chatMessage.toolCallChunks.length > 0 || chatMessage.invalidToolCalls.length > 0
     const success = chatMessage.success
 
-    //FIX second thinking after tool called. It happens on QWen3
+    //FIX second thinking after tool called. It seems to happen on QWen3
     while (nonThinkContent) {
       const secondThinkStartIndex = nonThinkContent.indexOf('<think>')
       const secondThinkEndIndex = nonThinkContent.indexOf('</think>')
