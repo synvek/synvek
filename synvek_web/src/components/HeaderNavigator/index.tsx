@@ -395,7 +395,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     let osType = SystemUtils.getOS()
     if (osType === OSType.WINDOWS) {
       if (backendType === 'default') {
-        return ['cuda', 'cuda_legacy', 'cpu']
+        return ['cuda', 'cpu']
       } else if (backendType === 'llama_cpp') {
         return ['cuda', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
@@ -415,7 +415,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       }
     } else if (osType === OSType.LINUX) {
       if (backendType === 'default') {
-        return ['cuda', 'cuda_legacy', 'cpu']
+        return ['cuda', 'cpu']
       } else if (backendType === 'llama_cpp') {
         return ['cuda', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
