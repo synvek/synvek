@@ -121,6 +121,36 @@ jobs:
     - name: Disk space after build backend-> stable-diffusion.cpp cpu 
       run: |
         df
+
+    - name: Configure and build backend-> mistral.rs cuda 
+      run: |
+        export CUDA_COMPUTE_CAP=86
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
+      run: |
+        cp build/mistral.rs/build_cuda/release/libsynvek_backend_default.so output/ 
+        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda.so 
+        rm -rf  build/mistral.rs/build_cuda
+
+    - name: Disk space after build backend-> mistral.rs cuda 
+      run: |
+        df
+
+    - name: Configure and build backend-> mistral.rs cuda legacy
+      run: |
+        export CUDA_COMPUTE_CAP=75
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda legacy 
+      run: |
+        cp build/mistral.rs/build_cuda_legacy/release/libsynvek_backend_default.so output/ 
+        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda_legacy.so 
+        rm -rf  build/mistral.rs/build_cuda_legacy
+
+    - name: Disk space after build backend-> mistral.rs cuda legacy
+      run: |
+        df
         
     - name: Configure and build backend-> mistral.rs cpu 
       run: |
@@ -201,11 +231,9 @@ jobs:
         cp -r synvek_service/service_plugins output 
         cp -r synvek_service/storage output 
 
-    #curl -L -o output/my_app.zip "https://github.com/synvek/mistral.rs/releases/download/v1.0.0/my_app.zip"
     - name: Copy artifacts for mistral rs cuda
       run: |
         df
-
 
     - name: Configure and build synvek_explorer
       run: |

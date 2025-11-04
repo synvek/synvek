@@ -106,6 +106,26 @@ jobs:
       run: |
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
         echo "Disk space - ${available_gb}GB available"
+
+    - name: Configure and build backend-> mistral.rs cuda 
+      run: |
+        set CUDA_COMPUTE_CAP=86
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+        
+    - name: Configure and build backend-> mistral.rs cuda legacy
+      run: |
+        set CUDA_COMPUTE_CAP=75
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
         
     - name: Configure and build backend-> mistral.rs cpu 
       run: |
@@ -154,6 +174,10 @@ jobs:
         Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cuda.dll" 
         Copy-Item "build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.dll" "output/" 
         Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cpu.dll" 
+        Copy-Item "build/mistral.rs/build_cuda/release/synvek_backend_default.dll" "output/" 
+        Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda.dll" 
+        Copy-Item "build/mistral.rs/build_cuda_legacy/release/synvek_backend_default.dll" "output/" 
+        Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda_legacy.dll" 
         Copy-Item "build/mistral.rs/build_cpu/release/synvek_backend_default.dll" "output/" 
         Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cpu.dll" 
 
