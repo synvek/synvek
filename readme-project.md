@@ -158,11 +158,13 @@ Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and c
 
 - Build mistral.rs with cuda: 
 For compute capability 8.x or above(RTX 3090 Ti RTX 3090 RTX 3080 Ti RTX 3080 RTX 3070 Ti RTX 3070 RTX 3060 Ti RTX 3060 RTX 3050 Ti RTX 3050)
+set CUDA_COMPUTE_CAP=86
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
 
 Noted: Need to rename synvek_backend_default.dll to synvek_backend_default_cuda.dll and copy to output folder. 
 
 For compute capability 7.x or below(GTX 1650 Ti TITAN RTX RTX 2080 Ti RTX 2080 RTX 2070 RTX 2060)
+set CUDA_COMPUTE_CAP=75
 cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
 
 Noted: Need to rename synvek_backend_default.dll  to synvek_backend_default_cuda_legacy.dll and copy to output folder. 
