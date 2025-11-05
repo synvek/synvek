@@ -412,9 +412,13 @@ export const chatService = new Elysia()
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
       const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format)
       if (imageResponse.status === 200 && imageResponse.data.created) {
-        return SystemUtils.buildResponse(true, imageResponse.data.data[0].b64_json)
+        // deno-lint-ignore no-explicit-any
+        const data = imageResponse.data.data.map((item: any) => item.b64_json)
+        return SystemUtils.buildResponse(true, data)
       } else if (imageResponse.status === 200 && imageResponse.data.data.length > 0) {
-        return SystemUtils.buildResponse(true, imageResponse.data.data[0].b64_json)
+        // deno-lint-ignore no-explicit-any
+        const data = imageResponse.data.data.map((item: any) => item.b64_json)
+        return SystemUtils.buildResponse(true, data)
       } else if (imageResponse.status === 200) {
         return SystemUtils.buildResponse(false, null, `Failed to generate image with message`)
       } else {

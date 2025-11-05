@@ -90,7 +90,7 @@ jobs:
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
         cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 
+        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
       run: |
@@ -100,7 +100,7 @@ jobs:
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
         cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 
+        cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
       run: |

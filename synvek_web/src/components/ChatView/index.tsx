@@ -718,12 +718,12 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     await WorkspaceUtils.handleRequest(
       messageApi,
       response,
-      async (data) => {
-        chatMessage.content = [{ type: 'image_url', text: data }]
+      async (data: string[]) => {
+        chatMessage.content = [{ type: 'image_url', text: data[0] }]
         setConversion(currentWorkspace.selectedConversionData)
         setForceUpdate(forceUpdate + 1)
         setCurrentChatKey(chatMessage.key)
-        setCurrentContent([{ type: 'image_url', text: data }])
+        setCurrentContent([{ type: 'image_url', text: data[0] }])
         setHistoryIndex(0)
         await addChat(false)
         setHistory([''])

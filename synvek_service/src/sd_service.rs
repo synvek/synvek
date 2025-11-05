@@ -165,6 +165,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from("-v"),
                         String::from("--steps"),
                         String::from("4"),
+                        String::from("--batch-count"),
+                        String::from(generation_args.n.to_string()),
                         String::from("--clip-on-cpu"),
                     ];
                     let c_start_strings = start_args

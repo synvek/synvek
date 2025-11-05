@@ -86,12 +86,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       return
     }
     const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
-    const imageData = await RequestUtils.generateImage(userText, userText, 1, size.width, size.height, seedNumber)
+    const imageData = await RequestUtils.generateImage(userText, userText, count, size.width, size.height, seedNumber)
     await WorkspaceUtils.handleRequest(
       messageApi,
       imageData,
-      async (data) => {
-        const newImages: string[] = [...images, data]
+      async (data: string[]) => {
+        const newImages: string[] = [...images, ...data]
         setImages(newImages)
         setCurrentImageIndex(newImages.length - 1)
         await saveGeneration(data)
@@ -101,30 +101,33 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     )
   }
 
-  const saveGeneration = async (image: string) => {
-    const thumbData = await SystemUtils.resizeImage(image, 64, 64)
-    const generationData = await RequestUtils.addGeneration(
-      Consts.GENERATION_TYPE_IMAGE,
-      userText,
-      '',
-      SystemUtils.generateUUID(),
-      image,
-      thumbData,
-      moment().valueOf(),
-      currentWorkspace.settings.defaultImageGenerationModel!,
-      null,
-      null,
-      null,
-      null,
-      null,
-    )
-    await WorkspaceUtils.handleRequest(
-      messageApi,
-      generationData,
-      () => {},
-      () => {},
-      () => {},
-    )
+  const saveGeneration = async (images: string[]) => {
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i]
+      const thumbData = await SystemUtils.resizeImage(image, 64, 64)
+      const generationData = await RequestUtils.addGeneration(
+        Consts.GENERATION_TYPE_IMAGE,
+        userText,
+        '',
+        SystemUtils.generateUUID(),
+        image,
+        thumbData,
+        moment().valueOf(),
+        currentWorkspace.settings.defaultImageGenerationModel!,
+        null,
+        null,
+        null,
+        null,
+        null,
+      )
+      await WorkspaceUtils.handleRequest(
+        messageApi,
+        generationData,
+        () => {},
+        () => {},
+        () => {},
+      )
+    }
   }
 
   const handleSwitchImage = (index: number) => {
@@ -169,22 +172,22 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     })
   }
   const countOptions = [
-    { value: '1', label: '1' },
-    { value: '2', label: '2' },
-    { value: '3', label: '3' },
-    { value: '4', label: '4' },
-    { value: '5', label: '5' },
-    { value: '6', label: '6' },
-    { value: '7', label: '7' },
-    { value: '8', label: '8' },
-    { value: '10', label: '10' },
-    { value: '12', label: '12' },
-    { value: '16', label: '16' },
-    { value: '20', label: '20' },
-    { value: '24', label: '24' },
-    { value: '32', label: '32' },
-    { value: '48', label: '48' },
-    { value: '64', label: '64' },
+    { value: 1, label: '1' },
+    { value: 2, label: '2' },
+    { value: 3, label: '3' },
+    { value: 4, label: '4' },
+    { value: 5, label: '5' },
+    { value: 6, label: '6' },
+    { value: 7, label: '7' },
+    { value: 8, label: '8' },
+    { value: 10, label: '10' },
+    { value: 12, label: '12' },
+    { value: 16, label: '16' },
+    { value: 20, label: '20' },
+    { value: 24, label: '24' },
+    { value: 32, label: '32' },
+    { value: 48, label: '48' },
+    { value: 64, label: '64' },
   ]
 
   const performanceOptions = [
