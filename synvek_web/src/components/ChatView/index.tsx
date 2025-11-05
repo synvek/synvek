@@ -1104,19 +1104,51 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     )
   }
 
+  const findThinkStartIndex = (output: string) => {
+    const thinkStartQwen = '<think>'
+    const thinkStartGpt = '<|channel|>analysis<|message|>'
+    const thinkingStartIndexQwen = output.indexOf(thinkStartQwen)
+    const thinkingStartIndexGpt = output.indexOf(thinkStartGpt)
+    if (thinkingStartIndexQwen >= 0) {
+      return [thinkingStartIndexQwen, thinkStartQwen.length]
+    } else if (thinkingStartIndexGpt >= 0) {
+      return [thinkingStartIndexGpt, thinkStartGpt.length]
+    } else {
+      return [-1, 0]
+    }
+  }
+
+  const findThinkEndIndex = (output: string) => {
+    const thinkEndQwen = '</think>'
+    const thinkEndGpt = '<|end|><|start|>assistant<|channel|>final<|message|>'
+    const thinkingEndIndexQwen = output.indexOf(thinkEndQwen)
+    const thinkingEndIndexGpt = output.indexOf(thinkEndGpt)
+    if (thinkingEndIndexQwen > 0) {
+      return [thinkingEndIndexQwen, thinkEndQwen.length]
+    } else if (thinkingEndIndexGpt > 0) {
+      return [thinkingEndIndexGpt, thinkEndGpt.length]
+    } else {
+      return [-1, 0]
+    }
+  }
+
   const chatSections = conversion.chatMessages.map((chatMessage) => {
     const chatContent = chatMessage.key === currentChatKey ? currentContent : chatMessage.content
-    const thinkStartIndex = chatContent[0].text.indexOf('<think>')
-    const thinkEndIndex = chatContent[0].text.indexOf('</think>')
+    const [thinkStartIndex, thinkStartLength] = findThinkStartIndex(chatContent[0].text)
+    const [thinkEndIndex, thinkEndLength] = findThinkEndIndex(chatContent[0].text)
     const thinkEnabled = thinkStartIndex >= 0
     const thinkFinished = thinkEndIndex >= 0
     const thinkContent =
       thinkStartIndex >= 0
         ? thinkEndIndex < 0
-          ? chatContent[0].text.substring(thinkStartIndex + 7)
-          : chatContent[0].text.substring(thinkStartIndex + 7, thinkEndIndex)
+          ? chatContent[0].text.substring(thinkStartIndex + thinkStartLength)
+          : chatContent[0].text.substring(thinkStartIndex + thinkStartLength, thinkEndIndex)
         : null
-    let nonThinkContent = thinkStartIndex < 0 ? chatContent[0].text : thinkEndIndex >= 0 ? chatContent[0].text.substring(thinkEndIndex + 8) : undefined
+    console.log(`content=${chatContent[0].text}`)
+    console.log(`thinkStartIndex= ${thinkStartIndex}, thinkStartLength=${thinkStartLength}`)
+    console.log(`thinkEndIndex= ${thinkEndIndex}, thinkEndLength=${thinkEndLength}`)
+    let nonThinkContent =
+      thinkStartIndex < 0 ? chatContent[0].text : thinkEndIndex >= 0 ? chatContent[0].text.substring(thinkEndIndex + thinkEndLength) : undefined
     const thinkTime = thinkFinished ? Number((chatMessage.thinkEndTime! - chatMessage.thinkStartTime!) / 1000.0).toFixed(2) : ''
     const validThinking = thinkEnabled && thinkContent !== '\n\n'
     const isImage = chatContent[0].type === 'image_url'

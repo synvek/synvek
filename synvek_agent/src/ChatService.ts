@@ -31,7 +31,7 @@ class LLMService {
     return LLMService.settings
   }
 
-  public static buildChat(streaming: boolean, modelName: string) {
+  public static buildChat(streaming: boolean, modelName: string, enableThinking: boolean) {
     const modelServers = ModelServerService.getModelServers()
     const settings = LLMService.getSettings()
     let selectedModelServer: ModelServerInfo | undefined = undefined
@@ -136,7 +136,7 @@ class LLMService {
     activatedToolPlugins: string[],
     activatedMCPServices: string[],
   ) {
-    const model = LLMService.buildChat(false, modelName)
+    const model = LLMService.buildChat(false, modelName, enableThinking)
     const toolPlugins = await PluginService.getAllToolPlugins()
     const filteredToolPlugins = toolPlugins.filter((toolPlugin: ToolPlugin) => {
       let activated = false
@@ -186,7 +186,7 @@ class LLMService {
     activatedToolPlugins: string[],
     activatedMCPServices: string[],
   ) {
-    const model = LLMService.buildChat(true, modelName)
+    const model = LLMService.buildChat(true, modelName, enableThinking)
     const toolPlugins = await PluginService.getAllToolPlugins()
     const filteredToolPlugins = toolPlugins.filter((toolPlugin: ToolPlugin) => {
       let activated = false

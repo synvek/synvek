@@ -472,6 +472,7 @@ fn populate_args_private_with_backend_llama_cpp(
         start_args.push(OsString::from("-m"));
         start_args.push(OsString::from(model_path.clone()));
     }
+    start_args.push(OsString::from("--jinja"));
 }
 
 fn populate_args_private_with_backend_stable_diffusion_cpp(
@@ -579,6 +580,7 @@ fn populate_args_with_backend_llama_cpp(
             start_args.push(OsString::from("-m"));
             start_args.push(OsString::from(model_path));
         }
+        start_args.push(OsString::from("--jinja"));
     });
     if !gguf_found {
         tracing::error!("No GGUF found");
