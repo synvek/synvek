@@ -26,6 +26,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
   const [modelSource, setModelSource] = useState<string>('')
   const [mirror, setMirror] = useState<string>('')
   const [accessToken, setAccessToken] = useState<string>('')
+  const [accessTokenRequired, setAccessTokenRequired] = useState<boolean>(false)
   const [modelType, setModelType] = useState<string>('plain')
   const [modelInfos, setModelInfos] = useState<ModelInfo[]>([])
   const { token } = useToken()
@@ -100,7 +101,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     setModelFormWindowVisible(false)
   }
 
-  const handleDownloadModel = (modelSource: string, modelId: string, modelType: string) => {
+  const handleDownloadModel = (modelSource: string, modelId: string, modelType: string, accessTokenRequired: boolean) => {
     const index = modelId.lastIndexOf('/')
     const modelName = index >= 0 ? modelId.slice(index + 1) : modelId
     setModelName(modelName)
@@ -108,6 +109,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     setModelSource(modelSource)
     setMirror('')
     setAccessToken('')
+    setAccessTokenRequired(accessTokenRequired)
     setModelFormWindowVisible(true)
     setModelType(modelType)
   }
@@ -249,7 +251,9 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
                             <Button
                               type={'primary'}
                               icon={<DownloadOutlined />}
-                              onClick={() => handleDownloadModel(modelProvider.modelSource, item.name, modelProvider.modelType)}
+                              onClick={() =>
+                                handleDownloadModel(modelProvider.modelSource, item.name, modelProvider.modelType, modelProvider.accessTokenRequired)
+                              }
                             >
                               <FormattedMessage id={'setting-view.model-search.model-options.download'} />
                             </Button>
@@ -308,6 +312,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
         modelSource={modelSource}
         mirror={mirror}
         accessToken={accessToken}
+        accessTokenRequired={accessTokenRequired}
         onWindowCancel={handleModelFormWindowCancel}
         onWindowOk={handleModelFormWindowOk}
       />

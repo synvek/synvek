@@ -9,12 +9,23 @@ interface ModelFormWindowProps {
   modelSource: string
   mirror: string
   accessToken: string
+  accessTokenRequired: boolean
   onWindowCancel: () => void
   onWindowOk: (modelName: string, modelId: string, modelSource: string, mirror: string, accessToken: string) => void
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ModelFormWindowPage: FC<ModelFormWindowProps> = ({ visible, modelName, modelId, modelSource, mirror, accessToken, onWindowCancel, onWindowOk }) => {
+const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
+  visible,
+  modelName,
+  modelId,
+  modelSource,
+  mirror,
+  accessToken,
+  accessTokenRequired,
+  onWindowCancel,
+  onWindowOk,
+}) => {
   const intl = useIntl()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [messageApi, contextHolder] = message.useMessage()
@@ -34,7 +45,7 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({ visible, modelName, mod
         accessToken,
       })
     }
-  }, [visible]) // 当窗口显示时设置表单值
+  }, [visible])
 
   const onOk = async () => {
     try {
@@ -104,7 +115,12 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({ visible, modelName, mod
               initialValue={modelSource}
               style={{ marginBottom: '4px', width: '100%' }}
             >
-              <Input placeholder={intl.formatMessage({ id: 'model-form-window.column-model-source-placeholder' })} size="small" style={{ width: '100%' }} />
+              <Input
+                readOnly
+                placeholder={intl.formatMessage({ id: 'model-form-window.column-model-source-placeholder' })}
+                size="small"
+                style={{ width: '100%' }}
+              />
             </Form.Item>
             <Form.Item
               name="mirror"
@@ -118,6 +134,7 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({ visible, modelName, mod
               name="accessToken"
               label={intl.formatMessage({ id: 'model-form-window.column-access-token' })}
               initialValue={accessToken}
+              rules={[{ required: accessTokenRequired, message: intl.formatMessage({ id: 'model-form-window.column-access-token-message' }) }]}
               style={{ marginBottom: '4px', width: '100%' }}
             >
               <Input placeholder={intl.formatMessage({ id: 'model-form-window.column-access-token-placeholder' })} size="small" style={{ width: '100%' }} />

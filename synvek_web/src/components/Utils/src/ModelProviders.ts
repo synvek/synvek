@@ -51,6 +51,7 @@ export interface ModelProvider {
   chatTemplate?: string
   summary: string
   description: string
+  accessTokenRequired: boolean
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -80,6 +81,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'GPT OSS 20b GGUF',
     description: 'GPT OSS 20b GGUF details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'GPT-OSS-120b-GGUF',
@@ -111,6 +113,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'GPT OSS 120b GGUF',
     description: 'GPT OSS 120b GGUF details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Qwen3-1.7B-UQFF',
@@ -147,6 +150,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'EricB/Qwen3-1.7B-UQFF summary',
     description: 'EricB/Qwen3-1.7B-UQFF details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Llama-3.2-1B-Instruct-UQFF',
@@ -186,6 +190,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'EricB/Qwen3-1.7B-UQFF summary',
     description: 'EricB/Qwen3-1.7B-UQFF details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Qwen3-0.6B-GGUF',
@@ -213,6 +218,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen/Qwen3-0.6B-GGUF summary',
     description: 'Qwen/Qwen3-0.6B-GGUF details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Qwen2-VL',
@@ -248,6 +254,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Qwen3',
@@ -275,6 +282,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'DeepSeek-V3',
@@ -309,6 +317,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'DeepSeek summary',
     description: 'DeepSeek details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'DeepSeek-R1',
@@ -373,6 +382,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'DeepSeek summary',
     description: 'DeepSeek details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'FLUX.1-schnell',
@@ -403,6 +413,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
+    accessTokenRequired: true,
   },
   {
     modelId: 'Phi-4-multimodal-instruct',
@@ -430,6 +441,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Phi-4-multimodal-instruct summary',
     description: 'Phi-4-multimodal-instruct details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'Dia-1.6B',
@@ -457,6 +469,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Dia-1.6B summary',
     description: 'Dia-1.6B details',
+    accessTokenRequired: false,
   },
   {
     modelId: 'gemma-3n-E4B-it',
@@ -484,6 +497,7 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'gemma-3n-E4B-it summary',
     description: 'gemma-3n-E4B-it details',
+    accessTokenRequired: false,
   },
   // {
   //   modelId: 'NousResearch-Llama-3.2-1B',
@@ -594,5 +608,6 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
+    accessTokenRequired: true,
   },
 ]

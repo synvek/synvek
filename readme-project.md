@@ -14,7 +14,7 @@ It is powered by Rust & Deno & Tauri & llama.cpp/stable-diffusion.cpp/Mistral.rs
 You can chat with multiple LLMs in one conversion including text, image generation and so on.
 
 
-### Mutliple models support. Chat completion, image generation or voice output in one application and one chat. 
+### Multiple models support. Chat completion, image generation or voice output in one application and one chat. 
 
 ### Function call & MCP support
 
@@ -30,7 +30,7 @@ You can chat with multiple LLMs in one conversion including text, image generati
 
 ### Macos
 
-## Suported Hardwares
+## Supported Hardwares
 
 ### CPU
 
@@ -42,7 +42,7 @@ You can chat with multiple LLMs in one conversion including text, image generati
 
 ## Download & run
 
-## Buld & Run
+## Build & Run
 
 ### Prepare environment
 
@@ -106,7 +106,7 @@ synvek_explorer will static link to synvek_service into single application and s
 - Deploy Setup：cargo install tauri-cli --version "^2.0.0" --locked
 - Deploy：cargo tauri build
 
-### Build dependences
+### Build dependencies
 
 #### Build backend: llama.cpp
 
