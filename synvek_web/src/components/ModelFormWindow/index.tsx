@@ -106,7 +106,12 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
               initialValue={modelId}
               style={{ marginBottom: '4px', width: '100%' }}
             >
-              <Input placeholder={intl.formatMessage({ id: 'model-form-window.column-model-id-placeholder' })} size="small" style={{ width: '100%' }} />
+              <Input
+                readOnly
+                placeholder={intl.formatMessage({ id: 'model-form-window.column-model-id-placeholder' })}
+                size="small"
+                style={{ width: '100%' }}
+              />
             </Form.Item>
             <Form.Item
               name="modelSource"

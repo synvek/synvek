@@ -7976,5 +7976,71 @@
         "endpoint": "",
         "access_token": null,
         "file_size": 12109566560
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 2133
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": "configuration.json",
+        "file_path": "configuration.json",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 48
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": "LICENSE",
+        "file_path": "LICENSE",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 11544
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": "params",
+        "file_path": "params",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 270
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": "Qwen3-0.6B-Q8_0.gguf",
+        "file_path": "Qwen3-0.6B-Q8_0.gguf",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 639446688
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "file_name": "README.md",
+        "file_path": "README.md",
+        "revision": "master",
+        "commit_hash": "32d6327dd2a5b42f7ce0fe5e6b6f25346b0ee8f9",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6236
     }
 ]

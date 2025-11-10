@@ -35,7 +35,7 @@ export interface ModelProviderStatus {
 export interface ModelProvider {
   modelId: string
   modelCreator: string
-  modelSource: string
+  modelSource: 'huggingface' | 'modelscope'
   parameters: string
   modelOptions: ModelOption[]
   categories: ModelCategory[]
@@ -609,5 +609,33 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
     accessTokenRequired: true,
+  },
+  {
+    modelId: 'Qwen3-0.6B-GGUF',
+    modelCreator: 'Qwen',
+    modelSource: 'modelscope',
+    parameters: 'a',
+    modelOptions: [
+      {
+        name: 'Qwen/Qwen3-0.6B-GGUF',
+        fileSize: '0.6G',
+        repos: [],
+        files: [{ repoName: 'Qwen/Qwen3-0.6B-GGUF', repoFile: 'Qwen3-0.6B-Q8_0.gguf' }],
+      },
+    ],
+    categories: ['text-to-text'],
+    backends: ['llama_cpp', 'default'],
+    modelType: 'gguf',
+    supportISQ: false,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'Qwen/Qwen3-0.6B-GGUF summary',
+    description: 'Qwen/Qwen3-0.6B-GGUF details',
+    accessTokenRequired: false,
   },
 ]

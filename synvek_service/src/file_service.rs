@@ -7,6 +7,7 @@ use std::path::Path;
 use std::sync::{Arc, Mutex, OnceLock};
 use std::thread::sleep;
 use std::time::Duration;
+use crate::common::MODEL_SOURCE_MODELSCOPE;
 use crate::process_service::ProcessInfo;
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -57,7 +58,7 @@ pub fn init_file_service() {
         let repo_file_infos = GLOBAL_REPO_FILE_INFOS.get().unwrap();
         let mut repo_file_info_map = repo_file_infos.lock().unwrap();
         repo_files_info.into_iter().for_each(|repo_file_info| {
-            let repo_file_key = format!("{}:{}:{}", repo_file_info.repo_name.clone(), repo_file_info.file_path.clone(), repo_file_info.commit_hash.clone());
+            let repo_file_key = format!("{}:{}:{}:{}", repo_file_info.repo_source.clone(), repo_file_info.repo_name.clone(), repo_file_info.file_path.clone(), repo_file_info.commit_hash.clone());
             repo_file_info_map.insert(repo_file_key, repo_file_info);
         })
     } else {
@@ -65,38 +66,38 @@ pub fn init_file_service() {
     }
 }
 
-pub fn has_repo_file_info(repo_name: &str, file_name: &str, commit_hash: &str) -> bool {
-    let repo_file_key = format!("{}:{}:{}", repo_name, file_name, commit_hash);
+pub fn has_repo_file_info(repo_source: &str, repo_name: &str, file_name: &str, commit_hash: &str) -> bool {
+    let repo_file_key = format!("{}:{}:{}:{}", repo_source, repo_name, file_name, commit_hash);
     let repo_file_infos = GLOBAL_REPO_FILE_INFOS.get().unwrap();
     let mut repo_file_info_map = repo_file_infos.lock().unwrap();
     repo_file_info_map.contains_key(&repo_file_key)
 }
 
-pub fn search_repo_file_info(repo_name: &str, file_name: &str) -> Option<RepoFileInfo> {
+pub fn search_repo_file_info(repo_source: &str, repo_name: &str, file_name: &str) -> Option<RepoFileInfo> {
     let repo_file_infos = GLOBAL_REPO_FILE_INFOS.get().unwrap();
     let repo_file_info_map = repo_file_infos.lock().unwrap();
     let mut search_repo_file_info: Option<RepoFileInfo> = None;
     repo_file_info_map.iter().for_each(|(_repo_file_name, repo_file_info)| {
-        if repo_name == repo_file_info.repo_name && file_name == repo_file_info.file_path {
+        if repo_source == repo_file_info.repo_source && repo_name == repo_file_info.repo_name && file_name == repo_file_info.file_path {
             search_repo_file_info = Some(repo_file_info.clone());
         }
     });
     search_repo_file_info
 }
 
-pub fn get_repo_file_info(repo_name: &str, file_name: &str, commit_hash: &str) -> Option<RepoFileInfo> {
-    let repo_file_key = format!("{}:{}:{}", repo_name, file_name, commit_hash);
+pub fn get_repo_file_info(repo_source: &str, repo_name: &str, file_name: &str, commit_hash: &str) -> Option<RepoFileInfo> {
+    let repo_file_key = format!("{}:{}:{}:{}", repo_source, repo_name, file_name, commit_hash);
     let repo_file_infos = GLOBAL_REPO_FILE_INFOS.get().unwrap();
     let repo_file_info_map = repo_file_infos.lock().unwrap();
     repo_file_info_map.get(&repo_file_key).cloned()
 }
 
-pub fn get_repo_info(repo_name: &str) -> Vec<RepoFileInfo> {
+pub fn get_repo_info(repo_source: &str, repo_name: &str) -> Vec<RepoFileInfo> {
     let repo_file_infos = GLOBAL_REPO_FILE_INFOS.get().unwrap();
     let repo_file_info_map = repo_file_infos.lock().unwrap();
     let mut repo_file_infos: Vec<RepoFileInfo> = Vec::new();
     repo_file_info_map.iter().for_each(|(repo_file_name, repo_file_info)| {
-        if repo_name == repo_file_info.repo_name {
+        if repo_source == repo_file_info.repo_source && repo_name == repo_file_info.repo_name {
             repo_file_infos.push(repo_file_info.clone());
         }
     });
@@ -152,6 +153,7 @@ fn fetch_remote_repo_info(
     access_token: Option<String>,
 ) {
     let repo_info = fetch_helper::get_repo_info_remote(
+        repo_source.clone(),
         repo_name.clone(),
         revision.clone(),
         endpoint.clone(),
@@ -165,42 +167,58 @@ fn fetch_remote_repo_info(
     }
     let repo_info = repo_info.unwrap();
     let commit_hash = repo_info.sha;
-    repo_info.siblings.iter().for_each(|child| {
-        let repo_file_name = child.rfilename.clone();
-        let file_meta = fetch_helper::get_file_meta_remote(
-            repo_name.clone(),
-            child.rfilename.clone(),
-            commit_hash.clone(),
-            endpoint.clone(),
-            access_token.clone(),
-        );
-        if file_meta.is_some() {
-            let file_meta = file_meta.unwrap();
-            let file_path = Path::new(repo_file_name.as_str());
-            let file_name = file_path.file_name();
-            if file_name.is_some() {
-                let file_name = file_name.unwrap().to_str().unwrap().to_string();
-                let file_info = RepoFileInfo {
-                    repo_source: repo_source.clone(),
-                    repo_name: repo_name.clone(),
-                    file_name,
-                    file_path: child.rfilename.clone(),
-                    revision: revision.clone(),
-                    commit_hash: commit_hash.clone(),
-                    endpoint: endpoint.clone(),
-                    access_token: access_token.clone(),
-                    file_size: file_meta.size as u64,
-                };
-                repo_file_infos.push(file_info.clone());
-                tracing::info!("Fetching remote file info: {:?}", file_info);
-                sleep(Duration::from_millis(9000));
-            } else {
-                tracing::error!("Unable to fetch file name info: {:?}", file_meta);
-                panic!("Unable to fetch file name info: {:?}", file_meta)
-            }
+    repo_info.files.iter().for_each(|child| {
+        if repo_source == MODEL_SOURCE_MODELSCOPE {
+            let file_info = RepoFileInfo {
+                repo_source: repo_source.clone(),
+                repo_name: repo_name.clone(),
+                file_name: child.file_name.clone(),
+                file_path: child.file_path.clone(),
+                revision: revision.clone(),
+                commit_hash: commit_hash.clone(),
+                endpoint: endpoint.clone(),
+                access_token: access_token.clone(),
+                file_size: child.file_size,
+            };
+            repo_file_infos.push(file_info.clone());
         } else {
-            tracing::error!("Unable to fetch file info: {:?}", file_meta);
-            panic!("Unable to fetch file info: {:?}", file_meta)
+            let repo_file_name = child.file_path.clone();
+            let file_meta = fetch_helper::get_file_meta_remote(
+                repo_source.clone(),
+                repo_name.clone(),
+                child.file_path.clone(),
+                commit_hash.clone(),
+                endpoint.clone(),
+                access_token.clone(),
+            );
+            if file_meta.is_some() {
+                let file_meta = file_meta.unwrap();
+                let file_path = Path::new(repo_file_name.as_str());
+                let file_name = file_path.file_name();
+                if file_name.is_some() {
+                    let file_name = file_name.unwrap().to_str().unwrap().to_string();
+                    let file_info = RepoFileInfo {
+                        repo_source: repo_source.clone(),
+                        repo_name: repo_name.clone(),
+                        file_name,
+                        file_path: child.file_path.clone(),
+                        revision: revision.clone(),
+                        commit_hash: commit_hash.clone(),
+                        endpoint: endpoint.clone(),
+                        access_token: access_token.clone(),
+                        file_size: file_meta.size as u64,
+                    };
+                    repo_file_infos.push(file_info.clone());
+                    tracing::info!("Fetching remote file info: {:?}", file_info);
+                    sleep(Duration::from_millis(9000));
+                } else {
+                    tracing::error!("Unable to fetch file name info: {:?}", file_meta);
+                    panic!("Unable to fetch file name info: {:?}", file_meta)
+                }
+            } else {
+                tracing::error!("Unable to fetch file info: {:?}", file_meta);
+                panic!("Unable to fetch file info: {:?}", file_meta)
+            }
         }
     })
 }

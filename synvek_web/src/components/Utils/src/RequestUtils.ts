@@ -267,12 +267,14 @@ export interface StartModelServerResponse {
 }
 
 export interface FetchRepo {
+  model_source: string
   repo_name: string
   revision: string | null
   access_token: string | null
 }
 
 export interface FetchFile {
+  model_source: string
   repo_name: string
   file_name: string
   revision: string | null
@@ -283,13 +285,14 @@ export interface FetchRequest {
   fetch_name: string
   fetch_repos: FetchRepo[]
   fetch_files: FetchFile[]
-  model_source: string | null
-  model_id: string | null
+  model_source: string
+  model_id: string
   mirror: string | null
   access_token: string | null
 }
 
 export interface TaskItem {
+  model_source: string
   repo_name: string
   file_name: string
   revision: string
@@ -302,7 +305,7 @@ export interface Task {
   task_items: TaskItem[]
   fetch_repos: FetchRepo[]
   fetch_files: FetchFile[]
-  model_source: string | null
+  model_source: string
   model_id: string | null
   mirror: string | null
   access_token: string | null
@@ -337,6 +340,7 @@ export interface RunningTaskItem {
 }
 
 export interface FetchStatusData {
+  model_source: string
   fetch_name: string
   repo_name: string
   file_name: string
@@ -359,6 +363,7 @@ export interface FinishedTaskItem {
 }
 
 export interface ListFetchData {
+  model_source: string
   repo_name: string
   file_name: string
   downloaded: boolean

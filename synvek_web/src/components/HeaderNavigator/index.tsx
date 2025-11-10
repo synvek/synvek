@@ -478,7 +478,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     } else {
       modelProviders.forEach((modelProvider) => {
         modelProvider.modelOptions.forEach((modelOption) => {
-          if (modelOption.name === task.model_id) {
+          if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
             modelProvider.backends.forEach((backend) => {
               populateBackendMenuItems(task, backend, items)
             })
@@ -523,7 +523,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     let modelConfig = modelConfigRef.current.get(task.task_name)
     modelProviders.forEach((modelProvider) => {
       modelProvider.modelOptions.forEach((modelOption) => {
-        if (modelOption.name === task.model_id) {
+        if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
           modelType = modelProvider.modelType
           backends = modelProvider.backends
         }

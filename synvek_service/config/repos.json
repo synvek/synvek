@@ -528,5 +528,14 @@
         "revision": "main",
         "endpoint": "https://hf-mirror.com",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Qwen/Qwen3-0.6B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
     }
 ]

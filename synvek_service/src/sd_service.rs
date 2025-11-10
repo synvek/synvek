@@ -112,9 +112,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         model_file_path = get_model_file_path(repo_name, file_name, revision, commit_hash);
         valid = true;
     }
-    let clip_l_file = file_service::search_repo_file_info("comfyanonymous/flux_text_encoders", "clip_l.safetensors");
-    let vae_file = file_service::search_repo_file_info("black-forest-labs/FLUX.1-schnell", "ae.safetensors");
-    let t5xxl_file = file_service::search_repo_file_info("comfyanonymous/flux_text_encoders", "t5xxl_fp16.safetensors");
+    let clip_l_file = file_service::search_repo_file_info("huggingface","comfyanonymous/flux_text_encoders", "clip_l.safetensors");
+    let vae_file = file_service::search_repo_file_info("huggingface","black-forest-labs/FLUX.1-schnell", "ae.safetensors");
+    let t5xxl_file = file_service::search_repo_file_info("huggingface","comfyanonymous/flux_text_encoders", "t5xxl_fp16.safetensors");
     match (clip_l_file, vae_file,t5xxl_file ) {
         (Some(clip_l_file), Some(vae_file), Some(t5xxl_file)) => {
             clip_l_path = get_model_file_path(clip_l_file.repo_name, clip_l_file.file_path, clip_l_file.revision, clip_l_file.commit_hash);

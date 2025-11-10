@@ -25,6 +25,7 @@ mod file_service;
 mod sd_service;
 mod sd_api;
 mod sd_server;
+mod modelscope_helper;
 
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;

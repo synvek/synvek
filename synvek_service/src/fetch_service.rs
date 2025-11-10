@@ -1,6 +1,4 @@
-use crate::{
-    CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, common, fetch_helper, file_service,
-};
+use crate::{CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, common, fetch_helper, file_service, MODEL_SOURCES, MODEL_SOURCE_HUGGINGFACE, MODEL_SOURCE_MODELSCOPE};
 use anyhow::{Error, Result, anyhow};
 use hf_hub::api::Progress;
 use hf_hub::api::sync::Metadata;
@@ -12,6 +10,9 @@ use std::{fs, panic, thread};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct FetchFile {
+    #[serde(default = "default_model_source")]
+    pub model_source: String,
+
     pub repo_name: String,
 
     pub file_name: String,
@@ -23,6 +24,9 @@ pub struct FetchFile {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct FetchRepo {
+    #[serde(default = "default_model_source")]
+    pub model_source: String,
+
     pub repo_name: String,
 
     pub revision: Option<String>,
@@ -32,6 +36,8 @@ pub struct FetchRepo {
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct TaskItem {
+    #[serde(default = "default_model_source")]
+    pub model_source: String,
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
@@ -42,6 +48,7 @@ pub struct TaskItem {
 
 #[derive(Debug, Clone, Default)]
 pub struct RunningTaskItem {
+    pub model_source: String,
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
@@ -58,6 +65,7 @@ pub struct RunningTaskItem {
 
 #[derive(Debug, Clone, Default)]
 pub struct FinishedTaskItem {
+    pub model_source: String,
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
@@ -72,7 +80,7 @@ pub struct Task {
     pub task_items: Vec<TaskItem>,
     pub fetch_repos: Vec<FetchRepo>,
     pub fetch_files: Vec<FetchFile>,
-    pub model_source: Option<String>,
+    pub model_source: String,
     pub model_id: Option<String>,
     pub mirror: Option<String>,
     pub access_token: Option<String>,
@@ -98,6 +106,7 @@ pub struct RunningTask {
 #[derive(Clone)]
 struct ProgressService {
     pub task_name: String,
+    pub model_source: String,
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
@@ -115,6 +124,7 @@ struct ProgressService {
 #[derive(Clone, Debug)]
 pub struct CacheRepoFile {
     pub cache_key: String,
+    pub model_source: String,
     pub repo_name: String,
     pub file_name: String,
     pub revision: String,
@@ -125,8 +135,13 @@ pub struct CacheRepoFile {
     pub update_time: u64,
 }
 
+fn default_model_source() -> String {
+    MODEL_SOURCE_HUGGINGFACE.to_string()
+}
+
 static RUNNING_TASKS: OnceLock<Arc<Mutex<HashMap<String, RunningTask>>>> = OnceLock::new();
 static CACHE_REPO_FILES: OnceLock<Arc<Mutex<HashMap<String, CacheRepoFile>>>> = OnceLock::new();
+
 impl Progress for ProgressService {
     fn init(&mut self, size: usize, file_name: &str) {
         self.total_size = size;
@@ -139,6 +154,7 @@ impl Progress for ProgressService {
         self.speed_check_size = 0;
         update_running_task_item(
             self.task_name.clone(),
+            self.model_source.clone(),
             self.repo_name.clone(),
             self.file_name.clone(),
             self.revision.clone(),
@@ -186,6 +202,7 @@ impl Progress for ProgressService {
         }
         update_running_task_item(
             self.task_name.clone(),
+            self.model_source.clone(),
             self.repo_name.clone(),
             self.file_name.clone(),
             self.revision.clone(),
@@ -200,6 +217,7 @@ impl Progress for ProgressService {
     fn finish(&mut self) {
         finish_running_task_item(
             self.task_name.clone(),
+            self.model_source.clone(),
             self.repo_name.clone(),
             self.file_name.clone(),
             self.revision.clone(),
@@ -308,10 +326,10 @@ fn update_finished_task_item(task_name: String, finished_task_item: FinishedTask
     }
 }
 
-fn find_access_token(repo_name: String, tasks: &Tasks) -> Option<String> {
+fn find_access_token(model_source: String, repo_name: String, tasks: &Tasks) -> Option<String> {
     for (_, task) in tasks.tasks.iter().enumerate() {
         for (_, task_item) in task.task_items.iter().enumerate() {
-            if task_item.repo_name == repo_name {
+            if task_item.repo_name == repo_name && task_item.model_source == model_source {
                 return task_item.access_token.clone();
             }
         }
@@ -319,10 +337,10 @@ fn find_access_token(repo_name: String, tasks: &Tasks) -> Option<String> {
     None
 }
 
-fn find_endpoint(repo_name: String, tasks: &Tasks) -> Option<String> {
+fn find_endpoint(model_source: String, repo_name: String, tasks: &Tasks) -> Option<String> {
     for (_, task) in tasks.tasks.iter().enumerate() {
         for (_, task_item) in task.task_items.iter().enumerate() {
-            if task_item.repo_name == repo_name {
+            if task_item.repo_name == repo_name && task_item.model_source == model_source {
                 return task.mirror.clone();
             }
         }
@@ -331,11 +349,12 @@ fn find_endpoint(repo_name: String, tasks: &Tasks) -> Option<String> {
 }
 
 pub fn build_cache_repo_file_key(
+    model_source: String,
     repo_name: String,
     file_name: String,
     commit_hash: String,
 ) -> String {
-    repo_name + ":" + file_name.as_str() + ":" + commit_hash.as_str()
+    model_source.to_string() + ":" + repo_name.as_str() + ":" + file_name.as_str() + ":" + commit_hash.as_str()
 }
 
 fn populate_cache_repo_files() {
@@ -344,41 +363,49 @@ fn populate_cache_repo_files() {
             tracing::info!("Cache repo files update is started");
             let tasks = load_local_tasks(false);
             let mut data: Vec<CacheRepoFile> = vec![];
-            let revision = "main".to_string();
+            let mut revision = "main".to_string();
             let update_time = SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
                 .unwrap()
                 .as_secs();
-            let repos = fetch_helper::get_repos_in_cache();
-            repos.iter().for_each(|repo_name| {
-                let access_token = find_access_token(repo_name.to_string(), &tasks);
-                let endpoint = find_endpoint(repo_name.to_string(), &tasks);
-                let repo_data = fetch_helper::get_repo_files_in_cache(
-                    repo_name.clone(),
-                    revision.clone(),
-                    endpoint,
-                    access_token,
-                );
-                //tracing::info!("Cache repo files checking: {:?}", repo_data);
-                repo_data.iter().for_each(|repo_file_data| {
-                    let cache_key = build_cache_repo_file_key(
-                        repo_name.to_string(),
-                        repo_file_data.file_name.clone(),
-                        repo_file_data.commit_hash.clone(),
+            MODEL_SOURCES.iter().for_each(|model_source| {
+                if model_source.to_string() == MODEL_SOURCE_MODELSCOPE {
+                    revision = "master".to_string();
+                }
+                let repos = fetch_helper::get_repos_in_cache(model_source.to_string());
+                repos.iter().for_each(|repo_name| {
+                    let access_token = find_access_token(model_source.to_string(), repo_name.to_string(), &tasks);
+                    let endpoint = find_endpoint(model_source.to_string(), repo_name.to_string(), &tasks);
+                    let repo_data = fetch_helper::get_repo_files_in_cache(
+                        model_source.to_string(),
+                        repo_name.clone(),
+                        revision.clone(),
+                        endpoint,
+                        access_token,
                     );
-                    let cache_repo_file = CacheRepoFile {
-                        cache_key,
-                        repo_name: repo_name.clone(),
-                        file_name: repo_file_data.file_name.clone(),
-                        revision: revision.clone(),
-                        commit_hash: repo_file_data.commit_hash.clone(),
-                        downloaded: repo_file_data.downloaded,
-                        file_size: repo_file_data.file_size,
-                        access_token: None,
-                        update_time,
-                    };
-                    data.push(cache_repo_file.clone());
-                    //tracing::info!("Cache repo files population: {:?}", cache_repo_file);
+                    //tracing::info!("Cache repo files checking: {:?}", repo_data);
+                    repo_data.iter().for_each(|repo_file_data| {
+                        let cache_key = build_cache_repo_file_key(
+                            model_source.to_string(),
+                            repo_name.to_string(),
+                            repo_file_data.file_name.clone(),
+                            repo_file_data.commit_hash.clone(),
+                        );
+                        let cache_repo_file = CacheRepoFile {
+                            cache_key,
+                            model_source: model_source.to_string(),
+                            repo_name: repo_name.clone(),
+                            file_name: repo_file_data.file_name.clone(),
+                            revision: revision.clone(),
+                            commit_hash: repo_file_data.commit_hash.clone(),
+                            downloaded: repo_file_data.downloaded,
+                            file_size: repo_file_data.file_size,
+                            access_token: None,
+                            update_time,
+                        };
+                        data.push(cache_repo_file.clone());
+                        //tracing::info!("Cache repo files population: {:?}", cache_repo_file);
+                    });
                 });
             });
             {
@@ -397,6 +424,7 @@ fn populate_cache_repo_files() {
 }
 
 fn populate_cache_repo_file(
+    model_source: String,
     repo_name: String,
     file_name: String,
     revision: String,
@@ -409,8 +437,9 @@ fn populate_cache_repo_file(
     let map_ref = Arc::clone(CACHE_REPO_FILES.get().unwrap());
     let mut map = map_ref.lock().unwrap();
     let cache_key =
-        build_cache_repo_file_key(repo_name.clone(), file_name.clone(), commit_hash.clone());
+        build_cache_repo_file_key(model_source.clone(), repo_name.clone(), file_name.clone(), commit_hash.clone());
     let cache_repo_file = CacheRepoFile {
+        model_source,
         cache_key,
         repo_name,
         file_name,
@@ -448,6 +477,7 @@ pub fn get_cache_repo_file(cache_key: String) -> Option<CacheRepoFile> {
 }
 
 pub fn start_fetch_repo(
+    model_source: String,
     repo_name: String,
     revision: String,
     endpoint: Option<String>,
@@ -455,6 +485,7 @@ pub fn start_fetch_repo(
 ) -> Result<bool> {
     tracing::info!("Starting fetch repo {}", repo_name);
     let repo_info_result = fetch_helper::get_repo_info(
+        model_source.clone(),
         repo_name.clone(),
         revision.clone(),
         endpoint,
@@ -469,7 +500,7 @@ pub fn start_fetch_repo(
             task_items: vec![],
             fetch_repos: vec![],
             fetch_files: vec![],
-            model_source: None,
+            model_source: model_source.clone(),
             model_id: None,
             mirror: None,
             access_token: access_token.clone(),
@@ -479,6 +510,7 @@ pub fn start_fetch_repo(
             private_model: false,
         };
         let fetch_repo: FetchRepo = FetchRepo {
+            model_source: model_source.clone(),
             repo_name: repo_name.clone(),
             revision: Option::from(revision.clone()),
             access_token: access_token.clone(),
@@ -486,9 +518,10 @@ pub fn start_fetch_repo(
         task.fetch_repos.push(fetch_repo);
         file_names.iter().for_each(|file_name| {
             let repo_file_info =
-                file_service::get_repo_file_info(&*repo_name, &*file_name.rfilename, &*commit_hash);
+                file_service::get_repo_file_info(&*model_source, &*repo_name, &*file_name.rfilename, &*commit_hash);
             if let Some(repo_file_info) = repo_file_info {
                 let task_item = TaskItem {
+                    model_source: model_source.clone(),
                     repo_name: repo_name.clone(),
                     file_name: file_name.rfilename.clone(),
                     revision: revision.clone(),
@@ -499,7 +532,8 @@ pub fn start_fetch_repo(
                 task.task_items.push(task_item);
             } else {
                 tracing::error!(
-                    "repo file not found on repo:{}, file name: {}",
+                    "repo file not found on model source: {}, repo:{}, file name: {}",
+                    model_source,
                     repo_name.clone(),
                     file_name.rfilename.clone().to_string()
                 );
@@ -508,7 +542,8 @@ pub fn start_fetch_repo(
         return start_task(task, true);
     }
     tracing::error!(
-        "Fetch repo failed on {} with error: {}.",
+        "Fetch repo failed on model source: {},  repo: {} with error: {}.",
+                    model_source,
         repo_name,
         repo_info_result.unwrap_err()
     );
@@ -516,17 +551,19 @@ pub fn start_fetch_repo(
 }
 
 pub fn start_fetch_repo_file(
+    model_source: String,
     repo_name: String,
     file_name: String,
     revision: String,
     access_token: Option<String>,
 ) -> Result<bool> {
-    tracing::info!("Starting fetch repo: {} on file: {}", repo_name, file_name);
+    tracing::info!("Starting fetch model source: {},  repo: {} on file: {}", model_source, repo_name, file_name);
     let exists =
-        fetch_helper::exists_in_cache(repo_name.clone(), file_name.clone(), revision.clone());
+        fetch_helper::exists_in_cache(model_source.clone(), repo_name.clone(), file_name.clone(), revision.clone());
     if exists {
         tracing::info!(
-            "Skip fetching, it already exists in cache with repo: {} on file: {}",
+            "Skip fetching, it already exists in cache with model_source:{} repo: {} on file: {}",
+            model_source,
             repo_name,
             file_name
         );
@@ -537,7 +574,7 @@ pub fn start_fetch_repo_file(
             task_items: vec![],
             fetch_repos: vec![],
             fetch_files: vec![],
-            model_source: None,
+            model_source: model_source.clone(),
             model_id: None,
             mirror: None,
             access_token: access_token.clone(),
@@ -547,6 +584,7 @@ pub fn start_fetch_repo_file(
             private_model: false,
         };
         let fetch_file: FetchFile = FetchFile {
+            model_source: model_source.clone(),
             repo_name: repo_name.clone(),
             file_name: file_name.clone(),
             revision: Option::from(revision.clone()),
@@ -554,9 +592,10 @@ pub fn start_fetch_repo_file(
         };
         task.fetch_files.push(fetch_file);
         let repo_file_info =
-            file_service::search_repo_file_info(&*repo_name.clone(), &*file_name.to_string());
+            file_service::search_repo_file_info(&*model_source, &*repo_name.clone(), &*file_name.to_string());
         if let Some(repo_file_info) = repo_file_info {
             let task_item = TaskItem {
+                model_source: model_source.clone(),
                 repo_name: repo_name.clone(),
                 file_name: file_name.clone(),
                 revision: revision.clone(),
@@ -617,12 +656,14 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
     task.task_items.iter().for_each(|item| {
         current_task.all_task_items.push(item.clone());
         let exists = fetch_helper::exists_in_cache(
+            item.model_source.clone(),
             item.repo_name.clone(),
             item.file_name.clone(),
             item.revision.clone(),
         );
         if exists {
             let file_size = fetch_helper::get_file_size_in_registry(
+                item.model_source.clone(),
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 item.commit_hash.clone(),
@@ -630,6 +671,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                 item.access_token.clone(),
             );
             let finished_task_item = FinishedTaskItem {
+                model_source: "".to_string(),
                 repo_name: item.repo_name.clone(),
                 file_name: item.file_name.clone(),
                 revision: item.revision.clone(),
@@ -647,6 +689,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
             );
         } else if require_remote_meta {
             let file_meta = fetch_helper::get_file_meta_in_registry(
+                item.model_source.clone(),
                 item.repo_name.clone(),
                 item.file_name.clone(),
                 item.revision.clone(),
@@ -656,6 +699,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
             if file_meta.is_some() {
                 let file_meta = file_meta.unwrap();
                 let running_task_item = RunningTaskItem {
+                    model_source: item.model_source.clone(),
                     repo_name: item.repo_name.clone(),
                     file_name: item.file_name.clone(),
                     revision: item.revision.clone(),
@@ -682,6 +726,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
             }
         } else {
             let running_task_item = RunningTaskItem {
+                model_source: item.model_source.clone(),
                 repo_name: item.repo_name.clone(),
                 file_name: item.file_name.clone(),
                 revision: item.revision.clone(),
@@ -734,6 +779,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                     );
                     let progress = ProgressService {
                         task_name: task.task_name.clone(),
+                        model_source: task.model_source.clone(),
                         repo_name: first_running_task_item.repo_name.clone(),
                         file_name: first_running_task_item.file_name.clone(),
                         revision: first_running_task_item.revision.clone(),
@@ -754,9 +800,11 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                         first_running_task_item.file_name.clone()
                     );
                     let download_result = fetch_helper::download_model_file(
+                        first_running_task_item.model_source.clone(),
                         first_running_task_item.repo_name.clone(),
                         first_running_task_item.file_name.clone(),
                         first_running_task_item.revision.clone(),
+                        first_running_task_item.commit_hash.clone(),
                         task.mirror.clone(),
                         first_running_task_item.access_token.clone(),
                         progress.clone(),
@@ -764,8 +812,9 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                     if download_result.is_err() {
                         let error = download_result.unwrap_err();
                         tracing::error!(
-                            "Task {} running and failed fetching repo name: {} and file name: {} with error: {}",
+                            "Task {} running and failed fetching model source: {}, repo name: {} and file name: {} with error: {}",
                             task.task_name.clone(),
+                            first_running_task_item.model_source.clone(),
                             first_running_task_item.repo_name.clone(),
                             first_running_task_item.file_name.clone(),
                             error.to_string()
@@ -773,6 +822,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                         if retry_index < DOWNLOAD_RETRY_COUNT_LIMIT {
                             retry_index = retry_index + 1;
                             update_running_task_item(
+                                first_running_task_item.model_source.clone(),
                                 task.task_name.clone(),
                                 first_running_task_item.repo_name.clone(),
                                 first_running_task_item.file_name.clone(),
@@ -785,8 +835,9 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                             );
                         } else {
                             tracing::error!(
-                                "Task {} failed to fetch repo name: {} and file name: {} for {} times and is terminated",
+                                "Task {} failed to fetch  model source: {}, repo name: {} and file name: {} for {} times and is terminated",
                                 task.task_name.clone(),
+                                first_running_task_item.model_source.clone(),
                                 first_running_task_item.repo_name.clone(),
                                 first_running_task_item.file_name.clone(),
                                 DOWNLOAD_RETRY_COUNT_LIMIT
@@ -796,12 +847,14 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                         }
                     } else {
                         tracing::info!(
-                            "Task {} running and finished fetching repo name: {} and file name: {}",
+                            "Task {} running and finished fetching  model source: {}, repo name: {} and file name: {}",
                             task.task_name.clone(),
+                            first_running_task_item.model_source.clone(),
                             first_running_task_item.repo_name.clone(),
                             first_running_task_item.file_name.clone()
                         );
                         let finished_task_item = FinishedTaskItem {
+                            model_source: first_running_task_item.model_source.clone(),
                             repo_name: first_running_task_item.repo_name.clone(),
                             file_name: first_running_task_item.file_name.clone(),
                             revision: first_running_task_item.revision.clone(),
@@ -818,6 +871,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
                             .unwrap()
                             .as_secs();
                         populate_cache_repo_file(
+                            first_running_task_item.model_source.clone(),
                             first_running_task_item.repo_name.clone(),
                             first_running_task_item.file_name.clone(),
                             first_running_task_item.revision.clone(),
@@ -856,6 +910,7 @@ pub fn start_task(task: Task, require_remote_meta: bool) -> Result<bool> {
 
 fn update_running_task_item(
     task_name: String,
+    model_source: String,
     repo_name: String,
     file_name: String,
     revision: String,
@@ -876,9 +931,8 @@ fn update_running_task_item(
                 .running_task_items
                 .iter_mut()
                 .for_each(|mut item| {
-                    if item.repo_name == repo_name
-                        && item.file_name == file_name
-                        && item.revision == revision
+                    if item.model_source == model_source &&  item.repo_name == repo_name
+                        && item.file_name == file_name && item.revision == revision
                     {
                         item.total_size = total_size;
                         item.downloaded_size = current_size;
@@ -899,6 +953,7 @@ fn update_running_task_item(
 }
 fn finish_running_task_item(
     task_name: String,
+    model_source: String,
     repo_name: String,
     file_name: String,
     revision: String,
@@ -914,9 +969,8 @@ fn finish_running_task_item(
             .running_task_items
             .iter_mut()
             .for_each(|mut item| {
-                if item.repo_name == repo_name
-                    && item.file_name == file_name
-                    && item.revision == revision
+                if  item.model_source == model_source &&  item.repo_name == repo_name
+                    && item.file_name == file_name && item.revision == revision
                 {
                     if success {
                         item.downloaded = true;
@@ -967,7 +1021,7 @@ fn load_local_private_tasks(tasks: &mut Tasks) {
             task_items: vec![],
             fetch_repos: vec![],
             fetch_files: vec![],
-            model_source: None,
+            model_source: "".to_string(),
             model_id: None,
             mirror: None,
             access_token: None,

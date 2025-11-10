@@ -1144,9 +1144,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
           ? chatContent[0].text.substring(thinkStartIndex + thinkStartLength)
           : chatContent[0].text.substring(thinkStartIndex + thinkStartLength, thinkEndIndex)
         : null
-    console.log(`content=${chatContent[0].text}`)
-    console.log(`thinkStartIndex= ${thinkStartIndex}, thinkStartLength=${thinkStartLength}`)
-    console.log(`thinkEndIndex= ${thinkEndIndex}, thinkEndLength=${thinkEndLength}`)
+    // console.log(`content=${chatContent[0].text}`)
+    // console.log(`thinkStartIndex= ${thinkStartIndex}, thinkStartLength=${thinkStartLength}`)
+    // console.log(`thinkEndIndex= ${thinkEndIndex}, thinkEndLength=${thinkEndLength}`)
     let nonThinkContent =
       thinkStartIndex < 0 ? chatContent[0].text : thinkEndIndex >= 0 ? chatContent[0].text.substring(thinkEndIndex + thinkEndLength) : undefined
     const thinkTime = thinkFinished ? Number((chatMessage.thinkEndTime! - chatMessage.thinkStartTime!) / 1000.0).toFixed(2) : ''

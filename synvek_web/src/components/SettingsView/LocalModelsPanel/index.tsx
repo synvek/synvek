@@ -274,7 +274,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
 
       modelProviders.forEach((modelProvider) => {
         modelProvider.modelOptions.forEach((modelOption) => {
-          if (modelOption.name === task.model_id) {
+          if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
             supportISQ = modelProvider.supportISQ
             supportOffloaded = modelProvider.supportOffloaded
           }
@@ -287,10 +287,19 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
         let existInFetchDataList = false
         //New fetch may not be included in list yet.
         currentWorkspace.fetchDataList.forEach((listFetchData) => {
-          if (taskItem.repo_name === listFetchData.repo_name && taskItem.file_name === listFetchData.file_name) {
+          if (
+            taskItem.repo_name === listFetchData.repo_name &&
+            taskItem.file_name === listFetchData.file_name &&
+            taskItem.model_source === listFetchData.model_source
+          ) {
             existInFetchDataList = true
           }
-          if (taskItem.repo_name === listFetchData.repo_name && taskItem.file_name === listFetchData.file_name && listFetchData.downloaded) {
+          if (
+            taskItem.repo_name === listFetchData.repo_name &&
+            taskItem.file_name === listFetchData.file_name &&
+            taskItem.model_source === listFetchData.model_source &&
+            listFetchData.downloaded
+          ) {
             taskItemDownloaded = true
           }
         })

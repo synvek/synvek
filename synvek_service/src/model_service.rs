@@ -20,6 +20,7 @@ use std::time::Duration;
 use std::{env, thread};
 use tokio::runtime;
 use uuid::Uuid;
+use crate::common::MODEL_SOURCE_MODELSCOPE;
 use crate::process_service::notify_main_process;
 
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
@@ -571,7 +572,10 @@ fn populate_args_with_backend_llama_cpp(
         let uniform_name = item.file_name.to_uppercase();
         if uniform_name.ends_with(".GGUF") {
             let mut model_path = model_dir.clone();
-            let model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            let mut model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            if task.model_source == MODEL_SOURCE_MODELSCOPE {
+                model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
+            }
             model_path.push(model_dir_name);
             model_path.push("snapshots");
             model_path.push(item.commit_hash.clone());
@@ -598,7 +602,10 @@ fn populate_args_with_backend_stable_diffusion_cpp(
         let uniform_name = item.file_name.to_uppercase();
         if uniform_name.ends_with(".GGUF") {
             let mut model_path = model_dir.clone();
-            let model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            let mut model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            if task.model_source == MODEL_SOURCE_MODELSCOPE {
+                model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
+            }
             model_path.push(model_dir_name);
             model_path.push("snapshots");
             model_path.push(item.commit_hash.clone());

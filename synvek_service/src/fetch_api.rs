@@ -23,9 +23,9 @@ pub struct StartFetchRequest {
 
     pub fetch_files: Vec<FetchFile>,
 
-    pub model_source: Option<String>,
+    pub model_source: String,
 
-    pub model_id: Option<String>,
+    pub model_id: String,
 
     pub mirror: Option<String>,
 
@@ -56,6 +56,8 @@ pub struct ListFetchRequest {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ListFetchData {
+    pub model_source: String,
+
     pub repo_name: String,
 
     pub file_name: String,
@@ -88,6 +90,8 @@ pub struct ListFetchResponse {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FetchStatusData {
     pub fetch_name: String,
+
+    pub model_source: String,
 
     pub repo_name: String,
 
@@ -232,7 +236,7 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
         fetch_repos: req.fetch_repos.clone(),
         fetch_files: req.fetch_files.clone(),
         model_source: req.model_source.clone(),
-        model_id: req.model_id.clone(),
+        model_id: Some(req.model_id.clone()),
         mirror: endpoint.clone(),
         access_token: req.access_token.clone(),
         isq: None,
@@ -261,6 +265,7 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
                 revision = fetch_repo.revision.clone().unwrap();
             }
             let repo_info_result = fetch_helper::get_repo_info(
+                req.model_source.clone(),
                 fetch_repo.repo_name.clone(),
                 revision.clone(),
                 endpoint.clone(),
@@ -274,9 +279,10 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
                 repo_files.iter().for_each(|repo_file| {
                     let file_name = repo_file.rfilename.clone();
                     let repo_file_info =
-                        file_service::search_repo_file_info(&*repo_name, &*file_name);
+                        file_service::search_repo_file_info(&*req.model_source, &*repo_name, &*file_name);
                     if let Some(repo_file_info) = repo_file_info {
                         let task_item = TaskItem {
+                            model_source: req.model_source.clone(),
                             repo_name: fetch_repo.repo_name.clone(),
                             file_name: file_name.clone(),
                             revision: revision.clone(),
@@ -306,11 +312,13 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
                 revision = fetch_file.revision.clone().unwrap();
             }
             let repo_file_info = file_service::search_repo_file_info(
+                &*req.model_source.clone(),
                 &*fetch_file.repo_name.clone(),
                 &*fetch_file.file_name.to_string(),
             );
             if let Some(repo_file_info) = repo_file_info {
                 let task_item = TaskItem {
+                    model_source: req.model_source.clone(),
                     repo_name: fetch_file.repo_name.clone(),
                     file_name: fetch_file.file_name.to_string(),
                     revision,
@@ -443,9 +451,10 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
                 revision = fetch_file.revision.clone().unwrap();
             }
             let repo_file_info =
-                file_service::search_repo_file_info(&*fetch_file.repo_name, &*fetch_file.file_name);
+                file_service::search_repo_file_info(&*fetch_file.model_source, &*fetch_file.repo_name, &*fetch_file.file_name);
             if let Some(repo_file_info) = repo_file_info {
                 let cache_key = fetch_service::build_cache_repo_file_key(
+                    fetch_file.model_source.clone(),
                     fetch_file.repo_name.clone(),
                     fetch_file.file_name.clone(),
                     repo_file_info.commit_hash.clone(),
@@ -457,8 +466,9 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
                 if let Some(cache_file_data) = cache_file_data {
                     downloaded = cache_file_data.downloaded;
                 }
-                //tracing::info!("Checking file in cache: {}, {}, {:?}", exists, cache_key, file_size );
+                //tracing::info!("Checking file in cache: {}, {}, {:?}", downloaded, cache_key, file_size );
                 let list_fetch_data = ListFetchData {
+                    model_source: fetch_file.model_source.clone(),
                     repo_name: fetch_file.repo_name.clone(),
                     file_name: fetch_file.file_name.clone(),
                     revision,
@@ -485,6 +495,7 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
             cache_repo_data.values().for_each(|cache_repo_file| {
                 if cache_repo_file.repo_name == fetch_repo.repo_name {
                     let list_fetch_data = ListFetchData {
+                        model_source: cache_repo_file.model_source.clone(),
                         repo_name: cache_repo_file.repo_name.clone(),
                         file_name: cache_repo_file.file_name.clone(),
                         revision: cache_repo_file.revision.clone(),
@@ -521,6 +532,7 @@ fn populate_fetch_status(
     running_task.finished_task_items.iter().for_each(|item| {
         let fetch_status_data = FetchStatusData {
             fetch_name: fetch_name.clone(),
+            model_source: item.model_source.clone(),
             repo_name: item.repo_name.clone(),
             file_name: item.file_name.clone(),
             downloaded: true,
@@ -536,6 +548,7 @@ fn populate_fetch_status(
     running_task.running_task_items.iter().for_each(|item| {
         let fetch_status_data = FetchStatusData {
             fetch_name: fetch_name.clone(),
+            model_source: item.model_source.clone(),
             repo_name: item.repo_name.clone(),
             file_name: item.file_name.clone(),
             downloaded: item.downloaded,

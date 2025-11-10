@@ -23,6 +23,7 @@ pub mod file_service;
 pub mod sd_service;
 pub mod sd_api;
 pub mod sd_server;
+pub mod modelscope_helper;
 
 use std::ffi::OsString;
 /// 导出所有公共接口

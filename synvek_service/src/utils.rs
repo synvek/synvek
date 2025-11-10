@@ -65,3 +65,9 @@ pub fn get_backend_path(lib_name: String) -> String {
     tracing::info!("Currently lib_path is : {}", backend_path);
     backend_path
 }
+
+pub fn generate_md5(source: &str) -> String {
+    let result = md5::compute(source.as_bytes());
+    let md5_string = format!("{:x}", result);
+    md5_string
+}

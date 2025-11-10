@@ -6,10 +6,11 @@ import { Consts, ModelCategory, ModelInfo, modelProviders, RequestUtils, useGlob
 import { FetchFile, FetchRepo, FetchRequest } from '@/components/Utils/src/RequestUtils'
 import { FormattedMessage, useIntl } from '@@/exports'
 import { CheckOutlined, CloseOutlined, DownloadOutlined } from '@ant-design/icons'
-import { Button, Card, Divider, List, Menu, MenuProps, message, Space, Splitter, TabsProps, theme } from 'antd'
+import { Button, Card, Divider, List, Menu, MenuProps, message, Space, Splitter, TabsProps, theme, Typography } from 'antd'
 import styles from './index.less'
 
 const { useToken } = theme
+const { Text, Link } = Typography
 
 interface ModelSearchPanelProps {
   visible: boolean
@@ -48,20 +49,22 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     let fetchFiles: FetchFile[] = []
     modelProviders.forEach((modelProvider) => {
       modelProvider.modelOptions.forEach((modelOption) => {
-        if (modelOption.name === modelId) {
+        if (modelOption.name === modelId && modelProvider.modelSource === modelSource) {
           modelOption.repos.forEach((repo) => {
             let fetchRepo: FetchRepo = {
+              model_source: modelProvider.modelSource,
               repo_name: repo.repoName,
-              revision: null,
+              revision: modelSource === 'modelscope' ? 'master' : 'main',
               access_token: accessToken ? accessToken : null,
             }
             fetchRepos.push(fetchRepo)
           })
           modelOption.files.forEach((file) => {
             let fetchFile: FetchFile = {
+              model_source: modelProvider.modelSource,
               repo_name: file.repoName,
               file_name: file.repoFile,
-              revision: null,
+              revision: modelSource === 'modelscope' ? 'master' : 'main',
               access_token: accessToken ? accessToken : null,
             }
             fetchFiles.push(fetchFile)
@@ -104,7 +107,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
   const handleDownloadModel = (modelSource: string, modelId: string, modelType: string, accessTokenRequired: boolean) => {
     const index = modelId.lastIndexOf('/')
     const modelName = index >= 0 ? modelId.slice(index + 1) : modelId
-    setModelName(modelName)
+    setModelName(modelSource + ':' + modelName)
     setModelId(modelId)
     setModelSource(modelSource)
     setMirror('')
@@ -162,7 +165,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
   const generateModelInfoPanel = () => {
     let modelInfoPanel: ReactNode | null = null
     modelProviders.forEach((modelProvider) => {
-      if (modelProvider.modelId === activeItemKey) {
+      if (modelProvider.modelSource + ':' + modelProvider.modelId === activeItemKey) {
         const availableModels = modelProvider.modelOptions.map((modelOption) => {
           return {
             name: modelOption.name,
@@ -183,16 +186,16 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.modelSearchPanelPropertyContainer}>
                   <div>
-                    <FormattedMessage id={'setting-view.model-search.model-creator'} />
+                    <FormattedMessage id={'setting-view.model-search.model-source'} />
                   </div>
-                  <div>{modelProvider.modelCreator}</div>
+                  <div>{modelProvider.modelSource}</div>
                 </div>
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.modelSearchPanelPropertyContainer}>
                   <div>
-                    <FormattedMessage id={'setting-view.model-search.model-source'} />
+                    <FormattedMessage id={'setting-view.model-search.model-creator'} />
                   </div>
-                  <div>{modelProvider.modelSource}</div>
+                  <div>{modelProvider.modelCreator}</div>
                 </div>
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.modelSearchPanelPropertyContainer}>
@@ -279,8 +282,15 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
 
   const settingItems: TabsProps['items'] = modelProviders.map((modelProvider) => {
     return {
-      key: modelProvider.modelId,
-      label: modelProvider.modelId,
+      key: `${modelProvider.modelSource}:${modelProvider.modelId}`,
+      label: (
+        <div>
+          <Text type={'secondary'} style={{ marginRight: 4 }}>
+            {modelProvider.modelSource}:
+          </Text>
+          {modelProvider.modelId}
+        </div>
+      ),
     }
   })
 

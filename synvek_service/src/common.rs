@@ -78,3 +78,13 @@ pub static ACCELERATION_METAL: &str = "metal";
 pub static ACCELERATION_UNKNOWN: &str = "unknown";
 
 pub static HEALTH_CHECK_COUNT: i32 = 1200;
+
+pub static MODEL_SOURCE_HUGGINGFACE: &str = "huggingface";
+pub static MODEL_SOURCE_MODELSCOPE: &str = "modelscope";
+
+pub static MODEL_SOURCES: [&str; 2] = [MODEL_SOURCE_HUGGINGFACE, MODEL_SOURCE_MODELSCOPE];
+
+pub static MODELSCOPE_MODELS_DIR_PREFIX: &str = "modelscope-models--";
+pub static MODELSCOPE_MODELS_DIR: &str = "modelscope-models";
+
+pub static MODELSCOPE_URL: &str = "https://modelscope.cn";

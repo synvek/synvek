@@ -3,16 +3,17 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Synvek",
-  description: "Synvek",
+  description: "Synvek: Manage and explore large language models locally | Support GPT OSS, Deepseek, Qwen, Flux and so on ",
   head: [
-    ['meta', { name: 'description', content: 'Synvek Explorer: GUI App to run LLMs locally' }],
-    ['meta', { name: 'keywords', content: 'LLM, Synvek, llama.cpo, stable-diffusion.cpp, chat, agent, mcp, ' }],
+    ['meta', { name: 'description', content: 'Synvek: Manage and explore large language models locally | Support GPT OSS, Deepseek, Qwen, Flux and so on' }],
+    ['meta', { name: 'keywords', content: 'large language models, LLM, Synvek, image generation, chat, agent, mcp, voice generation' }],
     ['link', { rel: 'icon', href: '/favicon.ico' }]
   ],
   locales: {
     root: {
       label: 'English',
       lang: 'en',
+      titleTemplate: "Manage and explore large language models locally | Support GPT OSS, Deepseek, Qwen, Flux and so on",
       themeConfig: {
         nav: [
           { text: 'Home', link: '/index' },
@@ -53,6 +54,7 @@ export default defineConfig({
     zh: {
       label: 'Chinese',
       lang: 'zh',
+      titleTemplate: "在本地管理和探索大语言模型 | 支持GPT OSS, Deepseek, 千问, Flux等",
       themeConfig: {
         nav: [
           { text: '首页', link: '/zh/index' },

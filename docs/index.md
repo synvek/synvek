@@ -13,6 +13,9 @@ hero:
     - theme: alt
       text: Document
       link: /installation
+    - theme: brand
+      text: Download
+      link: https://github.com/synvek/synvek/releases
   image:
     src: /synvek_explorer.png
     alt: Synvek
