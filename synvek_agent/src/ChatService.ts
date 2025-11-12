@@ -255,7 +255,7 @@ class LLMService {
     const modelServer = LLMService.buildGenerate(modelName)
     const settings = LLMService.getSettings()
     const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/audio/speech`
-    const speechResponse = await RequestUtils.generateSpeech(serverAddress, userMessage, modelServer.modelId, speed, format)
+    const speechResponse = await RequestUtils.generateSpeech(serverAddress, userMessage, 'default', speed, format)
     return speechResponse
   }
 }

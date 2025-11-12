@@ -36,7 +36,6 @@ export interface ModelProvider {
   modelId: string
   modelCreator: string
   modelSource: 'huggingface' | 'modelscope'
-  parameters: string
   modelOptions: ModelOption[]
   categories: ModelCategory[]
   backends: BackendType[]
@@ -59,7 +58,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'GPT-OSS-20b-GGUF',
     modelCreator: 'ggml-org',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-20b-GGUF',
@@ -87,7 +85,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'GPT-OSS-120b-GGUF',
     modelCreator: 'ggml-org',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-120b-GGUF',
@@ -119,7 +116,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-1.7B-UQFF',
     modelCreator: 'EricB',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'EricB/Qwen3-1.7B-UQFF',
@@ -156,7 +152,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Llama-3.2-1B-Instruct-UQFF',
     modelCreator: 'EricB',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'EricB/Llama-3.2-1B-Instruct-UQFF',
@@ -196,7 +191,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-0.6B-GGUF',
     modelCreator: 'Qwen',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'Qwen/Qwen3-0.6B-GGUF',
@@ -224,7 +218,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen2-VL',
     modelCreator: 'Qwen',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       { name: 'Qwen/Qwen2-VL-2B', fileSize: '4GB', repos: [{ repoName: 'Qwen/Qwen2-VL-2B' }], files: [] },
       {
@@ -260,7 +253,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3',
     modelCreator: 'Qwen',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       { name: 'Qwen/Qwen3-0.6B', fileSize: '1GB', repos: [{ repoName: 'Qwen/Qwen3-0.6B' }], files: [] },
       { name: 'Qwen/Qwen3-1.7B', fileSize: '4GB', repos: [{ repoName: 'Qwen/Qwen3-1.7B' }], files: [] },
@@ -288,7 +280,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'DeepSeek-V3',
     modelCreator: 'deepseek-ai',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'deepseek-ai/DeepSeek-V3-Base',
@@ -323,7 +314,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'DeepSeek-R1',
     modelCreator: 'deepseek-ai',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       { name: 'deepseek-ai/DeepSeek-R1', fileSize: '900GB', repos: [{ repoName: 'Qwen/DeepSeek-R1' }], files: [] },
       {
@@ -388,7 +378,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'FLUX.1-schnell',
     modelCreator: 'black-forest-labs',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'black-forest-labs/FLUX.1-schnell',
@@ -419,7 +408,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Phi-4-multimodal-instruct',
     modelCreator: 'microsoft',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'microsoft/Phi-4-multimodal-instruct',
@@ -447,7 +435,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Dia-1.6B',
     modelCreator: 'nari-labs',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'nari-labs/Dia-1.6B',
@@ -475,7 +462,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'gemma-3n-E4B-it',
     modelCreator: 'google',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'google/gemma-3n-E4B-it',
@@ -503,7 +489,6 @@ export const modelProviders: ModelProvider[] = [
   //   modelId: 'NousResearch-Llama-3.2-1B',
   //   modelCreator: 'NousResearch',
   //   modelSource: 'huggingface',
-  //   parameters: 'a',
   //   modelOptions: [
   //     {
   //       name: 'NousResearch/Llama-3.2-1B',
@@ -529,7 +514,6 @@ export const modelProviders: ModelProvider[] = [
   //   modelId: 'NousResearch/Hermes-3-Llama-3.2-3B',
   //   modelCreator: 'NousResearch',
   //   modelSource: 'huggingface',
-  //   parameters: 'a',
   //   modelOptions: [
   //     {
   //       name: 'NousResearch/Hermes-3-Llama-3.2-3B',
@@ -555,7 +539,6 @@ export const modelProviders: ModelProvider[] = [
   //   modelId: 'Mistral-Nemo-Instruct-FP8-2407',
   //   modelCreator: 'mistralai',
   //   modelSource: 'huggingface',
-  //   parameters: 'a',
   //   modelOptions: [
   //     {
   //       name: 'mistralai/Mistral-Nemo-Instruct-FP8-2407',
@@ -581,7 +564,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'FLUX.1-schnell-gguf',
     modelCreator: 'leejet',
     modelSource: 'huggingface',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'FLUX.1-schnell-gguf-q4_0',
@@ -614,7 +596,6 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-0.6B-GGUF',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    parameters: 'a',
     modelOptions: [
       {
         name: 'Qwen/Qwen3-0.6B-GGUF',
@@ -636,6 +617,33 @@ export const modelProviders: ModelProvider[] = [
     chatTemplate: undefined,
     summary: 'Qwen/Qwen3-0.6B-GGUF summary',
     description: 'Qwen/Qwen3-0.6B-GGUF details',
+    accessTokenRequired: false,
+  },
+  {
+    modelId: 'Dia-1.6B',
+    modelCreator: 'nari-labs',
+    modelSource: 'modelscope',
+    modelOptions: [
+      {
+        name: 'nari-labs/Dia-1.6B',
+        fileSize: '12.9GB',
+        repos: [{ repoName: 'nari-labs/Dia-1.6B' }, { repoName: 'synvek/dac_44khz' }],
+        files: [],
+      },
+    ],
+    categories: ['text-to-speech'],
+    backends: ['default'],
+    modelType: 'speech',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'Dia-1.6B summary',
+    description: 'Dia-1.6B details',
     accessTokenRequired: false,
   },
 ]

@@ -537,5 +537,23 @@
         "revision": "master",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "synvek/dac_44khz",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
     }
 ]

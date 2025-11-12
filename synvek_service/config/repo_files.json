@@ -8042,5 +8042,115 @@
         "endpoint": "",
         "access_token": null,
         "file_size": 6236
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 2130
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "config.json",
+        "file_path": "config.json",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 941
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "configuration.json",
+        "file_path": "configuration.json",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 64
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "dia-v0_1.pth",
+        "file_path": "dia-v0_1.pth",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6444788896
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "model.safetensors",
+        "file_path": "model.safetensors",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6444682848
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "preprocessor_config.json",
+        "file_path": "preprocessor_config.json",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 172
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "nari-labs/Dia-1.6B",
+        "file_name": "README.md",
+        "file_path": "README.md",
+        "revision": "master",
+        "commit_hash": "3d85e4dc6bf109672cd82b5fa9f3cff0b7356c78",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 6551
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "synvek/dac_44khz",
+        "file_name": ".gitattributes",
+        "file_path": ".gitattributes",
+        "revision": "master",
+        "commit_hash": "b43af167749306bc681e4f650272545a51c7bd7b",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 2012
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "synvek/dac_44khz",
+        "file_name": "model.safetensors",
+        "file_path": "model.safetensors",
+        "revision": "master",
+        "commit_hash": "b43af167749306bc681e4f650272545a51c7bd7b",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 306640616
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "synvek/dac_44khz",
+        "file_name": "pytorch_model.bin",
+        "file_path": "pytorch_model.bin",
+        "revision": "master",
+        "commit_hash": "b43af167749306bc681e4f650272545a51c7bd7b",
+        "endpoint": "",
+        "access_token": null,
+        "file_size": 306717287
     }
 ]

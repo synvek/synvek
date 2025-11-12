@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::fetch_service::Task;
 use crate::process_api::{HeartTickRequest, HeartTickResponse};
 use crate::script_service::ScriptInfo;
-use crate::utils;
+use crate::{modelscope_helper, utils};
 use crate::{common, fetch_service, sd_server};
 use crate::{config, process_service, synvek};
 use async_trait::async_trait;
@@ -525,10 +525,13 @@ fn populate_args_with_backend_default(
     } else {
         start_args.push(OsString::from(args.model_type.clone()));
     }
-
     
     start_args.push(OsString::from("-m"));
-    start_args.push(OsString::from(args.model_id.clone()));
+    //start_args.push(OsString::from(args.model_id.clone()));
+    let model_path = get_model_id_path(&*task.model_source, model_dir.clone(), &*args.model_id);
+    if let Some(model_path) = model_path {
+        start_args.push(OsString::from(model_path));
+    }
 
     if args.model_type.eq("uqff") || args.model_type.eq("gguf") {
         if task.fetch_files.len() > 0 {
@@ -542,7 +545,7 @@ fn populate_args_with_backend_default(
         && !args.model_type.eq("gguf")
     {
         start_args.push(OsString::from("--hf-cache-path"));
-        start_args.push(OsString::from(model_dir));
+        start_args.push(OsString::from(model_dir.clone()));
     }
     //start_args.push(OsString::from(args.path.clone()));
     if args.model_type.eq("diffusion") {
@@ -558,6 +561,45 @@ fn populate_args_with_backend_default(
     if args.model_type.eq("speech") {
         start_args.push(OsString::from("-a"));
         start_args.push(OsString::from("dia"));
+        if task.model_source == MODEL_SOURCE_MODELSCOPE {
+            let dia_model_path = get_model_id_path(&*task.model_source, model_dir, "synvek/dac_44khz");
+            if let Some(dia_model_path) = dia_model_path {
+                start_args.push(OsString::from("--dac-model-id"));
+                start_args.push(OsString::from(dia_model_path));
+            }
+        } else {
+            let dia_model_path = get_model_id_path(&*task.model_source, model_dir, "EricB/dac_44khz");
+            if let Some(dia_model_path) = dia_model_path {
+                start_args.push(OsString::from("--dac-model-id"));
+                start_args.push(OsString::from(dia_model_path));
+            }
+        }
+    }
+}
+
+fn get_model_id_path(model_source: &str, model_dir: PathBuf, model_id: &str) -> Option<PathBuf> {
+    let mut model_path = model_dir.clone();
+    let model_path_postfix = model_id.replace("/", "--");
+    if model_source == MODEL_SOURCE_MODELSCOPE {
+        model_path.push(format!("modelscope-models--{}", model_path_postfix));
+        let ref_path = modelscope_helper::get_ref_path(model_path.to_str().unwrap(), "master");
+        let commit_hash = std::fs::read_to_string(&ref_path);
+        if let Ok(commit_hash) = commit_hash {
+            let pointer_path = modelscope_helper::get_pointer_path(model_path.to_str().unwrap(), commit_hash.as_str());
+            Some(pointer_path)
+        } else {
+            None
+        }
+    } else {
+        model_path.push(format!("models--{}", model_path_postfix));
+        let ref_path = modelscope_helper::get_ref_path(model_path.to_str().unwrap(), "main");
+        let commit_hash = std::fs::read_to_string(&ref_path);
+        if let Ok(commit_hash) = commit_hash {
+            let pointer_path = modelscope_helper::get_pointer_path(model_path.to_str().unwrap(), commit_hash.as_str());
+            Some(pointer_path)
+        } else {
+            None
+        }
     }
 }
 
