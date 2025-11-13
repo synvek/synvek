@@ -6,4 +6,4 @@ It is powered by Rust & Deno & Tauri & llama.cpp/stable-diffusion.cpp/Mistral.rs
 
 You can chat with multiple LLMs in one conversion including text, image generation and so on.
 
-
+https://www.synvek.com
