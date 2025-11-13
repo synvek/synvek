@@ -528,6 +528,7 @@ fn populate_args_with_backend_default(
     
     start_args.push(OsString::from("-m"));
     //start_args.push(OsString::from(args.model_id.clone()));
+    tracing::info!("model_source: {:?}, model dir: {:?}, model id: {:?}", task.model_source, model_dir, args.model_id);
     let model_path = get_model_id_path(&*task.model_source, model_dir.clone(), &*args.model_id);
     if let Some(model_path) = model_path {
         start_args.push(OsString::from(model_path));

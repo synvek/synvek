@@ -618,22 +618,48 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       })
       task.task_items.forEach((taskItem) => {
         modelTotalSize += taskItem.file_size ? taskItem.file_size : 0
+        let taskItemDownloaded = false
+        let existInFetchDataList = false
+        //New fetch may not be included in list yet.
         currentWorkspace.fetchDataList.forEach((listFetchData) => {
-          if (taskItem.repo_name === listFetchData.repo_name && taskItem.file_name === listFetchData.file_name && !listFetchData.downloaded) {
-            modelDownloaded = false
+          if (
+            taskItem.repo_name === listFetchData.repo_name &&
+            taskItem.file_name === listFetchData.file_name &&
+            taskItem.model_source === listFetchData.model_source
+          ) {
+            existInFetchDataList = true
+          }
+          if (
+            taskItem.repo_name === listFetchData.repo_name &&
+            taskItem.file_name === listFetchData.file_name &&
+            taskItem.model_source === listFetchData.model_source &&
+            listFetchData.downloaded
+          ) {
+            taskItemDownloaded = true
           }
         })
-        if (modelDownloaded) {
+        if (taskItemDownloaded && existInFetchDataList) {
           modelDownloadedSize += taskItem.file_size ? taskItem.file_size : 0
+        } else {
+          modelDownloaded = false
         }
         currentWorkspace.fetchStatusData.forEach((fetchStatusData) => {
-          if (fetchStatusData.repo_name === taskItem.repo_name && fetchStatusData.file_name === taskItem.file_name && fetchStatusData.downloading) {
+          if (
+            fetchStatusData.model_source === taskItem.model_source &&
+            fetchStatusData.repo_name === taskItem.repo_name &&
+            fetchStatusData.file_name === taskItem.file_name &&
+            fetchStatusData.downloading
+          ) {
             modelDownloading = true
             modelDownloadSpeed += fetchStatusData.speed ? fetchStatusData.speed : 0
             modelDownloadedSize += fetchStatusData.current_size ? fetchStatusData.current_size : 0
           }
         })
       })
+
+      //Make sure all task item are finished and total item count match original file count
+      if (modelDownloaded) {
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       let modelDownloadedSizeDescription = SystemUtils.formatFileSize(modelDownloadedSize)

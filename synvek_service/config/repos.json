@@ -555,5 +555,32 @@
         "revision": "master",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "ggml-org/gpt-oss-120b-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "ggml-org/gpt-oss-20b-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "LLM-Research/Phi-4-multimodal-instruct",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
     }
 ]

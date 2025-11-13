@@ -307,6 +307,9 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
           modelDownloadedSize += taskItem.file_size ? taskItem.file_size : 0
         } else {
           modelDownloaded = false
+          if (taskItem.repo_name === 'LLM-Research/Phi-4-multimodal-instruct') {
+            console.log(`checked`)
+          }
         }
         currentWorkspace.fetchStatusData.forEach((fetchStatusData) => {
           if (fetchStatusData.repo_name === taskItem.repo_name && fetchStatusData.file_name === taskItem.file_name) {
