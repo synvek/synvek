@@ -125,11 +125,11 @@ fn copy_folder(src: &Path, dest: &Path, require_upgrade: bool) -> Result<(), std
                             "Already exists and skip copy {:?} to {:?}",
                             src_path, dest_path
                         );
-                    } else {
+                    } else if dest_path.exists() && require_upgrade {
                         if !src_path.ends_with("config/settings.json") &&
                             !src_path.ends_with("config/config.json") &&
                             !src_path.ends_with("config/tasks.json") &&
-                            !src_path.ends_with("storage/synvek_storage.json") {
+                            !src_path.ends_with("storage/synvek_storage.db") {
                             fs::copy(&src_path, &dest_path)?;
                             println!(
                                 "Copy file {:?} to {:?} with require_upgrade: {}",
@@ -145,6 +145,8 @@ fn copy_folder(src: &Path, dest: &Path, require_upgrade: bool) -> Result<(), std
                                 require_upgrade
                             );
                         }
+                    } else {
+                        fs::copy(&src_path, &dest_path)?;
                     }
                 } else if src_path.is_dir() {
                     copy_folder(&src_path, &dest_path, require_upgrade)?;
