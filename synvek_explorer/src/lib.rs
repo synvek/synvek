@@ -101,7 +101,7 @@ fn start_agent(script_path: OsString) {
     .expect("Failed to run synvek agent");
 }
 
-fn copy_folder(src: &Path, dest: &Path) -> Result<(), std::io::Error> {
+fn copy_folder(src: &Path, dest: &Path, require_upgrade: bool) -> Result<(), std::io::Error> {
     fs::create_dir_all(dest)?;
     println!("Checking dir {:?} to dir {:?}", src, dest);
     let src_dir = fs::read_dir(src);
@@ -120,21 +120,34 @@ fn copy_folder(src: &Path, dest: &Path) -> Result<(), std::io::Error> {
                 );
 
                 if src_path.is_file() {
-                    if dest_path.exists() {
+                    if dest_path.exists() && !require_upgrade {
                         println!(
                             "Already exists and skip copy {:?} to {:?}",
                             src_path, dest_path
                         );
                     } else {
-                        fs::copy(&src_path, &dest_path)?;
-                        println!(
-                            "Copy file {:?} to {:?}",
-                            src_path.display(),
-                            dest_path.display()
-                        );
+                        if !src_path.ends_with("config/settings.json") &&
+                            !src_path.ends_with("config/config.json") &&
+                            !src_path.ends_with("config/tasks.json") &&
+                            !src_path.ends_with("storage/synvek_storage.json") {
+                            fs::copy(&src_path, &dest_path)?;
+                            println!(
+                                "Copy file {:?} to {:?} with require_upgrade: {}",
+                                src_path.display(),
+                                dest_path.display(),
+                                require_upgrade
+                            );
+                        } else {
+                            println!(
+                                "Force to skip file {:?} to {:?} with require_upgrade: {}",
+                                src_path.display(),
+                                dest_path.display(),
+                                require_upgrade
+                            );
+                        }
                     }
                 } else if src_path.is_dir() {
-                    copy_folder(&src_path, &dest_path)?;
+                    copy_folder(&src_path, &dest_path, require_upgrade)?;
                 }
             }
         }
@@ -143,12 +156,73 @@ fn copy_folder(src: &Path, dest: &Path) -> Result<(), std::io::Error> {
     Ok(())
 }
 
+fn check_upgrade_required(app: &mut App) -> bool {
+    let config = config::Config::new();
+    let data_dir = config.get_data_dir();
+    let bundled_file_path = app
+        .path()
+        .resolve("resources/config/version.txt", tauri::path::BaseDirectory::Resource)
+        .map_err(|e| format!("Failed to resolve resource file: {}", e));
+    if bundled_file_path.is_err() {
+        return true
+    }
+    let bundled_file_path = bundled_file_path.unwrap();
+    println!("Process resource: {:?}", bundled_file_path);
+    let target_file_path = data_dir.join("config/version.txt");
+    if target_file_path.exists() {
+        let new_version = fs::read_to_string(&bundled_file_path);
+        let old_version = fs::read_to_string(&target_file_path);
+        if let Ok(new_version) = new_version {
+            if let Ok(old_version) = old_version {
+                let new_version = new_version.split(".").collect::<Vec<&str>>();
+                let old_version = old_version.split(".").collect::<Vec<&str>>();
+                if new_version.len() == 3 && old_version.len() == 3 {
+                    let new_major_version = new_version[0].parse::<u32>();
+                    let new_junior_version = new_version[1].parse::<u32>();
+                    let new_builder_number = new_version[2].parse::<u32>();
+                    let old_major_version = old_version[0].parse::<u32>();
+                    let old_junior_version = old_version[1].parse::<u32>();
+                    let old_builder_number = old_version[2].parse::<u32>();
+                    if new_major_version.is_ok()  && old_major_version.is_ok()  && new_junior_version.is_ok() && old_junior_version.is_ok() &&
+                        new_builder_number.is_ok()  && old_builder_number.is_ok() {
+                        let new_major_version = new_major_version.unwrap();
+                        let new_junior_version = new_junior_version.unwrap();
+                        let new_builder_number = new_builder_number.unwrap();
+                        let old_major_version = old_major_version.unwrap();
+                        let old_junior_version = old_junior_version.unwrap();
+                        let old_builder_number = old_builder_number.unwrap();
+                        return if new_major_version > old_major_version {
+                            true
+                        } else if new_major_version == old_major_version {
+                            if new_junior_version > old_junior_version {
+                                true
+                            } else if new_junior_version == old_junior_version {
+                                if new_builder_number > old_builder_number {
+                                    true
+                                } else {
+                                    false
+                                }
+                            } else {
+                                false
+                            }
+                        } else {
+                            false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    true
+
+}
 /// Check and populate data folder
 fn setup_app_data(app: &mut App) -> Result<(), String> {
     let config = config::Config::new();
     let data_dir = config.get_data_dir();
     println!("Data dir: {:?}", data_dir);
 
+    let require_upgrade = check_upgrade_required(app);
     let resources = vec![
         "resources/agent_plugins/",
         "resources/service_plugins/",
@@ -166,7 +240,7 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
         let target_dir = &resource[10..];
         let target_file_path = data_dir.join(target_dir);
         println!("Target resource: {:?}", target_file_path);
-        let result = copy_folder(&bundled_file_path, &target_file_path);
+        let result = copy_folder(&bundled_file_path, &target_file_path, require_upgrade);
         if let Err(e) = result {
             return Err(format!("Failed to copy resource: {:?}", e));
         }
@@ -174,12 +248,12 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
 
     //nsis installer have size limitation, we need to compress file and decompress them when opening on first launch
     #[cfg(target_os = "windows")]
-    setup_backend_files(app)?;
+    setup_backend_files(app, require_upgrade)?;
 
     Ok(())
 }
 
-fn setup_backend_files(app: &mut App)-> Result<(), String> {
+fn setup_backend_files(app: &mut App, require_upgrade: bool)-> Result<(), String> {
     let config = config::Config::new();
     let data_dir = config.get_data_dir();
     println!("Data dir: {:?}", data_dir);
@@ -196,7 +270,7 @@ fn setup_backend_files(app: &mut App)-> Result<(), String> {
         println!("Process backend resource: {:?}", bundled_file_path);
         let target_file_path = data_dir.join(resource);
         println!("Target resource: {:?}", target_file_path);
-        let result = copy_folder(&bundled_file_path, &target_file_path);
+        let result = copy_folder(&bundled_file_path, &target_file_path, require_upgrade);
         if let Err(e) = result {
             return Err(format!("Failed to copy backend resource: {:?}", e));
         }
