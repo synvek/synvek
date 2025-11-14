@@ -85,37 +85,37 @@ pub fn get_workers() -> Vec<WorkerInfo> {
     map.values().cloned().collect::<Vec<_>>()
 }
 
-pub fn has_worker(worker_id: String) -> bool {
+pub fn has_worker(worker_id: &str) -> bool {
     let map_ref = Arc::clone(GLOBAL_WORKERS.get().unwrap());
     let mut map = map_ref.lock().unwrap();
-    map.contains_key(&worker_id)
+    map.contains_key(worker_id)
 }
 
-pub fn stop_worker(worker_id: String) {
+pub fn stop_worker(worker_id: &str) {
     let map_ref = Arc::clone(GLOBAL_WORKERS.get().unwrap());
     let mut map = map_ref.lock().unwrap();
-    map.remove(&worker_id);
+    map.remove(worker_id);
 }
 
-pub fn check_worker_running(worker_id: String) {
+pub fn check_worker_running(worker_id: &str) {
     let map_ref = Arc::clone(GLOBAL_WORKERS.get().unwrap());
     let mut map = map_ref.lock().unwrap();
     tracing::info!("Checking worker on task {} and data {:?}", worker_id, map);
-    if let Some(worker_info) = map.get_mut(&worker_id) {
+    if let Some(worker_info) = map.get_mut(worker_id) {
         worker_info.running = true;
         tracing::info!("Worker checked on task {} and data {:?}", worker_id, map);
     }
 }
 
 pub async fn start_worker_from_command(
-    worker_args: WorkerArgs,
-    worker_id: String,
+    worker_args: &WorkerArgs,
+    worker_id: &str,
 ) -> Result<String, anyhow::Error> {
-    start_worker_in_process(worker_args.clone(), Some(worker_id), true).await
+    start_worker_in_process(worker_args, Some(worker_id.to_string()), true).await
 }
 
 pub async fn start_worker_from_web(
-    worker_args: WorkerArgs,
+    worker_args: &WorkerArgs,
     multi_process: bool,
 ) -> Result<String, anyhow::Error> {
     if multi_process {
@@ -126,11 +126,11 @@ pub async fn start_worker_from_web(
 }
 
 async fn start_worker_in_process(
-    worker_args: WorkerArgs,
+    worker_args: &WorkerArgs,
     worker_id: Option<String>,
     is_spawn_process: bool,
 ) -> Result<String, anyhow::Error> {
-    let worker = load_worker_config(worker_args.worker_name.clone());
+    let worker = load_worker_config(worker_args.worker_name.as_str());
     if worker.is_none() {
         tracing::error!("Worker {} not found", worker_args.worker_name.clone());
         return Err(anyhow!(
@@ -153,14 +153,14 @@ async fn start_worker_in_process(
         if script_result.is_err() {
             tracing::error!(
                 "Failed to execute worker: {} with id: {}",
-                worker.worker_name.clone(),
-                worker_id.clone()
+                worker.worker_name,
+                worker_id
             );
         } else {
             tracing::info!(
                 "Succeed to execute worker: {} with id: {}",
-                worker.worker_name.clone(),
-                worker_id.clone()
+                worker.worker_name,
+                worker_id
             );
         }
     });
@@ -168,9 +168,9 @@ async fn start_worker_in_process(
     Ok(moved_worker_id.clone())
 }
 
-fn start_worker_in_spawn(worker_args: WorkerArgs) -> Result<String, anyhow::Error> {
+fn start_worker_in_spawn(worker_args: &WorkerArgs) -> Result<String, anyhow::Error> {
     tracing::info!("Starting worker in spawn mode");
-    let worker = load_worker_config(worker_args.worker_name.clone());
+    let worker = load_worker_config(worker_args.worker_name.as_str());
     if worker.is_some() {
         let worker = worker.unwrap();
         let worker_id = Uuid::new_v4().to_string();
@@ -181,9 +181,9 @@ fn start_worker_in_spawn(worker_args: WorkerArgs) -> Result<String, anyhow::Erro
             "--worker-name".to_string(),
             worker_args.worker_name.to_string(),
         ];
-        tracing::info!("Starting worker {:?}", process_args.clone());
+        tracing::info!("Starting worker {:?}", process_args);
         start_worker_process(worker_id.to_string(), process_args.clone(), worker, true);
-        tracing::info!("Worker is finished: {:?}", process_args.clone());
+        tracing::info!("Worker is finished: {:?}", process_args);
         Ok(worker_id.to_string())
     } else {
         Err(anyhow::Error::msg("Worker isn't found"))
@@ -228,25 +228,25 @@ fn start_worker_process(
                 Ok(Some(status)) => {
                     tracing::warn!(
                         "Worker process exited unexpectedly on worker id: {} and process id: {} with {}",
-                        worker_id.clone(),
-                        process_id.clone(),
+                        worker_id,
+                        process_id,
                         status
                     );
-                    stop_worker(worker_id.clone());
+                    stop_worker(worker_id.as_str());
                     system_service::send_message(
                         MessageSource::WorkerService,
                         MessageType::Warning,
                         format!(
                             "Worker process exited unexpectedly on worker id: {} and process id: {} with {}",
-                            worker_id.clone(),
-                            process_id.clone(),
+                            worker_id,
+                            process_id,
                             status
                         ),
                     );
                     break;
                 }
                 Ok(None) => {
-                    let running = has_worker(worker_id.clone());
+                    let running = has_worker(worker_id.as_str());
                     if running {
                         let mut now_time = SystemTime::now()
                             .duration_since(SystemTime::UNIX_EPOCH)
@@ -256,8 +256,8 @@ fn start_worker_process(
                             heart_tick = now_time;
                             tracing::info!(
                                 "Worker process keep running on worker id: {} and process id: {}",
-                                worker_id.clone(),
-                                process_id.clone()
+                                worker_id,
+                                process_id
                             );
 
                             system_service::send_message(
@@ -265,8 +265,8 @@ fn start_worker_process(
                                 MessageType::Info,
                                 format!(
                                     "Worker process keep running on worker id: {} and process id: {}",
-                                    worker_id.clone(),
-                                    process_id.clone()
+                                    worker_id,
+                                    process_id
                                 ),
                             );
                             //thread::sleep(Duration::from_millis(1));
@@ -274,21 +274,21 @@ fn start_worker_process(
                     } else {
                         tracing::info!(
                             "Process will exit by signal on worker id: {} and process id: {}",
-                            worker_id.clone(),
-                            process_id.clone()
+                            worker_id,
+                            process_id
                         );
                         let kill_result = child.kill();
                         if kill_result.is_ok() {
                             tracing::info!(
                                 "Process is killed on worker id: {} and process id: {}",
-                                worker_id.clone(),
-                                process_id.clone()
+                                worker_id,
+                                process_id
                             );
                         } else {
                             tracing::error!(
                                 "Process failed to be killed on worker id: {} and process id: {}",
-                                worker_id.clone(),
-                                process_id.clone()
+                                worker_id,
+                                process_id
                             );
                         }
                         break;
@@ -297,18 +297,18 @@ fn start_worker_process(
                 Err(e) => {
                     tracing::error!(
                         "Error on start worker on worker id: {} and process id: {} with error: {}",
-                        worker_id.clone(),
-                        process_id.clone(),
+                        worker_id,
+                        process_id,
                         e
                     );
-                    stop_worker(worker_id.clone());
+                    stop_worker(worker_id.as_str());
                     system_service::send_message(
                         MessageSource::WorkerService,
                         MessageType::Error,
                         format!(
                             "Error on start worker on worker id: {} and process id: {} with error: {}",
-                            worker_id.clone(),
-                            process_id.clone(),
+                            worker_id,
+                            process_id,
                             e
                         ),
                     );
@@ -351,7 +351,7 @@ fn write_workers_config(workers: &Workers) {
     fs::write(&worker_config_file, json).unwrap();
 }
 
-pub fn update_workers_config(worker: Worker) {
+pub fn update_workers_config(worker: &Worker) {
     tracing::info!("Updating worker config: {:?}", worker);
     let mut workers = load_workers_config();
     let mut found = false;
@@ -363,14 +363,14 @@ pub fn update_workers_config(worker: Worker) {
         }
     }
     if found {
-        workers.workers[index] = worker;
+        workers.workers[index] = worker.clone();
     } else {
-        workers.workers.push(worker);
+        workers.workers.push(worker.clone());
     }
     write_workers_config(&workers);
 }
 
-pub fn delete_workers_config(worker_name: String) {
+pub fn delete_workers_config(worker_name: &str) {
     tracing::info!("Delete worker config: {:?}", worker_name);
     let mut workers = load_workers_config();
     let mut found = false;
@@ -387,7 +387,7 @@ pub fn delete_workers_config(worker_name: String) {
     write_workers_config(&workers);
 }
 
-pub fn load_worker_config(worker_name: String) -> Option<Worker> {
+pub fn load_worker_config(worker_name: &str) -> Option<Worker> {
     let mut workers = load_workers_config();
     for (_, element) in workers.workers.iter().enumerate() {
         if element.worker_name == worker_name {

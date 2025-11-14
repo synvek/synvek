@@ -42,8 +42,8 @@ pub fn get_load_library_name(base_name: &str, acceleration: &str) -> String {
 
 /// Get backend path based on environment
 ///
-pub fn get_backend_path(lib_name: String) -> String {
-    let mut backend_path = lib_name.clone();
+pub fn get_backend_path(lib_name: &str) -> String {
+    let mut backend_path = lib_name.to_string();
     let is_portal = Config::is_portal_available();
     if is_portal {
         let config = Config::new();

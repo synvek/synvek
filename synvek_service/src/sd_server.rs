@@ -54,11 +54,11 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
 
 /// Start Web Server
 pub async fn start_sd_server(
-    args: ModelServiceArgs,
+    args: &ModelServiceArgs,
     start_args: &Vec<OsString>,
-    task_id: String,
-    port: String,
-    path: String,
+    task_id: &str,
+    port: &str,
+    path: &str,
     is_spawn_process: bool,
 ) -> anyhow::Result<()> {
     let config = config::get_synvek_config();
@@ -66,11 +66,11 @@ pub async fn start_sd_server(
     let sd_config = SdConfig {
         args: args.clone(),
         start_args: start_args.clone(),
-        task_id: task_id.clone(),
-        port: port.clone(),
-        path,
+        task_id: task_id.to_string(),
+        port: port.to_string(),
+        path: path.to_string(),
         is_spawn_process,
-        acceleration: args.acceleration,
+        acceleration: args.acceleration.clone(),
     };
     sd_service::set_sd_config(sd_config);
     let port = port.parse::<u16>()?;
@@ -98,7 +98,7 @@ pub async fn start_sd_server(
     })
     .bind((host, port))?
     .run();
-    notify_main_process(task_id);
+    notify_main_process(task_id.to_string());
     http_server.await?;
     Ok(())
 }
@@ -111,7 +111,7 @@ fn notify_main_process(task_id: String) {
             .unwrap();
 
         rt.block_on(async {
-            let notification = process_service::notify_main_process(task_id).await;
+            let notification = process_service::notify_main_process(task_id.as_str()).await;
             if let Ok(_) = notification {
                 tracing::info!("Process notification successfully");
             } else {

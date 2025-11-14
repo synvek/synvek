@@ -131,7 +131,7 @@ async fn start_worker(req: web::Json<StartWorkerRequest>) -> impl Responder {
     };
     let config = config::get_synvek_config();
     let multi_process = config.multi_process;
-    match worker_service::start_worker_from_web(worker_args, multi_process).await {
+    match worker_service::start_worker_from_web(&worker_args, multi_process).await {
         Ok(worker_id) => {
             let worker_data = WorkerData {
                 worker_id,
@@ -163,7 +163,7 @@ async fn start_worker(req: web::Json<StartWorkerRequest>) -> impl Responder {
 #[post("/worker/heart-tick")]
 async fn heart_tick(req: web::Json<WorkerHeartTickRequest>) -> impl Responder {
     let worker_id = req.worker_id.clone();
-    worker_service::check_worker_running(worker_id);
+    worker_service::check_worker_running(worker_id.as_str());
     let response = WorkerHeartTickResponse {
         success: true,
         code: "".to_string(),

@@ -97,16 +97,16 @@ pub fn get_processes() -> Vec<ProcessInfo> {
     map.values().cloned().collect::<Vec<_>>()
 }
 
-pub fn has_process(task_id: String) -> bool {
+pub fn has_process(task_id: &str) -> bool {
     let map_ref = Arc::clone(GLOBAL_PROCESSES.get().unwrap());
     let mut map = map_ref.lock().unwrap();
-    map.contains_key(&task_id)
+    map.contains_key(task_id)
 }
 
-pub fn stop_process(task_id: String) {
+pub fn stop_process(task_id: &str) {
     let map_ref = Arc::clone(GLOBAL_PROCESSES.get().unwrap());
     let mut map = map_ref.lock().unwrap();
-    map.remove(&task_id);
+    map.remove(task_id);
 }
 
 pub fn stop_all_processes() {
@@ -116,7 +116,7 @@ pub fn stop_all_processes() {
     sleep(Duration::from_millis(2000));
 }
 
-pub fn notify_process_running(task_id: String) {
+pub fn notify_process_running(task_id: &str) {
     let map_ref = Arc::clone(GLOBAL_PROCESSES.get().unwrap());
     let mut map = map_ref.lock().unwrap();
     // let mut process_info_option = map.get_mut(&task_id);
@@ -128,7 +128,7 @@ pub fn notify_process_running(task_id: String) {
         task_id,
         map
     );
-    if let Some(process_info) = map.get_mut(&task_id) {
+    if let Some(process_info) = map.get_mut(task_id) {
         process_info.running = true;
         tracing::info!(
             "Notify process updated with task {} and data {:?}",
@@ -189,33 +189,33 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                 Ok(Some(status)) => {
                     tracing::warn!(
                         "Model service process exited unexpectedly on task id: {} and process id: {} with {}",
-                        task_id.clone(),
-                        process_id.clone(),
+                        task_id,
+                        process_id,
                         status
                     );
-                    stop_process(task_id.clone());
+                    stop_process(task_id.as_str());
                     system_service::send_message(
                         MessageSource::ProcessService,
                         MessageType::Warning,
                         format!(
                             "Model service process exited unexpectedly on task id: {} and process id: {} with {}",
-                            task_id.clone(),
-                            process_id.clone(),
+                            task_id,
+                            process_id,
                             status
                         ),
                     );
                     break;
                 }
                 Ok(None) => {
-                    let running = has_process(task_id.clone());
+                    let running = has_process(task_id.as_str());
                     if running {
                         let mut now_time =  SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs();
                         if now_time >= heart_tick + 60 {
                             heart_tick = now_time;
                             tracing::info!(
                                 "Model service process keep running on task id: {} and process id: {}",
-                                task_id.clone(),
-                                process_id.clone()
+                                task_id,
+                                process_id
                             );
 
                             system_service::send_message(
@@ -223,8 +223,8 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                                 MessageType::Info,
                                 format!(
                                     "Model service process keep running on task id: {} and process id: {}",
-                                    task_id.clone(),
-                                    process_id.clone()
+                                    task_id,
+                                    process_id
                                 ),
                             );
                             //thread::sleep(Duration::from_millis(1));
@@ -232,21 +232,21 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                     } else {
                         tracing::info!(
                             "Process will exit by signal on task id: {} and process id: {}",
-                            task_id.clone(),
-                            process_id.clone()
+                            task_id,
+                            process_id
                         );
                         let kill_result = child.kill();
                         if kill_result.is_ok() {
                             tracing::info!(
                                 "Process is killed on task id: {} and process id: {}",
-                                task_id.clone(),
-                                process_id.clone()
+                                task_id,
+                                process_id
                             );
                         } else {
                             tracing::error!(
                                 "Process failed to be killed on task id: {} and process id: {}",
-                                task_id.clone(),
-                                process_id.clone()
+                                task_id,
+                                process_id
                             );
                         }
                         break;
@@ -255,18 +255,18 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                 Err(e) => {
                     tracing::error!(
                         "Error on start model service on task id: {} and process id: {} with error: {}",
-                        task_id.clone(),
-                        process_id.clone(),
+                        task_id,
+                        process_id,
                         e
                     );
-                    stop_process(task_id.clone());
+                    stop_process(task_id.as_str());
                     system_service::send_message(
                         MessageSource::ProcessService,
                         MessageType::Error,
                         format!(
                             "Error on start model service on task id: {} and process id: {} with error: {}",
-                            task_id.clone(),
-                            process_id.clone(),
+                            task_id,
+                            process_id,
                             e
                         ),
                     );
@@ -277,7 +277,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
     });
 }
 
-pub fn notify_main_process_sync(task_id: String) {
+pub fn notify_main_process_sync(task_id: &str) {
     tracing::info!("Notify main process begin on task id: {}", task_id.clone());
     let old_task_id = task_id.clone();
     // let handle = tokio::task::spawn_blocking(move || {
@@ -299,12 +299,12 @@ pub async fn notify_main_process_dummy(_: String) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub async fn notify_main_process(task_id: String) -> anyhow::Result<()> {
+pub async fn notify_main_process(task_id: &str) -> anyhow::Result<()> {
     let client = Client::builder().timeout(Duration::from_secs(5)).build()?;
     let train_config = config::get_synvek_config();
     let port = train_config.port.to_string();
     let request_data = HeartTickRequest {
-        task_id: task_id.clone(),
+        task_id: task_id.to_string(),
     };
 
     let mut main_process_address = "http://127.0.0.1:".to_string();
@@ -317,7 +317,7 @@ pub async fn notify_main_process(task_id: String) -> anyhow::Result<()> {
         .header(header::CONTENT_TYPE, "application/json")
         .send()
         .await;
-    tracing::info!("Notify finished: {}", main_process_address.clone());
+    tracing::info!("Notify finished: {}", main_process_address);
 
     if response.is_ok() {
         let response = response?;

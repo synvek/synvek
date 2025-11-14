@@ -30,7 +30,7 @@ pub struct HeartTickResponse {
 #[post("/process/heart-tick")]
 async fn heart_tick(req: web::Json<HeartTickRequest>) -> impl Responder {
     let task_id = req.task_id.clone();
-    process_service::notify_process_running(task_id);
+    process_service::notify_process_running(task_id.as_str());
     let response = HeartTickResponse {
         success: true,
         code: "".to_string(),

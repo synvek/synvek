@@ -126,9 +126,9 @@ pub fn populate_repo_file_infos() {
             let access_token = repo_info.access_token.clone();
             fetch_remote_repo_info(
                 &mut repo_file_infos,
-                repo_source,
-                repo_name.clone(),
-                revision,
+                repo_source.as_str(),
+                repo_name.as_str(),
+                revision.as_str(),
                 endpoint,
                 access_token,
             );
@@ -146,16 +146,16 @@ pub fn populate_repo_file_infos() {
 
 fn fetch_remote_repo_info(
     repo_file_infos: &mut Vec<RepoFileInfo>,
-    repo_source: String,
-    repo_name: String,
-    revision: String,
+    repo_source: &str,
+    repo_name: &str,
+    revision: &str,
     endpoint: Option<String>,
     access_token: Option<String>,
 ) {
     let repo_info = fetch_helper::get_repo_info_remote(
-        repo_source.clone(),
-        repo_name.clone(),
-        revision.clone(),
+        repo_source,
+        repo_name,
+        revision,
         endpoint.clone(),
         access_token.clone(),
     );
@@ -170,11 +170,11 @@ fn fetch_remote_repo_info(
     repo_info.files.iter().for_each(|child| {
         if repo_source == MODEL_SOURCE_MODELSCOPE {
             let file_info = RepoFileInfo {
-                repo_source: repo_source.clone(),
-                repo_name: repo_name.clone(),
+                repo_source: repo_source.to_string(),
+                repo_name: repo_name.to_string(),
                 file_name: child.file_name.clone(),
                 file_path: child.file_path.clone(),
-                revision: revision.clone(),
+                revision: revision.to_string(),
                 commit_hash: commit_hash.clone(),
                 endpoint: endpoint.clone(),
                 access_token: access_token.clone(),
@@ -184,10 +184,10 @@ fn fetch_remote_repo_info(
         } else {
             let repo_file_name = child.file_path.clone();
             let file_meta = fetch_helper::get_file_meta_remote(
-                repo_source.clone(),
-                repo_name.clone(),
-                child.file_path.clone(),
-                commit_hash.clone(),
+                repo_source,
+                repo_name,
+                child.file_path.as_str(),
+                commit_hash.as_str(),
                 endpoint.clone(),
                 access_token.clone(),
             );
@@ -198,11 +198,11 @@ fn fetch_remote_repo_info(
                 if file_name.is_some() {
                     let file_name = file_name.unwrap().to_str().unwrap().to_string();
                     let file_info = RepoFileInfo {
-                        repo_source: repo_source.clone(),
-                        repo_name: repo_name.clone(),
+                        repo_source: repo_source.to_string(),
+                        repo_name: repo_name.to_string(),
                         file_name,
                         file_path: child.file_path.clone(),
-                        revision: revision.clone(),
+                        revision: revision.to_string(),
                         commit_hash: commit_hash.clone(),
                         endpoint: endpoint.clone(),
                         access_token: access_token.clone(),

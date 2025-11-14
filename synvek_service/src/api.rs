@@ -39,7 +39,7 @@ async fn get_status() -> impl Responder {
     HttpResponse::Ok().json(response)
 }
 
-/// 配置API路由
+/// Config API router
 pub fn configure_routes(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api/v1")

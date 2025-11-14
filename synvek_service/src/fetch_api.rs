@@ -261,15 +261,15 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
     if req.fetch_repos.len() > 0 {
         req.fetch_repos.iter().for_each(|fetch_repo| {
             let mut revision = "main".to_string();
-            if fetch_repo.revision.clone().is_some() {
-                revision = fetch_repo.revision.clone().unwrap();
+            if let Some(fetch_repo_revision) = fetch_repo.revision.clone() {
+                revision = fetch_repo_revision.clone();
             }
             let repo_info_result = fetch_helper::get_repo_info(
-                req.model_source.clone(),
-                fetch_repo.repo_name.clone(),
-                revision.clone(),
-                endpoint.clone(),
-                fetch_repo.access_token.clone(),
+                req.model_source.as_str(),
+                fetch_repo.repo_name.as_str(),
+                revision.as_str(),
+                &endpoint,
+                &fetch_repo.access_token,
             );
             if repo_info_result.is_ok() {
                 let repo_info = repo_info_result.unwrap();
@@ -279,13 +279,13 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
                 repo_files.iter().for_each(|repo_file| {
                     let file_name = repo_file.rfilename.clone();
                     let repo_file_info =
-                        file_service::search_repo_file_info(&*req.model_source, &*repo_name, &*file_name);
+                        file_service::search_repo_file_info(req.model_source.as_str(), repo_name.as_str(), file_name.as_str());
                     if let Some(repo_file_info) = repo_file_info {
                         let task_item = TaskItem {
                             model_source: req.model_source.clone(),
                             repo_name: fetch_repo.repo_name.clone(),
                             file_name: file_name.clone(),
-                            revision: revision.clone(),
+                            revision: revision.to_string(),
                             access_token: fetch_repo.access_token.clone(),
                             file_size: repo_file_info.file_size,
                             commit_hash: repo_file_info.commit_hash,
@@ -308,20 +308,20 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
     if req.fetch_files.len() > 0 {
         req.fetch_files.iter().for_each(|fetch_file| {
             let mut revision = "main".to_string();
-            if fetch_file.revision.clone().is_some() {
-                revision = fetch_file.revision.clone().unwrap();
+            if let Some(fetch_file_revision) = fetch_file.revision.clone() {
+                revision = fetch_file_revision.clone();
             }
             let repo_file_info = file_service::search_repo_file_info(
-                &*req.model_source.clone(),
-                &*fetch_file.repo_name.clone(),
-                &*fetch_file.file_name.to_string(),
+                req.model_source.as_str(),
+                fetch_file.repo_name.as_str(),
+                fetch_file.file_name.as_str(),
             );
             if let Some(repo_file_info) = repo_file_info {
                 let task_item = TaskItem {
                     model_source: req.model_source.clone(),
                     repo_name: fetch_file.repo_name.clone(),
                     file_name: fetch_file.file_name.to_string(),
-                    revision,
+                    revision: revision.to_string(),
                     access_token: fetch_file.access_token.clone(),
                     file_size: repo_file_info.file_size,
                     commit_hash: repo_file_info.commit_hash,
@@ -331,8 +331,8 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
                 success = false;
                 message = format!(
                     "repo file not found on repo:{}, file name: {}",
-                    fetch_file.repo_name.clone(),
-                    fetch_file.file_name.to_string()
+                    fetch_file.repo_name,
+                    fetch_file.file_name
                 );
             }
         });
@@ -342,7 +342,7 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
         message = "No fetch item found".to_string();
     }
     if success {
-        let result = crate::fetch_service::start_task(task, true);
+        let result = crate::fetch_service::start_task(&mut task, true);
         if !result.is_ok() {
             success = false;
             message = result.unwrap_err().to_string();
@@ -363,7 +363,7 @@ async fn stop_fetch(req: web::Json<StopFetchRequest>) -> impl Responder {
     let mut success = true;
     let mut code: String = "".to_string();
     let mut message: String = "".to_string();
-    success = fetch_service::stop_task(fetch_name);
+    success = fetch_service::stop_task(fetch_name.as_str());
     if !success {
         message = "Task not found or already stopped ".to_string();
     }
@@ -382,10 +382,9 @@ async fn resume_fetch(req: web::Json<ResumeFetchRequest>) -> impl Responder {
     let mut success = true;
     let mut code: String = "".to_string();
     let mut message: String = "".to_string();
-    let task = fetch_service::load_local_task(fetch_name);
-    if task.is_some() {
-        let task = task.unwrap();
-        let start_result = fetch_service::start_task(task, false);
+    let task = fetch_service::load_local_task(fetch_name.as_str());
+    if let Some(mut task) = task {
+        let start_result = fetch_service::start_task(&mut task, false);
         if !start_result.is_ok() {
             success = false;
             message = start_result.unwrap_err().to_string();
@@ -409,15 +408,14 @@ async fn update_fetch(req: web::Json<UpdateFetchRequest>) -> impl Responder {
     let mut success = true;
     let mut code: String = "".to_string();
     let mut message: String = "".to_string();
-    let task = fetch_service::load_local_task(fetch_name);
-    if task.is_some() {
-        let mut task = task.unwrap();
+    let task = fetch_service::load_local_task(fetch_name.as_str());
+    if let Some(mut task) = task {
         task.isq = req.isq.clone();
         task.mirror = req.mirror.clone();
         task.access_token = req.access_token.clone();
         task.cpu = req.cpu.clone();
         task.offloaded = req.offloaded.clone();
-        fetch_service::update_local_tasks(task);
+        fetch_service::update_local_tasks(&task);
     } else {
         success = false;
         message = "Task not found or already stopped ".to_string();
@@ -454,10 +452,10 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
                 file_service::search_repo_file_info(&*fetch_file.model_source, &*fetch_file.repo_name, &*fetch_file.file_name);
             if let Some(repo_file_info) = repo_file_info {
                 let cache_key = fetch_service::build_cache_repo_file_key(
-                    fetch_file.model_source.clone(),
-                    fetch_file.repo_name.clone(),
-                    fetch_file.file_name.clone(),
-                    repo_file_info.commit_hash.clone(),
+                    fetch_file.model_source.as_str(),
+                    fetch_file.repo_name.as_str(),
+                    fetch_file.file_name.as_str(),
+                    repo_file_info.commit_hash.as_str(),
                 );
                 let cache_file_data = cache_repo_data.get(&cache_key);
                 let commit_hash: String = repo_file_info.commit_hash;
@@ -525,13 +523,13 @@ async fn list_fetch(req: web::Json<ListFetchRequest>) -> impl Responder {
 }
 
 fn populate_fetch_status(
-    fetch_name: String,
+    fetch_name: &str,
     mut fetch_status: &mut Vec<FetchStatusData>,
     running_task: &RunningTask,
 ) {
     running_task.finished_task_items.iter().for_each(|item| {
         let fetch_status_data = FetchStatusData {
-            fetch_name: fetch_name.clone(),
+            fetch_name: fetch_name.to_string(),
             model_source: item.model_source.clone(),
             repo_name: item.repo_name.clone(),
             file_name: item.file_name.clone(),
@@ -547,7 +545,7 @@ fn populate_fetch_status(
     });
     running_task.running_task_items.iter().for_each(|item| {
         let fetch_status_data = FetchStatusData {
-            fetch_name: fetch_name.clone(),
+            fetch_name: fetch_name.to_string(),
             model_source: item.model_source.clone(),
             repo_name: item.repo_name.clone(),
             file_name: item.file_name.clone(),
@@ -582,15 +580,14 @@ async fn get_fetches(req: web::Json<FetchesRequest>) -> impl Responder {
 async fn get_fetch_status(req: web::Json<FetchStatusRequest>) -> impl Responder {
     let fetch_name = req.fetch_name.clone();
     let mut success = true;
-    let mut code: String = "".to_string();
+    let code: String = "".to_string();
     let mut message: String = "".to_string();
     let mut fetch_status: Vec<FetchStatusData> = vec![];
-    if fetch_name.is_some() {
-        let running_task_option = fetch_service::get_running_task(fetch_name.clone().unwrap());
-        if running_task_option.is_some() {
-            let running_task = running_task_option.unwrap();
+    if let Some(fetch_name) = fetch_name {
+        let running_task = fetch_service::get_running_task(fetch_name.as_str());
+        if let Some(running_task) = running_task {
             populate_fetch_status(
-                fetch_name.clone().unwrap(),
+                fetch_name.as_str(),
                 &mut fetch_status,
                 &running_task,
             );
@@ -603,7 +600,7 @@ async fn get_fetch_status(req: web::Json<FetchStatusRequest>) -> impl Responder 
         //tracing::info!("running_tasks: {:?}", running_tasks);
         running_tasks.iter().for_each(|running_task| {
             populate_fetch_status(
-                running_task.task_name.clone(),
+                running_task.task_name.as_str(),
                 &mut fetch_status,
                 running_task,
             );
@@ -626,11 +623,10 @@ async fn get_fetch_status_stream(req: web::Json<FetchStatusRequest>) -> impl Res
         let mut require_stop = false;
         let mut duration  = 0;
         while !require_stop || duration < 10 {
-            if fetch_name.is_some() {
-                let running_task_option = fetch_service::get_running_task(fetch_name.clone().unwrap());
-                if running_task_option.is_some() {
-                    let running_task = running_task_option.unwrap();
-                    populate_fetch_status(fetch_name.clone().unwrap(), &mut fetch_status, &running_task);
+            if let Some(fetch_name) = fetch_name.clone() {
+                let running_task = fetch_service::get_running_task(fetch_name.as_str());
+                if let Some(running_task) = running_task {
+                    populate_fetch_status(fetch_name.as_str(), &mut fetch_status, &running_task);
                 } else {
                     require_stop = true;
                 }
@@ -642,7 +638,7 @@ async fn get_fetch_status_stream(req: web::Json<FetchStatusRequest>) -> impl Res
                     if running_task.running_task_items.len() > 0 {
                         is_running = true;
                     }
-                    populate_fetch_status(running_task.task_name.clone(), &mut fetch_status, running_task);
+                    populate_fetch_status(running_task.task_name.as_str(), &mut fetch_status, running_task);
                 });
                 if running_tasks.len() == 0 || !is_running {
                     require_stop = true

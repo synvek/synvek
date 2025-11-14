@@ -1,17 +1,20 @@
+use crate::fetch_service;
+use crate::model_service::ModelServiceArgs;
+use crate::utils;
+use crate::{config, file_service};
+use base64::engine::general_purpose::STANDARD;
+use base64::{
+    Engine as _, alphabet,
+    engine::{self, general_purpose},
+};
+use hf_hub::{Cache, Repo, RepoType};
 use libloading::{Library, Symbol};
 use std::ffi::{CString, OsString, c_char, c_int};
 use std::marker::PhantomData;
-use std::{ptr};
 use std::path::PathBuf;
+use std::ptr;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
-use base64::{Engine as _, engine::{self, general_purpose}, alphabet};
-use base64::engine::general_purpose::STANDARD;
-use hf_hub::{Cache, Repo, RepoType};
-use crate::utils;
-use crate::fetch_service;
-use crate::model_service::ModelServiceArgs;
-use crate::{config, file_service};
 
 #[repr(C)]
 pub struct ImageOutput {
@@ -35,7 +38,6 @@ pub struct SdConfig {
     pub acceleration: String,
 }
 
-
 #[derive(Debug, Clone, Default)]
 pub struct GenerationArgs {
     pub model: String,
@@ -44,7 +46,7 @@ pub struct GenerationArgs {
     pub width: usize,
     pub height: usize,
     pub seed: i32,
-    pub format: String
+    pub format: String,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -54,20 +56,20 @@ fn init_sd_config() -> Arc<Mutex<SdConfig>> {
 }
 
 pub fn initialize_sd_service() {
-    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+    GLOBAL_SD_CONFIG.get_or_init(|| init_sd_config());
 }
 
 pub fn get_sd_config() -> SdConfig {
-    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+    GLOBAL_SD_CONFIG.get_or_init(|| init_sd_config());
     let sd_config_ref = Arc::clone(GLOBAL_SD_CONFIG.get().unwrap());
-    let sd_config  = sd_config_ref.lock().unwrap();
+    let sd_config = sd_config_ref.lock().unwrap();
     sd_config.clone()
 }
 
 pub fn set_sd_config(sd_config: SdConfig) {
-    GLOBAL_SD_CONFIG.get_or_init(||init_sd_config());
+    GLOBAL_SD_CONFIG.get_or_init(|| init_sd_config());
     let sd_config_ref = Arc::clone(GLOBAL_SD_CONFIG.get().unwrap());
-    let mut old_sd_config  = sd_config_ref.lock().unwrap();
+    let mut old_sd_config = sd_config_ref.lock().unwrap();
     old_sd_config.args = sd_config.args;
     old_sd_config.start_args = sd_config.start_args;
     old_sd_config.task_id = sd_config.task_id;
@@ -77,11 +79,16 @@ pub fn set_sd_config(sd_config: SdConfig) {
     old_sd_config.acceleration = sd_config.acceleration;
 }
 
-fn get_model_file_path(repo_name: String, file_name: String, revision: String, commit_hash: String) -> PathBuf {
+fn get_model_file_path(
+    repo_name: &str,
+    file_name: &str,
+    revision: &str,
+    commit_hash: &str,
+) -> PathBuf {
     let config = config::Config::new();
     let path = config.get_model_dir();
     let cache = Cache::new(path.clone());
-    let repo = Repo::with_revision(repo_name.clone(), RepoType::Model, revision);
+    let repo = Repo::with_revision(repo_name.to_string(), RepoType::Model, revision.to_string());
     let mut file_path = cache.path().clone();
     file_path.push(repo.folder_name());
     file_path.push("snapshots");
@@ -96,7 +103,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let sd_config = get_sd_config();
     let model_name = sd_config.args.model_name;
     let model_id = sd_config.args.model_id;
-    let task = fetch_service::load_local_task(model_name);
+    let task = fetch_service::load_local_task(model_name.as_str());
     let mut valid: bool = false;
     let mut model_file_path: PathBuf = PathBuf::new();
     let mut clip_l_path: PathBuf = PathBuf::new();
@@ -109,17 +116,49 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         let file_name = task_item.file_name;
         let revision = task_item.revision;
         let commit_hash = task_item.commit_hash;
-        model_file_path = get_model_file_path(repo_name, file_name, revision, commit_hash);
+        model_file_path = get_model_file_path(
+            repo_name.as_str(),
+            file_name.as_str(),
+            revision.as_str(),
+            commit_hash.as_str(),
+        );
         valid = true;
     }
-    let clip_l_file = file_service::search_repo_file_info("huggingface","comfyanonymous/flux_text_encoders", "clip_l.safetensors");
-    let vae_file = file_service::search_repo_file_info("huggingface","black-forest-labs/FLUX.1-schnell", "ae.safetensors");
-    let t5xxl_file = file_service::search_repo_file_info("huggingface","comfyanonymous/flux_text_encoders", "t5xxl_fp16.safetensors");
-    match (clip_l_file, vae_file,t5xxl_file ) {
+    let clip_l_file = file_service::search_repo_file_info(
+        "huggingface",
+        "comfyanonymous/flux_text_encoders",
+        "clip_l.safetensors",
+    );
+    let vae_file = file_service::search_repo_file_info(
+        "huggingface",
+        "black-forest-labs/FLUX.1-schnell",
+        "ae.safetensors",
+    );
+    let t5xxl_file = file_service::search_repo_file_info(
+        "huggingface",
+        "comfyanonymous/flux_text_encoders",
+        "t5xxl_fp16.safetensors",
+    );
+    match (clip_l_file, vae_file, t5xxl_file) {
         (Some(clip_l_file), Some(vae_file), Some(t5xxl_file)) => {
-            clip_l_path = get_model_file_path(clip_l_file.repo_name, clip_l_file.file_path, clip_l_file.revision, clip_l_file.commit_hash);
-            vae_path = get_model_file_path(vae_file.repo_name, vae_file.file_path, vae_file.revision, vae_file.commit_hash);
-            t5xxl_path = get_model_file_path(t5xxl_file.repo_name, t5xxl_file.file_path, t5xxl_file.revision, t5xxl_file.commit_hash);
+            clip_l_path = get_model_file_path(
+                clip_l_file.repo_name.as_str(),
+                clip_l_file.file_path.as_str(),
+                clip_l_file.revision.as_str(),
+                clip_l_file.commit_hash.as_str(),
+            );
+            vae_path = get_model_file_path(
+                vae_file.repo_name.as_str(),
+                vae_file.file_path.as_str(),
+                vae_file.revision.as_str(),
+                vae_file.commit_hash.as_str(),
+            );
+            t5xxl_path = get_model_file_path(
+                t5xxl_file.repo_name.as_str(),
+                t5xxl_file.file_path.as_str(),
+                t5xxl_file.revision.as_str(),
+                t5xxl_file.commit_hash.as_str(),
+            );
         }
         _ => {
             valid = false;
@@ -128,7 +167,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let base_lib_name = "synvek_backend_sd";
     let acceleration = sd_config.acceleration.clone();
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
-    let lib_name = utils::get_backend_path(lib_name);
+    let lib_name = utils::get_backend_path(lib_name.as_str());
 
     tracing::info!("synvek_backend_sd lib_name: {}", lib_name);
     unsafe {
@@ -139,11 +178,24 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
             let get_image_data_length_func = lib.get(b"get_image_data_length");
             let get_image_data_func = lib.get(b"get_image_data");
             let free_image_data_func = lib.get(b"free_image_data");
-            match (generate_image_data_func, get_image_count_func,get_image_data_length_func, get_image_data_func, free_image_data_func) {
-                (Ok(generate_image_data_func), Ok(get_image_count_func), Ok(get_image_data_length_func), Ok(get_image_data_func), Ok(free_image_data_func)) => {
+            match (
+                generate_image_data_func,
+                get_image_count_func,
+                get_image_data_length_func,
+                get_image_data_func,
+                free_image_data_func,
+            ) {
+                (
+                    Ok(generate_image_data_func),
+                    Ok(get_image_count_func),
+                    Ok(get_image_data_length_func),
+                    Ok(get_image_data_func),
+                    Ok(free_image_data_func),
+                ) => {
                     let generate_image_data: Symbol<GenerateImageData> = generate_image_data_func;
                     let get_image_count: Symbol<GetImageCount> = get_image_count_func;
-                    let get_image_data_length: Symbol<GetImageDataLength> = get_image_data_length_func;
+                    let get_image_data_length: Symbol<GetImageDataLength> =
+                        get_image_data_length_func;
                     let get_image_data: Symbol<GetImageData> = get_image_data_func;
                     let free_image_data: Symbol<FreeImageData> = free_image_data_func;
                     let start_args: Vec<String> = vec![
@@ -176,10 +228,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     if let Ok(c_start_strings) = c_start_strings {
                         let raw_ptrs: Vec<*const c_char> =
                             c_start_strings.iter().map(|cs| cs.as_ptr()).collect();
-                        let image_output = generate_image_data(
-                            start_args.len() as c_int,
-                            raw_ptrs.as_ptr(),
-                        );
+                        let image_output =
+                            generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr());
 
                         if image_output == null_mut() {
                             panic!("Failed to get string array from DLL");
@@ -190,7 +240,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         for i in 0..image_count {
                             let image_data_length = get_image_data_length(image_output, i);
                             let image_data = get_image_data(image_output, i);
-                            let image_data_slice: &[u8] = std::slice::from_raw_parts(image_data, image_data_length);
+                            let image_data_slice: &[u8] =
+                                std::slice::from_raw_parts(image_data, image_data_length);
                             tracing::info!("Image data = {:?}", image_data_slice.len());
                             let base64_string = STANDARD.encode(image_data_slice);
                             let data_url = format!("data:image/png;base64,{}", base64_string);

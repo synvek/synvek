@@ -196,7 +196,7 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
     };
     let config = config::get_synvek_config();
     let multi_process = config.multi_process;
-    match model_service::start_model_server_from_web(multi_process, args).await {
+    match model_service::start_model_server_from_web(multi_process, &args).await {
         Ok(task_id) => {
             let model_server_data = ModelServerData {
                 model_name: req.model_name.clone(),
@@ -237,7 +237,7 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
 /// Get Running Model Servers
 #[post("/model/stop")]
 async fn stop_model_server(req: web::Json<StopModelServerRequest>) -> impl Responder {
-    model_service::stop_model_server(req.task_id.clone());
+    model_service::stop_model_server(req.task_id.as_str());
     let response = StartModelServerResponse {
         success: true,
         code: "".to_string(),

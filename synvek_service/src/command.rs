@@ -231,7 +231,7 @@ impl CommandHandler {
             backend: args.backend,
             acceleration: args.acceleration,
         };
-        crate::model_service::start_model_server_from_command(model_args, args.task_id, args.port).await?;
+        crate::model_service::start_model_server_from_command(&model_args, args.task_id.as_str(), args.port.as_str()).await?;
         loop {
             sleep(Duration::from_secs(120)).await;
             tracing::info!("Sever is still running");
@@ -245,7 +245,7 @@ impl CommandHandler {
             worker_name: args.worker_name.clone(),
             worker_type: WorkerType::ScriptService,
         };
-        let exec_result = crate::worker_service::start_worker_from_command(worker_args, args.worker_id).await;
+        let exec_result = crate::worker_service::start_worker_from_command(&worker_args, args.worker_id.as_str()).await;
         if exec_result.is_err() {
             Err(anyhow!("Failed to exec worker: {} with error: {}", args.worker_name.clone(), exec_result.unwrap_err()))
         } else {

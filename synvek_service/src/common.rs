@@ -45,7 +45,7 @@ pub static CONFIG_PORT: &str = "port";
 
 pub static CACHE_REPO_FILES_SLEEP_DURATION: u64 = 7200u64;
 
-pub static DOWNLOAD_RETRY_COUNT_LIMIT: u64 = 3;
+pub static DOWNLOAD_RETRY_COUNT_LIMIT: u64 = 5;
 
 pub static BACKEND_DEFAULT: &str = "default";
 
