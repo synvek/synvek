@@ -1,4 +1,4 @@
-name: Build synvek on macos
+name: Build synvek on macos universal
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-macos:
-    name: Build on macos
+    name: Build on macos universal
     runs-on: macos-latest
     env:
       APPLE_ID: ${{ secrets.APPLE_ID }}
