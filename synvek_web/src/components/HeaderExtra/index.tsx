@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Button, MenuProps, message, Space } from 'antd'
+import { Button, MenuProps, message, Space, Tooltip } from 'antd'
 import { FC, useEffect, useState } from 'react'
 
 import { SquareMultiple } from '@/components/Resource/Icons'
@@ -83,7 +83,9 @@ const HeaderExtra: FC<HeaderExtraProps> = ({ online }) => {
       <div data-tauri-drag-region className={styles.main}>
         <Space data-tauri-drag-region direction="horizontal" className={styles.content}>
           <Space wrap={false}>
-            <Button type={'primary'} size={'small'} shape={'circle'} icon={<UserOutlined />} onClick={handleUpdateUserProfile} />
+            <Tooltip title={intl.formatMessage({ id: 'header.extra.button.profile' })}>
+              <Button type={'primary'} size={'small'} shape={'circle'} icon={<UserOutlined />} onClick={handleUpdateUserProfile} />
+            </Tooltip>
           </Space>
         </Space>
       </div>

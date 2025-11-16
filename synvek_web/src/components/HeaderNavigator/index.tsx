@@ -822,12 +822,14 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         {/*{defaultImageGenerationModel ? defaultImageGenerationModel : <FormattedMessage id="header.navigator.no-default-image-generation-model-found" />}*/}
         {/*{defaultAudioModel ? defaultAudioModel : <FormattedMessage id="header.navigator.no-default-audio-model-found" />}*/}
       </Dropdown.Button>
-      <Button
-        type={'text'}
-        icon={<SearchOutlined style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} />}
-        style={{ display: isValidWorkMode() ? undefined : 'none', marginLeft: '16px' }}
-        onClick={handleModelSearch}
-      ></Button>
+      <Tooltip title={intl.formatMessage({ id: 'header.navigator.button.model-search' })}>
+        <Button
+          type={'text'}
+          icon={<SearchOutlined style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} />}
+          style={{ display: isValidWorkMode() ? undefined : 'none', marginLeft: '16px' }}
+          onClick={handleModelSearch}
+        ></Button>
+      </Tooltip>
     </div>
   )
 }
