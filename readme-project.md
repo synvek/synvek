@@ -94,7 +94,7 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 
 ### Build & run service module: synvek_service
 
-- Local run: cargo run --package synvek_service --features "cuda cudnn" --bin synvek_service -- serve
+- Local run: cargo run --package synvek_service --bin synvek_service -- serve
 - Debug & Run requires output as working folder.
 
 ### Build & run tauri module: synvek_explorer

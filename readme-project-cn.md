@@ -94,7 +94,7 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 
 ### 构建和运行service模块: synvek_service
 
-- 本地运行: cargo run --package synvek_service --features "cuda cudnn" --bin synvek_service -- serve
+- 本地运行: cargo run --package synvek_service --bin synvek_service -- serve
 - 调试和运行必须指定output路径作为工作目录.
 
 ### 构建和运行tauri模块: synvek_explorer
