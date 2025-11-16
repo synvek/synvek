@@ -54,11 +54,6 @@ jobs:
       run: |
         df
 
-    # - name: Prepare for synvek_explorer
-    #   run: |
-    #     mkdir -p output
-    #     ls output/
-
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -98,74 +93,74 @@ jobs:
       run: |
         df
 
-    # - name: Configure and build backend-> llama.cpp cpu 
-    #   run: |
-    #     cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
+    - name: Configure and build backend-> llama.cpp cpu 
+      run: |
+        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
 
-    # - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
-    #   run: |
-    #     cp build/llama.cpp/build_cpu/bin/libsynvek_backend_llama.dylib output 
-    #     mv output/libsynvek_backend_llama.dylib output/libsynvek_backend_llama_cpu.dylib 
-    #     rm -rf  build/llama.cpp/build_cpu
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
+      run: |
+        cp build/llama.cpp/build_cpu/bin/libsynvek_backend_llama.dylib output 
+        mv output/libsynvek_backend_llama.dylib output/libsynvek_backend_llama_cpu.dylib 
+        rm -rf  build/llama.cpp/build_cpu
 
-    # - name: Disk space after build backend-> llama.cpp cpu 
-    #   run: |
-    #     df
+    - name: Disk space after build backend-> llama.cpp cpu 
+      run: |
+        df
 
-    # - name: Configure and build backend-> stable-diffusion.cpp metal 
-    #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/stable-diffusion.cpp/build_metal --config Release --target synvek_backend_sd -j  4
+    - name: Configure and build backend-> stable-diffusion.cpp metal 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_metal --config Release --target synvek_backend_sd -j  4
 
-    # - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
-    #   run: |
-    #     cp build/stable-diffusion.cpp/build_metal/bin/libsynvek_backend_sd.dylib output 
-    #     mv output/libsynvek_backend_sd.dylib output/libsynvek_backend_sd_metal.dylib 
-    #     rm -rf  build/stable-diffusion.cpp/build_metal
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
+      run: |
+        cp build/stable-diffusion.cpp/build_metal/bin/libsynvek_backend_sd.dylib output 
+        mv output/libsynvek_backend_sd.dylib output/libsynvek_backend_sd_metal.dylib 
+        rm -rf  build/stable-diffusion.cpp/build_metal
 
-    # - name: Disk space after build backend-> stable-diffusion.cpp metal 
-    #   run: |
-    #     df
+    - name: Disk space after build backend-> stable-diffusion.cpp metal 
+      run: |
+        df
         
-    # - name: Configure and build backend-> stable-diffusion.cpp cpu 
-    #   run: |
-    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    #     cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
+    - name: Configure and build backend-> stable-diffusion.cpp cpu 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
 
-    # - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
-    #   run: |
-    #     cp build/stable-diffusion.cpp/build_cpu/bin/libsynvek_backend_sd.dylib output 
-    #     mv output/libsynvek_backend_sd.dylib output/libsynvek_backend_sd_cpu.dylib 
-    #     rm -rf  build/stable-diffusion.cpp/build_cpu
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
+      run: |
+        cp build/stable-diffusion.cpp/build_cpu/bin/libsynvek_backend_sd.dylib output 
+        mv output/libsynvek_backend_sd.dylib output/libsynvek_backend_sd_cpu.dylib 
+        rm -rf  build/stable-diffusion.cpp/build_cpu
 
-    # - name: Disk space after build backend-> stable-diffusion.cpp cpu 
-    #   run: |
-    #     df
+    - name: Disk space after build backend-> stable-diffusion.cpp cpu 
+      run: |
+        df
         
-    # - name: Configure and build backend-> mistral.rs metal 
-    #   run: |
-    #     cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal" --lib
+    - name: Configure and build backend-> mistral.rs metal 
+      run: |
+        cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal" --lib
 
-    # - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs metal 
-    #   run: |
-    #     cp build/mistral.rs/build_metal/release/libsynvek_backend_default.dylib output 
-    #     mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_metal.dylib 
-    #     rm -rf  build/mistral.rs/build_metal
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs metal 
+      run: |
+        cp build/mistral.rs/build_metal/release/libsynvek_backend_default.dylib output 
+        mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_metal.dylib 
+        rm -rf  build/mistral.rs/build_metal
 
-    # - name: Disk space after build backend-> mistral.rs.cpp metal 
-    #   run: |
-    #     df
+    - name: Disk space after build backend-> mistral.rs.cpp metal 
+      run: |
+        df
 
-    # - name: Configure and build backend-> mistral.rs cpu 
-    #   run: |
-    #     cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+    - name: Configure and build backend-> mistral.rs cpu 
+      run: |
+        cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
 
-    # - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
-    #   run: |
-    #     cp build/mistral.rs/build_cpu/release/libsynvek_backend_default.dylib output 
-    #     mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_cpu.dylib 
-    #     rm -rf  build/mistral.rs/build_cpu
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
+      run: |
+        cp build/mistral.rs/build_cpu/release/libsynvek_backend_default.dylib output 
+        mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_cpu.dylib 
+        rm -rf  build/mistral.rs/build_cpu
 
     - name: Disk space after build backend-> mistral.rs.cpp cpu 
       run: |
