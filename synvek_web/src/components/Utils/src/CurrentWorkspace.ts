@@ -38,6 +38,7 @@ export class CurrentWorkspace {
   public messageManager = new MessageManager(this)
   public workMode: WorkMode = WorkMode.Chat
   public workPath: string = Consts.WORK_PATH_CHAT
+  public settingKey: string = Consts.SETTING_GENERAL_SETTINGS
   public knowledge: Knowledge = new Knowledge('')
   public selectedConversionData: ConversionData = defaultConversionData
   public modelServers: ModelServerData[] = []

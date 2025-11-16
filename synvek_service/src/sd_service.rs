@@ -1,6 +1,6 @@
-use crate::fetch_service;
 use crate::model_service::ModelServiceArgs;
-use crate::utils;
+use crate::{modelscope_helper, utils};
+use crate::{common, fetch_service};
 use crate::{config, file_service};
 use base64::engine::general_purpose::STANDARD;
 use base64::{
@@ -15,6 +15,7 @@ use std::path::PathBuf;
 use std::ptr;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
+use crate::common::MODEL_SOURCE_MODELSCOPE;
 
 #[repr(C)]
 pub struct ImageOutput {
@@ -80,21 +81,34 @@ pub fn set_sd_config(sd_config: SdConfig) {
 }
 
 fn get_model_file_path(
+    model_source: &str,
     repo_name: &str,
     file_name: &str,
     revision: &str,
     commit_hash: &str,
 ) -> PathBuf {
+    // let config = config::Config::new();
+    // let path = config.get_model_dir();
+    // let cache = Cache::new(path.clone());
+    // let repo = Repo::with_revision(repo_name.to_string(), RepoType::Model, revision.to_string());
+    // let mut file_path = cache.path().clone();
+    // file_path.push(repo.folder_name());
+    // file_path.push("snapshots");
+    // file_path.push(commit_hash);
+    // file_path.push(file_name);
+    //
+    // file_path
     let config = config::Config::new();
-    let path = config.get_model_dir();
-    let cache = Cache::new(path.clone());
-    let repo = Repo::with_revision(repo_name.to_string(), RepoType::Model, revision.to_string());
-    let mut file_path = cache.path().clone();
-    file_path.push(repo.folder_name());
-    file_path.push("snapshots");
-    file_path.push(commit_hash);
-    file_path.push(file_name);
-    file_path
+    let mut model_path = config.get_model_dir();
+    let model_path_postfix = repo_name.replace("/", "--");
+    if model_source == MODEL_SOURCE_MODELSCOPE {
+        model_path.push(format!("modelscope-models--{}", model_path_postfix));
+    } else {
+        model_path.push(format!("models--{}", model_path_postfix));
+    }
+    let mut pointer_path = modelscope_helper::get_pointer_path(model_path.to_str().unwrap(), commit_hash);
+    pointer_path.push(file_name);
+    pointer_path
 }
 
 pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
@@ -109,6 +123,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut clip_l_path: PathBuf = PathBuf::new();
     let mut vae_path: PathBuf = PathBuf::new();
     let mut t5xxl_path: PathBuf = PathBuf::new();
+    let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
+
     if let Some(task) = task {
         tracing::info!("Current task info: {:?}", task.clone());
         let task_item = task.task_items[0].clone();
@@ -116,7 +132,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         let file_name = task_item.file_name;
         let revision = task_item.revision;
         let commit_hash = task_item.commit_hash;
+        model_source = task_item.model_source;
         model_file_path = get_model_file_path(
+            model_source.as_str(),
             repo_name.as_str(),
             file_name.as_str(),
             revision.as_str(),
@@ -125,35 +143,46 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         valid = true;
     }
     let clip_l_file = file_service::search_repo_file_info(
-        "huggingface",
-        "comfyanonymous/flux_text_encoders",
+        model_source.as_str(),
+        if model_source == common::MODEL_SOURCE_HUGGINGFACE {
+            "comfyanonymous/flux_text_encoders"
+        } else {
+            "synvek/flux_text_encoders"
+        },
         "clip_l.safetensors",
     );
     let vae_file = file_service::search_repo_file_info(
-        "huggingface",
+        model_source.as_str(),
         "black-forest-labs/FLUX.1-schnell",
         "ae.safetensors",
     );
     let t5xxl_file = file_service::search_repo_file_info(
-        "huggingface",
-        "comfyanonymous/flux_text_encoders",
+        model_source.as_str(),
+        if model_source == common::MODEL_SOURCE_HUGGINGFACE {
+            "comfyanonymous/flux_text_encoders"
+        } else {
+            "synvek/flux_text_encoders"
+        },
         "t5xxl_fp16.safetensors",
     );
     match (clip_l_file, vae_file, t5xxl_file) {
         (Some(clip_l_file), Some(vae_file), Some(t5xxl_file)) => {
             clip_l_path = get_model_file_path(
+                clip_l_file.repo_source.as_str(),
                 clip_l_file.repo_name.as_str(),
                 clip_l_file.file_path.as_str(),
                 clip_l_file.revision.as_str(),
                 clip_l_file.commit_hash.as_str(),
             );
             vae_path = get_model_file_path(
+                vae_file.repo_source.as_str(),
                 vae_file.repo_name.as_str(),
                 vae_file.file_path.as_str(),
                 vae_file.revision.as_str(),
                 vae_file.commit_hash.as_str(),
             );
             t5xxl_path = get_model_file_path(
+                t5xxl_file.repo_source.as_str(),
                 t5xxl_file.repo_name.as_str(),
                 t5xxl_file.file_path.as_str(),
                 t5xxl_file.revision.as_str(),

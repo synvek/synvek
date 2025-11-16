@@ -9,7 +9,7 @@ export class Consts {
   public static SETTING_SIDEBAR_WIDTH = 250
   public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_DEFAULT = 240
   public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MIN = 200
-  public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX = 300
+  public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX = 450
 
   public static ENV_DEFAULT = 'default'
   public static ENV_DESKTOP = 'desktop'

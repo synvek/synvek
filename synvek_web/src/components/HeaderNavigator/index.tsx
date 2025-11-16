@@ -19,7 +19,7 @@ import {
 import { AccelerationType, BackendType } from '@/components/Utils/src/ModelProviders'
 import { FetchFile, FetchRepo, StartModelServerRequest } from '@/components/Utils/src/RequestUtils'
 import { useIntl } from '@@/exports'
-import { AimOutlined, CaretDownOutlined, CheckOutlined, FireOutlined, Loading3QuartersOutlined, ThunderboltFilled } from '@ant-design/icons'
+import { AimOutlined, CaretDownOutlined, CheckOutlined, FireOutlined, Loading3QuartersOutlined, SearchOutlined, ThunderboltFilled } from '@ant-design/icons'
 import { MenuItemType } from 'antd/es/menu/interface'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
@@ -795,6 +795,14 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   const isValidWorkMode = () => {
     return currentWorkspace.workMode === WorkMode.Chat || currentWorkspace.workMode === WorkMode.Image || currentWorkspace.workMode === WorkMode.Translate
   }
+
+  const handleModelSearch = () => {
+    currentWorkspace.workPath = Consts.WORK_PATH_SETTINGS
+    currentWorkspace.workMode = WorkMode.Settings
+    currentWorkspace.settingKey = Consts.SETTING_MODEL_SEARCH
+    currentWorkspace.triggerRouterChanged()
+  }
+
   return (
     <div data-tauri-drag-region className={styles.main}>
       {contextHolder}
@@ -814,6 +822,12 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         {/*{defaultImageGenerationModel ? defaultImageGenerationModel : <FormattedMessage id="header.navigator.no-default-image-generation-model-found" />}*/}
         {/*{defaultAudioModel ? defaultAudioModel : <FormattedMessage id="header.navigator.no-default-audio-model-found" />}*/}
       </Dropdown.Button>
+      <Button
+        type={'text'}
+        icon={<SearchOutlined style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} />}
+        style={{ display: isValidWorkMode() ? undefined : 'none', marginLeft: '16px' }}
+        onClick={handleModelSearch}
+      ></Button>
     </div>
   )
 }

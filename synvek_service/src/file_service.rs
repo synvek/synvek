@@ -210,7 +210,7 @@ fn fetch_remote_repo_info(
                     };
                     repo_file_infos.push(file_info.clone());
                     tracing::info!("Fetching remote file info: {:?}", file_info);
-                    sleep(Duration::from_millis(9000));
+                    sleep(Duration::from_millis(5000));
                 } else {
                     tracing::error!("Unable to fetch file name info: {:?}", file_meta);
                     panic!("Unable to fetch file name info: {:?}", file_meta)

@@ -26,7 +26,7 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
   const currentWorkspace = globalContext.currentWorkspace
   const [initialized, setInitialized] = useState<boolean>(false)
   const [userText, setUserText] = useState<string>('')
-  const [activeItemKey, setActiveItemKey] = useState<string>(Consts.SETTING_GENERAL_SETTINGS)
+  const [activeItemKey, setActiveItemKey] = useState<string>(currentWorkspace.settingKey)
 
   const intl = useIntl()
   const { token } = useToken()
@@ -36,7 +36,10 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
     if (!initialized) {
       initialize()
     }
-    return () => {}
+    currentWorkspace.onRouterChanged(handleRouterChange)
+    return () => {
+      currentWorkspace.removeRouterChangedListener(handleRouterChange)
+    }
   })
 
   const initialize = () => {
@@ -46,7 +49,12 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
   const handleSettingChange: MenuProps['onSelect'] = ({ selectedKeys }) => {
     if (selectedKeys && selectedKeys.length > 0) {
       setActiveItemKey(selectedKeys[0])
+      currentWorkspace.settingKey = selectedKeys[0]
     }
+  }
+
+  const handleRouterChange = () => {
+    setActiveItemKey(currentWorkspace.settingKey)
   }
 
   const settingItems: TabsProps['items'] = [
@@ -95,6 +103,7 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
           <Menu
             className={styles.settingsSideBar}
             defaultSelectedKeys={[activeItemKey]}
+            selectedKeys={[activeItemKey]}
             mode={'inline'}
             items={settingItems}
             onSelect={handleSettingChange}
