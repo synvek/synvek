@@ -144,10 +144,11 @@ jobs:
 
     - name: Configure and build backend-> mistral.rs metal 
       run: |
-       cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal" --lib  --target x86_64-apple-darwin 
+       cargo build --profile release --target-dir build/mistral.rs/build_metal --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --features "metal"  --target x86_64-apple-darwin --lib  
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs metal 
       run: |
+        ls build/mistral.rs/build_metal/release/
         cp build/mistral.rs/build_metal/release/libsynvek_backend_default.dylib output 
         mv output/libsynvek_backend_default.dylib output/libsynvek_backend_default_metal.dylib 
         rm -rf  build/mistral.rs/build_metal
@@ -158,7 +159,7 @@ jobs:
 
     - name: Configure and build backend-> mistral.rs cpu 
       run: |
-        cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib --target x86_64-apple-darwin 
+        cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server  --target x86_64-apple-darwin  --lib
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cpu 
       run: |
