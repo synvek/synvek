@@ -5,7 +5,7 @@ edition = "2024"
 
 
 [dependencies]
-deno = {version = "2.3.5", path = "./../third_party/deno/cli", features = ["hmr"]}
+deno = {version = "2.3.5", path = "./../third_party/deno/cli"}
 #mistralrs-server = {version = "0.6.0", path = "./../third_party/mistral.rs/mistralrs-server"}
 hf-hub = { path = "./../third_party/hf-hub", default-features = false, features = ["ureq","tokio","rustls-tls",] }
 actix-web = "4.11.0"
