@@ -65,7 +65,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp metal 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_metal -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="x86_64"
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_metal -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
         cmake --build build/llama.cpp/build_metal --config Release --target synvek_backend_llama -j 4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp metal 
@@ -95,7 +95,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cpu 
       run: |
-        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="x86_64"
+        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
         cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
@@ -110,7 +110,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp metal 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="x86_64"
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
         cmake --build build/stable-diffusion.cpp/build_metal --config Release --target synvek_backend_sd -j  4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
@@ -125,7 +125,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="x86_64"
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
         cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
