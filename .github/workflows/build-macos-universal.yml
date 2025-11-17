@@ -216,6 +216,7 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
       run: |
         cargo install tauri-cli --version "^2.0.0" --locked
+        export DENO_SKIP_CROSS_BUILD_CHECK=1​​
         TAURI_TARGET="universal-apple-darwin" cargo tauri build --target universal-apple-darwin
       working-directory: ./synvek_explorer
 
