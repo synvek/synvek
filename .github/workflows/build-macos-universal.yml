@@ -216,8 +216,29 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
       run: |
         cargo install tauri-cli --version "^2.0.0" --locked
-        TAURI_TARGET="universal-apple-darwin" cargo tauri build
+        TAURI_TARGET="universal-apple-darwin" cargo tauri build --target universal-apple-darwin
       working-directory: ./synvek_explorer
+
+    - name: Verify Universal Binary synvek_explorer
+      run: |
+        APP_PATH=$(find synvek_explorer/target/release/bundle -name "*.app" -type d | head -1)
+        if [ -n "$APP_PATH" ]; then
+          APP_NAME=$(basename "$APP_PATH" .app)
+          BINARY_PATH="$APP_PATH/Contents/MacOS/$APP_NAME"
+          
+          if [ -f "$BINARY_PATH" ]; then
+            echo "Binary architectures:"
+            lipo -info "$BINARY_PATH"
+            echo "File info:"
+            file "$BINARY_PATH"
+          else
+            echo "Binary not found at: $BINARY_PATH"
+            find "$APP_PATH" -type f
+          fi
+        else
+          echo "No .app file found"
+          find synvek_explorer/target -name "*.app" -type d
+        fi      
 
     - name: Disk space after build synvek_agent
       run: |
