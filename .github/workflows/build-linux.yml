@@ -48,7 +48,7 @@ jobs:
       run: |
         nvcc --version
 
-    - name: Disk space before code checkin
+    - name: Disk space before code checkout
       run: |
         df
 
@@ -57,7 +57,7 @@ jobs:
       with:
         submodules: recursive    
 
-    - name: Disk space after code checkin
+    - name: Disk space after code checkout
       run: |
         df
 

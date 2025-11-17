@@ -18,7 +18,7 @@ crate-type = ["staticlib", "rlib"]
 tauri-build = { version = "2.2.0", features = ["config-json5"] }
 
 [dependencies]
-synvek_service = {version = "0.1.0",path = "./../synvek_service" }
+synvek_service = {version = "0.2.1",path = "./../synvek_service" }
 
 log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
