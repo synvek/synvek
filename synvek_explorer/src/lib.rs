@@ -358,13 +358,13 @@ pub fn run() {
 
             let _ = thread::spawn(move || {
                 //Sleep and avoid potential V8 initialization crash on Ubuntu!
-                std::thread::sleep(std::time::Duration::from_millis(500));
+                std::thread::sleep(std::time::Duration::from_millis(300));
                 tracing::info!("synvek agent is starting");
                 start_agent(OsString::from(resource_path.as_os_str()));
             });
 
             //Sleep and avoid web start faster than agent!
-            std::thread::sleep(std::time::Duration::from_millis(550));
+            std::thread::sleep(std::time::Duration::from_millis(400));
 
             let main_window = app.get_webview_window("main").unwrap();
 

@@ -135,6 +135,7 @@ pub async fn start_service() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 pub fn initialize() {
+    //Need to initialize logging in Deno first
     script_service::initialize_script_engine();
     initialize_logging();
     config::initialize_synvek_config();
