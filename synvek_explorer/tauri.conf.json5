@@ -43,7 +43,6 @@
       "./../synvek_service/service_plugins/**/*": "resources/service_plugins/",
       "./../synvek_service/config/**/*": "resources/config/",
       "./../synvek_service/storage/**/*": "resources/storage/",
-      "./../output/*":  "backend/",
     },
     "windows": {
       "webviewInstallMode": {
@@ -51,6 +50,8 @@
       },
     },
     "macOS": {
+      "hardenedRuntime": true,
+      "entitlements": "./Entitlements.plist",
       "frameworks": [
         "./../output/libsynvek_backend_default_cpu.dylib",
         "./../output/libsynvek_backend_default_metal.dylib",
