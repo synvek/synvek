@@ -3,6 +3,21 @@ name: Build synvek on macos
 on:
   workflow_dispatch:
   workflow_call:
+    secrets: 
+      APPLE_CERTIFICATE: 
+        required: true
+      APPLE_CERTIFICATE_PASSWORD: 
+        required: true
+      APPLE_ID: 
+        required: true
+      APPLE_PASSWORD: 
+        required: true
+      APPLE_TEAM_ID : 
+        required: true
+      APPLE_ID_PASSWORD: 
+        required: true
+      KEYCHAIN_PASSWORD: 
+        required: true
 
 jobs:
   build-macos:
