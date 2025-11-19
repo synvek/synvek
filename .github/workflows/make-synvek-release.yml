@@ -17,7 +17,7 @@ jobs:
 
   build-macos-arm64:
     uses: ./.github/workflows/build-macos.yml
-    with: 
+    secrets: 
       APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
       APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
       APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
@@ -29,7 +29,7 @@ jobs:
 
   build-macos-intel:
     uses: ./.github/workflows/build-macos-intel.yml
-    with: 
+    secrets: 
       APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
       APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
       APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
