@@ -735,5 +735,212 @@
         "revision": "master",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-1b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-1b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-4b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-4b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-12b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-12b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-27b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/gemma-3-27b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-V3-0324-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "lmstudio-community/DeepSeek-R1-0528-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-1b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-1b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-4b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-4b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-12b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-12b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-27b-it-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "google/gemma-3-27b-pt-qat-q4_0-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
     }
 ]
