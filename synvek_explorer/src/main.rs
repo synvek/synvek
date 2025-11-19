@@ -7,9 +7,9 @@ use std::ffi::OsString;
 use std::thread::sleep;
 use std::time::Duration;
 use std::{env, thread};
+use synvek_service::script_service;
 use tokio::runtime::Handle;
 use tokio::runtime::Runtime;
-use synvek_service::script_service;
 
 #[tauri::command]
 fn start_synvek_service() {
@@ -22,7 +22,7 @@ fn start_synvek_service() {
         .await
         .unwrap()
     })
-        .expect("Failed to run synvek service");
+    .expect("Failed to run synvek service");
 }
 
 fn start_agent() {
@@ -48,14 +48,16 @@ fn start_agent() {
         .await
         .unwrap()
     })
-        .expect("Failed to run synvek agent");
+    .expect("Failed to run synvek agent");
 }
 
 fn main() {
-
     #[cfg(target_os = "linux")]
     unsafe {
-        std::env::set_var("LD_LIBRARY_PATH", "/usr/lib/SynvekExplorer/backend:./backend");
+        std::env::set_var(
+            "LD_LIBRARY_PATH",
+            "/usr/lib/SynvekExplorer/backend:./backend",
+        );
     }
 
     let args: Vec<String> = env::args().collect();

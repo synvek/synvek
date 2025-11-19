@@ -1,14 +1,12 @@
 use std::ffi::OsString;
+use std::fs::File;
 use std::process::Command;
 use std::{env, fs, thread};
-use std::fs::File;
-use tauri::{
-    App, Manager, PhysicalSize, WebviewUrl, WebviewWindowBuilder, WindowEvent,
-};
+use tauri::{App, Manager, PhysicalSize, WebviewUrl, WebviewWindowBuilder, WindowEvent};
 use tauri_plugin_decorum::WebviewWindowExt;
 
 #[cfg(target_os = "macos")]
-use tauri::{TitleBarStyle, };
+use tauri::TitleBarStyle;
 
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
@@ -126,10 +124,11 @@ fn copy_folder(src: &Path, dest: &Path, require_upgrade: bool) -> Result<(), std
                             src_path, dest_path
                         );
                     } else if dest_path.exists() && require_upgrade {
-                        if !src_path.ends_with("config/settings.json") &&
-                            !src_path.ends_with("config/config.json") &&
-                            !src_path.ends_with("config/tasks.json") &&
-                            !src_path.ends_with("storage/synvek_storage.db") {
+                        if !src_path.ends_with("config/settings.json")
+                            && !src_path.ends_with("config/config.json")
+                            && !src_path.ends_with("config/tasks.json")
+                            && !src_path.ends_with("storage/synvek_storage.db")
+                        {
                             fs::copy(&src_path, &dest_path)?;
                             println!(
                                 "Copy file {:?} to {:?} with require_upgrade: {}",
@@ -163,10 +162,13 @@ fn check_upgrade_required(app: &mut App) -> bool {
     let data_dir = config.get_data_dir();
     let bundled_file_path = app
         .path()
-        .resolve("resources/config/version.txt", tauri::path::BaseDirectory::Resource)
+        .resolve(
+            "resources/config/version.txt",
+            tauri::path::BaseDirectory::Resource,
+        )
         .map_err(|e| format!("Failed to resolve resource file: {}", e));
     if bundled_file_path.is_err() {
-        return true
+        return true;
     }
     let bundled_file_path = bundled_file_path.unwrap();
     println!("Process resource: {:?}", bundled_file_path);
@@ -185,8 +187,13 @@ fn check_upgrade_required(app: &mut App) -> bool {
                     let old_major_version = old_version[0].parse::<u32>();
                     let old_junior_version = old_version[1].parse::<u32>();
                     let old_builder_number = old_version[2].parse::<u32>();
-                    if new_major_version.is_ok()  && old_major_version.is_ok()  && new_junior_version.is_ok() && old_junior_version.is_ok() &&
-                        new_builder_number.is_ok()  && old_builder_number.is_ok() {
+                    if new_major_version.is_ok()
+                        && old_major_version.is_ok()
+                        && new_junior_version.is_ok()
+                        && old_junior_version.is_ok()
+                        && new_builder_number.is_ok()
+                        && old_builder_number.is_ok()
+                    {
                         let new_major_version = new_major_version.unwrap();
                         let new_junior_version = new_junior_version.unwrap();
                         let new_builder_number = new_builder_number.unwrap();
@@ -209,14 +216,13 @@ fn check_upgrade_required(app: &mut App) -> bool {
                             }
                         } else {
                             false
-                        }
+                        };
                     }
                 }
             }
         }
     }
     true
-
 }
 /// Check and populate data folder
 fn setup_app_data(app: &mut App) -> Result<(), String> {
@@ -255,14 +261,12 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
     Ok(())
 }
 
-fn setup_backend_files(app: &mut App, require_upgrade: bool)-> Result<(), String> {
+fn setup_backend_files(app: &mut App, require_upgrade: bool) -> Result<(), String> {
     let config = config::Config::new();
     let data_dir = config.get_data_dir();
     println!("Data dir: {:?}", data_dir);
 
-    let resources = vec![
-        "backend/",
-    ];
+    let resources = vec!["backend/"];
 
     for resource in resources {
         let bundled_file_path = app
@@ -302,6 +306,8 @@ fn run_external_command() -> Result<String, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_os::init())
         .invoke_handler(tauri::generate_handler![get_server_config])
         .plugin(tauri_plugin_decorum::init()) // initialize the decorum plugin
         .setup(move |app| {
@@ -384,7 +390,6 @@ pub fn run() {
                 // NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
                 main_window.set_window_level(25).unwrap();
             }
-
 
             // let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
             //     .title("Synvek Explorer")
