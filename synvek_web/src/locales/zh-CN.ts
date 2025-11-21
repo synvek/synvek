@@ -239,6 +239,7 @@ export default {
   'setting-view.model-search.model-availabilities': '可用模型',
   'setting-view.model-search.model-details': '模型详情',
   'setting-view.model-search.model-options.download': '下载到本地 ...',
+  'setting-view.model-search.search-placeholder': '输入模型名称搜索',
   'setting-view.setting-about': '关于',
   'setting-view.setting-local-models': '本地模型',
   'setting-view.setting-default-models': '默认模型',

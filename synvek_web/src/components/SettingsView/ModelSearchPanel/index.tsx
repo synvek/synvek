@@ -6,12 +6,12 @@ import { Consts, ModelCategory, ModelInfo, modelProviders, RequestUtils, useGlob
 import { FetchFile, FetchRepo, FetchRequest } from '@/components/Utils/src/RequestUtils'
 import { FormattedMessage, useIntl } from '@@/exports'
 import { CheckOutlined, CloseOutlined, DownloadOutlined } from '@ant-design/icons'
-import { Button, Card, Divider, List, Menu, MenuProps, message, Space, Splitter, TabsProps, theme, Typography } from 'antd'
+import { Button, Card, ConfigProvider, Divider, Input, List, Menu, MenuProps, message, Space, Splitter, TabsProps, theme, Typography } from 'antd'
 import styles from './index.less'
 
 const { useToken } = theme
 const { Text, Link } = Typography
-
+const { Search } = Input
 interface ModelSearchPanelProps {
   visible: boolean
 }
@@ -22,6 +22,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
   const currentWorkspace = globalContext.currentWorkspace
   const [activeItemKey, setActiveItemKey] = useState<string>(Consts.SETTING_GENERAL_SETTINGS)
   const [modelFormWindowVisible, setModelFormWindowVisible] = useState<boolean>(false)
+  const [modelNameSearch, setModelNameSearch] = useState<string>('')
   const [modelName, setModelName] = useState<string>('')
   const [modelId, setModelId] = useState<string>('')
   const [modelSource, setModelSource] = useState<string>('')
@@ -280,53 +281,84 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     return modelInfoPanel
   }
 
-  const settingItems: TabsProps['items'] = modelProviders.map((modelProvider) => {
-    return {
-      key: `${modelProvider.modelSource}:${modelProvider.modelId}`,
-      label: (
-        <div>
-          <Text type={'secondary'} style={{ marginRight: 4 }}>
-            {modelProvider.modelSource}:
-          </Text>
-          {modelProvider.modelId}
-        </div>
-      ),
-    }
-  })
+  const handleSearch = (value: string) => {
+    setModelNameSearch(value)
+  }
+
+  const settingItems: TabsProps['items'] = modelProviders
+    .filter((modelProvider) => {
+      let filterResult = true
+      if (modelNameSearch && modelNameSearch.trim().length) {
+        filterResult =
+          modelProvider.modelSource.toUpperCase().includes(modelNameSearch.toUpperCase()) ||
+          modelProvider.modelId.toUpperCase().includes(modelNameSearch.toUpperCase())
+      }
+      return filterResult
+    })
+    .map((modelProvider) => {
+      return {
+        key: `${modelProvider.modelSource}:${modelProvider.modelId}`,
+        label: (
+          <div style={{ whiteSpace: 'normal', lineHeight: 1.2, height: 'auto' }}>
+            <div style={{ whiteSpace: 'none' }}>{modelProvider.modelId}</div>
+            <div style={{ whiteSpace: 'none', fontSize: '9px' }}>
+              <Text type={'secondary'}>{modelProvider.modelSource}</Text>
+            </div>
+          </div>
+        ),
+      }
+    })
 
   return (
-    <div className={styles.modelSearchPanel} style={{ display: visible ? 'block' : 'none' }}>
-      {contextHolder}
-      <Splitter>
-        <Splitter.Panel
-          defaultSize={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_DEFAULT}
-          min={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MIN}
-          max={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX}
-          style={{ padding: '0 0' }}
-        >
-          <Menu
-            className={styles.modelSearchPanelSideBar}
-            defaultSelectedKeys={[activeItemKey]}
-            mode={'inline'}
-            items={settingItems}
-            onSelect={handleSettingChange}
-            style={{ backgroundColor: token.colorBgElevated }}
-          />
-        </Splitter.Panel>
-        <Splitter.Panel style={{ padding: '0 0' }}>{generateModelInfoPanel()}</Splitter.Panel>
-      </Splitter>
-      <ModelFormWindow
-        visible={modelFormWindowVisible}
-        modelName={modelName}
-        modelId={modelId}
-        modelSource={modelSource}
-        mirror={mirror}
-        accessToken={accessToken}
-        accessTokenRequired={accessTokenRequired}
-        onWindowCancel={handleModelFormWindowCancel}
-        onWindowOk={handleModelFormWindowOk}
-      />
-    </div>
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            itemHeight: 60,
+          },
+        },
+      }}
+    >
+      <div className={styles.modelSearchPanel} style={{ display: visible ? 'block' : 'none' }}>
+        {contextHolder}
+        <Splitter>
+          <Splitter.Panel
+            defaultSize={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_DEFAULT}
+            min={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MIN}
+            max={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX}
+            style={{ padding: '0 0' }}
+          >
+            <div style={{ height: '40px', padding: '8px 8px' }}>
+              <Search
+                placeholder={intl.formatMessage({ id: 'setting-view.model-search.search-placeholder' })}
+                onSearch={handleSearch}
+                style={{ width: '100%' }}
+              />
+            </div>
+            <Menu
+              className={styles.modelSearchPanelSideBar}
+              defaultSelectedKeys={[activeItemKey]}
+              mode={'inline'}
+              items={settingItems}
+              onSelect={handleSettingChange}
+              style={{ backgroundColor: token.colorBgElevated }}
+            />
+          </Splitter.Panel>
+          <Splitter.Panel style={{ padding: '0 0' }}>{generateModelInfoPanel()}</Splitter.Panel>
+        </Splitter>
+        <ModelFormWindow
+          visible={modelFormWindowVisible}
+          modelName={modelName}
+          modelId={modelId}
+          modelSource={modelSource}
+          mirror={mirror}
+          accessToken={accessToken}
+          accessTokenRequired={accessTokenRequired}
+          onWindowCancel={handleModelFormWindowCancel}
+          onWindowOk={handleModelFormWindowOk}
+        />
+      </div>
+    </ConfigProvider>
   )
 }
 

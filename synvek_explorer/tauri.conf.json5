@@ -1,65 +1,69 @@
 {
-  "$schema": "./../synvek_web/node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "SynvekExplorer",
-  "version": "0.2.1",
-  "identifier": "com.synvek.SynvekExplorer",
-  "build": {
-    "frontendDist": "./../synvek_web/build",
-    //"devUrl": "http://localhost:8000",
-    "devUrl": null,
-    "beforeDevCommand": null,
-    "beforeBuildCommand": null
+  $schema: './../synvek_web/node_modules/@tauri-apps/cli/config.schema.json',
+  productName: 'SynvekExplorer',
+  version: '0.2.2',
+  identifier: 'com.synvek.SynvekExplorer',
+  build: {
+    frontendDist: './../synvek_web/build',
+    devUrl: null,
+    beforeDevCommand: null,
+    beforeBuildCommand: null,
   },
-  "app": {
-    "windows": [
+  app: {
+    windows: [
       {
-        "title": "Synvek Explorer",
-        "width": 1024,
-        "height": 768,
-        "label": "main",
-        "devtools": true,
-        "titleBarStyle": "Overlay",
-        "hiddenTitle": true,
-        "decorations": true
-      }
+        title: 'Synvek Explorer',
+        width: 1024,
+        height: 768,
+        label: 'main',
+        devtools: true,
+        titleBarStyle: 'Overlay',
+        hiddenTitle: true,
+        decorations: true,
+      },
     ],
-    "security": {
-      "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": ["nsis", 'app', 'dmg','deb'],
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "resources": {
-      "./../synvek_agent/build/synvek_agent.cjs": "resources/synvek_agent/synvek_agent.cjs",
-      "./../synvek_service/agent_plugins/**/*": "resources/agent_plugins/",
-      "./../synvek_service/service_plugins/**/*": "resources/service_plugins/",
-      "./../synvek_service/config/**/*": "resources/config/",
-      "./../synvek_service/storage/**/*": "resources/storage/",
+    security: {
+      csp: null,
     },
-    "windows": {
-      "webviewInstallMode": {
-        "type": "offlineInstaller"
+  },
+  bundle: {
+    active: true,
+    targets: [
+      'nsis',
+      'app',
+      'dmg',
+      'deb',
+    ],
+    icon: [
+      'icons/32x32.png',
+      'icons/128x128.png',
+      'icons/128x128@2x.png',
+      'icons/icon.icns',
+      'icons/icon.ico',
+    ],
+    resources: {
+      './../synvek_agent/build/synvek_agent.cjs': 'resources/synvek_agent/synvek_agent.cjs',
+      './../synvek_service/agent_plugins/**/*': 'resources/agent_plugins/',
+      './../synvek_service/service_plugins/**/*': 'resources/service_plugins/',
+      './../synvek_service/config/**/*': 'resources/config/',
+      './../synvek_service/storage/**/*': 'resources/storage/',
+    },
+    windows: {
+      webviewInstallMode: {
+        type: 'offlineInstaller',
       },
     },
-    "macOS": {
-      "hardenedRuntime": true,
-      "entitlements": "./Entitlements.plist",
-      "frameworks": [
-        "./../output/libsynvek_backend_default_cpu.dylib",
-        "./../output/libsynvek_backend_default_metal.dylib",
-        "./../output/libsynvek_backend_llama_cpu.dylib",
-        "./../output/libsynvek_backend_llama_metal.dylib",
-        "./../output/libsynvek_backend_sd_cpu.dylib",
-        "./../output/libsynvek_backend_sd_metal.dylib"
-      ]
-    }
-  }
+    macOS: {
+      hardenedRuntime: true,
+      entitlements: './Entitlements.plist',
+      frameworks: [
+        './../output/libsynvek_backend_default_cpu.dylib',
+        './../output/libsynvek_backend_default_metal.dylib',
+        './../output/libsynvek_backend_llama_cpu.dylib',
+        './../output/libsynvek_backend_llama_metal.dylib',
+        './../output/libsynvek_backend_sd_cpu.dylib',
+        './../output/libsynvek_backend_sd_metal.dylib',
+      ],
+    },
+  },
 }

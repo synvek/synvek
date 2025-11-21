@@ -1,6 +1,6 @@
 {
   "name": "synvek_web",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "homepage": "https://github.com/synvek/synvek",
   "author": {
@@ -39,6 +39,7 @@
     "antd": "^5.23.2",
     "axios": "^1.7.7",
     "crypto-js": "^4.0.0",
+    "json5": "^2.2.3",
     "react-audio-play": "^1.0.4",
     "react-draggable": "^4.4.3",
     "react-markdown": "^10.1.0",

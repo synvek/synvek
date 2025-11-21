@@ -240,6 +240,7 @@ export default {
   'setting-view.model-search.model-availabilities': 'Model Availabilities',
   'setting-view.model-search.model-details': 'Model Details',
   'setting-view.model-search.model-options.download': 'Download ...',
+  'setting-view.model-search.search-placeholder': 'Search model name... ',
   'setting-view.setting-about': 'About',
   'setting-view.setting-local-models': 'Local Models',
   'setting-view.setting-default-models': 'Default Models',
