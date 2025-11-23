@@ -73,7 +73,7 @@ Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/
 
 ### 构建和运行前端模块: synvek_web
 
-- 准备: npm run install
+- 准备: npm install
 - 本地调试: npm run start
 - 构建: npm run desktop:build
 

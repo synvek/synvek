@@ -73,7 +73,7 @@ You can chat with multiple LLMs in one conversion including text, image generati
 - Output folder is working foder for synvek_agent, synvek_service and synvek_explorer.
 ### Buld & run frontend module: synvek_web
 
-- Setup: npm run install
+- Setup: npm install
 - Local run: npm run start
 - Build: npm run desktop:build
 
