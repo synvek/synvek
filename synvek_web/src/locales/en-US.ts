@@ -112,6 +112,7 @@ export default {
   'model-form-window.column-access-token': 'Access Token',
   'model-form-window.column-access-token-message': 'Access token is required',
   'model-form-window.column-access-token-placeholder': 'Please input access if needed',
+  'model-form-window.message.download-for-model-license': 'Downloading indicates agreement to license with model',
   'setting-view.about.title.about': 'About',
   'setting-view.about.title.contact': 'Contact',
   'setting-view.about.title.feedback': 'Feedback',

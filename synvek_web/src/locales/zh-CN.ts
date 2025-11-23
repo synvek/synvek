@@ -112,6 +112,7 @@ export default {
   'model-form-window.column-access-token': '访问令牌',
   'model-form-window.column-access-token-message': '访问令牌为必填项',
   'model-form-window.column-access-token-placeholder': '如果需要请输入访问令牌',
+  'model-form-window.message.download-for-model-license': '下载模型表示同意模型协议',
   'setting-view.about.title.about': '关于',
   'setting-view.about.title.contact': '邮件联系',
   'setting-view.about.title.feedback': '反馈',

@@ -1,6 +1,8 @@
-import { Form, Input, message, Modal } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { Form, Input, message, Modal, Typography } from 'antd'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'umi'
+
+const { Text, Title, Link } = Typography
 
 interface ModelFormWindowProps {
   visible: boolean
@@ -31,6 +33,7 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
   const [messageApi, contextHolder] = message.useMessage()
   const [dataLoading, setDataLoading] = useState<boolean>(false)
   const [providerForm] = Form.useForm()
+  const [currentMirror, setCurrentMirror] = useState<string>(mirror)
 
   useEffect(() => {
     if (!dataLoading) {
@@ -63,10 +66,23 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
     }
   }
 
+  const handleMirrorChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentMirror(e.target.value)
+  }
+
   const onFinish = async (values: any) => {
     onWindowOk?.(values.modelName, values.modelId, values.modelSource, values.mirror, values.accessToken)
   }
 
+  const getModelHomePage = () => {
+    if (currentMirror && currentMirror.trim().length > 0) {
+      return currentMirror
+    } else if (modelSource === 'huggingface') {
+      return 'https://huggingface.co'
+    } else {
+      return 'https://modelscope.com'
+    }
+  }
   return (
     <div key={modelName}>
       {contextHolder}
@@ -133,7 +149,12 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
               initialValue={mirror}
               style={{ marginBottom: '4px', width: '100%' }}
             >
-              <Input placeholder={intl.formatMessage({ id: 'model-form-window.column-mirror-placeholder' })} size="small" style={{ width: '100%' }} />
+              <Input
+                placeholder={intl.formatMessage({ id: 'model-form-window.column-mirror-placeholder' })}
+                size="small"
+                style={{ width: '100%' }}
+                onChange={handleMirrorChange}
+              />
             </Form.Item>
             <Form.Item
               name="accessToken"
@@ -144,6 +165,14 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
             >
               <Input placeholder={intl.formatMessage({ id: 'model-form-window.column-access-token-placeholder' })} size="small" style={{ width: '100%' }} />
             </Form.Item>
+            <div>
+              <Text type={'secondary'}>
+                <FormattedMessage id={'model-form-window.message.download-for-model-license'} />
+              </Text>
+              <Link href={`${getModelHomePage()}/${modelId}`} target="_blank" style={{ marginLeft: '8px' }}>
+                {modelId}
+              </Link>
+            </div>
           </Form>
         </div>
       </Modal>

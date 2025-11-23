@@ -54,7 +54,7 @@ const AboutPanel: FC<AboutPanelProps> = ({ visible }) => {
                 <FormattedMessage id={'setting-view.about.title.version'} />: {process.env.PRODUCTION_VERSION}
               </div>
               <div style={{ height: '33%', display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
-                <Link href="https://ant.design" target="_blank">
+                <Link href="https://github.com/synvek/synvek" target="_blank">
                   {process.env.PRODUCTION_HOMEPAGE}
                 </Link>
               </div>

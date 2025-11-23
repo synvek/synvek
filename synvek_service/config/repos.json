@@ -942,5 +942,77 @@
         "revision": "main",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/stable-diffusion-3.5-large",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/stable-diffusion-3.5-medium",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/stable-diffusion-3.5-large-turbo",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "AI-ModelScope/stable-diffusion-3.5-fp8",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "stabilityai/stable-diffusion-3.5-large",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "stabilityai/stable-diffusion-3.5-medium",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "stabilityai/stable-diffusion-3.5-large-turbo",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Comfy-Org/stable-diffusion-3.5-fp8",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
     }
 ]
