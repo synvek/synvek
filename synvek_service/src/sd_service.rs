@@ -244,6 +244,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from("--sampling-method"),
                         String::from("euler"),
                         String::from("-v"),
+                        String::from("--seed"),
+                        String::from(generation_args.seed.to_string()),
                         String::from("--steps"),
                         String::from("4"),
                         String::from("--batch-count"),
