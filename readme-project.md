@@ -61,16 +61,8 @@ You can chat with multiple LLMs in one conversion including text, image generati
 ### Check out code
 
 - Checkout synvek
-    git clone https://github.com/synvek/synvek.git
+    git clone --recurse-submodules https://github.com/synvek/synvek.git
 
-- Checkout synvek_dev branch of followings to %SYNVEK%/third_party
-git clone https://github.com/synvek/deno.git
-git clone https://github.com/synvek/mistral.rs.git
-git clone https://github.com/synvek/hf-hub.git
-git clone https://github.com/synvek/llama.cpp.git
-git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
-
-- Be noted: git submodule isn't supported yet.
 - If forget checkout submodule, use command： git submodule update --init --recursive
 
 ### Prepare output folder

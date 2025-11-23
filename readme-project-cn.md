@@ -60,16 +60,8 @@ Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/
 ### 拉取代码
 
 - 拉取synvek
-    git clone https://github.com/synvek/synvek.git
+    git clone --recurse-submodules https://github.com/synvek/synvek.git
 
-- 使用下列仓库的synvek_dev分支。需要提取到%SYNVEK%/third_party路径下
-git clone https://github.com/synvek/deno.git
-git clone https://github.com/synvek/mistral.rs.git
-git clone https://github.com/synvek/hf-hub.git
-git clone https://github.com/synvek/llama.cpp.git
-git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
-
-- 注意： 暂不支持使用git submodule.
 - 如果忘记checkout submodule可以重新拉取： git submodule update --init --recursive
 
 ### 准备输出路径。这里使用output
