@@ -1,7 +1,4 @@
-use crate::{
-    CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, MODEL_SOURCE_HUGGINGFACE,
-    MODEL_SOURCE_MODELSCOPE, MODEL_SOURCES, common, fetch_helper, file_service,
-};
+use crate::{CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, MODEL_SOURCE_HUGGINGFACE, MODEL_SOURCE_MODELSCOPE, MODEL_SOURCES, common, fetch_helper, file_service, system_service};
 use anyhow::{Error, Result, anyhow};
 use hf_hub::api::Progress;
 use hf_hub::api::sync::Metadata;
@@ -10,6 +7,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant, SystemTime};
 use std::{fs, panic, thread};
+use crate::system_service::{MessageSource, MessageType};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct FetchFile {
@@ -759,6 +757,7 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
         task.task_name,
         current_task.running_task_items.len()
     );
+    system_service::send_message(MessageSource::TaskService, MessageType::TaskAdded, "".to_string());
     if current_task.all_task_items.len() > 0 {
         if current_task.running_task_items.len() > 0 {
             let mut updated_task = task.clone();
@@ -797,6 +796,19 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
                         first_running_task_item.repo_name,
                         first_running_task_item.file_name
                     );
+                    //Notify fronted task is already running now
+                    update_running_task_item(
+                        updated_task.task_name.as_str(),
+                        first_running_task_item.model_source.as_str(),
+                        first_running_task_item.repo_name.as_str(),
+                        first_running_task_item.file_name.as_str(),
+                        first_running_task_item.revision.as_str(),
+                        0,
+                        0,
+                        0,
+                        &None,
+                        retry_index,
+                    );
                     let download_result = fetch_helper::download_model_file(
                         first_running_task_item.model_source.as_str(),
                         first_running_task_item.repo_name.as_str(),
@@ -820,8 +832,8 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
                         if retry_index < DOWNLOAD_RETRY_COUNT_LIMIT {
                             retry_index = retry_index + 1;
                             update_running_task_item(
-                                first_running_task_item.model_source.as_str(),
                                 updated_task.task_name.as_str(),
+                                first_running_task_item.model_source.as_str(),
                                 first_running_task_item.repo_name.as_str(),
                                 first_running_task_item.file_name.as_str(),
                                 first_running_task_item.revision.as_str(),

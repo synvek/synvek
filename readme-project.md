@@ -79,7 +79,7 @@ You can chat with multiple LLMs in one conversion including text, image generati
 
 ### Build & run agent module: synvek_agent
 
-- Setup: deno install --allow-scripts=npm:ssh2@1.16.0,npm:cpu-features@0.0.10
+- Setup: deno install --allow-scripts=npm:ssh2@1.16.0
 - Local run: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/index.ts
 - Build: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
 - Debug & Run requires output as working folder.

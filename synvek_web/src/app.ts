@@ -27,8 +27,17 @@ export const antd: RuntimeAntdConfig = (memo) => {
   memo.theme ??= {}
   // memo.theme.algorithm = [theme.compactAlgorithm]
   //memo.theme.algorithm = [theme.darkAlgorithm]//, theme.compactAlgorithm]
-  memo.theme.algorithm = [theme.darkAlgorithm]
-  document.documentElement.setAttribute('data-theme', 'dark')
+  //const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  let storageTheme = localStorage.getItem('synvek.theme')
+  if (!storageTheme) {
+    storageTheme = 'dark'
+  }
+  memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
+  if (storageTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light')
+  }
   return memo
 }
 

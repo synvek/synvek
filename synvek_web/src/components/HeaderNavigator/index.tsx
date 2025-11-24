@@ -19,12 +19,22 @@ import {
 import { AccelerationType, BackendType } from '@/components/Utils/src/ModelProviders'
 import { FetchFile, FetchRepo, StartModelServerRequest } from '@/components/Utils/src/RequestUtils'
 import { useIntl } from '@@/exports'
-import { AimOutlined, CaretDownOutlined, CheckOutlined, FireOutlined, Loading3QuartersOutlined, SearchOutlined, ThunderboltFilled } from '@ant-design/icons'
+import {
+  AimOutlined,
+  CaretDownOutlined,
+  CheckOutlined,
+  CloudDownloadOutlined,
+  FireOutlined,
+  Loading3QuartersOutlined,
+  SearchOutlined,
+  StopOutlined,
+  ThunderboltFilled,
+} from '@ant-design/icons'
 import { MenuItemType } from 'antd/es/menu/interface'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
-const { Text, Link } = Typography
+const { Text } = Typography
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface HeaderNavigatorProps {}
 
@@ -290,11 +300,14 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   const handleMessage = async () => {
     const message = currentWorkspace.messageManager.message
     if (message) {
-      if (message.messageType === Consts.MESSAGE_TYPE_ERROR) {
+      if (message.messageType === Consts.MESSAGE_TYPE_PROCESS_FAILED_TO_START) {
         await WorkspaceUtils.showMessage(messageApi, 'error', '' + message.messageContent, 5)
       }
-      if (message.messageType === Consts.MESSAGE_TYPE_WARNING) {
+      if (message.messageType === Consts.MESSAGE_TYPE_PROCESS_TERMINATED_UNEXPECTED) {
         await WorkspaceUtils.showMessage(messageApi, 'warning', '' + message.messageContent, 5)
+      }
+      if (message.messageType === Consts.MESSAGE_TYPE_TASK_ADDED) {
+        currentWorkspace.triggerTasksChangeEvent()
       }
     }
   }
@@ -330,11 +343,62 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       if (task.task_name === defaultModel) {
         let started = false
         let starting = false
+        let modelDownloaded = true
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let modelDownloading = false
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let modelDownloadSpeed = 0
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let modelTotalSize = 0
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let modelDownloadedSize = 0
+        let taskId: string = ''
         currentWorkspace.modelServers.forEach((modelServer) => {
           if (modelServer.modelName === defaultModel) {
             started = modelServer.started
             starting = !modelServer.started
+            taskId = modelServer.taskId
           }
+        })
+        task.task_items.forEach((taskItem) => {
+          modelTotalSize += taskItem.file_size ? taskItem.file_size : 0
+          let taskItemDownloaded = false
+          let existInFetchDataList = false
+          //New fetch may not be included in list yet.
+          currentWorkspace.fetchDataList.forEach((listFetchData) => {
+            if (
+              taskItem.repo_name === listFetchData.repo_name &&
+              taskItem.file_name === listFetchData.file_name &&
+              taskItem.model_source === listFetchData.model_source
+            ) {
+              existInFetchDataList = true
+            }
+            if (
+              taskItem.repo_name === listFetchData.repo_name &&
+              taskItem.file_name === listFetchData.file_name &&
+              taskItem.model_source === listFetchData.model_source &&
+              listFetchData.downloaded
+            ) {
+              taskItemDownloaded = true
+            }
+          })
+          if (taskItemDownloaded && existInFetchDataList) {
+            modelDownloadedSize += taskItem.file_size ? taskItem.file_size : 0
+          } else {
+            modelDownloaded = false
+          }
+          currentWorkspace.fetchStatusData.forEach((fetchStatusData) => {
+            if (
+              fetchStatusData.model_source === taskItem.model_source &&
+              fetchStatusData.repo_name === taskItem.repo_name &&
+              fetchStatusData.file_name === taskItem.file_name &&
+              fetchStatusData.downloading
+            ) {
+              modelDownloading = true
+              modelDownloadSpeed += fetchStatusData.speed ? fetchStatusData.speed : 0
+              modelDownloadedSize += fetchStatusData.current_size ? fetchStatusData.current_size : 0
+            }
+          })
         })
         currentModel = (
           <div>
@@ -355,9 +419,28 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                 <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-loading' })}>
                   <ThunderboltFilled style={{ color: token.colorTextDisabled, fontSize: '14px', marginLeft: '10px' }} />
                 </Tooltip>
-                {/*<FormattedMessage id="header.navigator.loading" />*/}
               </>
             )}
+            <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-start' })}>
+              <Button
+                size={'small'}
+                type={'text'}
+                icon={<PlayOutlined16 style={{ color: starting || !modelDownloaded ? token.colorTextDisabled : token.colorSuccess }} />}
+                hidden={started}
+                disabled={started || starting || !modelDownloaded}
+                onClick={() => handleStartModelServer(task)}
+              ></Button>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-stop' })}>
+              <Button
+                size={'small'}
+                type={'text'}
+                icon={<StopOutlined16 style={{ color: token.colorError }} />}
+                hidden={!started}
+                disabled={!modelDownloaded}
+                onClick={() => handleStopModelServer(taskId)}
+              ></Button>
+            </Tooltip>
           </div>
         )
       }
@@ -389,6 +472,46 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     })
 
     setForceUpdate(forceUpdate + 1)
+  }
+
+  const handleStartDownloadModelByProvider = async (task: Task) => {
+    const fetchResponse = await RequestUtils.resumeFetch(task.task_name)
+    await WorkspaceUtils.handleRequest(
+      messageApi,
+      fetchResponse,
+      async () => {
+        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }))
+        currentWorkspace.fetchStatusCountDown = Consts.FETCH_STATUS_COUNTDOWN
+      },
+      async (failure) => {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }) + failure)
+      },
+      async (error) => {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }) + error)
+      },
+    )
+    setForceUpdate(forceUpdate + 1)
+    currentWorkspace.triggerTasksChangeEvent()
+  }
+
+  const handleSuspendDownloadModelByProvider = async (task: Task) => {
+    const fetchResponse = await RequestUtils.stopFetch(task.task_name)
+    await WorkspaceUtils.handleRequest(
+      messageApi,
+      fetchResponse,
+      async () => {
+        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }))
+        currentWorkspace.fetchStatusCountDown = Consts.FETCH_STATUS_COUNTDOWN
+      },
+      async (failure) => {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }) + failure)
+      },
+      async (error) => {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'header.navigator.message-success-request-sent' }) + error)
+      },
+    )
+    setForceUpdate(forceUpdate + 1)
+    currentWorkspace.triggerTasksChangeEvent()
   }
 
   const getAccelerations = (backendType: BackendType): AccelerationType[] => {
@@ -453,6 +576,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       acceleration: acceleration,
     }
     modelConfigRef.current.set(task.task_name, modelConfig)
+    localStorage.setItem(Consts.LOCAL_STORAGE_BACKEND_PREFIX + task.task_name, backend + ':' + acceleration)
   }
 
   const populateBackendMenuItems = (task: Task, backendType: BackendType, items: MenuProps['items']) => {
@@ -486,7 +610,18 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         })
       })
     }
-    const modelConfig = modelConfigRef.current.get(task.task_name)
+    const localStorageBackend = localStorage.getItem(Consts.LOCAL_STORAGE_BACKEND_PREFIX + task.task_name)
+    if (localStorageBackend) {
+      const [backend, acceleration] = localStorageBackend.split(':')
+      const modelConfig: ModelConfig = {
+        // @ts-ignore
+        backend: backend,
+        // @ts-ignore
+        acceleration: acceleration,
+      }
+      modelConfigRef.current.set(task.task_name, modelConfig)
+    }
+    let modelConfig = modelConfigRef.current.get(task.task_name)
     if (modelConfig) {
       items.forEach((item) => {
         const menuItem = item as MenuItemType
@@ -507,6 +642,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
               acceleration: keyStr[1] as AccelerationType,
             }
             modelConfigRef.current.set(task.task_name, modelConfig)
+            localStorage.setItem(Consts.LOCAL_STORAGE_BACKEND_PREFIX + task.task_name, modelConfig.backend + ':' + modelConfig.acceleration)
           }
           menuItem.icon = <CheckOutlined />
         } else {
@@ -690,7 +826,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         <>
           {index > 0 ? <Divider style={{ margin: '0' }} /> : ''}
           <div key={task.model_id} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '4px' }}>
               <span>{task.task_name}</span>
               {started ? (
                 <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-running' })}>
@@ -710,19 +846,41 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                   </Tooltip>
                   {/*<FormattedMessage id="header.navigator.loading" />*/}
                 </>
-              ) : (
+              ) : modelDownloaded ? (
                 <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-stopped' })}>
                   <ThunderboltFilled style={{ color: token.colorTextDisabled, fontSize: '14px', marginLeft: '10px' }} />
                 </Tooltip>
+              ) : (
+                <Text type={'secondary'} style={{ fontSize: '9px' }}>
+                  {modelDownloadedPercent}% - {modelDownloadSpeedDescription}
+                </Text>
               )}
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-continue-downloading' })}>
+                <Button
+                  size={'small'}
+                  type={'text'}
+                  icon={<CloudDownloadOutlined style={{ color: token.colorSuccess }} />}
+                  hidden={modelDownloaded || modelDownloading}
+                  onClick={() => handleStartDownloadModelByProvider(task)}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={intl.formatMessage({ id: 'header.navigator.suspend-downloading' })}>
+                <Button
+                  size={'small'}
+                  type={'text'}
+                  icon={<StopOutlined style={{ color: token.colorSuccess }} />}
+                  hidden={modelDownloaded || !modelDownloading}
+                  onClick={() => handleSuspendDownloadModelByProvider(task)}
+                ></Button>
+              </Tooltip>
               <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-start' })}>
                 <Button
                   size={'small'}
                   type={'text'}
                   icon={<PlayOutlined16 style={{ color: starting || !modelDownloaded ? token.colorTextDisabled : token.colorSuccess }} />}
-                  hidden={started}
+                  hidden={!modelDownloaded || started}
                   disabled={started || starting || !modelDownloaded}
                   onClick={() => handleStartModelServer(task)}
                 ></Button>
@@ -732,7 +890,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                   size={'small'}
                   type={'text'}
                   icon={<StopOutlined16 style={{ color: token.colorError }} />}
-                  hidden={!started}
+                  hidden={!modelDownloaded || !started}
                   disabled={!modelDownloaded}
                   onClick={() => handleStopModelServer(taskId)}
                 ></Button>

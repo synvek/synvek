@@ -196,7 +196,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                     stop_process(task_id.as_str());
                     system_service::send_message(
                         MessageSource::ProcessService,
-                        MessageType::Warning,
+                        MessageType::ProcessTerminatedUnexpected,
                         format!(
                             "Model service process exited unexpectedly on task id: {} and process id: {} with {}",
                             task_id,
@@ -220,7 +220,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
 
                             system_service::send_message(
                                 MessageSource::ProcessService,
-                                MessageType::Info,
+                                MessageType::ProcessRunning,
                                 format!(
                                     "Model service process keep running on task id: {} and process id: {}",
                                     task_id,
@@ -242,11 +242,29 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                                 task_id,
                                 process_id
                             );
+                            system_service::send_message(
+                                MessageSource::ProcessService,
+                                MessageType::ProcessTerminatedNormally,
+                                format!(
+                                    "Process is killed on task id: {} and process id: {}",
+                                    task_id,
+                                    process_id
+                                ),
+                            );
                         } else {
                             tracing::error!(
                                 "Process failed to be killed on task id: {} and process id: {}",
                                 task_id,
                                 process_id
+                            );
+                            system_service::send_message(
+                                MessageSource::ProcessService,
+                                MessageType::ProcessFailedToStart,
+                                format!(
+                                    "Process failed to be killed on task id: {} and process id: {}",
+                                    task_id,
+                                    process_id
+                                ),
                             );
                         }
                         break;
@@ -262,7 +280,7 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
                     stop_process(task_id.as_str());
                     system_service::send_message(
                         MessageSource::ProcessService,
-                        MessageType::Error,
+                        MessageType::ProcessFailedToStart,
                         format!(
                             "Error on start model service on task id: {} and process id: {} with error: {}",
                             task_id,

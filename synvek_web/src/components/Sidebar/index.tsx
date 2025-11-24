@@ -19,7 +19,12 @@ export default (props: any) => {
   const [initialized, setInitialized] = useState<boolean>(false)
   const { token } = useToken()
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
-  const [darkTheme, setDarkTheme] = useState<boolean>(true)
+  //const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  let storageTheme = localStorage.getItem('synvek.theme')
+  if (!storageTheme) {
+    storageTheme = 'dark'
+  }
+  const [darkTheme, setDarkTheme] = useState<boolean>(storageTheme === 'dark')
 
   const intl = useIntl()
   useEffect(() => {
@@ -99,10 +104,15 @@ export default (props: any) => {
         if (hasDark) {
           config.theme.algorithm = [theme.defaultAlgorithm]
           setDarkTheme(false)
+          localStorage.setItem('synvek.theme', 'light')
+          document.documentElement.setAttribute('data-theme', 'light')
         } else {
           config.theme.algorithm = [theme.darkAlgorithm]
           setDarkTheme(true)
+          localStorage.setItem('synvek.theme', 'dark')
+          document.documentElement.setAttribute('data-theme', 'dark')
         }
+
         handleGlobalThemeChange(hasDark)
       }
       return config

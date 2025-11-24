@@ -235,7 +235,7 @@ fn start_worker_process(
                     stop_worker(worker_id.as_str());
                     system_service::send_message(
                         MessageSource::WorkerService,
-                        MessageType::Warning,
+                        MessageType::WorkerTerminatedUnexpected,
                         format!(
                             "Worker process exited unexpectedly on worker id: {} and process id: {} with {}",
                             worker_id,
@@ -262,7 +262,7 @@ fn start_worker_process(
 
                             system_service::send_message(
                                 MessageSource::WorkerService,
-                                MessageType::Info,
+                                MessageType::WorkerRunning,
                                 format!(
                                     "Worker process keep running on worker id: {} and process id: {}",
                                     worker_id,
@@ -304,7 +304,7 @@ fn start_worker_process(
                     stop_worker(worker_id.as_str());
                     system_service::send_message(
                         MessageSource::WorkerService,
-                        MessageType::Error,
+                        MessageType::WorkerFailedToStart,
                         format!(
                             "Error on start worker on worker id: {} and process id: {} with error: {}",
                             worker_id,

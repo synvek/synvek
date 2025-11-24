@@ -79,7 +79,7 @@ Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/
 
 ### 构建和运行agent模块: synvek_agent
 
-- 准备: deno install --allow-scripts=npm:ssh2@1.16.0,npm:cpu-features@0.0.10
+- 准备: deno install --allow-scripts=npm:ssh2@1.16.0
 - 本地运行: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/index.ts
 - 构建: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
 - 调试和运行必须指定output路径作为工作目录.

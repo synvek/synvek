@@ -61,14 +61,37 @@ export class Consts {
   public static MESSAGE_SOURCE_TASK_SERVICE = 'TaskService'
   public static MESSAGE_SOURCE_FETCH_SERVICE = 'FetchService'
 
-  public static MESSAGE_TYPE_INFO = 'Info'
-  public static MESSAGE_TYPE_WARNING = 'Warning'
-  public static MESSAGE_TYPE_ERROR = 'Error'
+  public static MESSAGE_TYPE_PROCESS_STARTING = 'ProcessStarting'
+  public static MESSAGE_TYPE_PROCESS_STARTED = 'ProcessStarted'
+  public static MESSAGE_TYPE_PROCESS_TERMINATED_NORMALLY = 'ProcessTerminatedNormally'
+  public static MESSAGE_TYPE_PROCESS_TERMINATED_UNEXPECTED = 'ProcessTerminatedUnexpected'
+  public static MESSAGE_TYPE_PROCESS_RUNNING = 'ProcessRunning'
+  public static MESSAGE_TYPE_PROCESS_FAILED_TO_START = 'ProcessFailedToStart'
+  public static MESSAGE_TYPE_PROCESS_FAILED_TO_TERMINATE = 'ProcessFailedToTerminate'
+  public static MESSAGE_TYPE_TASK_ADDED = 'TaskAdded'
+  public static MESSAGE_TYPE_TASK_DELETED = 'TaskDeleted'
+  public static MESSAGE_TYPE_TASK_COMPLETED = 'TaskCompleted'
+  public static MESSAGE_TYPE_TASK_SUSPENDED = 'TaskSuspended'
+  public static MESSAGE_TYPE_TASK_UPDATED = 'TaskUpdated'
+  public static MESSAGE_TYPE_FETCH_ADDED = 'FetchAdded'
+  public static MESSAGE_TYPE_FETCH_DELETED = 'FetchDeleted'
+  public static MESSAGE_TYPE_FETCH_COMPLETED = 'FetchCompleted'
+  public static MESSAGE_TYPE_FETCH_SUSPENDED = 'FetchSuspended'
+  public static MESSAGE_TYPE_FETCH_UPDATED = 'FetchUpdated'
+  public static MESSAGE_TYPE_WORKER_STARTING = 'WorkerStarting'
+  public static MESSAGE_TYPE_WORKER_STARTED = 'WorkerStarted'
+  public static MESSAGE_TYPE_WORKER_TERMINATED_NORMALLY = 'WorkerTerminatedNormally'
+  public static MESSAGE_TYPE_WORKER_UNEXPECTED = 'WorkerTerminatedUnexpected'
+  public static MESSAGE_TYPE_WORKER_RUNNING = 'WorkerRunning'
+  public static MESSAGE_TYPE_WORKER_FAILED_TO_START = 'WorkerFailedToStart'
+  public static MESSAGE_TYPE_WORKER_FAILED_TO_TERMINATE = 'WorkerFailedToTerminate'
 
   public static GENERATION_TYPE_IMAGE = 'image'
   public static GENERATION_TYPE_SPEECH = 'speech'
   public static GENERATION_TYPE_TRANSLATION = 'translation'
 
+  //Use local storage for cache backend selection
+  public static LOCAL_STORAGE_BACKEND_PREFIX = 'synvek.backend.'
   /**
    * Max history chat message for conversion with memory
    */
