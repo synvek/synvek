@@ -19,6 +19,7 @@ export class Consts {
   public static MODEL_TYPE_VISION_PLAIN = 'vision-plain'
   public static MODEL_TYPE_DIFFUSION = 'diffusion'
   public static MODEL_TYPE_SPEECH = 'speech'
+  public static MODEL_TYPE_STABLE_DIFFUSION = 'stable-diffusion'
 
   public static LANGUAGE_EN_US = 'en-US'
   public static LANGUAGE_ZH_CN = 'zh-CN'

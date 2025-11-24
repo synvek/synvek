@@ -17,6 +17,7 @@ use std::path::PathBuf;
 use std::ptr;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
+use crate::fetch_service::Task;
 
 #[repr(C)]
 pub struct ImageOutput {
@@ -120,16 +121,40 @@ fn get_model_file_path(
     pointer_path
 }
 
+fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
+    let mut file_path: PathBuf = PathBuf::new();
+    task.task_items.iter().for_each(|item| {
+        if item.file_name.ends_with(file_name) {
+            let repo_file_info = file_service::search_repo_file_info(
+                item.model_source.as_str(),
+                item.repo_name.as_str(),
+                item.file_name.as_str(),
+            );
+            if let Some(repo_file_info) = repo_file_info {
+               file_path = get_model_file_path(
+                   repo_file_info.repo_source.as_str(),
+                   repo_file_info.repo_name.as_str(),
+                   repo_file_info.file_path.as_str(),
+                   repo_file_info.revision.as_str(),
+                   repo_file_info.commit_hash.as_str());
+            }
+        }
+    });
+    file_path
+
+}
+
 pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut output: Vec<String> = vec![];
     let config = config::Config::new();
     let sd_config = get_sd_config();
     let model_name = sd_config.args.model_name;
     let model_id = sd_config.args.model_id;
+    let model_type = sd_config.args.model_type;
     let task = fetch_service::load_local_task(model_name.as_str());
-    let mut valid: bool = false;
     let mut model_file_path: PathBuf = PathBuf::new();
     let mut clip_l_path: PathBuf = PathBuf::new();
+    let mut clip_g_path: PathBuf = PathBuf::new();
     let mut vae_path: PathBuf = PathBuf::new();
     let mut t5xxl_path: PathBuf = PathBuf::new();
     let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
@@ -149,65 +174,26 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
             revision.as_str(),
             commit_hash.as_str(),
         );
-        valid = true;
+        clip_l_path = find_relative_model_file_path(&task, "clip_l.safetensors");
+        clip_g_path = find_relative_model_file_path(&task, "clip_g.safetensors");
+        vae_path = find_relative_model_file_path(&task, "ae.safetensors");
+        t5xxl_path = find_relative_model_file_path(&task, "t5xxl_fp16.safetensors");
+
     }
-    let clip_l_file = file_service::search_repo_file_info(
-        model_source.as_str(),
-        if model_source == common::MODEL_SOURCE_HUGGINGFACE {
-            "comfyanonymous/flux_text_encoders"
-        } else {
-            "synvek/flux_text_encoders"
-        },
-        "clip_l.safetensors",
-    );
-    let vae_file = file_service::search_repo_file_info(
-        model_source.as_str(),
-        "black-forest-labs/FLUX.1-schnell",
-        "ae.safetensors",
-    );
-    let t5xxl_file = file_service::search_repo_file_info(
-        model_source.as_str(),
-        if model_source == common::MODEL_SOURCE_HUGGINGFACE {
-            "comfyanonymous/flux_text_encoders"
-        } else {
-            "synvek/flux_text_encoders"
-        },
-        "t5xxl_fp16.safetensors",
-    );
-    match (clip_l_file, vae_file, t5xxl_file) {
-        (Some(clip_l_file), Some(vae_file), Some(t5xxl_file)) => {
-            clip_l_path = get_model_file_path(
-                clip_l_file.repo_source.as_str(),
-                clip_l_file.repo_name.as_str(),
-                clip_l_file.file_path.as_str(),
-                clip_l_file.revision.as_str(),
-                clip_l_file.commit_hash.as_str(),
-            );
-            vae_path = get_model_file_path(
-                vae_file.repo_source.as_str(),
-                vae_file.repo_name.as_str(),
-                vae_file.file_path.as_str(),
-                vae_file.revision.as_str(),
-                vae_file.commit_hash.as_str(),
-            );
-            t5xxl_path = get_model_file_path(
-                t5xxl_file.repo_source.as_str(),
-                t5xxl_file.repo_name.as_str(),
-                t5xxl_file.file_path.as_str(),
-                t5xxl_file.revision.as_str(),
-                t5xxl_file.commit_hash.as_str(),
-            );
-        }
-        _ => {
-            valid = false;
-        }
-    }
+
     let base_lib_name = "synvek_backend_sd";
     let acceleration = sd_config.acceleration.clone();
     let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
     let lib_name = utils::get_backend_path(lib_name.as_str());
 
-    tracing::info!("synvek_backend_sd lib_name: {}", lib_name);
+    tracing::info!(
+        "synvek_backend_sd lib_name: {}, clip_l_path: {}, clip_g_path: {}, clip_l_path: {}, clip_l_path: {}",
+        lib_name,
+        clip_l_path.display(),
+        clip_g_path.display(),
+        t5xxl_path.display(),
+        vae_path.display()
+    );
     let library_cache = get_library_cache();
     let mut library_cache_guard = library_cache.lock().unwrap();
     let library_arc: Arc<Library>;
@@ -249,31 +235,56 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 let get_image_data_length: Symbol<GetImageDataLength> = get_image_data_length_func;
                 let get_image_data: Symbol<GetImageData> = get_image_data_func;
                 let free_image_data: Symbol<FreeImageData> = free_image_data_func;
-                let start_args: Vec<String> = vec![
-                    String::from("synvek_service"),
-                    String::from("--diffusion-model"),
-                    model_file_path.to_str().unwrap().to_string(),
-                    String::from("--vae"),
-                    vae_path.to_str().unwrap().to_string(),
-                    String::from("--clip_l"),
-                    clip_l_path.to_str().unwrap().to_string(),
-                    String::from("--t5xxl"),
-                    t5xxl_path.to_str().unwrap().to_string(),
-                    String::from("-p"),
-                    String::from(generation_args.prompt.clone()),
-                    String::from("--cfg-scale"),
-                    String::from("1.0"),
-                    String::from("--sampling-method"),
-                    String::from("euler"),
-                    String::from("-v"),
-                    String::from("--seed"),
-                    String::from(generation_args.seed.to_string()),
-                    String::from("--steps"),
-                    String::from("4"),
-                    String::from("--batch-count"),
-                    String::from(generation_args.n.to_string()),
-                    String::from("--clip-on-cpu"),
-                ];
+                let start_args: Vec<String> = if model_type == "diffusion" {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--clip_l"),
+                        clip_l_path.to_str().unwrap().to_string(),
+                        String::from("--t5xxl"),
+                        t5xxl_path.to_str().unwrap().to_string(),
+                        String::from("-p"),
+                        String::from(generation_args.prompt.clone()),
+                        String::from("--cfg-scale"),
+                        String::from("1.0"),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("-v"),
+                        String::from("--seed"),
+                        String::from(generation_args.seed.to_string()),
+                        String::from("--steps"),
+                        String::from("4"),
+                        String::from("--batch-count"),
+                        String::from(generation_args.n.to_string()),
+                        String::from("--clip-on-cpu"),
+                    ]
+                } else {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("-m"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--clip_l"),
+                        clip_l_path.to_str().unwrap().to_string(),
+                        String::from("--clip_g"),
+                        clip_g_path.to_str().unwrap().to_string(),
+                        String::from("--t5xxl"),
+                        t5xxl_path.to_str().unwrap().to_string(),
+                        String::from("-p"),
+                        String::from(generation_args.prompt.clone()),
+                        String::from("--cfg-scale"),
+                        String::from("4.5"),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("-v"),
+                        String::from("--seed"),
+                        String::from(generation_args.seed.to_string()),
+                        String::from("--clip-on-cpu"),
+                    ]
+                };
+                tracing::info!("Generate image with args = {:?}", start_args);
                 let c_start_strings = start_args
                     .iter()
                     .map(|s| CString::new(s.as_str()))

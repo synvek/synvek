@@ -265,7 +265,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         modelStarted = true
       }
       if (modelServer.modelName === currentWorkspace.settings.defaultTextModel) {
-        isDiffusionType = modelServer.modelType === Consts.MODEL_TYPE_DIFFUSION
+        isDiffusionType = modelServer.modelType === Consts.MODEL_TYPE_DIFFUSION || modelServer.modelType === Consts.MODEL_TYPE_STABLE_DIFFUSION
       }
       if (modelServer.modelName === currentWorkspace.settings.defaultTextModel) {
         isSpeechType = modelServer.modelType === Consts.MODEL_TYPE_SPEECH

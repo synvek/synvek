@@ -657,7 +657,7 @@ fn populate_args_with_backend_stable_diffusion_cpp(
         }
     });
     if !gguf_found {
-        tracing::error!("No GGUF found");
+        tracing::info!("No GGUF found");
     }
 }
 
