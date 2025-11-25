@@ -1,4 +1,4 @@
-name: Build synvek on windows
+name: Build synvek on windows Cuda 12.6
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-windows:
-    name: Build on Windows
+    name: Build on Windows Cuda 12.6
     runs-on: windows-2022
 
     steps:
