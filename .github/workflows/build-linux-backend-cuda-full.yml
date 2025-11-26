@@ -1,4 +1,4 @@
-name: Build synvek on linux
+name: Build synvek on linux full backend CUDA
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-linux:
-    name: Build on linux
+    name: Build on linux full backend CUDA
     runs-on: ubuntu-22.04
 
     steps:
