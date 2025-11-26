@@ -221,7 +221,7 @@ pub fn get_file_size_in_cache(
     endpoint: &Option<String>,
     access_token: &Option<String>,
 ) -> u64 {
-    tracing::info!(
+    tracing::debug!(
         "Get repo file size in cache, repo={}, file_name={}, commit_hash={}",
         repo_name,
         file_name,
@@ -253,7 +253,7 @@ pub fn get_file_meta_in_registry(
     endpoint: &Option<String>,
     access_token: &Option<String>,
 ) -> Option<Metadata> {
-    tracing::info!(
+    tracing::debug!(
         "Get repo file meta in registry, repo={}, file_name={}, revision={}",
         repo_name,
         file_name,
@@ -405,9 +405,9 @@ pub fn get_repo_info(
     endpoint: &Option<String>,
     access_token: &Option<String>,
 ) -> anyhow::Result<RepoInfo> {
-    tracing::info!("Getting repo info on {}", repo_name);
+    tracing::debug!("Getting repo info on {}", repo_name);
     let repo_file_infos = file_service::get_repo_info(model_source, repo_name);
-    tracing::info!("Getting repo info with data size {}", repo_file_infos.len());
+    tracing::debug!("Getting repo info with data size {}", repo_file_infos.len());
     if !repo_file_infos.is_empty() {
         let mut siblings: Vec<Siblings> = vec![];
         let mut sha: String = "".to_string();

@@ -37,6 +37,10 @@ pub struct SynvekConfig {
     )]
     #[serde(default = "default_multi_process")]
     pub multi_process: bool,
+
+    #[schemars(description = "Enable debug information for logging")]
+    #[serde(default = "enable_debug_log")]
+    pub enable_debug_log: bool,
 }
 
 fn default_port() -> u16 {
@@ -61,6 +65,9 @@ fn default_endpoint() -> String {
 fn default_multi_process() -> bool {
     true
 }
+fn enable_debug_log() -> bool {
+    false
+}
 
 impl Default for SynvekConfig {
     fn default() -> Self {
@@ -71,6 +78,7 @@ impl Default for SynvekConfig {
             host: default_host(),
             endpoint: default_endpoint(),
             multi_process: default_multi_process(),
+            enable_debug_log: enable_debug_log(),
         }
     }
 }
@@ -86,15 +94,15 @@ static SYNVEK_CONFIG: OnceLock<Arc<Mutex<SynvekConfig>>> = OnceLock::new();
 
 fn init_synvek_config() -> Arc<Mutex<SynvekConfig>> {
     let default_config = SynvekConfig::default(); //Config::get_default_config();
-    //tracing::info!("Initialize synvek config {:?}", default_config);
+    println!("Initialize synvek config {:?}", default_config);
     let mut config = Config::new();
     if config.has_config_file_available() {
         let new_config = config.read_config();
         if new_config.is_ok() {
-            tracing::info!("Initialize synvek config from file {:?}", new_config);
+            println!("Initialize synvek config from file {:?}", new_config);
             return Arc::new(Mutex::new(new_config.unwrap()));
         } else {
-            tracing::info!(
+            println!(
                 "Failed to initialize synvek config from file {:?}",
                 new_config
             );
@@ -190,6 +198,7 @@ impl Config {
             host: "0.0.0.0".to_string(),
             endpoint: "https://huggingface.co".to_string(),
             multi_process: true,
+            enable_debug_log: false,
         }
     }
     fn from_working_dir() -> Self {
@@ -232,7 +241,9 @@ impl Config {
     pub fn read_config(&mut self) -> Result<SynvekConfig> {
         let mut config_path = self.config_dir.clone();
         config_path.push(common::CONFIG_FILE);
+        println!("Reading config from {}", config_path.display());
         let config_str = fs::read_to_string(config_path)?;
+        //println!("Reading config content {}", config_str);
         let config: SynvekConfig = self.populate_json_into_config(config_str);
         Ok(config)
     }
@@ -240,7 +251,7 @@ impl Config {
     fn populate_json_into_config(&self, config_str: String) -> SynvekConfig {
         let mut config: SynvekConfig = Config::get_default_config();
         let new_config: Value = serde_json::from_str(&config_str).unwrap();
-        tracing::info!("Reading config = {:?}", new_config);
+        //println!("Reading config = {:?}", new_config);
         if let Some(port) = new_config.get(common::CONFIG_PORT) {
             config.port = port.as_u64().unwrap() as u16;
         }
@@ -258,6 +269,9 @@ impl Config {
         }
         if let Some(multi_process) = new_config.get(common::CONFIG_MULTI_PROCESS) {
             config.multi_process = multi_process.as_bool().unwrap();
+        }
+        if let Some(enable_debug_log) = new_config.get(common::CONFIG_ENABLE_DEBUG_LOG) {
+            config.enable_debug_log = enable_debug_log.as_bool().unwrap();
         }
         config
     }
@@ -340,6 +354,11 @@ impl Config {
     pub fn get_config_multi_process(&self) -> bool {
         let config = get_synvek_config();
         config.multi_process
+    }
+
+    pub fn get_config_enable_debug_log(&self) -> bool {
+        let config = get_synvek_config();
+        config.enable_debug_log
     }
 }
 

@@ -41,6 +41,8 @@ pub static CONFIG_MODEL_PORT: &str = "model_port";
 
 pub static CONFIG_MULTI_PROCESS: &str = "multi_process";
 
+pub static CONFIG_ENABLE_DEBUG_LOG: &str = "enable_debug_log";
+
 pub static CONFIG_PORT: &str = "port";
 
 pub static CACHE_REPO_FILES_SLEEP_DURATION: u64 = 7200u64;

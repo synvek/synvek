@@ -1,8 +1,8 @@
 use crate::common::ServiceRef;
-use crate::{config, fetch_service, file_service};
 use crate::fetch_service::{RunningTask, Task, TaskItem};
 use crate::model_service;
 use crate::model_service::ModelServiceArgs;
+use crate::{config, fetch_service, file_service};
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
@@ -10,6 +10,7 @@ use actix_web::{HttpRequest, get, post};
 use base64::{Engine as _, engine::general_purpose};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+use tracing_actix_web::{DefaultRootSpanBuilder, TracingLogger};
 
 /// Response for Start Model Server
 #[derive(Debug, Serialize)]
@@ -73,17 +74,18 @@ pub async fn start_server() -> std::io::Result<()> {
     file_service::init_file_service();
     // Initialize fetch service
     fetch_service::initialize();
+
     // Start web server
     HttpServer::new(|| {
         let cors = Cors::default()
-            .allow_any_origin() 
-            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"]) 
-            .allowed_headers(vec!["Content-Type"]) 
-            .max_age(3600); 
+            .allow_any_origin()
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec!["Content-Type"])
+            .max_age(3600);
 
         App::new()
             .wrap(cors)
-            .wrap(Logger::default())
+            .wrap(TracingLogger::<DefaultRootSpanBuilder>::new())
             .configure(configure_routes)
     })
     .bind((host, port))?

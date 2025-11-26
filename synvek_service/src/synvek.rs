@@ -30,6 +30,7 @@ use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{Registry};
+use tracing_subscriber::fmt::format::FmtSpan;
 use uuid::Uuid;
 
 pub(crate) static DEBUG: AtomicBool = AtomicBool::new(false);
@@ -84,6 +85,9 @@ pub fn get_global_settings() -> Settings {
 pub fn initialize_logging() {
     let config = config::Config::new();
     let log_dir = config.get_log_dir();
+    let enable_debug = config.get_config_enable_debug_log();
+    let log_level = if enable_debug { tracing::Level::DEBUG } else { tracing::Level::INFO };
+    //println!("Log level: {}", log_level);
     LOGGER.get_or_init(|| {
         let console_offset = time::UtcOffset::from_hms(8, 0, 0).unwrap();
         let console_timer = OffsetTime::new(
@@ -92,7 +96,9 @@ pub fn initialize_logging() {
         );
         let console_layer = fmt::layer()
             .with_timer(console_timer)
-            .with_writer(std::io::stdout.with_max_level(tracing::Level::INFO));
+            .with_target(true)
+            .with_span_events(FmtSpan::CLOSE)
+            .with_writer(std::io::stdout.with_max_level(log_level));
 
         let file_appender = rolling::Builder::new()
             .rotation(Rotation::DAILY)
@@ -111,9 +117,11 @@ pub fn initialize_logging() {
         let (file_writer, _guard) = non_blocking(file_appender);
         let file_layer = fmt::layer()
             .with_ansi(false)
+            .with_target(true)
+            .with_span_events(FmtSpan::CLOSE)
             .event_format(format().compact())
             .with_timer(file_timer)
-            .with_writer(file_writer.with_max_level(tracing::Level::INFO));
+            .with_writer(file_writer.with_max_level(log_level));
 
         let subscriber = Registry::default().with(console_layer).with(file_layer);
 
@@ -137,10 +145,12 @@ pub async fn start_service() -> Result<(), Box<dyn std::error::Error>> {
 pub fn initialize() {
     //Need to initialize logging in Deno first
     script_service::initialize_script_engine();
-    initialize_logging();
     config::initialize_synvek_config();
+    initialize_logging();
     process_service::initialize_process_service();
     worker_service::initialize_worker_service();
     initialize_synvek();
     model_service::initialize_model_server();
+    config::generate_schema().expect("TODO: panic message");
+
 }

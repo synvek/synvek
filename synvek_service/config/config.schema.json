@@ -10,6 +10,11 @@
       "format": "uint16",
       "minimum": 0.0
     },
+    "enable_debug_log": {
+      "description": "Enable debug information for logging",
+      "default": false,
+      "type": "boolean"
+    },
     "endpoint": {
       "description": "Huggingface endpoint, in case of restricted access to Huggingface",
       "default": "https://huggingface.co",
