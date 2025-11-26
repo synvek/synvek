@@ -1,0 +1,214 @@
+name: Build synvek on windows full backend CUDA - llama.cpp
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-windows:
+    name: Build on Windows full backend CUDA - llama.cpp
+    runs-on: windows-2022
+
+    steps:
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+        
+    - name: Install Deno via PowerShell
+      run: |
+       npm install -g deno
+
+    - name: Install Rust
+      run: |
+        curl -sSf -L https://sh.rustup.rs | sh -s -- -y
+        
+        echo "$HOME/.cargo/bin" >> $env:GITHUB_PATH
+        echo "CARGO_HOME=$HOME/.cargo" >> $env:GITHUB_ENV
+        echo "RUSTUP_HOME=$HOME/.rustup" >> $env:GITHUB_ENV
+      shell: pwsh
+
+    - name: Download CUDA
+      run: |
+        $cudaVersion = "12.9.1"
+        $cudaInstaller = "cuda_${cudaVersion}_installer.exe"
+        Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/cuda_12.9.1_576.57_windows.exe" -OutFile $cudaInstaller
+    
+    - name: Install CUDA
+      run: |
+        .\cuda_12.9.1_installer.exe -s -npt -noeula -toolkit
+      shell: cmd
+
+    - name: Set Environment Variables
+      run: |
+        echo "CUDA_PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        echo "CUDACXX=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/nvcc.exe" >> $env:GITHUB_ENV
+        echo "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin" >> $env:GITHUB_PATH
+        echo "CudaToolkitDir=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        echo "CUDA_PATH_V12_9=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        
+    - name: Verify Cuda
+      run: |
+        nvcc --version
+        echo "CUDA_PATH is set to: $env:CUDA_PATH"
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive    
+
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2.16
+      with:
+        key: windows release
+        evict-old-files: 1d
+
+    - name: Environment Information
+      run: |
+        echo "Build will start"
+
+    - name: Configure and build backend-> llama.cpp cuda 
+      run: |
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90;10;1030;1100;1200-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
+
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build backend-> llama.cpp cpu 
+    #   run: |
+    #     cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    - name: Configure and build backend-> stable-diffusion.cpp cuda 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90;10;1030;1100;1200-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 4
+
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build backend-> stable-diffusion.cpp cpu 
+    #   run: |
+    #     cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+
+    # - name: Configure and build backend-> mistral.rs cuda 
+    #   run: |
+    #     set CUDA_COMPUTE_CAP=86
+    #     cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build backend-> mistral.rs cuda legacy
+    #   run: |
+    #     set CUDA_COMPUTE_CAP=75
+    #     cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build backend-> mistral.rs cpu 
+    #   run: |
+    #     cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build synvek_web
+    #   run: |
+    #     npm install
+    #     npm run desktop:build
+    #   working-directory: ./synvek_web
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build synvek_agent
+    #   run: |
+    #     deno install --allow-scripts=npm:ssh2@1.16.0
+    #     deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
+    #   working-directory: ./synvek_agent
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Copy reasources for synvek_explorer
+    #   shell: pwsh
+    #   run: |
+    #     New-Item -ItemType Directory -Path "output" -Force | Out-Null
+    #     Copy-Item "synvek_service/agent_plugins" "output/" 
+    #     Copy-Item "synvek_service/config" "output/" 
+    #     Copy-Item "synvek_service/service_plugins" "output/" 
+    #     Copy-Item "synvek_service/storage" "output/" 
+    #     Copy-Item "build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cpu.dll"
+    #     Copy-Item "build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cuda.dll" 
+    #     Copy-Item "build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cuda.dll" 
+    #     Copy-Item "build/stable-diffusion.cpp/build_cpu/bin/Release/synvek_backend_sd.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cpu.dll" 
+    #     Copy-Item "build/mistral.rs/build_cuda/release/synvek_backend_default.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda.dll" 
+    #     Copy-Item "build/mistral.rs/build_cuda_legacy/release/synvek_backend_default.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda_legacy.dll" 
+    #     Copy-Item "build/mistral.rs/build_cpu/release/synvek_backend_default.dll" "output/" 
+    #     Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cpu.dll" 
+
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    # - name: Configure and build synvek_explorer
+    #   run: |
+    #     cargo install tauri-cli --version "^2.0.0" --locked
+    #     cargo tauri build
+    #   working-directory: ./synvek_explorer
+
+    # - name: Disk space check
+    #   run: |
+    #     $available_gb = (Get-PSDrive -Name C).Free / 1GB
+    #     echo "Disk space - ${available_gb}GB available"
+        
+    - name: Copy artifacts
+      run: |
+        New-Item -ItemType Directory -Path "artifacts" -Force | Out-Null
+        Copy-Item "build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll" "artifacts/" 
+        Rename-Item  "artifacts/synvek_backend_llama.dll" "synvek_backend_llama_cuda.dll" 
+        Copy-Item "build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll" "artifacts/" 
+        Rename-Item  "artifacts/synvek_backend_sd.dll" "synvek_backend_sd_cuda.dll" 
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: synvek-explorer-artifacts-windows
+        path: artifacts
+        retention-days: 7       
