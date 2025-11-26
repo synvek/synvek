@@ -328,21 +328,24 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
             max={Consts.SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX}
             style={{ padding: '0 0' }}
           >
-            <div style={{ height: '40px', padding: '8px 8px' }}>
+            <div style={{ height: '48px', padding: '8px 8px', borderRight: `${token.colorSplit} solid 1px`, borderBottom: `${token.colorSplit} solid 1px` }}>
               <Search
+                variant={'borderless'}
                 placeholder={intl.formatMessage({ id: 'setting-view.model-search.search-placeholder' })}
                 onSearch={handleSearch}
                 style={{ width: '100%' }}
               />
             </div>
-            <Menu
-              className={styles.modelSearchPanelSideBar}
-              defaultSelectedKeys={[activeItemKey]}
-              mode={'inline'}
-              items={settingItems}
-              onSelect={handleSettingChange}
-              style={{ backgroundColor: token.colorBgElevated }}
-            />
+            <div style={{ height: 'calc(100% - 48px)' }}>
+              <Menu
+                className={styles.modelSearchPanelSideBar}
+                defaultSelectedKeys={[activeItemKey]}
+                mode={'inline'}
+                items={settingItems}
+                onSelect={handleSettingChange}
+                style={{ backgroundColor: token.colorBgElevated }}
+              />
+            </div>
           </Splitter.Panel>
           <Splitter.Panel style={{ padding: '0 0' }}>{generateModelInfoPanel()}</Splitter.Panel>
         </Splitter>
