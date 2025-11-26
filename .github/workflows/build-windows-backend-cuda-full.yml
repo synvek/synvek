@@ -69,7 +69,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90;1200-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
 
     - name: Disk space check
@@ -89,7 +89,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90;1200-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;60;61;70;72;75;80;86;87;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
