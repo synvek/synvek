@@ -104,7 +104,7 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 - 使用cuda支持构建llama.cpp: 
 
-cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
@@ -127,7 +127,7 @@ cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录
