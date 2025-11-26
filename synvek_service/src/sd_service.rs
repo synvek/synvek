@@ -11,10 +11,11 @@ use base64::{
 use hf_hub::{Cache, Repo, RepoType};
 use libloading::{Library, Symbol};
 use std::collections::HashMap;
-use std::ffi::{CString, OsString, c_char, c_int};
+use std::ffi::{CString, OsString, c_char, c_int, CStr};
 use std::marker::PhantomData;
 use std::path::PathBuf;
-use std::ptr;
+use std::{panic, ptr};
+use std::panic::AssertUnwindSafe;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
 use crate::fetch_service::Task;
@@ -29,6 +30,9 @@ type GetImageCount = unsafe fn(*mut ImageOutput) -> usize;
 type GetImageDataLength = unsafe fn(*mut ImageOutput, usize) -> usize;
 type GetImageData = unsafe fn(*mut ImageOutput, usize) -> *const u8;
 type FreeImageData = unsafe fn(*mut ImageOutput);
+type InitLogCallback = unsafe fn(Option<extern "C" fn(i32, *const c_char)>) -> ();
+type CleanupLogCallback = unsafe fn() -> ();
+
 
 #[derive(Debug, Clone, Default)]
 pub struct SdConfig {
@@ -144,6 +148,41 @@ fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
 
 }
 
+/**
+For callback from c/c++
+LOG_LEVEL_DEBUG = 1,
+LOG_LEVEL_INFO  = 2,
+LOG_LEVEL_WARN  = 3,
+LOG_LEVEL_ERROR = 4,
+**/
+extern "C" fn handle_stable_diffusion_cpp_log_callback(log_level: i32, c_msg: *const c_char) {
+    let result = panic::catch_unwind(AssertUnwindSafe(|| {
+        let c_msg_ptr = unsafe { c_msg.as_ref() };
+        let rust_msg = match c_msg_ptr {
+            Some(ptr) => unsafe {
+                let mut log_message = CStr::from_ptr(ptr).to_string_lossy().into_owned();
+                if log_message.len() > 0 && log_message.as_bytes()[log_message.len() - 1] == b'\n' {
+                    log_message.pop();
+                }
+                match log_level {
+                    1 => tracing::debug!(target: "backend:stable-diffusion.cpp", "{}", log_message),
+                    2 => tracing::info!(target: "backend:stable-diffusion.cpp", "{}", log_message),
+                    3 => tracing::warn!(target: "backend:stable-diffusion.cpp", "{}", log_message),
+                    4 => tracing::error!(target: "backend:stable-diffusion.cpp", "{}", log_message),
+                    _ => tracing::error!(target: "backend:stable-diffusion.cpp", "{}", log_message),
+                }
+            },
+            None => {
+                tracing::error!(target: "backend:stable-diffusion.cpp", "Received null message from log callback");
+            }
+        };
+    }));
+
+    if let Err(_) = result {
+        tracing::error!(target: "backend:stable-diffusion.cpp", "A panic occurred inside the log callback!");
+    }
+}
+
 pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut output: Vec<String> = vec![];
     let config = config::Config::new();
@@ -216,12 +255,16 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         let get_image_data_length_func = library_arc.get(b"get_image_data_length");
         let get_image_data_func = library_arc.get(b"get_image_data");
         let free_image_data_func = library_arc.get(b"free_image_data");
+        let init_log_callback_func = library_arc.get(b"init_log_callback");
+        let cleanup_log_callback_func = library_arc.get(b"cleanup_log_callback");
         match (
             generate_image_data_func,
             get_image_count_func,
             get_image_data_length_func,
             get_image_data_func,
             free_image_data_func,
+            init_log_callback_func,
+            cleanup_log_callback_func,
         ) {
             (
                 Ok(generate_image_data_func),
@@ -229,12 +272,18 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 Ok(get_image_data_length_func),
                 Ok(get_image_data_func),
                 Ok(free_image_data_func),
+                Ok(init_log_callback_func),
+                Ok(cleanup_log_callback_func),
             ) => {
                 let generate_image_data: Symbol<GenerateImageData> = generate_image_data_func;
                 let get_image_count: Symbol<GetImageCount> = get_image_count_func;
                 let get_image_data_length: Symbol<GetImageDataLength> = get_image_data_length_func;
                 let get_image_data: Symbol<GetImageData> = get_image_data_func;
                 let free_image_data: Symbol<FreeImageData> = free_image_data_func;
+                //TODO: Need at first time
+                let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
+                //TODO: Can be removed or optimized if dynamic loading required
+                let cleanup_log_callback_func: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
                 let start_args: Vec<String> = if model_type == "diffusion" {
                     vec![
                         String::from("synvek_service"),
@@ -292,6 +341,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 if let Ok(c_start_strings) = c_start_strings {
                     let raw_ptrs: Vec<*const c_char> =
                         c_start_strings.iter().map(|cs| cs.as_ptr()).collect();
+                    init_log_callback(Some(handle_stable_diffusion_cpp_log_callback));
                     let image_output =
                         generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr());
 

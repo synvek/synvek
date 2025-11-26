@@ -1,32 +1,39 @@
+use crate::common::MODEL_SOURCE_MODELSCOPE;
 use crate::config::Config;
 use crate::fetch_service::Task;
 use crate::process_api::{HeartTickRequest, HeartTickResponse};
+use crate::process_service::notify_main_process;
 use crate::script_service::ScriptInfo;
-use crate::{modelscope_helper, utils};
 use crate::{common, fetch_service, sd_server};
 use crate::{config, process_service, synvek};
+use crate::{modelscope_helper, utils};
 use async_trait::async_trait;
 use clap::Subcommand;
 use libloading::{Library, Symbol};
+use log::trace;
 use reqwest::{Client, header};
 use std::collections::HashMap;
 use std::ffi::{CStr, CString, OsString, c_char, c_int};
 use std::fmt::Debug;
+use std::panic::AssertUnwindSafe;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::{Arc, Mutex, Once, OnceLock};
 use std::thread::sleep;
 use std::time::Duration;
-use std::{env, thread};
+use std::{env, panic, thread};
+use actix_web::body::MessageBody;
 use tokio::runtime;
 use uuid::Uuid;
-use crate::common::MODEL_SOURCE_MODELSCOPE;
-use crate::process_service::notify_main_process;
 
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
-type InitDefaultServer = unsafe fn(*const c_char, *const c_char, *const c_char, *const c_char) -> i32;
+type InitDefaultServer =
+    unsafe fn(*const c_char, *const c_char, *const c_char, *const c_char) -> i32;
 type StartDefaultServer = unsafe fn(*const c_char, *const c_char) -> i32;
 type StopDefaultServer = unsafe fn(*const c_char) -> i32;
+
+type InitLogCallback = unsafe fn(Option<extern "C" fn(i32, *const c_char)>) -> ();
+type CleanupLogCallback = unsafe fn() -> ();
 
 #[derive(Debug, Clone, Default)]
 pub enum ModelSelected {
@@ -171,7 +178,13 @@ pub async fn start_model_server_from_command(
     task_id: &str,
     port: &str,
 ) -> Result<String, anyhow::Error> {
-    start_model_server_in_process(args, Some(task_id.to_string()), Some(port.to_string()), true).await
+    start_model_server_in_process(
+        args,
+        Some(task_id.to_string()),
+        Some(port.to_string()),
+        true,
+    )
+    .await
 }
 
 pub async fn start_model_server_from_web(
@@ -245,35 +258,51 @@ fn validate_acceleration(backend: &str, acceleration: &str) -> bool {
     let mut validation = false;
     if backend == common::BACKEND_DEFAULT {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_LLAMA_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_STABLE_DIFFUSION_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     } else if backend == common::BACKEND_WHISPER_CPP {
         validation = if cfg!(target_os = "windows") {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
-            acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_CUDA || acceleration == common::ACCELERATION_CUDA_LEGACY
+            acceleration == common::ACCELERATION_CPU
+                || acceleration == common::ACCELERATION_CUDA
+                || acceleration == common::ACCELERATION_CUDA_LEGACY
         };
     }
     validation
@@ -324,7 +353,9 @@ async fn start_model_server_in_process(
                 args,
             );
         }
-        return Err(anyhow::anyhow!("Unable to validate acceleration with backend"));
+        return Err(anyhow::anyhow!(
+            "Unable to validate acceleration with backend"
+        ));
     }
     tracing::info!("Starting model server on port {}", port);
     let args = args.clone();
@@ -352,7 +383,12 @@ async fn start_model_server_in_process(
             }
             if private_model {
                 if selected_backend == common::BACKEND_DEFAULT {
-                    populate_args_private_with_backend_default(&task, model_dir, log_dir, &mut start_args);
+                    populate_args_private_with_backend_default(
+                        &task,
+                        model_dir,
+                        log_dir,
+                        &mut start_args,
+                    );
                 } else if selected_backend == common::BACKEND_LLAMA_CPP {
                     populate_args_private_with_backend_llama_cpp(&task, model_dir, &mut start_args);
                 } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
@@ -365,12 +401,7 @@ async fn start_model_server_in_process(
                 } else {
                 }
             } else if selected_backend == common::BACKEND_LLAMA_CPP {
-                populate_args_with_backend_llama_cpp(
-                    &args,
-                    &task,
-                    model_dir,
-                    &mut start_args,
-                );
+                populate_args_with_backend_llama_cpp(&args, &task, model_dir, &mut start_args);
             } else if selected_backend == common::BACKEND_WHISPER_CPP {
             } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
                 populate_args_with_backend_stable_diffusion_cpp(
@@ -380,7 +411,13 @@ async fn start_model_server_in_process(
                     &mut start_args,
                 );
             } else if selected_backend == common::BACKEND_DEFAULT {
-                populate_args_with_backend_default(&args.clone(), &task, model_dir, log_dir, &mut start_args);
+                populate_args_with_backend_default(
+                    &args.clone(),
+                    &task,
+                    model_dir,
+                    log_dir,
+                    &mut start_args,
+                );
             }
             tracing::info!("Starting model server {:?}", start_args);
             let path = args.path.clone();
@@ -392,11 +429,25 @@ async fn start_model_server_in_process(
             if selected_backend == common::BACKEND_DEFAULT {
                 // start_mistral_server(args, &start_args, task_id, port, path, is_spawn_process)
                 //     .await;
-                start_mistral_server_dll(&args, &start_args, &task_id, &port, &path, is_spawn_process)
-                    .await;
+                start_mistral_server_dll(
+                    &args,
+                    &start_args,
+                    &task_id,
+                    &port,
+                    &path,
+                    is_spawn_process,
+                )
+                .await;
             } else if selected_backend == common::BACKEND_LLAMA_CPP {
-                start_llama_cpp_server(&args, &start_args, &task_id, &port, &path, is_spawn_process)
-                    .await;
+                start_llama_cpp_server(
+                    &args,
+                    &start_args,
+                    &task_id,
+                    &port,
+                    &path,
+                    is_spawn_process,
+                )
+                .await;
             } else if selected_backend == common::BACKEND_STABLE_DIFFUSION_CPP {
                 start_stable_diffusion_cpp_server(
                     &args,
@@ -434,7 +485,7 @@ fn populate_args_private_with_backend_default(
 ) {
     let private_model_name = task.task_name.to_string();
     let uniform_private_model_name = private_model_name.to_uppercase();
-    let mut model_path = model_dir.clone();    
+    let mut model_path = model_dir.clone();
     model_path.push(private_model_name.clone());
     let is_gguf = uniform_private_model_name.ends_with(".GGUF");
     let is_uqff = uniform_private_model_name.ends_with(".UQFF");
@@ -472,6 +523,11 @@ fn populate_args_private_with_backend_llama_cpp(
         start_args.push(OsString::from(model_path.clone()));
     }
     start_args.push(OsString::from("--jinja"));
+    populate_log_file_args_with_backend_llama_cpp(start_args)
+}
+
+fn populate_log_file_args_with_backend_llama_cpp(start_args: &mut Vec<OsString>) {
+    start_args.push(OsString::from("--log-timestamps"));
 }
 
 fn populate_args_private_with_backend_stable_diffusion_cpp(
@@ -523,10 +579,15 @@ fn populate_args_with_backend_default(
     } else {
         start_args.push(OsString::from(args.model_type.clone()));
     }
-    
+
     start_args.push(OsString::from("-m"));
     //start_args.push(OsString::from(args.model_id.clone()));
-    tracing::info!("model_source: {:?}, model dir: {:?}, model id: {:?}", task.model_source, model_dir, args.model_id);
+    tracing::info!(
+        "model_source: {:?}, model dir: {:?}, model id: {:?}",
+        task.model_source,
+        model_dir,
+        args.model_id
+    );
     let model_path = get_model_id_path(&*task.model_source, model_dir.clone(), &*args.model_id);
     if let Some(model_path) = model_path {
         start_args.push(OsString::from(model_path));
@@ -561,13 +622,15 @@ fn populate_args_with_backend_default(
         start_args.push(OsString::from("-a"));
         start_args.push(OsString::from("dia"));
         if task.model_source == MODEL_SOURCE_MODELSCOPE {
-            let dia_model_path = get_model_id_path(&*task.model_source, model_dir, "synvek/dac_44khz");
+            let dia_model_path =
+                get_model_id_path(&*task.model_source, model_dir, "synvek/dac_44khz");
             if let Some(dia_model_path) = dia_model_path {
                 start_args.push(OsString::from("--dac-model-id"));
                 start_args.push(OsString::from(dia_model_path));
             }
         } else {
-            let dia_model_path = get_model_id_path(&*task.model_source, model_dir, "EricB/dac_44khz");
+            let dia_model_path =
+                get_model_id_path(&*task.model_source, model_dir, "EricB/dac_44khz");
             if let Some(dia_model_path) = dia_model_path {
                 start_args.push(OsString::from("--dac-model-id"));
                 start_args.push(OsString::from(dia_model_path));
@@ -584,7 +647,10 @@ fn get_model_id_path(model_source: &str, model_dir: PathBuf, model_id: &str) -> 
         let ref_path = modelscope_helper::get_ref_path(model_path.to_str().unwrap(), "master");
         let commit_hash = std::fs::read_to_string(&ref_path);
         if let Ok(commit_hash) = commit_hash {
-            let pointer_path = modelscope_helper::get_pointer_path(model_path.to_str().unwrap(), commit_hash.as_str());
+            let pointer_path = modelscope_helper::get_pointer_path(
+                model_path.to_str().unwrap(),
+                commit_hash.as_str(),
+            );
             Some(pointer_path)
         } else {
             None
@@ -594,7 +660,10 @@ fn get_model_id_path(model_source: &str, model_dir: PathBuf, model_id: &str) -> 
         let ref_path = modelscope_helper::get_ref_path(model_path.to_str().unwrap(), "main");
         let commit_hash = std::fs::read_to_string(&ref_path);
         if let Ok(commit_hash) = commit_hash {
-            let pointer_path = modelscope_helper::get_pointer_path(model_path.to_str().unwrap(), commit_hash.as_str());
+            let pointer_path = modelscope_helper::get_pointer_path(
+                model_path.to_str().unwrap(),
+                commit_hash.as_str(),
+            );
             Some(pointer_path)
         } else {
             None
@@ -613,7 +682,8 @@ fn populate_args_with_backend_llama_cpp(
         let uniform_name = item.file_name.to_uppercase();
         if uniform_name.ends_with(".GGUF") {
             let mut model_path = model_dir.clone();
-            let mut model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            let mut model_dir_name =
+                "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
             if task.model_source == MODEL_SOURCE_MODELSCOPE {
                 model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
             }
@@ -630,6 +700,7 @@ fn populate_args_with_backend_llama_cpp(
     if !gguf_found {
         tracing::error!("No GGUF found");
     }
+    populate_log_file_args_with_backend_llama_cpp(start_args)
 }
 
 fn populate_args_with_backend_stable_diffusion_cpp(
@@ -643,7 +714,8 @@ fn populate_args_with_backend_stable_diffusion_cpp(
         let uniform_name = item.file_name.to_uppercase();
         if uniform_name.ends_with(".GGUF") {
             let mut model_path = model_dir.clone();
-            let mut model_dir_name = "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+            let mut model_dir_name =
+                "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
             if task.model_source == MODEL_SOURCE_MODELSCOPE {
                 model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
             }
@@ -871,6 +943,42 @@ async fn start_mistral_server_dll(
         );
     }
 }
+
+/**
+For callback from c/c++
+LOG_LEVEL_DEBUG = 1,
+LOG_LEVEL_INFO  = 2,
+LOG_LEVEL_WARN  = 3,
+LOG_LEVEL_ERROR = 4,
+**/
+extern "C" fn handle_llama_cpp_log_callback(log_level: i32, c_msg: *const c_char) {
+    let result = panic::catch_unwind(AssertUnwindSafe(|| {
+        let c_msg_ptr = unsafe { c_msg.as_ref() };
+        let rust_msg = match c_msg_ptr {
+            Some(ptr) => unsafe {
+                let mut log_message = CStr::from_ptr(ptr).to_string_lossy().into_owned();
+                if log_message.len() > 0 && log_message.as_bytes()[log_message.len() - 1] == b'\n' {
+                    log_message.pop();
+                }
+                match log_level {
+                    1 => tracing::debug!(target: "backend:llama.cpp", "{}", log_message),
+                    2 => tracing::info!(target: "backend:llama.cpp", "{}", log_message),
+                    3 => tracing::warn!(target: "backend:llama.cpp", "{}", log_message),
+                    4 => tracing::error!(target: "backend:llama.cpp", "{}", log_message),
+                    _ => tracing::error!(target: "backend:llama.cpp", "{}", log_message),
+                }
+            },
+            None => {
+                tracing::error!(target: "backend:llama.cpp", "Received null message from log callback");
+            }
+        };
+    }));
+
+    if let Err(_) = result {
+        tracing::error!(target: "backend:llama.cpp", "A panic occurred inside the log callback!");
+    }
+}
+
 async fn start_llama_cpp_server(
     args: &ModelServiceArgs,
     start_args: &Vec<OsString>,
@@ -889,30 +997,46 @@ async fn start_llama_cpp_server(
         let lib = Library::new(lib_name);
         if let Ok(lib) = lib {
             tracing::info!("Loading Llama server...");
-            let func = lib.get(b"start_llama_server");
-            if let Ok(func) = func {
-                let start_llama_server_func: Symbol<StartLlamaServer> = func;
-                let c_strings = start_args
-                    .iter()
-                    .map(|s| CString::new(s.to_str().unwrap()))
-                    .collect::<anyhow::Result<Vec<_>, _>>();
-                if let Ok(c_strings) = c_strings {
-                    let raw_ptrs: Vec<*const c_char> =
-                        c_strings.iter().map(|cs| cs.as_ptr()).collect();
-                    tracing::info!("Starting Llama server...");
-                    start_server_monitor(task_id.to_string(), port.to_string());
-                    let result =
-                        start_llama_server_func(raw_ptrs.len() as c_int, raw_ptrs.as_ptr());
-                    tracing::info!("Llama server exited with result: {}", result);
+            let start_llama_server_func = lib.get(b"start_llama_server");
+            let init_log_callback_func = lib.get(b"init_log_callback");
+            let cleanup_log_callback_func = lib.get(b"cleanup_log_callback");
+            match (
+                start_llama_server_func,
+                init_log_callback_func,
+                cleanup_log_callback_func,
+            ) {
+                (
+                    Ok(start_llama_server_func),
+                    Ok(init_log_callback_func),
+                    Ok(cleanup_log_callback_func),
+                ) => {
+                    let start_llama_server: Symbol<StartLlamaServer> = start_llama_server_func;
+                    let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
+                    let cleanup_log_callback: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
+                    let c_strings = start_args
+                        .iter()
+                        .map(|s| CString::new(s.to_str().unwrap()))
+                        .collect::<anyhow::Result<Vec<_>, _>>();
+                    if let Ok(c_strings) = c_strings {
+                        let raw_ptrs: Vec<*const c_char> =
+                            c_strings.iter().map(|cs| cs.as_ptr()).collect();
+                        tracing::info!("Starting Llama server...");
+                        start_server_monitor(task_id.to_string(), port.to_string());
+                        init_log_callback(Some(handle_llama_cpp_log_callback));
+                        let result = start_llama_server(raw_ptrs.len() as c_int, raw_ptrs.as_ptr());
+                        cleanup_log_callback();
+                        tracing::info!("Llama server exited with result: {}", result);
+                    }
                 }
-            } else {
-                tracing::error!("Failed to load functions of backend Llama server.");
-                // Need to terminate in multiprocess mode  right now.
-                if is_spawn_process {
-                    panic!(
-                        "Failed to load functions of backend Llama server, args = {:?} ",
-                        args.clone(),
-                    );
+                _ => {
+                    tracing::error!("Failed to load functions of backend Llama server.");
+                    // Need to terminate in multiprocess mode  right now.
+                    if is_spawn_process {
+                        panic!(
+                            "Failed to load functions of backend Llama server, args = {:?} ",
+                            args.clone(),
+                        );
+                    }
                 }
             }
         } else {
