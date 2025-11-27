@@ -24,14 +24,14 @@ cargoTomlContent = cargoTomlContent.replace(/(\[package\][\s\S]*?version\s*=\s*"
 fs.writeFileSync(cargoTomlPath, cargoTomlContent)
 console.log('✓ Updated synvek_service/Cargo.toml')
 
-// 3. Sync to Synvek Explorer tauri.conf.json
+// 4. Sync to Synvek Explorer tauri.conf.json
 const tauriConfPath = path.join(__dirname, '..', 'synvek_explorer', 'tauri.conf.json5')
 const tauriConf = JSON5.parse(fs.readFileSync(tauriConfPath, 'utf8'))
 tauriConf.version = version
 fs.writeFileSync(tauriConfPath, JSON5.stringify(tauriConf, null, 2))
 console.log('✓ Updated synvek_explorer/tauri.conf.json5')
 
-// 4. Sync to Synvek Agent package.json
+// 5. Sync to Synvek Agent package.json
 const webPackageJsonPath = path.join(__dirname, '..', 'synvek_agent', 'package.json')
 if (fs.existsSync(webPackageJsonPath)) {
   const webPackageJson = JSON.parse(fs.readFileSync(webPackageJsonPath, 'utf8'))
@@ -39,5 +39,10 @@ if (fs.existsSync(webPackageJsonPath)) {
   fs.writeFileSync(webPackageJsonPath, JSON.stringify(webPackageJson, null, 2))
   console.log('✓ Updated synvek_agent/package.json')
 }
+
+// 6. Syn to version.txt of Synvek Service config dir
+const versionPath = path.join(__dirname, '..', 'synvek_service', 'config', 'version.txt')
+fs.writeFileSync(versionPath, version)
+console.log('✓ Updated synvek_service/config/version.txt')
 
 console.log('Version sync completed!')
