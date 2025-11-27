@@ -151,6 +151,6 @@ pub fn initialize() {
     worker_service::initialize_worker_service();
     initialize_synvek();
     model_service::initialize_model_server();
-    config::generate_schema().expect("TODO: panic message");
+    //config::generate_schema().expect("TODO: panic message");
 
 }
