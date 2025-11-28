@@ -5,11 +5,11 @@ on:
   workflow_call:
 
 jobs:
-  build-windows-vulkan:
+  build-windows:
     name: Build on Windows Vulkan
     runs-on: windows-2022
 
-    steps:      
+    steps:
     - name: Setup Vukan Version
       run: |
         echo "VULKAN_SDK_VERSION=1.4.321.1">> $env:GITHUB_ENV
@@ -35,7 +35,7 @@ jobs:
         } else {
           Write-Error "vulkaninfo.exe not found! Installation might have failed."
         }
-
+          
     - name: Disk space check
       run: |
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
