@@ -17,6 +17,6 @@
     <key>com.apple.security.network.server</key>
     <true/>
     <key>com.apple.security.app-sandbox</key>
-    <true/>
+    <false/>
 </dict>
 </plist>
