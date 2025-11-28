@@ -12,8 +12,7 @@ jobs:
     env:
       VULKAN_SDK_VERSION: "1.4.321.1"
 
-    steps:
-      
+    steps:      
     - name: Install Vulkan SDK
     run: |
       $sdkInstaller = "VulkanSDK-${{ env.VULKAN_SDK_VERSION }}-Installer.exe"
