@@ -39,7 +39,6 @@ jobs:
     - name: Verify Vulkan SDK
       run: |
         vulkaninfo
-        vkcube
 
     - name: Install CUDA
       uses: Jimver/cuda-toolkit@v0.2.28
