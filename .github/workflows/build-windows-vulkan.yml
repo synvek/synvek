@@ -1,12 +1,12 @@
-name: Build synvek on windows
+name: Build synvek on windows Vulkan
 
 on:
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  build-windows:
-    name: Build on Windows
+  build-windows-vulkan:
+    name: Build on Windows Vulkan
     runs-on: windows-2022
 
     steps:      
