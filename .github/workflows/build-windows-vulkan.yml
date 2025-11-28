@@ -1,15 +1,41 @@
-name: Build synvek on windows Cuda 12.6
+name: Build synvek on windows
 
 on:
   workflow_dispatch:
   workflow_call:
 
+env:
+  VULKAN_SDK_VERSION: "1.4.321.1"
+
 jobs:
   build-windows:
-    name: Build on Windows Cuda 12.6
+    name: Build on Windows
     runs-on: windows-2022
 
     steps:
+      
+    - name: Install Vulkan SDK
+    run: |
+      $sdkInstaller = "VulkanSDK-${{ env.VULKAN_SDK_VERSION }}-Installer.exe"
+      Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller" -OutFile $sdkInstaller
+      Start-Process -Wait -FilePath ".\$sdkInstaller" -ArgumentList "/S"
+      echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+    - name: Setup Environment Variables
+      run: |
+        echo "VK_SDK_PATH=$env:VULKAN_SDK" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        echo "PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Lib;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        echo "VK_LAYER_PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Config\vulkan\implicit_layer.d" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+    - name: Verify Vulkan SDK Installation
+      run: |
+        echo "Vulkan SDK is installed at: $env:VULKAN_SDK"
+        if (Test-Path "$env:VULKAN_SDK\Bin\vulkaninfo.exe") {
+          & "$env:VULKAN_SDK\Bin\vulkaninfo.exe" --summary
+        } else {
+          Write-Error "vulkaninfo.exe not found! Installation might have failed."
+        }
+
     - name: Disk space check
       run: |
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
@@ -30,22 +56,22 @@ jobs:
 
     - name: Download CUDA
       run: |
-        $cudaVersion = "12.6.3"
+        $cudaVersion = "12.9.1"
         $cudaInstaller = "cuda_${cudaVersion}_installer.exe"
-        Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.6.3/local_installers/cuda_12.6.3_561.17_windows.exe" -OutFile $cudaInstaller
+        Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/cuda_12.9.1_576.57_windows.exe" -OutFile $cudaInstaller
     
     - name: Install CUDA
       run: |
-        .\cuda_12.6.3_installer.exe -s -npt -noeula -toolkit
+        .\cuda_12.9.1_installer.exe -s -npt -noeula -toolkit
       shell: cmd
 
     - name: Set Environment Variables
       run: |
-        echo "CUDA_PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6" >> $env:GITHUB_ENV
-        echo "CUDACXX=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/nvcc.exe" >> $env:GITHUB_ENV
-        echo "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin" >> $env:GITHUB_PATH
-        echo "CudaToolkitDir=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6" >> $env:GITHUB_ENV
-        echo "CUDA_PATH_V12_6=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6" >> $env:GITHUB_ENV
+        echo "CUDA_PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        echo "CUDACXX=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/nvcc.exe" >> $env:GITHUB_ENV
+        echo "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin" >> $env:GITHUB_PATH
+        echo "CudaToolkitDir=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
+        echo "CUDA_PATH_V12_9=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9" >> $env:GITHUB_ENV
         
     - name: Verify Cuda
       run: |
@@ -69,7 +95,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
 
     - name: Disk space check
@@ -89,7 +115,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
