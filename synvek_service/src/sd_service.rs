@@ -245,6 +245,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 library_arc = Arc::new(library);
                 library_cache_guard.insert(lib_name.clone(), library_arc.clone());
             } else {
+                tracing::error!("Failed to load stable-diffusion.cpp library with error: {:?}", library.unwrap_err());
                 return output;
             }
         }

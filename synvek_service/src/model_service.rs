@@ -933,6 +933,8 @@ async fn start_mistral_server_dll(
                     tracing::error!("Failed to load functions on synvek_backend_default");
                 }
             }
+        } else {
+            tracing::error!("Failed to load mistral.rs library with error: {:?}", lib.unwrap_err());
         }
     }
     // Need to terminate in multiprocess mode  right now.
@@ -1040,7 +1042,7 @@ async fn start_llama_cpp_server(
                 }
             }
         } else {
-            tracing::error!("Failed to load backend Llama server.");
+            tracing::error!("Failed to load backend Llama server with error {:}.", lib.unwrap_err());
             // Need to terminate in multiprocess mode  right now.
             if is_spawn_process {
                 panic!(
