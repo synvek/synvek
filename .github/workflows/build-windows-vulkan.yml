@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 jobs:
-  build-windows:
+  build-windows-vulkan:
     name: Build on Windows Vulkan
     runs-on: windows-2022
 
