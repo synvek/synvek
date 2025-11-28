@@ -1,4 +1,4 @@
-name: Build synvek on windows2
+name: Build synvek on windows
 
 on:
   workflow_dispatch:
@@ -6,36 +6,10 @@ on:
 
 jobs:
   build-windows:
-    name: Build on Windows2
+    name: Build on Windows
     runs-on: windows-2022
 
     steps:
-    - name: Setup Vukan Version
-      run: |
-        echo "VULKAN_SDK_VERSION=1.4.321.1">> $env:GITHUB_ENV
-
-    - name: Install Vulkan SDK
-    run: |
-      $sdkInstaller = "VulkanSDK-${{ env.VULKAN_SDK_VERSION }}-Installer.exe"
-      Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller" -OutFile $sdkInstaller
-      Start-Process -Wait -FilePath ".\$sdkInstaller" -ArgumentList "/S"
-      echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-    - name: Setup Environment Variables
-      run: |
-        echo "VK_SDK_PATH=$env:VULKAN_SDK" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-        echo "PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Lib;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-        echo "VK_LAYER_PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Config\vulkan\implicit_layer.d" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-    - name: Verify Vulkan SDK Installation
-      run: |
-        echo "Vulkan SDK is installed at: $env:VULKAN_SDK"
-        if (Test-Path "$env:VULKAN_SDK\Bin\vulkaninfo.exe") {
-          & "$env:VULKAN_SDK\Bin\vulkaninfo.exe" --summary
-        } else {
-          Write-Error "vulkaninfo.exe not found! Installation might have failed."
-        }
-          
     - name: Disk space check
       run: |
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
