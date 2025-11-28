@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
   workflow_call:
 
-env:
-  VULKAN_SDK_VERSION: "1.4.321.1"
 
 jobs:
   build-windows:
     name: Build on Windows Vulkan
     runs-on: windows-2022
+    env:
+      VULKAN_SDK_VERSION: "1.4.321.1"
 
     steps:
       
