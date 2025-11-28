@@ -4,15 +4,13 @@ on:
   workflow_dispatch:
   workflow_call:
 
+
 jobs:
   build-linux:
-    name: Build on linux  Vulkan
+    name: Build on linux Vulkan
     runs-on: ubuntu-22.04
     env:
       VULKAN_SDK_VERSION: "1.4.321.1"
-      VULKAN_SDK: ${{ github.workspace }}/${{ env.VULKAN_SDK_VERSION }}/x86_64
-      LD_LIBRARY_PATH: ${{ github.workspace }}/${{ env.VULKAN_SDK_VERSION }}/x86_64/lib
-      VK_LAYER_PATH: ${{ github.workspace }}/${{ env.VULKAN_SDK_VERSION }}/x86_64/etc/vulkan/explicit_layer.d
 
     steps:
     - name: Initialize & Cleanup
@@ -32,6 +30,11 @@ jobs:
       run: |
         wget https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/linux/vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
         tar -xf vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
+        cd ${{ env.VULKAN_SDK_VERSION }}    
+        echo "VULKAN_SDK=$(pwd)/x86_64" >> $GITHUB_ENV
+        echo "$(pwd)/x86_64/bin" >> $GITHUB_PATH
+        echo "LD_LIBRARY_PATH=$(pwd)/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "VK_LAYER_PATH=$(pwd)/x86_64/etc/vulkan/explicit_layer.d" >> $GITHUB_ENV
 
     - name: Verify Vulkan SDK
       run: |
