@@ -10,16 +10,16 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - name: Setup Vukan Version
-      run: |
-        echo "VULKAN_SDK_VERSION=1.4.321.1">> $env:GITHUB_ENV
+    # - name: Setup Vukan Version
+    #   run: |
+    #     echo "VULKAN_SDK_VERSION=1.4.321.1">> $env:GITHUB_ENV
 
-    - name: Install Vulkan SDK
-    run: |
-      $sdkInstaller = "VulkanSDK-${{ env.VULKAN_SDK_VERSION }}-Installer.exe"
-      Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller" -OutFile $sdkInstaller
-      Start-Process -Wait -FilePath ".\$sdkInstaller" -ArgumentList "/S"
-      echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+    # - name: Install Vulkan SDK
+    # run: |
+    #   $sdkInstaller = "VulkanSDK-${{ env.VULKAN_SDK_VERSION }}-Installer.exe"
+    #   Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller" -OutFile $sdkInstaller
+    #   Start-Process -Wait -FilePath ".\$sdkInstaller" -ArgumentList "/S"
+    #   echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
     # - name: Setup Environment Variables
     #   run: |
