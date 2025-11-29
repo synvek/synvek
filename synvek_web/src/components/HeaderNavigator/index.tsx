@@ -520,11 +520,11 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       if (backendType === 'default') {
         return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       } else {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       }
     } else if (osType === OSType.MACOS) {
       if (backendType === 'default') {
@@ -540,11 +540,11 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       if (backendType === 'default') {
         return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       } else {
-        return ['cuda', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       }
     } else if (osType === OSType.IOS) {
       if (backendType === 'default') {

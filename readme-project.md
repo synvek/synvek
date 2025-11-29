@@ -102,12 +102,21 @@ synvek_explorer will static link to synvek_service into single application and s
 
 #### Build backend: llama.cpp
 
+The concurrent compilation parameter - j 14 needs to be adjusted based on the actual number of CPUs in the building machine. 14 is the concurrent number, which should match the actual number of CPUs
+
 - Build llama.cpp with cuda: 
 
 cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
+
+- Build llama.cpp with Vulkan: 
+
+cmake -B build_vulkan -DGGML_VULKAN=ON  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_vulkan.dll and copy to output folder
 
 - Build llama.cpp with cpu: 
 
@@ -138,6 +147,13 @@ cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
+
+- Build stable-diffusion.cpp with Vulkan: 
+
+cmake -B build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_sd -j 14
+
+Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_vulkan.dll and copy to output folder
 
 - Build stable-diffusion.cpp with metal: 
 

@@ -102,6 +102,8 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 #### 构建推理引擎: llama.cpp
 
+需要根据构建机器实际CPU数量调整如下的并发编译参数-j 14， 14为并发数，该数值应该和匹配实际CPU数量
+
 - 使用cuda支持构建llama.cpp: 
 
 cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -115,6 +117,13 @@ cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_I
 cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
+
+- 使用Vulkan支持构建llama.cpp: 
+
+cmake -B build_vulkan -DGGML_VULKAN=ON  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll synvek_backend_llama_vulkan.dll并复制到output目录
 
 - 使用Metal支持构建llama.cpp: 
 
@@ -138,6 +147,13 @@ cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cpu.dll并复制到output目录
+
+- 使用vulkan支持构建stable-diffusion.cpp: 
+
+cmake -B build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_sd -j 14
+
+注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_vulkan.dll并复制到output目录
 
 - 使用Metal支持构建stable-diffusion.cpp: 
 

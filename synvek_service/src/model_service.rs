@@ -272,37 +272,37 @@ fn validate_acceleration(backend: &str, acceleration: &str) -> bool {
         validation = if cfg!(target_os = "windows") {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         };
     } else if backend == common::BACKEND_STABLE_DIFFUSION_CPP {
         validation = if cfg!(target_os = "windows") {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         };
     } else if backend == common::BACKEND_WHISPER_CPP {
         validation = if cfg!(target_os = "windows") {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         } else if cfg!(target_os = "macos") {
             acceleration == common::ACCELERATION_CPU || acceleration == common::ACCELERATION_METAL
         } else {
             acceleration == common::ACCELERATION_CPU
                 || acceleration == common::ACCELERATION_CUDA
-                || acceleration == common::ACCELERATION_CUDA_LEGACY
+                || acceleration == common::ACCELERATION_VULKAN
         };
     }
     validation
