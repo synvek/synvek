@@ -29,7 +29,7 @@ jobs:
       run: |
         echo "Vulkan SDK is installed at: $env:VULKAN_SDK"
         if (Test-Path "$env:VULKAN_SDK\Bin\vulkaninfo.exe") {
-          & "$env:VULKAN_SDK\Bin\vulkaninfo.exe" --summary
+          & "$env:VULKAN_SDK\Bin\vulkaninfoSDK.exe" --summary
         } else {
           Write-Error "vulkaninfo.exe not found! Installation might have failed."
         }
