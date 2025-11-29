@@ -17,11 +17,7 @@ jobs:
         $sdkInstaller = "vulkansdk-windows-X64-${{ env.VULKAN_SDK_VERSION }}.exe"
         curl.exe -o $sdkInstaller -L "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller"        
         & ./$sdkInstaller --accept-licenses --default-answer --confirm-command install
-        echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-        # $sdkInstaller = "vulkansdk-windows-X64-${{ env.VULKAN_SDK_VERSION }}.exe"
-        # Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/windows/$sdkInstaller" -OutFile $sdkInstaller
-        # Start-Process -Wait -FilePath ".\$sdkInstaller" -ArgumentList "/S"
-        # echo "VULKAN_SDK=$env:ProgramFiles\LunarG\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        echo "VULKAN_SDK=C:\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
     - name: Setup Environment Variables
       run: |
