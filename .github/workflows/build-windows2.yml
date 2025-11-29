@@ -1,4 +1,4 @@
-name: Build synvek on windows2
+name: Build synvek on windows
 
 on:
   workflow_dispatch:
@@ -6,10 +6,10 @@ on:
 
 jobs:
   build-windows:
-    name: Build on Windows2
+    name: Build on Windows
     runs-on: windows-2022
 
-    steps:         
+    steps:
     - name: Disk space check
       run: |
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
