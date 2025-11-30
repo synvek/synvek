@@ -21,8 +21,8 @@ jobs:
 
     - name: Setup HIP Environment Variables
       run: |   
-        echo "$env:HIP_PATH"
-        echo "$env:HIP_PATH\bin" >> $env:GITHUB_PATH
+        echo "HIP_PATH=C:\Program Files\AMD\ROCm\6.4\" >> $env:GITHUB_ENV
+        echo "C:\Program Files\AMD\ROCm\6.4\bin" >> $env:GITHUB_PATH
 
     - name: Verify HIP SDK Installation
       run: |
