@@ -120,7 +120,7 @@ cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
 
 - 使用HIP支持构建llama.cpp: 
 set PATH=%HIP_PATH%\bin;%PATH%
-cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030;gfx1100;gfx1150 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_hip --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_hip.dll并复制到output目录

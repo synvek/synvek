@@ -138,7 +138,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp hip 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_hip -G Ninja -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030;gfx1100;gfx1150 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_hip -G Ninja -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/llama.cpp/build_hip --config Release --target synvek_backend_llama -j 4
 
     - name: Disk space check

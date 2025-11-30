@@ -520,9 +520,10 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       if (backendType === 'default') {
         return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'vulkan', 'hip', 'cpu']
+        //TODO: Ad HIP here after performance issue fixed
+        return ['cuda', 'vulkan', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'vulkan', 'hip', 'cpu']
+        return ['cuda', 'vulkan', 'cpu']
       } else {
         return ['cuda', 'vulkan', 'cpu']
       }
