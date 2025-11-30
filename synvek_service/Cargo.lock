@@ -9141,7 +9141,7 @@ dependencies = [
 
 [[package]]
 name = "synvek_service"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "actix-cors",
  "actix-web",

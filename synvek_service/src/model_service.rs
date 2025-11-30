@@ -25,7 +25,6 @@ use std::{env, panic, thread};
 use actix_web::body::MessageBody;
 use tokio::runtime;
 use uuid::Uuid;
-
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
 type InitDefaultServer =
     unsafe fn(*const c_char, *const c_char, *const c_char, *const c_char) -> i32;
@@ -530,7 +529,7 @@ fn populate_args_private_with_backend_llama_cpp(
 }
 
 fn populate_log_file_args_with_backend_llama_cpp(start_args: &mut Vec<OsString>) {
-    start_args.push(OsString::from("--log-timestamps"));
+    //start_args.push(OsString::from("--log-timestamps"));
 }
 
 fn populate_args_private_with_backend_stable_diffusion_cpp(

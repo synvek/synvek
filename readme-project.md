@@ -118,6 +118,14 @@ cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_vulkan.dll and copy to output folder
 
+- Build llama.cpp with HIP: 
+
+set PATH=%HIP_PATH%\bin;%PATH%
+cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030;gfx1100;gfx1150 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_hip --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_hip.dll and copy to output folder
+
 - Build llama.cpp with cpu: 
 
 cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON

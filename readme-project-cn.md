@@ -111,26 +111,33 @@ cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
 
-- 使用CPU支持构建llama.cpp: 
-
-cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
-
-注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
-
 - 使用Vulkan支持构建llama.cpp: 
 
 cmake -B build_vulkan -DGGML_VULKAN=ON  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
 
-注意: 需要将synvek_backend_llama.dll synvek_backend_llama_vulkan.dll并复制到output目录
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_vulkan.dll并复制到output目录
+
+- 使用HIP支持构建llama.cpp: 
+set PATH=%HIP_PATH%\bin;%PATH%
+cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030;gfx1100;gfx1150 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_hip --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_hip.dll并复制到output目录
+
+- 使用CPU支持构建llama.cpp: 
+
+cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cpu.dll并复制到output目录
 
 - 使用Metal支持构建llama.cpp: 
 
 cmake -B build_metal -DBUILD_SHARED_LIBS=OFF
 cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
-注意: 需要将synvek_backend_llama.dll synvek_backend_llama_metal.dll并复制到output目录
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_metal.dll并复制到output目录
 
 #### 构建推理引擎: stable-diffusion.cpp
 
