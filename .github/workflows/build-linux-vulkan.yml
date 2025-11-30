@@ -16,7 +16,7 @@ jobs:
     - name: Initialize & Cleanup
       run: |
         sudo apt update
-        sudo apt install libglib2.0-dev  libgdk-pixbuf2.0-dev libgtk-3-dev  libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libclang-dev libssl-dev mesa-vulkan-drivers vulkan-tools libvulkan-dev libcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev 
+        sudo apt install libglib2.0-dev  libgdk-pixbuf2.0-dev libgtk-3-dev  libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libclang-dev libssl-dev mesa-vulkan-drivers vulkan-tools libvulkan-dev libxcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev 
         sudo apt clean        
         sudo rm -rf /tmp/*
         sudo rm -rf /var/tmp/*        
