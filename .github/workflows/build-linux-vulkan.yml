@@ -53,30 +53,30 @@ jobs:
         which vulkaninfo
         vulkaninfo
 
-    # - name: Install CUDA
-    #   uses: Jimver/cuda-toolkit@v0.2.28
-    #   with:
-    #     cuda: 12.9.1
-    #     method: network
-    #     linux-local-args: '[["--toolkit"]]'
+    - name: Install CUDA
+      uses: Jimver/cuda-toolkit@v0.2.28
+      with:
+        cuda: 12.9.1
+        method: network
+        linux-local-args: '[["--toolkit"]]'
 
-    # - name: Install Deno
-    #   run: |
-    #     curl -fsSL https://deno.land/install.sh | sh
-    #     echo "$HOME/.deno/bin" >> $GITHUB_PATH
+    - name: Install Deno
+      run: |
+        curl -fsSL https://deno.land/install.sh | sh
+        echo "$HOME/.deno/bin" >> $GITHUB_PATH
     
-    # - name: Cleanup for tools
-    #   run: |
-    #     sudo apt clean        
-    #     sudo rm -rf /tmp/*
-    #     sudo rm -rf /var/tmp/*        
-    #     sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
-    #     npm cache clean --force
-    #     deno clean
+    - name: Cleanup for tools
+      run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
+        npm cache clean --force
+        deno clean
 
-    # - name: Verify Cuda
-    #   run: |
-    #     nvcc --version
+    - name: Verify Cuda
+      run: |
+        nvcc --version
 
     - name: Disk space before code checkout
       run: |
