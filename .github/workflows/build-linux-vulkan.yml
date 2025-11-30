@@ -32,13 +32,14 @@ jobs:
         tar -xf vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
         cd ${{ env.VULKAN_SDK_VERSION }}    
         echo "VULKAN_SDK=$(pwd)/x86_64" >> $GITHUB_ENV
-        echo "$(pwd)/x86_64/bin" >> $GITHUB_PATH
+        echo "$(pwd)/x86_64/bin:$PATH" >> $GITHUB_PATH
         echo "LD_LIBRARY_PATH=$(pwd)/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$(pwd)/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
         echo "VK_ADD_LAYER_PATH=$(pwd)/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
 
     - name: Verify Vulkan SDK
       run: |
+        glslc --version
         vulkaninfo
 
     - name: Install CUDA
@@ -79,22 +80,6 @@ jobs:
       run: |
         df
 
-    - name: Configure and build backend-> llama.cpp cuda 
-      run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
-      run: |
-        mkdir output
-        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output/ 
-        mv output/libsynvek_backend_llama.so output/libsynvek_backend_llama_cuda.so 
-        rm -rf  build/llama.cpp/build_cuda
-
-    - name: Disk space after build backend-> llama.cpp cuda 
-      run: |
-        df
-
     - name: Configure and build backend-> llama.cpp vulkan 
       run: |
         cmake -S third_party/llama.cpp -B build/llama.cpp/build_vulkan -DGGML_VULKAN=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -108,6 +93,22 @@ jobs:
         rm -rf  build/llama.cpp/build_vulkan
 
     - name: Disk space after build backend-> llama.cpp vulkan 
+      run: |
+        df
+
+    - name: Configure and build backend-> llama.cpp cuda 
+      run: |
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
+      run: |
+        mkdir output
+        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output/ 
+        mv output/libsynvek_backend_llama.so output/libsynvek_backend_llama_cuda.so 
+        rm -rf  build/llama.cpp/build_cuda
+
+    - name: Disk space after build backend-> llama.cpp cuda 
       run: |
         df
 
