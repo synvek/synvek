@@ -15,11 +15,13 @@ jobs:
     - name: Install HIP SDK
       run: |
         $sdkInstaller = "AMD-Software-PRO-Edition-25.Q3-WinSvr2022-For-HIP.exe"
-        curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"        
+        curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"      
+        dir  
         & ./$sdkInstaller -install
 
     - name: Setup HIP Environment Variables
       run: |   
+        echo "$env:HIP_PATH"
         echo "$env:HIP_PATH\bin" >> $env:GITHUB_PATH
 
     - name: Verify HIP SDK Installation
