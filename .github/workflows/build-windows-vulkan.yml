@@ -12,6 +12,20 @@ jobs:
       VULKAN_SDK_VERSION: "1.4.321.1" 
 
     steps:
+    - name: Install HIP SDK
+      run: |
+        $sdkInstaller = "AMD-Software-PRO-Edition-25.Q3-WinSvr2022-For-HIP.exe"
+        curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"        
+        & ./$sdkInstaller -install
+
+    - name: Setup HIP Environment Variables
+      run: |   
+        echo "$env:HIP_PATH\bin" >> $env:GITHUB_PATH
+
+    - name: Verify HIP SDK Installation
+      run: |
+        & "$env:HIP_PATH\bin\clang.exe" --version
+
     - name: Install Vulkan SDK
       run: |
         $sdkInstaller = "vulkansdk-windows-X64-${{ env.VULKAN_SDK_VERSION }}.exe"
@@ -19,11 +33,13 @@ jobs:
         & ./$sdkInstaller --accept-licenses --default-answer --confirm-command install
         echo "VULKAN_SDK=C:\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-    - name: Setup Environment Variables
+    - name: Setup Vulkan Environment Variables
       run: |
         echo "VK_SDK_PATH=$env:VULKAN_SDK" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
         echo "PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Lib;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
         echo "VK_LAYER_PATH=$env:VULKAN_SDK\Bin;$env:VULKAN_SDK\Config\vulkan\implicit_layer.d" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        echo "$env:VULKAN_SDK\Bin" >> $env:GITHUB_PATH
+        echo "$env:VULKAN_SDK\Lib" >> $env:GITHUB_PATH
 
     - name: Verify Vulkan SDK Installation
       run: |
