@@ -51,6 +51,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
             Write-Warning "vulkaninfoSDK.exe ran but encountered an error (likely missing drivers). Exit code: $LASTEXITCODE"
             Write-Warning "This is often expected on CI runners without a physical GPU."
+            Exit 0
           } else {
             Write-Host "vulkaninfoSDK executed successfully." -ForegroundColor Green
           }
