@@ -26,6 +26,7 @@ jobs:
 
     - name: Verify HIP SDK Installation
       run: |
+        dir "$env:HIP_PATH\bin"
         & "$env:HIP_PATH\bin\clang.exe" --version
 
     - name: Install Vulkan SDK
