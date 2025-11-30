@@ -71,6 +71,8 @@ pub static ACCELERATION_CUDA_LEGACY: &str = "cuda_legacy";
 
 pub static ACCELERATION_VULKAN: &str = "vulkan";
 
+pub static ACCELERATION_HIP: &str = "hip";
+
 pub static ACCELERATION_OPENCL: &str = "opencl";
 
 pub static ACCELERATION_WEBGPU: &str = "webgpu";

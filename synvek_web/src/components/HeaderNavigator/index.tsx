@@ -520,9 +520,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       if (backendType === 'default') {
         return ['cuda', 'cuda_legacy', 'cpu']
       } else if (backendType === 'llama_cpp') {
-        return ['cuda', 'vulkan', 'cpu']
+        return ['cuda', 'vulkan', 'hip', 'cpu']
       } else if (backendType === 'stable_diffusion_cpp') {
-        return ['cuda', 'vulkan', 'cpu']
+        return ['cuda', 'vulkan', 'hip', 'cpu']
       } else {
         return ['cuda', 'vulkan', 'cpu']
       }
