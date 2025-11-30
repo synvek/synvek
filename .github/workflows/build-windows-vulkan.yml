@@ -16,8 +16,7 @@ jobs:
       run: |
         $sdkInstaller = "AMD-Software-PRO-Edition-25.Q3-WinSvr2022-For-HIP.exe"
         curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"      
-        dir  
-        & ./$sdkInstaller -install
+        Start-Process $sdkInstaller -ArgumentList '-install' -NoNewWindow -Wait
 
     - name: Setup HIP Environment Variables
       run: |   
