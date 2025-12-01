@@ -26,11 +26,13 @@ jobs:
       run: |
         df
 
+#   Need to release disk space ASAP because of disk space limitation        
     - name: Install Vulkan SDK
       run: |
         wget https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/linux/vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
         tar -xf vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
         sudo mkdir -p /opt/vulkan
+        rm vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
         sudo mv ${{ env.VULKAN_SDK_VERSION }}  /opt/vulkan/
 
         echo "VULKAN_SDK=/opt/vulkan/${{ env.VULKAN_SDK_VERSION }}/x86_64" >> $GITHUB_ENV
@@ -110,6 +112,29 @@ jobs:
       run: |
         df
 
+    - name: Configure and build backend-> stable-diffusion.cpp vulkan 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_vulkan --config Release --target synvek_backend_sd -j  4
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp vulkan 
+      run: |
+        cp build/stable-diffusion.cpp/build_vulkan/bin/libsynvek_backend_sd.so output/ 
+        mv output/libsynvek_backend_sd.so output/libsynvek_backend_sd_vulkan.so 
+        rm -rf  build/stable-diffusion.cpp/build_vulkan
+
+    - name: Disk space after build backend-> stable-diffusion.cpp vulkan 
+      run: |
+        df
+
+    - name: Release diskspace of Vulkan SDK
+      run: |
+        rm -rf /opt/vulkan
+
+    - name: Disk space check after removing Vulkan 
+      run: |
+        df
+
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
         cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -154,22 +179,7 @@ jobs:
     - name: Disk space after build backend-> stable-diffusion.cpp cuda 
       run: |
         df
-
-    - name: Configure and build backend-> stable-diffusion.cpp vulkan 
-      run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/stable-diffusion.cpp/build_vulkan --config Release --target synvek_backend_sd -j  4
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp vulkan 
-      run: |
-        cp build/stable-diffusion.cpp/build_vulkan/bin/libsynvek_backend_sd.so output/ 
-        mv output/libsynvek_backend_sd.so output/libsynvek_backend_sd_vulkan.so 
-        rm -rf  build/stable-diffusion.cpp/build_vulkan
-
-    - name: Disk space after build backend-> stable-diffusion.cpp vulkan 
-      run: |
-        df
-        
+       
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
         cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
