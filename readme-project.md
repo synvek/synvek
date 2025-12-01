@@ -13,35 +13,6 @@ It is powered by Rust & Deno & Tauri & llama.cpp/stable-diffusion.cpp/Mistral.rs
 
 You can chat with multiple LLMs in one conversion including text, image generation and so on.
 
-
-### Multiple models support. Chat completion, image generation or voice output in one application and one chat. 
-
-### Function call & MCP support
-
-### Speed up inference with GPU support 
-
-### Extensible application with embedded Deno support. Creat plugin & Function call & MCP server with Typescript/Javascript without external dependence.
-
-## Supported Platforms
-
-### Windows
-
-### Linux
-
-### Macos
-
-## Supported Hardwares
-
-### CPU
-
-### Cuda
-
-### Metal/Accelerate on Macos
-
-## Supported Models
-
-## Download & run
-
 ## Build & Run
 
 ### Prepare environment

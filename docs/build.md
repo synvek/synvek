@@ -16,16 +16,8 @@
 ### Check out code
 
 - Checkout synvek
-    git clone https://github.com/synvek/synvek.git
+    git clone --recurse-submodules https://github.com/synvek/synvek.git
 
-- Checkout synvek_dev branch of followings to %SYNVEK%/third_party
-git clone https://github.com/synvek/deno.git
-git clone https://github.com/synvek/mistral.rs.git
-git clone https://github.com/synvek/hf-hub.git
-git clone https://github.com/synvek/llama.cpp.git
-git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
-
-- Be noted: git submodule isn't supported yet.
 - If forget checkout submodule, use command： git submodule update --init --recursive
 
 ### Prepare output folder
@@ -36,20 +28,20 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 - Output folder is working foder for synvek_agent, synvek_service and synvek_explorer.
 ### Buld & run frontend module: synvek_web
 
-- Setup: npm run install
+- Setup: npm install
 - Local run: npm run start
 - Build: npm run desktop:build
 
 ### Build & run agent module: synvek_agent
 
-- Setup: deno install --allow-scripts=npm:ssh2@1.16.0,npm:cpu-features@0.0.10
+- Setup: deno install --allow-scripts=npm:ssh2@1.16.0
 - Local run: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/index.ts
 - Build: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
 - Debug & Run requires output as working folder.
 
 ### Build & run service module: synvek_service
 
-- Local run: cargo run --package synvek_service --features "cuda cudnn" --bin synvek_service -- serve
+- Local run: cargo run --package synvek_service --bin synvek_service -- serve
 - Debug & Run requires output as working folder.
 
 ### Build & run tauri module: synvek_explorer
@@ -65,12 +57,29 @@ synvek_explorer will static link to synvek_service into single application and s
 
 #### Build backend: llama.cpp
 
+The concurrent compilation parameter - j 14 needs to be adjusted based on the actual number of CPUs in the building machine. 14 is the concurrent number, which should match the actual number of CPUs
+
 - Build llama.cpp with cuda: 
 
-cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_cuda.dll and copy to output folder
+
+- Build llama.cpp with Vulkan: 
+
+cmake -B build_vulkan -DGGML_VULKAN=ON  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_vulkan.dll and copy to output folder
+
+- Build llama.cpp with HIP: 
+
+set PATH=%HIP_PATH%\bin;%PATH%
+cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_hip --config Release --target synvek_backend_llama -j 14
+
+Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_hip.dll and copy to output folder
 
 - Build llama.cpp with cpu: 
 
@@ -90,7 +99,7 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll
 
 - Build stable-diffusion.cpp with cuda: 
 
-cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
@@ -101,6 +110,13 @@ cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
+
+- Build stable-diffusion.cpp with Vulkan: 
+
+cmake -B build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_sd -j 14
+
+Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_vulkan.dll and copy to output folder
 
 - Build stable-diffusion.cpp with metal: 
 

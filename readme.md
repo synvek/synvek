@@ -7,3 +7,32 @@ It is powered by Rust & Deno & Tauri & llama.cpp/stable-diffusion.cpp/Mistral.rs
 You can chat with multiple LLMs in one conversion including text, image generation and so on.
 
 https://www.synvek.com
+
+## Main Features
+
+### Local models management
+
+- Click & download & run models with GUI, no command tools required
+
+### Multiple models support. Chat completion, image generation or voice output in one application and one chat. 
+
+- Chat completions: GPT-oss, Deepseek, Qwen3, gemma-3
+- Image Generation: Stable Diffusion 3.5, Flux
+- Speech: Dia 1.5
+- Multimodels: Phi-4,Qwen2-VL
+- More in progress
+
+### Speed up inference with GPU support 
+
+- Nvidia CUDA on Windows & Linux
+- Vulkan on Windows & Linux (Support Nividia/AMD/Intel/Other GPUs)
+- Metal on MacOS
+
+### Function call & MCP support（In progress）
+
+### Extensible application with embedded Deno support. Creat plugin & Function call & MCP server with Typescript/Javascript without external dependence.
+
+## Supported Platforms
+
+Windows, Macos & Linux(Ubuntu)
+

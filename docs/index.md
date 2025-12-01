@@ -26,9 +26,9 @@ features:
   - title: Multiple backend Support
     details: Support llama.cpp, stable-diffusion.cpp and mistral.rs.
   - title: Support many models 
-    details: GPT OSS, Qwen, Deepseek, Flux, Dia and so on
+    details: GPT OSS, Qwen, Deepseek, Flux, Stable Diffusion, Dia and so on
   - title: GPU support
-    details: Support Cuda on windows/Linux, Metal on macos
+    details: Support CUDA&Vulkan on windows/Linux, Metal on macos
   - title: Text, image and voice generation
     details: Chat completion, image generation, voice generation and so on.
   - title: MCP and Function call support

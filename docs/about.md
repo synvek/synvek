@@ -16,7 +16,7 @@ You can chat with multiple large language models simultaneously in a conversatio
 
 - Supports multiple backend engines including llama.cpp, stable diffusion.cpp, mistral.rs, etc
 
-- Supports CPU inference and GPU acceleration, including Cuda (Windows/Linux), Metal (Macos), etc
+- Supports CPU inference and GPU acceleration, including Cuda (Windows/Linux), Vulkan(Windows/Linux), Metal (Macos), etc
 
 - Support MCP/Reduction calls, etc
 

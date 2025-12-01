@@ -3,43 +3,15 @@
 [中文](README-CN.md), [English](README.md)
 
 
-## About Synvek
+## 关于Synvek
 
 Synvek能在单一应用内管理、运行和探索各种大语言模型，包括文本生成、图像生成和语音生成等等。
 
-## Main Features
+## 主要特征
 
 Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/Candle构建。可以在本地使用单一应用运行和探索本地AI模型。无需Pyton或Node依赖。
 
 您可以在一个对话里同时和多个大语言模型聊天包括文本生成、图像生成、语音生成等。
-
-### 多模型支持. 可以在一个对话里支持包括对话完成、图像生成、语音生成等输出
-
-### Function call & MCP支持
-
-### GPU加速推理 
-
-### 可基于内嵌Deno引擎扩展应用，使用Typescript/Javascript创建应用插件、工具调用(Function Call)和MCP服务等，无需外部依赖.（进行中）
-
-## 支持平台
-
-### Windows
-
-### Linux（进行中）
-
-### Macos（进行中）
-
-## 支持硬件
-
-### CPU
-
-### Cuda
-
-### Metal/Accelerate仅Macos系统可用（进行中）
-
-## 支持大语言模型（进行中）
-
-## 下载和运行
 
 ## 构建和运行
 

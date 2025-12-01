@@ -16,17 +16,10 @@
 ### 拉取代码
 
 - 拉取synvek
-    git clone https://github.com/synvek/synvek.git
+    git clone --recurse-submodules https://github.com/synvek/synvek.git
 
-- 使用下列仓库的synvek_dev分支。需要提取到%SYNVEK%/third_party路径下
-git clone https://github.com/synvek/deno.git
-git clone https://github.com/synvek/mistral.rs.git
-git clone https://github.com/synvek/hf-hub.git
-git clone https://github.com/synvek/llama.cpp.git
-git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.git
-
-- 注意： 暂不支持使用git submodule.
 - 如果忘记checkout submodule可以重新拉取： git submodule update --init --recursive
+
 
 ### 准备输出路径。这里使用output
 
@@ -37,20 +30,20 @@ git clone --recurse-submodules https://github.com/synvek/stable-diffusion.cpp.gi
 
 ### 构建和运行前端模块: synvek_web
 
-- 准备: npm run install
+- 准备: npm install
 - 本地调试: npm run start
 - 构建: npm run desktop:build
 
 ### 构建和运行agent模块: synvek_agent
 
-- 准备: deno install --allow-scripts=npm:ssh2@1.16.0,npm:cpu-features@0.0.10
+- 准备: deno install --allow-scripts=npm:ssh2@1.16.0
 - 本地运行: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/index.ts
 - 构建: deno run --unstable-sloppy-imports --unstable-worker-options  --allow-run --allow-env --allow-sys --allow-net --allow-read --allow-write  ./src/Build.ts
 - 调试和运行必须指定output路径作为工作目录.
 
 ### 构建和运行service模块: synvek_service
 
-- 本地运行: cargo run --package synvek_service --features "cuda cudnn" --bin synvek_service -- serve
+- 本地运行: cargo run --package synvek_service --bin synvek_service -- serve
 - 调试和运行必须指定output路径作为工作目录.
 
 ### 构建和运行tauri模块: synvek_explorer
@@ -66,32 +59,48 @@ synvek_explorer会静态连接synvek_service成单一应用，因此构建synvek
 
 #### 构建推理引擎: llama.cpp
 
+需要根据构建机器实际CPU数量调整如下的并发编译参数-j 14， 14为并发数，该数值应该和匹配实际CPU数量
+
 - 使用cuda支持构建llama.cpp: 
 
-cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_llama -j 14
 
 注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cuda.dll并复制到output目录
+
+- 使用Vulkan支持构建llama.cpp: 
+
+cmake -B build_vulkan -DGGML_VULKAN=ON  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_vulkan.dll并复制到output目录
+
+- 使用HIP支持构建llama.cpp: 
+set PATH=%HIP_PATH%\bin;%PATH%
+cmake -B build_hip  -G Ninja  -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_hip --config Release --target synvek_backend_llama -j 14
+
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_hip.dll并复制到output目录
 
 - 使用CPU支持构建llama.cpp: 
 
 cmake -B build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_llama -j 14
 
-注意: 需要将synvek_backend_llama.dll synvek_backend_llama_cpu.dll并复制到output目录
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_cpu.dll并复制到output目录
 
 - 使用Metal支持构建llama.cpp: 
 
 cmake -B build_metal -DBUILD_SHARED_LIBS=OFF
 cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
-注意: 需要将synvek_backend_llama.dll synvek_backend_llama_metal.dll并复制到output目录
+注意: 需要将synvek_backend_llama.dll 改成synvek_backend_llama_metal.dll并复制到output目录
 
 #### 构建推理引擎: stable-diffusion.cpp
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50-virtual;52-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86;89;90-virtual;120-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录
@@ -102,6 +111,13 @@ cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cpu.dll并复制到output目录
+
+- 使用vulkan支持构建stable-diffusion.cpp: 
+
+cmake -B build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake --build build_vulkan --config Release --target synvek_backend_sd -j 14
+
+注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_vulkan.dll并复制到output目录
 
 - 使用Metal支持构建stable-diffusion.cpp: 
 

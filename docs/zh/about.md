@@ -17,7 +17,7 @@ Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/
 
 - 支持多种后端引擎包括llama.cpp，stable-diffusion.cpp, mistral.rs等.
 
-- 支持CPU推理和GPU加速包括Cuda(Windows/Linux),Metal(Macos)等
+- 支持CPU推理和GPU加速包括Cuda(Windows/Linux),Vulkan(Windows/Linux),Metal(Macos)等
 
 - 支持MCP/Fuction call等
 
