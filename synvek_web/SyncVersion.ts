@@ -45,4 +45,18 @@ const versionPath = path.join(__dirname, '..', 'synvek_service', 'config', 'vers
 fs.writeFileSync(versionPath, version)
 console.log('✓ Updated synvek_service/config/version.txt')
 
+// 7. Sync to Synvek docs package.json
+const docsJsonPath = path.join(__dirname, '..', 'docs', 'package.json')
+if (fs.existsSync(docsJsonPath)) {
+  const docPackageJson = JSON.parse(fs.readFileSync(docsJsonPath, 'utf8'))
+  docPackageJson.version = version
+  fs.writeFileSync(docsJsonPath, JSON.stringify(docPackageJson, null, 2))
+  console.log('✓ Updated docs/package.json')
+}
+
+// 6. Syn to version.txt of Synvek Docs config dir
+const docsVersionPath = path.join(__dirname, '..', 'docs', 'version.txt')
+fs.writeFileSync(docsVersionPath, version)
+console.log('✓ Updated docs/version.txt')
+
 console.log('Version sync completed!')
