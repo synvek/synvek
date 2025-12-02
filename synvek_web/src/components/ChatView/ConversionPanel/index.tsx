@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import PropertyContainer from '@/components/Controls/PropertyContainer'
 import TextEditWindow from '@/components/TextEditWindow'
 import {
   Attachment,
   Chat,
   ChatMessage,
+  Consts,
   Conversion,
   ConversionTreeNode,
   Folder,
@@ -13,8 +15,8 @@ import {
   useGlobalContext,
   WorkspaceUtils,
 } from '@/components/Utils'
-import { EllipsisOutlined, FolderOpenOutlined, FolderOutlined, MessageOutlined, PushpinOutlined } from '@ant-design/icons'
-import { Button, Dropdown, MenuProps, message, Modal, theme, Tree } from 'antd'
+import { EllipsisOutlined, FolderOpenOutlined, FolderOutlined, MessageOutlined, PushpinOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Dropdown, MenuProps, message, Modal, Slider, SliderSingleProps, Tabs, TabsProps, theme, Tooltip, Tree } from 'antd'
 import * as React from 'react'
 import { FC, useEffect, useRef, useState } from 'react'
 import { FormattedMessage, useIntl } from 'umi'
@@ -55,6 +57,12 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const [messageApi, contextHolder] = message.useMessage()
   const intl = useIntl()
   const { token } = useToken()
+  const oldTemperature = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTemperature = oldTemperature ? Number.parseFloat(oldTemperature) : Consts.CHAT_TEMPERATURE_DEFAULT
+  const oldTopN = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTopP = oldTopN ? Number.parseFloat(oldTopN) : Consts.CHAT_TOP_P_DEFAULT
+  const oldContext = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_CONTEXT)
+  const defaultContext = oldContext ? Number.parseFloat(oldContext) : Consts.CHAT_CONTEXT_DEFAULT
 
   useEffect(() => {
     if (dirty) {
@@ -889,18 +897,130 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     setTextEditWindowVisible(false)
   }
 
+  const onChange = (key: string) => {
+    console.log(key)
+  }
+
+  const handleTemperatureChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
+  }
+  const handleTopPChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
+  }
+  const handleContextChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
+  }
+
+  const temperatureMarks: SliderSingleProps['marks'] = {
+    0: '0',
+    1: '1',
+    2: '2',
+  }
+  const topNMarks: SliderSingleProps['marks'] = {
+    0: '0',
+    1: '1',
+  }
+  const contextMarks: SliderSingleProps['marks'] = {
+    0: '0',
+    5: '5',
+    10: '10',
+    15: '15',
+    20: '20',
+  }
+
+  const chatSettingView = (
+    <div className={styles.chatSettingView}>
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.temperature'} />
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.temperature.tooltip' })}>
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={<Slider min={0} max={2} defaultValue={defaultTemperature} step={0.02} marks={temperatureMarks} onChange={handleTemperatureChange} />}
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.top-p'} />
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.top-p.tooltip' })}>
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={<Slider min={0} max={1} defaultValue={defaultTopP} step={0.01} marks={topNMarks} onChange={handleTopPChange} />}
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.context'} />
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.context.tooltip' })}>
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={<Slider min={0} max={20} step={1} defaultValue={defaultContext} marks={contextMarks} onChange={handleContextChange} />}
+        visible={true}
+        enableDivider={false}
+        columnMode={true}
+      />
+    </div>
+  )
+
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <span style={{ marginLeft: '10px' }}>
+          <FormattedMessage id={'conversion-panel.tab.chats'} />
+        </span>
+      ),
+      children: (
+        <>
+          <ConfigProvider
+            theme={{
+              components: {
+                Tree: {},
+              },
+            }}
+          >
+            <Tree
+              className={styles.conversionPanel}
+              style={{ backgroundColor: token.colorBgElevated }}
+              showIcon
+              blockNode
+              //switcherIcon={<div style={{ width: 0 }} />}
+              treeData={conversionTreeNodes}
+              expandedKeys={expandedKeys}
+              onSelect={handleSelect}
+              onExpand={handleExpand}
+            />
+          </ConfigProvider>
+        </>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <span style={{}}>
+          <FormattedMessage id={'conversion-panel.tab.settings'} />
+        </span>
+      ),
+      children: chatSettingView,
+    },
+  ]
   return (
     <div className={styles.conversionPanel}>
       {contextHolder}
-      <Tree
-        style={{ backgroundColor: token.colorBgElevated }}
-        showIcon
-        blockNode
-        treeData={conversionTreeNodes}
-        expandedKeys={expandedKeys}
-        onSelect={handleSelect}
-        onExpand={handleExpand}
-      />
+      <Tabs defaultActiveKey="1" items={items} onChange={onChange} style={{ height: '100%' }} />
       <TextEditWindow
         visible={textEditWindowVisible}
         textId={textEditId}

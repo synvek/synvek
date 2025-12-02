@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 
-import { RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
+import { Consts, RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { CopyOutlined, GlobalOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Input, message, Select, Splitter, theme, Tooltip } from 'antd'
 import { FormattedMessage, useIntl } from 'umi'
@@ -64,6 +64,10 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [selectedTranslationTargetLanguage, setTranslationTargetLanguage] = useState<string>(
     currentWorkspace.settings.defaultTranslationTargetOption ? currentWorkspace.settings.defaultTranslationTargetOption : TranslationUtils.LANGUAGE_EN_US,
   )
+  const oldTemperature = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTemperature = oldTemperature ? Number.parseFloat(oldTemperature) : Consts.CHAT_TEMPERATURE_DEFAULT
+  const oldTopN = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTopP = oldTopN ? Number.parseFloat(oldTopN) : Consts.CHAT_TOP_P_DEFAULT
 
   const intl = useIntl()
   const { token } = useToken()
@@ -151,6 +155,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       [{ type: 'text', text: translationInput }],
       [{ type: 'text', text: systemPrompt }],
       currentWorkspace.settings.defaultTranslationModel!,
+      defaultTemperature,
+      defaultTopP,
     )
     const content = chatData.data.content
     if (content) {

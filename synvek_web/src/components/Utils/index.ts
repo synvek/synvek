@@ -14,6 +14,7 @@ import type {
   User,
 } from './src/Common'
 import type { ModelCategory, ModelFile, ModelOption, ModelProvider, ModelProviderStatus, ModelRepo, ModelType } from './src/ModelProviders'
+import type { PluginContext, PluginDefinition, PluginMessage } from './src/PluginTypes'
 import type {
   Attachment,
   Chat,
@@ -61,6 +62,7 @@ export { ProviderUtils } from './src/ProviderUtils'
 export { RequestUtils } from './src/RequestUtils'
 export { OSType, SystemUtils } from './src/SystemUtils'
 export { ThemeUtils } from './src/ThemeUtils'
+export { usePluginBridge } from './src/usePluginBridge'
 export { WorkspaceUtils } from './src/WorkspaceUtils'
 export {
   Attachment,
@@ -93,6 +95,9 @@ export {
   ModelRepo,
   ModelServerData,
   ModelType,
+  PluginContext,
+  PluginDefinition,
+  PluginMessage,
   ProvidersType,
   ResponseMetadata,
   RunningTask,

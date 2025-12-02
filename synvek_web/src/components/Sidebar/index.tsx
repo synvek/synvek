@@ -157,15 +157,15 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Translate)}
           />
         </Tooltip>
-        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-applications' })}>
-          {/*<Button*/}
-          {/*  icon={<AppstoreOutlined />}*/}
-          {/*  variant={'text'}*/}
-          {/*  color={currentWorkspace.workMode === WorkMode.Tools ? 'primary' : 'default'}*/}
-          {/*  className={styles.button}*/}
-          {/*  onClick={() => handleWorkModeChange(WorkMode.Tools)}*/}
-          {/*></Button>*/}
-        </Tooltip>
+        {/*<Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-applications' })}>*/}
+        {/*  <Button*/}
+        {/*    icon={<AppstoreOutlined />}*/}
+        {/*    variant={'text'}*/}
+        {/*    color={currentWorkspace.workMode === WorkMode.Tools ? 'primary' : 'default'}*/}
+        {/*    className={styles.button}*/}
+        {/*    onClick={() => handleWorkModeChange(WorkMode.Tools)}*/}
+        {/*  ></Button>*/}
+        {/*</Tooltip>*/}
         <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-knowledge' })}>
           {/*<Button*/}
           {/*  icon={<ReadOutlined />}*/}

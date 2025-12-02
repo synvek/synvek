@@ -985,7 +985,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         <Button
           type={'text'}
           icon={<SearchOutlined style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} />}
-          style={{ display: isValidWorkMode() ? undefined : 'none', marginLeft: '16px' }}
+          style={{ display: isValidWorkMode() ? undefined : 'none' }}
           onClick={handleModelSearch}
         ></Button>
       </Tooltip>

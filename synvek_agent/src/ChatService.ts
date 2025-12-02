@@ -31,7 +31,7 @@ class LLMService {
     return LLMService.settings
   }
 
-  public static buildChat(streaming: boolean, modelName: string, enableThinking: boolean) {
+  public static buildChat(streaming: boolean, modelName: string, enableThinking: boolean, temperature?: number, topP?: number) {
     const modelServers = ModelServerService.getModelServers()
     const settings = LLMService.getSettings()
     let selectedModelServer: ModelServerInfo | undefined = undefined
@@ -44,7 +44,8 @@ class LLMService {
     if (selectedModelServer) {
       return new ChatOpenAI({
         model: 'default', //selectedModelServer.modelId,
-        temperature: 0.7,
+        temperature: temperature,
+        topP: topP,
         configuration: {
           baseURL: `${settings.backendServerProtocol}${settings.backendServerHost}:${selectedModelServer.port}${settings.backendServerPath}`,
           apiKey: '',
@@ -55,7 +56,8 @@ class LLMService {
     } else {
       return new ChatOpenAI({
         model: 'Qwen/Qwen3-1.7B',
-        temperature: 0.7,
+        temperature: temperature,
+        topP: topP,
         configuration: {
           baseURL: `${settings.backendServerProtocol}${settings.backendServerHost}:${settings.backendServerPort}${settings.backendServerPath}`,
           apiKey: '',
@@ -135,8 +137,10 @@ class LLMService {
     enableWebSearch: boolean,
     activatedToolPlugins: string[],
     activatedMCPServices: string[],
+    temperature?: number,
+    topP?: number,
   ) {
-    const model = LLMService.buildChat(false, modelName, enableThinking)
+    const model = LLMService.buildChat(false, modelName, enableThinking, temperature, topP)
     const toolPlugins = await PluginService.getAllToolPlugins()
     const filteredToolPlugins = toolPlugins.filter((toolPlugin: ToolPlugin) => {
       let activated = false
@@ -185,8 +189,10 @@ class LLMService {
     enableWebSearch: boolean,
     activatedToolPlugins: string[],
     activatedMCPServices: string[],
+    temperature?: number,
+    topP?: number,
   ) {
-    const model = LLMService.buildChat(true, modelName, enableThinking)
+    const model = LLMService.buildChat(true, modelName, enableThinking, temperature, topP)
     const toolPlugins = await PluginService.getAllToolPlugins()
     const filteredToolPlugins = toolPlugins.filter((toolPlugin: ToolPlugin) => {
       let activated = false
@@ -282,6 +288,8 @@ export const chatService = new Elysia()
                 body.enableWebSearch,
                 body.activatedToolPlugins,
                 body.activatedMCPServices,
+                body.temperature,
+                body.topN
               )
               //Logger.info(`Chat stream is created`)
               for await (const [chunk, metadata] of chatStream) {
@@ -361,6 +369,8 @@ export const chatService = new Elysia()
           body.enableWebSearch,
           body.activatedToolPlugins,
           body.activatedMCPServices,
+          body.temperature,
+          body.topN
         )
         const output: Chunk = {
           content: response.content.toString(),
@@ -403,6 +413,8 @@ export const chatService = new Elysia()
         enableWebSearch: t.Boolean(),
         activatedToolPlugins: t.Array(t.String()),
         activatedMCPServices: t.Array(t.String()),
+        temperature: t.Optional(t.Number()),
+        topN: t.Optional(t.Number()),
       }),
     },
   )

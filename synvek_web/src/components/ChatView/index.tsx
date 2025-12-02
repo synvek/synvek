@@ -110,6 +110,12 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const requireScrollRef = useRef<boolean>(false)
   const requireScrollCounterRef = useRef<number>(0)
   const antdConfig = useAntdConfig()
+  const oldTemperature = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTemperature = oldTemperature ? Number.parseFloat(oldTemperature) : Consts.CHAT_TEMPERATURE_DEFAULT
+  const oldTopN = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE)
+  const defaultTopP = oldTopN ? Number.parseFloat(oldTopN) : Consts.CHAT_TOP_P_DEFAULT
+  const oldContext = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_CONTEXT)
+  const defaultContext = oldContext ? Number.parseFloat(oldContext) : Consts.CHAT_CONTEXT_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -491,7 +497,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const historyMessages = currentWorkspace.selectedConversionData.chatMessages.filter((chatMessage) => chatMessage.content[0].type === 'text')
     const historyMessageHead = `## Chat history\n\n`
     const historyMessageContent = historyMessages
-      .slice(-Consts.HISTORY_CHAT_LIMIT)
+      .slice(-defaultContext)
       .map((chatMessage, index) => `chat index ${index}, chat role: ${chatMessage.fromUser ? 'user' : 'assistant'},  ${chatMessage.content[0].text}`)
       .join('\n')
 
@@ -544,6 +550,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       turnOnWebSearch,
       turnOnTools ? currentWorkspace.settings.activatedToolPlugins : [],
       turnOnMCP ? currentWorkspace.settings.activatedMCPServices : [],
+      defaultTemperature,
+      defaultTopP,
     )
     response
       .then(async (value) => {
@@ -1243,9 +1251,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       >
         <Splitter layout={'horizontal'}>
           <Splitter.Panel
-            min={240}
-            defaultSize={250}
-            max={320}
+            min={Consts.CONVERSION_PANEL_WIDTH_MIN}
+            defaultSize={Consts.CONVERSION_PANEL_WIDTH_DEFAULT}
+            max={Consts.CONVERSION_PANEL_WIDTH_MAX}
             style={{ display: currentWorkspace.conversionListVisible ? undefined : 'none', padding: '0 0' }}
             size={currentWorkspace.conversionListVisible ? undefined : 0}
           >

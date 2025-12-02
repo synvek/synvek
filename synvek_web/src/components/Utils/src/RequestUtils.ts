@@ -594,6 +594,8 @@ export class RequestUtils {
    * @param enableWebSearch
    * @param activatedToolPlugins
    * @param activatedMCPServices
+   * @param temperature
+   * @param topN
    */
   public static chat(
     userMessage: ChatContent[],
@@ -604,6 +606,8 @@ export class RequestUtils {
     enableWebSearch: boolean,
     activatedToolPlugins: string[],
     activatedMCPServices: string[],
+    temperature: number,
+    topN: number,
   ) {
     const data = {
       userMessage: userMessage,
@@ -615,6 +619,8 @@ export class RequestUtils {
       enableWebSearch: enableWebSearch,
       activatedToolPlugins: activatedToolPlugins,
       activatedMCPServices: activatedMCPServices,
+      temperature: temperature,
+      topN: topN,
     }
     return fetch(`${RequestUtils.agentServerAddress}/chat`, {
       method: 'POST',
@@ -625,7 +631,7 @@ export class RequestUtils {
     })
   }
 
-  public static chatDirectly(userMessage: ChatContent[], systemMessage: ChatContent[], modelName: string) {
+  public static chatDirectly(userMessage: ChatContent[], systemMessage: ChatContent[], modelName: string, temperature: number, topN: number) {
     const data = {
       userMessage: userMessage,
       systemMessage: systemMessage,
@@ -636,6 +642,8 @@ export class RequestUtils {
       enableWebSearch: false,
       activatedToolPlugins: [],
       activatedMCPServices: [],
+      temperature: temperature,
+      topN: topN,
     }
     const config = {
       headers: {

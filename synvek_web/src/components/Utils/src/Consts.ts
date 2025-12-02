@@ -7,9 +7,12 @@ export class Consts {
   public static HEADER_MENUBAR_ICON_WIDTH = 34
   public static HEADER_TITLE_BAR_BUTTON_WIDTH = 39
   public static SETTING_SIDEBAR_WIDTH = 250
-  public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_DEFAULT = 240
+  public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_DEFAULT = 280
   public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MIN = 200
   public static SETTING_MODEL_SEARCH_SIDEBAR_WIDTH_MAX = 450
+  public static CONVERSION_PANEL_WIDTH_DEFAULT = 280
+  public static CONVERSION_PANEL_WIDTH_MIN = 230
+  public static CONVERSION_PANEL_WIDTH_MAX = 450
 
   public static ENV_DEFAULT = 'default'
   public static ENV_DESKTOP = 'desktop'
@@ -92,10 +95,14 @@ export class Consts {
 
   //Use local storage for cache backend selection
   public static LOCAL_STORAGE_BACKEND_PREFIX = 'synvek.backend.'
-  /**
-   * Max history chat message for conversion with memory
-   */
-  public static HISTORY_CHAT_LIMIT = 10
+
+  //Local storage for chat settings
+  public static LOCAL_STORAGE_CHAT_TEMPERATURE = 'synvek.chat.temperature'
+  public static LOCAL_STORAGE_CHAT_TOP_P = 'synvek.chat.top_p'
+  public static LOCAL_STORAGE_CHAT_CONTEXT = 'synvek.chat.context'
+  public static CHAT_TEMPERATURE_DEFAULT = 1
+  public static CHAT_TOP_P_DEFAULT = 0.8
+  public static CHAT_CONTEXT_DEFAULT = 5
 
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },

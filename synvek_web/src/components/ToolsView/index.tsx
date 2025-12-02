@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { FC, KeyboardEvent, useCallback, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 
-import { useGlobalContext, WorkspaceUtils } from '@/components/Utils'
-import { ArrowUpOutlined, CodeOutlined, FileAddOutlined, GlobalOutlined, InteractionOutlined, ReadOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Input, message, Splitter, theme, Typography } from 'antd'
-import { Mention, MentionItem, MentionsInput } from 'react-mentions'
+import { PluginRunner, PluginRunnerRef } from '@/components/PluginRunner'
+import { PluginContext, PluginDefinition, useGlobalContext } from '@/components/Utils'
+import speechGenerationApp from '@/plugins/SpeechGenerationApp'
+import { Input, message, theme, Typography } from 'antd'
 import styles from './index.less'
 const { Text, Title } = Typography
 const { TextArea } = Input
@@ -14,16 +14,7 @@ interface ChatViewProps {
   visible: boolean
 }
 
-interface User {
-  id: string
-  display: string
-  avatar?: string
-}
-
-interface Tag {
-  id: string
-  display: string
-}
+const plugins: PluginDefinition[] = [speechGenerationApp]
 
 const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -32,110 +23,79 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [initialized, setInitialized] = useState<boolean>(false)
   const [userText, setUserText] = useState<string>('')
   const { token } = useToken()
+  const [activePlugin, setActivePlugin] = useState<PluginDefinition>(speechGenerationApp)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [lastMessage, setLastMessage] = useState<string>('None')
+
+  const pluginRunnerRef = useRef<PluginRunnerRef>(null)
+
+  const context: PluginContext = {
+    theme,
+    user: { name: 'Admin User' },
+  }
 
   useEffect(() => {
-    console.log(`Initializing ChatView now ...`)
-    if (!initialized) {
-      initialize()
+    if (pluginRunnerRef.current) {
+      pluginRunnerRef.current.sendMessage({
+        type: 'THEME_CHANGED',
+        payload: { theme },
+      })
     }
-    return () => {}
-  })
+  }, [theme])
 
-  const initialize = () => {
-    setInitialized(true)
+  // Mock TTS Handler
+  const handleTTSRequest = (payload: any) => {
+    // Simulate API delay
+    setTimeout(() => {
+      // In a real app, this would call the Dia model API
+      // For demo, we use browser's speech synthesis to generate a blob or just speak
+      // But to simulate "returning a file", we can't easily get a blob from speechSynthesis.
+      // So we will just return a dummy success message or a public URL if available.
+      // Actually, let's try to use a public TTS API or just a placeholder sound.
+      // Or better, we can use the browser's speechSynthesis to speak it, but that happens on Host.
+      // To make the Plugin play it, the Plugin needs a URL.
+
+      // Let's use a placeholder MP3 for demo purposes, or a free TTS API.
+      // Using a simple reliable source or just a mock.
+      // Mock: "Here is your audio"
+
+      console.log('Generating audio for:', payload.text)
+
+      // We will send back a success with a dummy URL (or a real one if we had one)
+      // For the sake of the demo being "cool", let's use a data URI of a short beep or similar?
+      // No, let's just pretend.
+
+      if (pluginRunnerRef.current) {
+        pluginRunnerRef.current.sendMessage({
+          type: 'TTS_RESULT',
+          payload: {
+            // This is a sample audio file URL (public domain or similar)
+            // Using a generic sound for demo
+            audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+          },
+        })
+      }
+    }, 2000)
   }
 
-  const handleUserTextChange = (event: { target: { value: string } }, newValue: string, newPlainTextValue: string, mentions: MentionItem[]) => {
-    setUserText(event.target.value)
-  }
-
-  const mentionItems: User[] = [{ id: 'abc', display: 'bcd', avatar: 'https://abc.com' }]
-
-  const tags: Tag[] = [{ id: 'abc', display: 'bcccc' }]
-
-  const handleUserMention = useCallback((id: string | number, display: string) => {}, [])
-
-  const handleTagMention = useCallback((id: string, display: string) => {}, [])
-
-  const handleKeyDownCapture = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    WorkspaceUtils.preventGlobalPropagation(event)
-  }
   return (
     <div className={styles.chatView} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
-      <ConfigProvider
-        theme={{
-          components: {
-            Splitter: {
-              splitBarSize: 0,
-            },
-          },
-        }}
-      >
-        <Splitter layout={'vertical'} className={styles.agentSplitter}>
-          <Splitter.Panel>
-            <div className={styles.agentContent} style={{}}>
-              tools
-            </div>
-          </Splitter.Panel>
-          <Splitter.Panel defaultSize={110} min={100} max={500} style={{ padding: '0 16px 16px 16px' }}>
-            <div className={styles.agentFooter} style={{ backgroundColor: token.colorBgElevated, border: `${token.colorBorder} solid 1.5px` }}>
-              <div className={styles.agentFooterText}>
-                {/*<TextArea variant={'borderless'} className={styles.agentFooterTextBox} style={{ resize: 'none' }}></TextArea>*/}
-                <MentionsInput
-                  className={styles.agentFooterTextBox}
-                  value={userText}
-                  onChange={handleUserTextChange}
-                  onKeyDownCapture={handleKeyDownCapture}
-                  placeholder={'Please input your question'}
-                  a11ySuggestionsListLabel={'Suggested mentions'}
-                  style={{
-                    input: {
-                      outline: 'none',
-                      border: 'none',
-                      overflow: 'auto',
-                      scrollbarWidth: 'thin',
-                      backgroundColor: token.colorBgElevated,
-                      scrollbarColor: `var(--scroll-color-elevated)`,
-                    },
-                    suggestions: {
-                      backgroundColor: token.colorBgContainer,
-                    },
-                  }}
-                >
-                  <Mention
-                    trigger={'@'}
-                    data={mentionItems}
-                    displayTransform={(id, display) => `@${display}->${id}`}
-                    onAdd={handleUserMention}
-                    markup={'@[__display__](__id__)'}
-                    renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => {
-                      return (
-                        <div>
-                          <span>{suggestion.display}</span> Hello
-                        </div>
-                      )
-                    }}
-                    style={{ backgroundColor: 'silver' }}
-                  />
-                </MentionsInput>
-              </div>
-              <div className={styles.agentFooterButton}>
-                <div className={styles.agentFooterButtonSettingSection}>
-                  <Button color={'default'} variant={'text'} icon={<InteractionOutlined />} style={{ fontSize: '17px' }} />
-                  <Button color={'default'} variant={'text'} icon={<GlobalOutlined />} style={{ fontSize: '17px' }} />
-                </div>
-                <div className={styles.agentFooterButtonSubmitSection}>
-                  <Button color={'default'} variant={'text'} icon={<FileAddOutlined />} style={{ fontSize: '17px' }} />
-                  <Button color={'default'} variant={'text'} icon={<CodeOutlined />} style={{ fontSize: '17px' }} />
-                  <Button color={'default'} variant={'text'} icon={<ReadOutlined />} style={{ fontSize: '17px' }} />
-                  <Button type={'primary'} shape={'circle'} icon={<ArrowUpOutlined />} style={{ fontSize: '17px' }} />
-                </div>
-              </div>
-            </div>
-          </Splitter.Panel>
-        </Splitter>
-      </ConfigProvider>
+      <div style={{ flex: 1, height: '500px' }}>
+        <PluginRunner
+          ref={pluginRunnerRef}
+          plugin={activePlugin}
+          context={context}
+          onMessage={(msg) => {
+            setLastMessage(JSON.stringify(msg))
+            message.info(`Received: ${msg.type}`)
+
+            if (msg.type === 'REQUEST_TTS') {
+              handleTTSRequest(msg.payload)
+            }
+          }}
+        />
+      </div>
     </div>
   )
 }
