@@ -157,12 +157,18 @@ export default (props: any) => {
 
   const openMiniApps = currentWorkspace.openMiniApps.map((openMiniApp) => {
     const size = 28
-    const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(openMiniApp.icon)}`
+    let img: JSX.Element
+    if (typeof openMiniApp.icon === 'string') {
+      const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(openMiniApp.icon)}`
+      img = <img src={svgDataUrl} width={size} height={size} alt={openMiniApp.name} />
+    } else {
+      img = openMiniApp.icon({ width: size, height: size })
+    }
     return (
       <Tooltip key={openMiniApp.id} title={openMiniApp.description}>
         <Dropdown menu={{ items: populatePopupMenuItems(openMiniApp) }} trigger={['contextMenu']}>
           <Button
-            icon={<img src={svgDataUrl} width={size} height={size} alt={openMiniApp.name} />}
+            icon={img}
             variant={'text'}
             color={currentWorkspace.workMode === WorkMode.MiniApps ? 'primary' : 'default'}
             className={styles.button}

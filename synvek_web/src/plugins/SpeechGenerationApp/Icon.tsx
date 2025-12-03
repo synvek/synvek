@@ -1,7 +1,7 @@
 import { SVGProps } from 'react'
 
 //Icon set: Fluent UI System Icons: fluent:sound-wave-circle-sparkle-48-regular
-export function Sidebar(props: SVGProps<SVGSVGElement>) {
+export function Icon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" {...props}>
       <path

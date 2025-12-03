@@ -3,8 +3,10 @@ import { FC, useEffect, useRef, useState } from 'react'
 
 import { PluginRunner, PluginRunnerRef } from '@/components/PluginRunner'
 import { Consts, PluginContext, PluginDefinition, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
-import deepseekApp from '@/plugins/DeepseekApp'
+import doubaoApp from '@/plugins/DoubaoApp'
+import helloWorldApp from '@/plugins/HelloWorldApp'
 import speechGenerationApp from '@/plugins/SpeechGenerationApp'
+import yiyanApp from '@/plugins/YiyanApp'
 import { Card, Input, message, theme, Tooltip, Typography } from 'antd'
 import styles from './index.less'
 
@@ -17,7 +19,7 @@ interface ChatViewProps {
   visible: boolean
 }
 
-const plugins: PluginDefinition[] = [speechGenerationApp, deepseekApp]
+const plugins: PluginDefinition[] = [speechGenerationApp, doubaoApp, yiyanApp, helloWorldApp]
 
 const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -103,21 +105,27 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   }
 
   const pluginCards = plugins.map((plugin) => {
-    const size = 64
-    const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(plugin.icon)}`
+    const iconSize = 64
+    const cardSize = 128
+    let img: JSX.Element
+    if (typeof plugin.icon === 'string') {
+      const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(plugin.icon)}`
+      img = <img src={svgDataUrl} width={iconSize} height={iconSize} alt={plugin.name} />
+    } else {
+      img = plugin.icon({ width: iconSize, height: iconSize })
+    }
     return (
       <Tooltip key={plugin.id} title={plugin.name}>
-        <Card size="small" hoverable onClick={() => handleOpenPlugin(plugin)}>
-          <div style={{ width: size, height: size, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img src={svgDataUrl} width={size} height={size} alt={plugin.name} />
-          </div>
+        <Card size="small" hoverable onClick={() => handleOpenPlugin(plugin)} style={{ width: cardSize, height: cardSize }}>
+          <div style={{ width: '100%', height: 80, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{img}</div>
           <div
             style={{
-              width: 48,
-              fontSize: 11,
+              width: '100%',
+              fontSize: 14,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              textAlign: 'center',
             }}
           >
             {plugin.name}
@@ -160,11 +168,11 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             width: '100%',
             height: '100%',
             display: 'flex',
-            gap: '24px',
+            gap: '48px',
             justifyContent: 'start',
             justifyItems: 'start',
             alignItems: 'start',
-            padding: '32px',
+            padding: '48px',
           }}
         >
           {pluginCards}
