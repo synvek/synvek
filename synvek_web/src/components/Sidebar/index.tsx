@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Consts, useGlobalContext, WorkMode } from '@/components/Utils'
+import { Consts, PluginDefinition, useGlobalContext, WorkMode } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { AppstoreOutlined, MessageOutlined, MoonOutlined, PictureOutlined, SettingOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons'
-import { Button, MappingAlgorithm, theme, Tooltip } from 'antd'
+import { Button, Divider, Dropdown, MappingAlgorithm, MenuProps, theme, Tooltip } from 'antd'
 import { ConfigProviderProps } from 'antd/es/config-provider'
 import { useEffect, useState } from 'react'
-import { useAntdConfig, useAntdConfigSetter } from 'umi'
+import { FormattedMessage, useAntdConfig, useAntdConfigSetter } from 'umi'
 import styles from './index.less'
 
 const { useToken } = theme
@@ -16,7 +16,6 @@ export default (props: any) => {
   const antdConfig = useAntdConfig()
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
-  const [initialized, setInitialized] = useState<boolean>(false)
   const { token } = useToken()
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
   //const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -28,14 +27,14 @@ export default (props: any) => {
 
   const intl = useIntl()
   useEffect(() => {
-    if (!initialized) {
-      initialize()
+    currentWorkspace.onActivatedMiniAppChanged(handleActivatedMiniAppChanged)
+    return () => {
+      currentWorkspace.removeActivatedMiniAppChangedListener(handleActivatedMiniAppChanged)
     }
-    return () => {}
   })
 
-  const initialize = async () => {
-    setInitialized(true)
+  const handleActivatedMiniAppChanged = () => {
+    setForceUpdate(!forceUpdate)
   }
 
   const handleWorkModeChange = async (workMode: WorkMode) => {
@@ -62,6 +61,8 @@ export default (props: any) => {
         //history.push('/tools')
         currentWorkspace.workPath = Consts.WORK_PATH_MINI_APPS
         currentWorkspace.workMode = WorkMode.MiniApps
+        currentWorkspace.activatedMiniApp = null
+        currentWorkspace.triggerActivatedMiniAppChanged()
         break
       case WorkMode.Knowledge:
         //history.push('/knowledge')
@@ -119,6 +120,58 @@ export default (props: any) => {
     })
     currentWorkspace.triggerThemeChanged()
   }
+
+  const handleCloseActivatedMiniApp = (miniApp: PluginDefinition) => {
+    let index = -1
+    for (let i = 0; i < currentWorkspace.openMiniApps.length; i++) {
+      if (miniApp.id === currentWorkspace.openMiniApps[i].id) {
+        index = i
+      }
+    }
+    if (index >= 0) {
+      if (currentWorkspace.activatedMiniApp && miniApp.id === currentWorkspace.activatedMiniApp.id) {
+        currentWorkspace.activatedMiniApp = null
+      }
+      currentWorkspace.openMiniApps.splice(index, 1)
+      currentWorkspace.triggerActivatedMiniAppChanged()
+    }
+  }
+
+  const handleCloseAllActivatedMiniApps = () => {
+    currentWorkspace.openMiniApps = []
+    currentWorkspace.activatedMiniApp = null
+    currentWorkspace.triggerActivatedMiniAppChanged()
+  }
+
+  const populatePopupMenuItems = (miniApp: PluginDefinition): MenuProps['items'] => {
+    return [
+      { label: <FormattedMessage id="sidebar.menu.close-activated-mini-app" />, key: '1', onClick: () => handleCloseActivatedMiniApp(miniApp) },
+      { label: <FormattedMessage id="sidebar.menu.close-all-activated-mini-apps" />, key: '2', onClick: handleCloseAllActivatedMiniApps },
+    ]
+  }
+
+  const handleOpenMiniApp = (miniApp: PluginDefinition) => {
+    currentWorkspace.activatedMiniApp = miniApp
+    currentWorkspace.triggerActivatedMiniAppChanged()
+  }
+
+  const openMiniApps = currentWorkspace.openMiniApps.map((openMiniApp) => {
+    const size = 28
+    const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(openMiniApp.icon)}`
+    return (
+      <Tooltip key={openMiniApp.id} title={openMiniApp.description}>
+        <Dropdown menu={{ items: populatePopupMenuItems(openMiniApp) }} trigger={['contextMenu']}>
+          <Button
+            icon={<img src={svgDataUrl} width={size} height={size} alt={openMiniApp.name} />}
+            variant={'text'}
+            color={currentWorkspace.workMode === WorkMode.MiniApps ? 'primary' : 'default'}
+            className={styles.button}
+            onClick={() => handleOpenMiniApp(openMiniApp)}
+          ></Button>
+        </Dropdown>
+      </Tooltip>
+    )
+  })
   return (
     <div data-tauri-drag-region className={styles.sidebar} style={{ backgroundColor: token.colorFillAlter, borderRight: `${token.colorBorder} solid 1px` }}>
       <div data-tauri-drag-region className={styles.controlBar}>
@@ -158,7 +211,7 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Translate)}
           />
         </Tooltip>
-        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-tools' })}>
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-mini-apps' })}>
           <Button
             icon={<AppstoreOutlined />}
             variant={'text'}
@@ -176,6 +229,8 @@ export default (props: any) => {
           {/*  onClick={() => handleWorkModeChange(WorkMode.Knowledge)}*/}
           {/*></Button>*/}
         </Tooltip>
+        {openMiniApps.length > 0 ? <Divider style={{ margin: 0 }} /> : null}
+        {openMiniApps}
       </div>
       <div data-tauri-drag-region className={styles.settingBar}>
         <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-help' })}>

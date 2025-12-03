@@ -5,12 +5,14 @@ import { PluginRunner, PluginRunnerRef } from '@/components/PluginRunner'
 import { Consts, PluginContext, PluginDefinition, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import deepseekApp from '@/plugins/DeepseekApp'
 import speechGenerationApp from '@/plugins/SpeechGenerationApp'
-import { Input, message, theme, Typography } from 'antd'
+import { Card, Input, message, theme, Tooltip, Typography } from 'antd'
 import styles from './index.less'
+
 const { Text, Title } = Typography
 const { TextArea } = Input
 
 const { useToken } = theme
+
 interface ChatViewProps {
   visible: boolean
 }
@@ -21,10 +23,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
-  const [initialized, setInitialized] = useState<boolean>(false)
-  const [userText, setUserText] = useState<string>('')
   const { token } = useToken()
-  const [activePlugin, setActivePlugin] = useState<PluginDefinition>(deepseekApp)
+  const [activatedMiniApp, setActivatedMiniApp] = useState<PluginDefinition | null>(currentWorkspace.activatedMiniApp)
   const [theme, setTheme] = useState<'light' | 'dark'>(WorkspaceUtils.getTheme())
   const [lastMessage, setLastMessage] = useState<string>('None')
 
@@ -40,11 +40,17 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     handleLanguageChanged()
     currentWorkspace.onThemeChanged(handleThemeChanged)
     currentWorkspace.onLanguageChanged(handleLanguageChanged)
+    currentWorkspace.onActivatedMiniAppChanged(handleActivatedMiniAppChange)
     return () => {
       currentWorkspace.removeThemeChangedListener(handleThemeChanged)
       currentWorkspace.removeLanguageChangedListener(handleLanguageChanged)
+      currentWorkspace.removeActivatedMiniAppChangedListener(handleActivatedMiniAppChange)
     }
   })
+
+  const handleActivatedMiniAppChange = () => {
+    setActivatedMiniApp(currentWorkspace.activatedMiniApp)
+  }
 
   const handleThemeChanged = () => {
     const theme = WorkspaceUtils.getTheme()
@@ -81,22 +87,89 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     }, 2000)
   }
 
+  const handleOpenPlugin = (plugin: PluginDefinition) => {
+    let open = false
+    currentWorkspace.openMiniApps.forEach((openMiniApp) => {
+      if (openMiniApp.id === plugin.id) {
+        open = true
+      }
+    })
+    if (!open) {
+      currentWorkspace.openMiniApps = [...currentWorkspace.openMiniApps, plugin]
+    }
+    currentWorkspace.activatedMiniApp = plugin
+    setActivatedMiniApp(plugin)
+    currentWorkspace.triggerActivatedMiniAppChanged()
+  }
+
+  const pluginCards = plugins.map((plugin) => {
+    const size = 64
+    const svgDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(plugin.icon)}`
+    return (
+      <Tooltip key={plugin.id} title={plugin.name}>
+        <Card size="small" hoverable onClick={() => handleOpenPlugin(plugin)}>
+          <div style={{ width: size, height: size, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img src={svgDataUrl} width={size} height={size} alt={plugin.name} />
+          </div>
+          <div
+            style={{
+              width: 48,
+              fontSize: 11,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {plugin.name}
+          </div>
+        </Card>
+      </Tooltip>
+    )
+  })
+
   return (
     <div className={styles.chatView} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
-      <div ref={pluginContainerRef} style={{ width: '100%', height: '100%', display: 'flex', justifyItems: 'center', alignItems: 'center' }}>
-        <PluginRunner
-          ref={pluginRunnerRef}
-          plugin={activePlugin}
-          context={context}
-          onMessage={(msg) => {
-            setLastMessage(JSON.stringify(msg))
-            if (msg.type === 'REQUEST_TTS') {
-              handleTTSRequest(msg.payload)
-            }
+      {activatedMiniApp ? (
+        <div
+          ref={pluginContainerRef}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            justifyItems: 'center',
+            alignItems: 'center',
           }}
-        />
-      </div>
+        >
+          <PluginRunner
+            ref={pluginRunnerRef}
+            plugin={activatedMiniApp}
+            context={context}
+            onMessage={(msg) => {
+              setLastMessage(JSON.stringify(msg))
+              if (msg.type === 'REQUEST_TTS') {
+                handleTTSRequest(msg.payload)
+              }
+            }}
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            gap: '24px',
+            justifyContent: 'start',
+            justifyItems: 'start',
+            alignItems: 'start',
+            padding: '32px',
+          }}
+        >
+          {pluginCards}
+        </div>
+      )}
     </div>
   )
 }

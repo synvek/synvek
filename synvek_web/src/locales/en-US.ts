@@ -281,6 +281,8 @@ export default {
   'sidebar.button-tooltip-theme-light': 'Theme: Light',
   'sidebar.button-tooltip-theme-dark': 'Theme: Dark',
   'sidebar.button-tooltip-settings': 'Settings',
+  'sidebar.menu.close-activated-mini-app': 'Close',
+  'sidebar.menu.close-all-activated-mini-apps': 'Close All',
   'text-edit-window.window-title': 'Edit',
   'text-edit-window.column-text-content': 'Content',
   'text-edit-window.column-text-content-message': 'Content is required',

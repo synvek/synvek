@@ -1,4 +1,4 @@
-import { FetchStatusData, ListFetchData, MCPServer, Settings, Task } from '@/components/Utils'
+import { FetchStatusData, ListFetchData, MCPServer, PluginDefinition, Settings, Task } from '@/components/Utils'
 import { ConversionData } from './Common'
 import { Consts } from './Consts'
 import { Knowledge } from './Knowledge'
@@ -55,6 +55,8 @@ export class CurrentWorkspace {
   public modelDataCountDown: number = 0
   public modelDataCounter: number = 0
   public conversionListVisible = false
+  public openMiniApps: PluginDefinition[] = []
+  public activatedMiniApp: PluginDefinition | null = null
 
   private _fetchStatusChangedListeners: Array<() => void> = []
   private _modelServersChangedListeners: Array<() => void> = []
@@ -72,6 +74,7 @@ export class CurrentWorkspace {
   private _routerChangedListeners: Array<() => void> = []
   private _themeChangedListeners: Array<() => void> = []
   private _languageChangedListeners: Array<() => void> = []
+  private _activatedMiniAppChangedListeners: Array<() => void> = []
 
   public onFetchStatusChanged(callback: () => void) {
     const index = this._fetchStatusChangedListeners.indexOf(callback)
@@ -359,5 +362,23 @@ export class CurrentWorkspace {
 
   public triggerLanguageChanged() {
     this._languageChangedListeners.forEach((callback) => callback())
+  }
+
+  public onActivatedMiniAppChanged(callback: () => void) {
+    const index = this._activatedMiniAppChangedListeners.indexOf(callback)
+    if (index < 0) {
+      this._activatedMiniAppChangedListeners.push(callback)
+    }
+  }
+
+  public removeActivatedMiniAppChangedListener(callback: () => void) {
+    const index = this._activatedMiniAppChangedListeners.indexOf(callback)
+    if (index >= 0) {
+      this._activatedMiniAppChangedListeners.splice(index, 1)
+    }
+  }
+
+  public triggerActivatedMiniAppChanged() {
+    this._activatedMiniAppChangedListeners.forEach((callback) => callback())
   }
 }
