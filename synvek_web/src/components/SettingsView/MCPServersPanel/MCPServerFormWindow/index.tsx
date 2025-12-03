@@ -292,7 +292,7 @@ const MCPServerFormWindowPage: FC<MCPServerFormWindowProps> = ({
               style={{ marginBottom: '4px', width: '100%' }}
             >
               <TextArea
-                placeholder={intl.formatMessage({ id: 'setting-view.mcp-server-form-window.column-envs-placeholder' })}
+                placeholder={`{\n    "VAR1": "Value1",\n    "VAR2": "Value2"\n}`}
                 size="small"
                 style={{ width: '100%', height: '90px', maxHeight: '140px' }}
               />
@@ -307,7 +307,7 @@ const MCPServerFormWindowPage: FC<MCPServerFormWindowProps> = ({
               style={{ marginBottom: '4px', width: '100%' }}
             >
               <TextArea
-                placeholder={intl.formatMessage({ id: 'setting-view.mcp-server-form-window.column-headers-placeholder' })}
+                placeholder={`{\n    "Content-Type": "application/json",\n    "Authorization": "Bearer your token"\n}`}
                 size="small"
                 style={{ width: '100%', height: '90px', maxHeight: '140px' }}
               />
