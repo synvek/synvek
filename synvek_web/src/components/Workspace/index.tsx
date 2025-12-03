@@ -6,7 +6,6 @@ import ImageGenerationView from '@/components/ImageGenerationView'
 import KnowledgeView from '@/components/KnowledgeView'
 import SettingsView from '@/components/SettingsView'
 import Sidebar from '@/components/Sidebar'
-import ToolsView from '@/components/ToolsView'
 import TranslationView from '@/components/TranslationView'
 import { Consts, useGlobalContext, WorkMode } from '@/components/Utils'
 import { message, Splitter } from 'antd'
@@ -14,6 +13,7 @@ import { FC, useEffect, useState } from 'react'
 import { useParams } from 'umi'
 import styles from './index.less'
 
+import MiniAppsView from '@/components/MiniAppsView'
 import { theme } from 'antd'
 
 const { useToken } = theme
@@ -58,7 +58,7 @@ const Workspace: FC<WorkspaceProps> = () => {
           <ImageGenerationView visible={currentWorkspace.workMode === WorkMode.Image} />
           <AudioGenerationView visible={currentWorkspace.workMode === WorkMode.Audio} />
           <TranslationView visible={currentWorkspace.workMode === WorkMode.Translate} />
-          <ToolsView visible={currentWorkspace.workMode === WorkMode.Tools} />
+          <MiniAppsView visible={currentWorkspace.workMode === WorkMode.MiniApps} />
           <KnowledgeView visible={currentWorkspace.workMode === WorkMode.Knowledge} />
           <HelpView visible={currentWorkspace.workMode === WorkMode.Help} />
           <SettingsView visible={currentWorkspace.workMode === WorkMode.Settings} />

@@ -603,4 +603,13 @@ export class WorkspaceUtils {
       duration: duration,
     })
   }
+
+  public static getTheme(): 'light' | 'dark' {
+    let storageTheme = localStorage.getItem('synvek.theme')
+    if (!storageTheme) {
+      storageTheme = 'dark'
+    }
+    // @ts-ignore
+    return storageTheme
+  }
 }

@@ -14,7 +14,7 @@ export interface PluginDefinition {
   id: string
   name: string
   label: string
-  type: 'agent' | 'app' | 'worker' | 'tool'
+  type: 'agent' | 'app' | 'worker' | 'tool' | 'site'
   category: 'tool' | 'chat' | 'development' | 'finance' | 'life'
   icon: string //Base64 icon or svg
   content: string // HTML content

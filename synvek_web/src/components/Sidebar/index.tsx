@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Consts, useGlobalContext, WorkMode } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { MessageOutlined, MoonOutlined, PictureOutlined, SettingOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, MessageOutlined, MoonOutlined, PictureOutlined, SettingOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons'
 import { Button, MappingAlgorithm, theme, Tooltip } from 'antd'
 import { ConfigProviderProps } from 'antd/es/config-provider'
 import { useEffect, useState } from 'react'
@@ -58,10 +58,10 @@ export default (props: any) => {
         currentWorkspace.workPath = Consts.WORK_PATH_TRANSLATE
         currentWorkspace.workMode = WorkMode.Translate
         break
-      case WorkMode.Tools:
+      case WorkMode.MiniApps:
         //history.push('/tools')
-        currentWorkspace.workPath = Consts.WORK_PATH_TOOLS
-        currentWorkspace.workMode = WorkMode.Tools
+        currentWorkspace.workPath = Consts.WORK_PATH_MINI_APPS
+        currentWorkspace.workMode = WorkMode.MiniApps
         break
       case WorkMode.Knowledge:
         //history.push('/knowledge')
@@ -117,6 +117,7 @@ export default (props: any) => {
       }
       return config
     })
+    currentWorkspace.triggerThemeChanged()
   }
   return (
     <div data-tauri-drag-region className={styles.sidebar} style={{ backgroundColor: token.colorFillAlter, borderRight: `${token.colorBorder} solid 1px` }}>
@@ -157,15 +158,15 @@ export default (props: any) => {
             onClick={() => handleWorkModeChange(WorkMode.Translate)}
           />
         </Tooltip>
-        {/*<Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-applications' })}>*/}
-        {/*  <Button*/}
-        {/*    icon={<AppstoreOutlined />}*/}
-        {/*    variant={'text'}*/}
-        {/*    color={currentWorkspace.workMode === WorkMode.Tools ? 'primary' : 'default'}*/}
-        {/*    className={styles.button}*/}
-        {/*    onClick={() => handleWorkModeChange(WorkMode.Tools)}*/}
-        {/*  ></Button>*/}
-        {/*</Tooltip>*/}
+        <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-tools' })}>
+          <Button
+            icon={<AppstoreOutlined />}
+            variant={'text'}
+            color={currentWorkspace.workMode === WorkMode.MiniApps ? 'primary' : 'default'}
+            className={styles.button}
+            onClick={() => handleWorkModeChange(WorkMode.MiniApps)}
+          ></Button>
+        </Tooltip>
         <Tooltip title={intl.formatMessage({ id: 'sidebar.button-tooltip-knowledge' })}>
           {/*<Button*/}
           {/*  icon={<ReadOutlined />}*/}

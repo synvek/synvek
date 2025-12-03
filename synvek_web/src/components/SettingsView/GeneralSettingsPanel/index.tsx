@@ -62,6 +62,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
         setLocale(data.language, false)
         currentWorkspace.settings.language = value
         currentWorkspace.triggerSettingsChanged()
+        currentWorkspace.triggerLanguageChanged()
       },
       () => {},
       () => {},

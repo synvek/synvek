@@ -8,6 +8,11 @@ You can chat with multiple LLMs in one conversion including text, image generati
 
 https://www.synvek.com
 
+
+**Development Status**
+
+This project is currently under active development​ and not yet production-ready. Please note that the API and functionality are subject to breaking changes​ during this phase.
+
 ## Main Features
 
 ### Local models management

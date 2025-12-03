@@ -10,7 +10,7 @@ export enum WorkMode {
   Image = 1,
   Audio = 2,
   Translate = 3,
-  Tools = 4,
+  MiniApps = 4,
   Knowledge = 5,
   Help = 6,
   Settings = 7,
@@ -70,6 +70,8 @@ export class CurrentWorkspace {
   private _mcpServersChangedListeners: Array<() => void> = []
   private _mcpServersRefreshedListeners: Array<() => void> = []
   private _routerChangedListeners: Array<() => void> = []
+  private _themeChangedListeners: Array<() => void> = []
+  private _languageChangedListeners: Array<() => void> = []
 
   public onFetchStatusChanged(callback: () => void) {
     const index = this._fetchStatusChangedListeners.indexOf(callback)
@@ -321,5 +323,41 @@ export class CurrentWorkspace {
 
   public triggerRouterChanged() {
     this._routerChangedListeners.forEach((callback) => callback())
+  }
+
+  public onThemeChanged(callback: () => void) {
+    const index = this._themeChangedListeners.indexOf(callback)
+    if (index < 0) {
+      this._themeChangedListeners.push(callback)
+    }
+  }
+
+  public removeThemeChangedListener(callback: () => void) {
+    const index = this._themeChangedListeners.indexOf(callback)
+    if (index >= 0) {
+      this._themeChangedListeners.splice(index, 1)
+    }
+  }
+
+  public triggerThemeChanged() {
+    this._themeChangedListeners.forEach((callback) => callback())
+  }
+
+  public onLanguageChanged(callback: () => void) {
+    const index = this._languageChangedListeners.indexOf(callback)
+    if (index < 0) {
+      this._languageChangedListeners.push(callback)
+    }
+  }
+
+  public removeLanguageChangedListener(callback: () => void) {
+    const index = this._languageChangedListeners.indexOf(callback)
+    if (index >= 0) {
+      this._languageChangedListeners.splice(index, 1)
+    }
+  }
+
+  public triggerLanguageChanged() {
+    this._languageChangedListeners.forEach((callback) => callback())
   }
 }

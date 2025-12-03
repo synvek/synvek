@@ -8,6 +8,10 @@ Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/
 
 https://www.synvek.com
 
+**项目状态说明**
+
+本项目目前处于早期积极开发阶段,其核心架构与功能仍在快速迭代中，尚未达到生产环境所需的稳定性和完整性要求。因此API和功能可能随时变化。
+
 ## 主要功能
 
 ### 本地模型管理

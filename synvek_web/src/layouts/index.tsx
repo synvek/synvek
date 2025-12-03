@@ -25,7 +25,7 @@ export default function GlobalLayout(props: any) {
   const matchImage = useMatch(Consts.WORK_PATH_IMAGE)
   const matchAudio = useMatch(Consts.WORK_PATH_AUDIO)
   const matchTranslate = useMatch(Consts.WORK_PATH_TRANSLATE)
-  const matchTools = useMatch(Consts.WORK_PATH_TOOLS)
+  const matchTools = useMatch(Consts.WORK_PATH_MINI_APPS)
   const matchKnowledge = useMatch(Consts.WORK_PATH_KNOWLEDGE)
   const matchHelp = useMatch(Consts.WORK_PATH_HELP)
   const matchSettings = useMatch(Consts.WORK_PATH_SETTINGS)
@@ -46,8 +46,8 @@ export default function GlobalLayout(props: any) {
     initWorkPath = Consts.WORK_PATH_TRANSLATE
     initWorkMode = WorkMode.Translate
   } else if (matchTools) {
-    initWorkPath = Consts.WORK_PATH_TOOLS
-    initWorkMode = WorkMode.Tools
+    initWorkPath = Consts.WORK_PATH_MINI_APPS
+    initWorkMode = WorkMode.MiniApps
   } else if (matchKnowledge) {
     initWorkPath = Consts.WORK_PATH_KNOWLEDGE
     initWorkMode = WorkMode.Knowledge
@@ -94,6 +94,7 @@ export default function GlobalLayout(props: any) {
         const newLanguage = data.language ? data.language : 'en-US'
         if (newLanguage !== getLocale()) {
           setLocale(newLanguage, false)
+          currentWorkspace.triggerLanguageChanged()
         }
         if (WorkspaceUtils.checkIfSettingsLanguageOrModelChanged(currentWorkspace.settings, data)) {
           currentWorkspace.settings = data
@@ -102,9 +103,11 @@ export default function GlobalLayout(props: any) {
       },
       () => {
         setLocale(Consts.LANGUAGE_EN_US, false)
+        currentWorkspace.triggerLanguageChanged()
       },
       () => {
         setLocale(Consts.LANGUAGE_EN_US, false)
+        currentWorkspace.triggerLanguageChanged()
       },
     )
   }

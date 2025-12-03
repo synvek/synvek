@@ -33,7 +33,7 @@ export class Consts {
   public static WORK_PATH_IMAGE = '/image'
   public static WORK_PATH_AUDIO = '/audio'
   public static WORK_PATH_TRANSLATE = '/translate'
-  public static WORK_PATH_TOOLS = '/tools'
+  public static WORK_PATH_MINI_APPS = '/miniapps'
   public static WORK_PATH_KNOWLEDGE = '/knowledge'
   public static WORK_PATH_HELP = '/help'
   public static WORK_PATH_SETTINGS = '/settings'
@@ -103,6 +103,18 @@ export class Consts {
   public static CHAT_TEMPERATURE_DEFAULT = 1
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
+
+  public static PLUGIN_MESSAGE_TYPE_THEME_CHANGED = 'THEME_CHANGED'
+  public static PLUGIN_MESSAGE_TYPE_LANGUAGE_CHANGED = 'LANGUAGE_CHANGED'
+  public static PLUGIN_MESSAGE_TYPE_PLUGIN_READY = 'PLUGIN_READY'
+  public static PLUGIN_MESSAGE_TYPE_PLUGIN_ERROR = 'PLUGIN_ERROR'
+  public static PLUGIN_MESSAGE_TYPE_INIT_CONTEXT = 'INIT_CONTEXT'
+  public static PLUGIN_MESSAGE_TYPE_REQUEST_SPEECH_GENERATION = 'REQUEST_SPEECH_GENERATION'
+  public static PLUGIN_MESSAGE_TYPE_RESPONSE_SPEECH_GENERATION = 'RESPONSE_SPEECH_GENERATION'
+  public static PLUGIN_MESSAGE_TYPE_REQUEST_IMAGE_GENERATION = 'REQUEST_IMAGE_GENERATION'
+  public static PLUGIN_MESSAGE_TYPE_RESPONSE_IMAGE_GENERATION = 'RESPONSE_IMAGE_GENERATION'
+  public static PLUGIN_MESSAGE_TYPE_REQUEST_CHAT_COMPLETION = 'REQUEST_CHAT_COMPLETION'
+  public static PLUGIN_MESSAGE_TYPE_RESPONSE_CHAT_COMPLETION = 'RESPONSE_CHAT_COMPLETION'
 
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },
