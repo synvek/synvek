@@ -1,20 +1,17 @@
 import { PluginDefinition } from '@/components/Plugin'
 
-/**
- * It is copy of SpeechGenerationApp with only icon change to support SVG icon
- */
-const HelloWorldApp: PluginDefinition = {
-  id: 'HelloWorld',
-  name: 'HelloWorld',
-  description: 'HelloWorld',
+const TranslationApp: PluginDefinition = {
+  id: 'Translation',
+  name: 'Translation',
+  description: 'Translation',
   type: 'app',
   category: 'tool',
-  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-      <path
-        fill="#15b354"
-        d="M32.833 12.112a5.36 5.36 0 0 0-2.544-1.805l-2.603-.845a1.028 1.028 0 0 1 0-1.937l2.602-.845a5.36 5.36 0 0 0 3.323-3.33l.022-.064l.845-2.6a1.027 1.027 0 0 1 1.94 0l.845 2.6A5.36 5.36 0 0 0 40.66 6.68l2.602.845l.052.013a1.028 1.028 0 0 1 0 1.937l-2.602.845a5.36 5.36 0 0 0-3.397 3.394l-.846 2.6l-.025.064a1.027 1.027 0 0 1-1.538.433a1.03 1.03 0 0 1-.375-.497l-.846-2.6a5.4 5.4 0 0 0-.852-1.602m14.776 6.872l-1.378-.448a2.84 2.84 0 0 1-1.797-1.796l-.448-1.377a.544.544 0 0 0-1.027 0l-.448 1.377a2.84 2.84 0 0 1-1.77 1.796l-1.378.448a.545.545 0 0 0 0 1.025l1.378.448q.227.075.438.188l.003.015a2.84 2.84 0 0 1 1.357 1.61l.448 1.377a.545.545 0 0 0 1.01.039v-.01l.016-.039l.448-1.377a2.84 2.84 0 0 1 1.798-1.796l1.378-.448a.545.545 0 0 0 0-1.025zM24 4c1.966 0 3.866.284 5.662.813l-.022.007l-2.57.83a3.1 3.1 0 0 0-1.364.932A18 18 0 0 0 24 6.5C14.335 6.5 6.5 14.335 6.5 24S14.335 41.5 24 41.5c9.336 0 16.964-7.31 17.473-16.52q.219.319.527.56a2.55 2.55 0 0 0 1.904.429C42.915 36.09 34.381 44 24 44C12.954 44 4 35.046 4 24S12.954 4 24 4m7.5 13.25c0-.562.371-1.038.882-1.195l.278.855A3 3 0 0 0 34 18.563V30.75a1.25 1.25 0 1 1-2.5 0zM20.75 16c.69 0 1.25.56 1.25 1.25v13.5a1.25 1.25 0 1 1-2.5 0v-13.5c0-.69.56-1.25 1.25-1.25m-6 4c.69 0 1.25.56 1.25 1.25v5.5a1.25 1.25 0 1 1-2.5 0v-5.5c0-.69.56-1.25 1.25-1.25m13.25.25a1.25 1.25 0 1 0-2.5 0v7.5a1.25 1.25 0 1 0 2.5 0z"
-      />
-    </svg>`,
+  //Icon source: https://icon-sets.iconify.design/ph/translate-fill
+  icon: `
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+<path fill="#15b354" d="M160 129.89L175.06 160h-30.12l6.36-12.7ZM224 48v160a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h160a16 16 0 0 1 16 16m-16.84 140.42l-40-80a8 8 0 0 0-14.32 0l-13.18 26.38a62.3 62.3 0 0 1-23.61-10A79.6 79.6 0 0 0 135.6 80H152a8 8 0 0 0 0-16h-40v-8a8 8 0 0 0-16 0v8H56a8 8 0 0 0 0 16h63.48a63.73 63.73 0 0 1-15.3 34.05a66 66 0 0 1-9-13.61a8 8 0 0 0-14.32 7.12a81.8 81.8 0 0 0 11.4 17.15A63.6 63.6 0 0 1 56 136a8 8 0 0 0 0 16a79.56 79.56 0 0 0 48.11-16.13a78.3 78.3 0 0 0 28.18 13.66l-19.45 38.89a8 8 0 0 0 14.32 7.16l9.78-19.58h46.12l9.78 19.58a8 8 0 1 0 14.32-7.16" />
+</svg>
+`,
   vendor: 'Synvek',
   content: `
     <style>
@@ -125,9 +122,15 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .result-area.visible { display: block; }
 
-audio { width: 100%; margin-top: 10px; }
-
 .status {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #888;
+  text-align: center;
+  min-height: 20px;
+}
+
+.translation {
   margin-top: 10px;
   font-size: 0.9em;
   color: #888;
@@ -154,20 +157,20 @@ audio { width: 100%; margin-top: 10px; }
       AI Voice Generator
     </h2>
   
-    <div class="input-group">
+    <div class="controls">
       <label for="text-input">Text to Speech</label>
+      <select id="target-language-select">
+        <option value="english">English</option>
+        <option value="chinese">Chinese</option>
+      </select>
+    </div>
+    <div class="input-group">
       <textarea id="text-input" placeholder="Enter text here to generate speech..."></textarea>
     </div>
   
     <div class="controls">
-    <!--
-      <select id="model-select">
-        <option value="dia-basic">Dia Basic (Fast)</option>
-        <option value="dia-pro">Dia Pro (High Quality)</option>
-      </select>
-     -->
      <div></div>
-      <button id="generate-btn" onclick="generateSpeech()">
+      <button id="generate-btn" onclick="translate()">
         <span>Generate Audio</span>
       </button>
     </div>
@@ -175,14 +178,13 @@ audio { width: 100%; margin-top: 10px; }
     <div id="status" class="status"></div>
   
     <div id="result" class="result-area">
-      <label>Generated Audio</label>
-      <audio id="audio-player" controls></audio>
+      <div id="translation" class="translation"></div>
     </div>
   </div>
 
 <script>
   // State
-  let isGenerating = false;
+  let isTranslating = false;
 
   // Elements
   const textInput = document.getElementById('text-input');
@@ -190,11 +192,10 @@ audio { width: 100%; margin-top: 10px; }
   const generateBtn = document.getElementById('generate-btn');
   const statusEl = document.getElementById('status');
   const resultArea = document.getElementById('result');
-  const audioPlayer = document.getElementById('audio-player');
+  const translation = document.getElementById('translation');
 
   // Theme Handling
   function applyTheme(theme) {
-    //console.log('theme', theme);
     if (theme === 'dark') {
       document.body.classList.add('dark');
     } else {
@@ -233,7 +234,7 @@ audio { width: 100%; margin-top: 10px; }
   })
   
   // Actions
-  function generateSpeech() {
+  function translate() {
     const text = textInput.value.trim();
     if (!text) {
       statusEl.textContent = 'Please enter some text first.';
@@ -254,7 +255,7 @@ audio { width: 100%; margin-top: 10px; }
   }
 
   function setLoading(loading) {
-    isGenerating = loading;
+    isTranslating = loading;
     generateBtn.disabled = loading;
     if (loading) {
       generateBtn.innerHTML = 'Generating<span class="loading-dots"></span>';
@@ -266,14 +267,13 @@ audio { width: 100%; margin-top: 10px; }
     }
   }
 
-  function handleSuccess(url) {
+  function handleSuccess(data) {
     setLoading(false);
-    statusEl.textContent = 'Generation complete!';
+    statusEl.textContent = 'Translation complete!';
     statusEl.style.color = 'green';
   
-    audioPlayer.src = url;
+    translation.textContent = data
     resultArea.classList.add('visible');
-    audioPlayer.play().catch(e => console.log('Auto-play prevented:', e));
   }
 
   function handleError(msg) {
@@ -289,4 +289,4 @@ audio { width: 100%; margin-top: 10px; }
   `,
 }
 
-export default HelloWorldApp
+export default TranslationApp

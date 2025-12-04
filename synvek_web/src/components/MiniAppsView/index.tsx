@@ -5,8 +5,8 @@ import { LLMServerData, LLMServerRequest, PluginContext, PluginDefinition, Speec
 import { PluginRunner, PluginRunnerRef } from '@/components/PluginRunner'
 import { RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import doubaoApp from '@/plugins/DoubaoApp'
-import helloWorldApp from '@/plugins/HelloWorldApp'
 import speechGenerationApp from '@/plugins/SpeechGenerationApp'
+import translationApp from '@/plugins/TranslationApp'
 import yiyanApp from '@/plugins/YiyanApp'
 import { Card, Input, message, theme, Tooltip, Typography } from 'antd'
 import styles from './index.less'
@@ -20,7 +20,7 @@ interface ChatViewProps {
   visible: boolean
 }
 
-const plugins: PluginDefinition[] = [speechGenerationApp, doubaoApp, yiyanApp, helloWorldApp]
+const plugins: PluginDefinition[] = [speechGenerationApp, doubaoApp, yiyanApp, translationApp]
 
 const pluginRunnerRefs: (PluginRunnerRef | null)[] = plugins.map(() => null)
 const pluginContainers: (HTMLDivElement | null)[] = plugins.map(() => null)
