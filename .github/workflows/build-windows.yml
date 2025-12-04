@@ -187,8 +187,9 @@ jobs:
         echo "Disk space - ${available_gb}GB available"
 
     - name: Configure and build backend-> mistral.rs cuda 
+      env:
+        CUDA_COMPUTE_CAP: "86"
       run: |
-        set CUDA_COMPUTE_CAP=86
         cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Disk space check
@@ -197,8 +198,9 @@ jobs:
         echo "Disk space - ${available_gb}GB available"
         
     - name: Configure and build backend-> mistral.rs cuda legacy
+      env:
+        CUDA_COMPUTE_CAP: "75"
       run: |
-        set CUDA_COMPUTE_CAP=75
         cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Disk space check
