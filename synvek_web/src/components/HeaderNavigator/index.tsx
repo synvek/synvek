@@ -327,6 +327,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       case WorkMode.Translate:
         defaultModel = currentWorkspace.settings.defaultTranslationModel
         break
+      case WorkMode.MiniApps:
+        defaultModel = currentWorkspace.settings.defaultApplicationModel
+        break
       default:
         defaultModel = currentWorkspace.settings.defaultApplicationModel
     }
@@ -463,6 +466,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         break
       case WorkMode.Translate:
         settings.defaultTranslationModel = task.task_name
+        break
+      case WorkMode.MiniApps:
+        settings.defaultApplicationModel = task.task_name
         break
     }
     const updateSettingsResponse = await RequestUtils.updateSettings(settings)
@@ -952,7 +958,12 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   }
 
   const isValidWorkMode = () => {
-    return currentWorkspace.workMode === WorkMode.Chat || currentWorkspace.workMode === WorkMode.Image || currentWorkspace.workMode === WorkMode.Translate
+    return (
+      currentWorkspace.workMode === WorkMode.Chat ||
+      currentWorkspace.workMode === WorkMode.Image ||
+      currentWorkspace.workMode === WorkMode.Translate ||
+      currentWorkspace.workMode === WorkMode.MiniApps
+    )
   }
 
   const handleModelSearch = () => {

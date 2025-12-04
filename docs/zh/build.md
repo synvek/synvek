@@ -132,13 +132,13 @@ cmake --build build_metal --config Release --target synvek_backend_sd -j 14
 
 针对计算能力8.x及以上(RTX 3090 Ti RTX 3090 RTX 3080 Ti RTX 3080 RTX 3070 Ti RTX 3070 RTX 3060 Ti RTX 3060 RTX 3050 Ti RTX 3050)
 set CUDA_COMPUTE_CAP=86
-cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
+cargo build --profile release --package mistralrs-server --features "cuda" --lib
 
 注意: 需要基于显卡计算能力选择相应的synvek_backend_default.dll并改成synvek_backend_default_cuda.dll并复制到output目录,
 
 针对计算能力7.x及以下(GTX 1650 Ti TITAN RTX RTX 2080 Ti RTX 2080 RTX 2070 RTX 2060)
 set CUDA_COMPUTE_CAP=75
-cargo build --profile release --package mistralrs-server --features "cuda cudnn" --lib
+cargo build --profile release --package mistralrs-server --features "cuda" --lib
 
 注意: 需要基于显卡计算能力选择相应的synvek_backend_default.dll并改成synvek_backend_default_cuda_legacy.dll并复制到output目录,
 

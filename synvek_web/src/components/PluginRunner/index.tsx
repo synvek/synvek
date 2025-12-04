@@ -1,15 +1,16 @@
-import { Consts, PluginContext, PluginDefinition, usePluginBridge } from '@/components/Utils'
+import { PluginContext, PluginDefinition, PluginError, PluginMessage } from '@/components/Plugin'
+import { usePluginBridge } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import React, { useEffect, useRef, useState } from 'react'
 
 interface PluginRunnerProps {
   plugin: PluginDefinition
   context: PluginContext
-  onMessage?: (message: any) => void
+  onMessage?: (message: PluginMessage) => void
 }
 
 export interface PluginRunnerRef {
-  sendMessage: (message: any) => void
+  sendMessage: (message: PluginMessage) => void
 }
 
 export const PluginRunner = React.forwardRef<PluginRunnerRef, PluginRunnerProps>(({ plugin, context, onMessage }, ref) => {
@@ -22,11 +23,13 @@ export const PluginRunner = React.forwardRef<PluginRunnerRef, PluginRunnerProps>
   const { sendMessage } = usePluginBridge(iframeRef, (msg) => {
     console.log('[Host] Received:', msg)
     onMessage?.(msg) // Forward to parent
-    if (msg.type === Consts.PLUGIN_MESSAGE_TYPE_PLUGIN_READY) {
+    if (msg.type === 'PLUGIN_READY') {
       setLoading(false)
-      sendMessage({ type: Consts.PLUGIN_MESSAGE_TYPE_INIT_CONTEXT, payload: context })
-    } else if (msg.type === Consts.PLUGIN_MESSAGE_TYPE_PLUGIN_ERROR) {
-      setError(msg.payload)
+      console.log('INIT_CONTEXT：', context)
+      sendMessage({ type: 'INIT_CONTEXT', payload: context })
+    } else if (msg.type === 'PLUGIN_ERROR') {
+      const pluginError = msg.payload as PluginError
+      setError(pluginError.error)
     }
   })
 

@@ -1,4 +1,4 @@
-import { PluginDefinition } from '@/components/Utils'
+import { PluginDefinition } from '@/components/Plugin'
 import { Icon } from './Icon'
 
 const SpeechGenerationApp: PluginDefinition = {
@@ -44,7 +44,7 @@ body {
 .container {
   width: 600px;
   max-width: 600px;
-  height: 600px;
+  height: 400px;
   background: var(--card-bg);
   padding: 24px;
   border-radius: 12px;
@@ -60,7 +60,7 @@ label { display: block; margin-bottom: 8px; font-weight: 500; }
 
 textarea {
   width: 100%;
-  height: 120px;
+  height: 170px;
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -133,11 +133,6 @@ audio { width: 100%; margin-top: 10px; }
   animation: dots 1.5s steps(5, end) infinite;
 }
 
-.web-content {
-  width: 500px;
-  height: 500px;
-}
-
 @keyframes dots {
   0%, 20% { content: '.'; }
   40% { content: '..'; }
@@ -158,10 +153,13 @@ audio { width: 100%; margin-top: 10px; }
     </div>
   
     <div class="controls">
+    <!--
       <select id="model-select">
         <option value="dia-basic">Dia Basic (Fast)</option>
         <option value="dia-pro">Dia Pro (High Quality)</option>
       </select>
+     -->
+     <div></div>
       <button id="generate-btn" onclick="generateSpeech()">
         <span>Generate Audio</span>
       </button>
@@ -189,6 +187,7 @@ audio { width: 100%; margin-top: 10px; }
 
   // Theme Handling
   function applyTheme(theme) {
+    //console.log('theme', theme);
     if (theme === 'dark') {
       document.body.classList.add('dark');
     } else {
@@ -203,19 +202,21 @@ audio { width: 100%; margin-top: 10px; }
   // Communication
   window.addEventListener('message', (event) => {
     const { type, payload } = event.data;
-  
+    //console.log('type, payload',type, payload);
     if (type === 'INIT_CONTEXT') {
-      applyTheme(payload.theme);
       document.body.style.width = document.documentElement.clientWidth + 'px';
-      document.body.style.height = document.documentElement.clientHeight + 'px'    
+      document.body.style.height = document.documentElement.clientHeight + 'px'
+      applyTheme(payload.theme);
     } else if (type === 'THEME_CHANGED') {
       applyTheme(payload.theme);
     } else if (type === 'LANGUAGE_CHANGED') {
-      applyLanguage(payload.language);
-    } else if (type === 'TTS_RESULT') {
-      handleSuccess(payload.audioUrl);
-    } else if (type === 'TTS_ERROR') {
-      handleError(payload.message);
+    } else if (type === 'SPEECH_GENERATION_RESPONSE') {
+      console.log('speech=', payload);
+      if(payload.success) {
+        handleSuccess(payload.data)
+      } else {
+        handleError(payload.message)
+      }
     }
   });
 
@@ -237,10 +238,10 @@ audio { width: 100%; margin-top: 10px; }
 
     // Call Host
     window.parent.postMessage({
-      type: 'REQUEST_TTS',
+      type: 'SPEECH_GENERATION_REQUEST',
       payload: {
         text: text,
-        model: modelSelect.value
+        modelName: modelSelect.value
       }
     }, '*');
   }

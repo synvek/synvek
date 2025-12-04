@@ -1,4 +1,5 @@
-import { FetchStatusData, ListFetchData, MCPServer, PluginDefinition, Settings, Task } from '@/components/Utils'
+import { PluginDefinition } from '@/components/Plugin'
+import { FetchStatusData, ListFetchData, MCPServer, Settings, Task } from '@/components/Utils'
 import { ConversionData } from './Common'
 import { Consts } from './Consts'
 import { Knowledge } from './Knowledge'
@@ -57,6 +58,7 @@ export class CurrentWorkspace {
   public conversionListVisible = false
   public openMiniApps: PluginDefinition[] = []
   public activatedMiniApp: PluginDefinition | null = null
+  public activatedMiniAppVisible: boolean = false
 
   private _fetchStatusChangedListeners: Array<() => void> = []
   private _modelServersChangedListeners: Array<() => void> = []

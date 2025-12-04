@@ -1,5 +1,5 @@
+import { PluginMessage } from '@/components/Plugin'
 import { useCallback, useEffect } from 'react'
-import type { PluginMessage } from './PluginTypes'
 
 export const usePluginBridge = (iframeRef: React.RefObject<HTMLIFrameElement | null>, onMessage?: (message: PluginMessage) => void) => {
   const sendMessage = useCallback(
@@ -15,7 +15,7 @@ export const usePluginBridge = (iframeRef: React.RefObject<HTMLIFrameElement | n
     const handleMessage = (event: MessageEvent) => {
       // Security check: In production, verify event.origin
       // For this demo, we accept '*' but in real app should be strict
-
+      console.log('Plugin bridge handleMessage:', event)
       if (event.data && typeof event.data === 'object' && 'type' in event.data) {
         onMessage?.(event.data as PluginMessage)
       }

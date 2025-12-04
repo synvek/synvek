@@ -245,24 +245,44 @@ class LLMService {
 
   public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number, seed: number, format: string) {
     const modelServer = LLMService.buildGenerate(modelName)
-    const isDefaultBackend = modelServer.backend === 'default'
-    const settings = LLMService.getSettings()
-    const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/generations`
-    if (isDefaultBackend) {
-      const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
-      return imageResponse
+    if(modelServer) {
+      const isDefaultBackend = modelServer.backend === 'default'
+      const settings = LLMService.getSettings()
+      const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/generations`
+      if (isDefaultBackend) {
+        try {
+          const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
+          return imageResponse
+        } catch(error) {
+          return `Internal error: ${error}`
+        }
+      } else {
+        try {
+          const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format)
+          return imageResponse
+        } catch(error) {
+          return `Internal error: ${error}`
+        }
+      }
     } else {
-      const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format)
-      return imageResponse
+      return "Model server not found"
     }
   }
 
   public static async generateSpeech(userMessage: string, modelName: string, speed: number, format: string) {
     const modelServer = LLMService.buildGenerate(modelName)
-    const settings = LLMService.getSettings()
-    const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/audio/speech`
-    const speechResponse = await RequestUtils.generateSpeech(serverAddress, userMessage, 'default', speed, format)
-    return speechResponse
+    if(modelServer) {
+      const settings = LLMService.getSettings()
+      const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/audio/speech`
+      try {
+        const speechResponse = await RequestUtils.generateSpeech(serverAddress, userMessage, 'default', speed, format)
+        return speechResponse
+      } catch(error) {
+        return `Internal error: ${error}`
+      }
+    } else {
+      return "Model server not found"
+    }
   }
 }
 
@@ -423,18 +443,22 @@ export const chatService = new Elysia()
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
       const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format)
-      if (imageResponse.status === 200 && imageResponse.data.created) {
-        // deno-lint-ignore no-explicit-any
-        const data = imageResponse.data.data.map((item: any) => item.b64_json)
-        return SystemUtils.buildResponse(true, data)
-      } else if (imageResponse.status === 200 && imageResponse.data.data.length > 0) {
-        // deno-lint-ignore no-explicit-any
-        const data = imageResponse.data.data.map((item: any) => item.b64_json)
-        return SystemUtils.buildResponse(true, data)
-      } else if (imageResponse.status === 200) {
-        return SystemUtils.buildResponse(false, null, `Failed to generate image with message`)
+      if(typeof imageResponse !== 'string') {
+        if (imageResponse.status === 200 && imageResponse.data.created) {
+          // deno-lint-ignore no-explicit-any
+          const data = imageResponse.data.data.map((item: any) => item.b64_json)
+          return SystemUtils.buildResponse(true, data)
+        } else if (imageResponse.status === 200 && imageResponse.data.data.length > 0) {
+          // deno-lint-ignore no-explicit-any
+          const data = imageResponse.data.data.map((item: any) => item.b64_json)
+          return SystemUtils.buildResponse(true, data)
+        } else if (imageResponse.status === 200) {
+          return SystemUtils.buildResponse(false, null, `Failed to generate image with message`)
+        } else {
+          return SystemUtils.buildResponse(false, null, 'System error occurs, please check with administrator')
+        }
       } else {
-        return SystemUtils.buildResponse(false, null, 'System error occurs, please check with administrator')
+        return SystemUtils.buildResponse(false, null, imageResponse)
       }
     },
     {
@@ -453,11 +477,15 @@ export const chatService = new Elysia()
     '/speech',
     async ({ body, store: chatData, set }) => {
       const imageResponse = await LLMService.generateSpeech(body.userMessage, body.modelName, body.speed, body.format)
-      if (imageResponse.status === 200) {
-        const base64Data = CommonUtils.arrayBufferToBase64(imageResponse.data)
-        return SystemUtils.buildResponse(true, `data:audio/${body.format};base64,${base64Data}`)
+      if(typeof imageResponse !== 'string') {
+        if (imageResponse.status === 200) {
+          const base64Data = CommonUtils.arrayBufferToBase64(imageResponse.data)
+          return SystemUtils.buildResponse(true, `data:audio/${body.format};base64,${base64Data}`)
+        } else {
+          return SystemUtils.buildResponse(false, null, 'System error occurs, please check with administrator')
+        }
       } else {
-        return SystemUtils.buildResponse(false, null, 'System error occurs, please check with administrator')
+        return SystemUtils.buildResponse(false, null, imageResponse)
       }
     },
     {

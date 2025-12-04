@@ -14,7 +14,6 @@ import type {
   User,
 } from './src/Common'
 import type { ModelCategory, ModelFile, ModelOption, ModelProvider, ModelProviderStatus, ModelRepo, ModelType } from './src/ModelProviders'
-import type { PluginContext, PluginDefinition, PluginMessage } from './src/PluginTypes'
 import type {
   Attachment,
   Chat,
@@ -95,9 +94,6 @@ export {
   ModelRepo,
   ModelServerData,
   ModelType,
-  PluginContext,
-  PluginDefinition,
-  PluginMessage,
   ProvidersType,
   ResponseMetadata,
   RunningTask,

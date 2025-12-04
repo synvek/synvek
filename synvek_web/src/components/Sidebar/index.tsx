@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Consts, PluginDefinition, useGlobalContext, WorkMode } from '@/components/Utils'
+import { PluginDefinition } from '@/components/Plugin'
+import { Consts, useGlobalContext, WorkMode } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { AppstoreOutlined, MessageOutlined, MoonOutlined, PictureOutlined, SettingOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons'
 import { Button, Divider, Dropdown, MappingAlgorithm, MenuProps, theme, Tooltip } from 'antd'
@@ -61,7 +62,7 @@ export default (props: any) => {
         //history.push('/tools')
         currentWorkspace.workPath = Consts.WORK_PATH_MINI_APPS
         currentWorkspace.workMode = WorkMode.MiniApps
-        currentWorkspace.activatedMiniApp = null
+        currentWorkspace.activatedMiniAppVisible = false
         currentWorkspace.triggerActivatedMiniAppChanged()
         break
       case WorkMode.Knowledge:
@@ -131,6 +132,7 @@ export default (props: any) => {
     if (index >= 0) {
       if (currentWorkspace.activatedMiniApp && miniApp.id === currentWorkspace.activatedMiniApp.id) {
         currentWorkspace.activatedMiniApp = null
+        currentWorkspace.activatedMiniAppVisible = false
       }
       currentWorkspace.openMiniApps.splice(index, 1)
       currentWorkspace.triggerActivatedMiniAppChanged()
@@ -140,6 +142,7 @@ export default (props: any) => {
   const handleCloseAllActivatedMiniApps = () => {
     currentWorkspace.openMiniApps = []
     currentWorkspace.activatedMiniApp = null
+    currentWorkspace.activatedMiniAppVisible = false
     currentWorkspace.triggerActivatedMiniAppChanged()
   }
 
@@ -151,8 +154,12 @@ export default (props: any) => {
   }
 
   const handleOpenMiniApp = (miniApp: PluginDefinition) => {
+    currentWorkspace.workPath = Consts.WORK_PATH_MINI_APPS
+    currentWorkspace.workMode = WorkMode.MiniApps
     currentWorkspace.activatedMiniApp = miniApp
+    currentWorkspace.activatedMiniAppVisible = true
     currentWorkspace.triggerActivatedMiniAppChanged()
+    currentWorkspace.triggerRouterChanged()
   }
 
   const openMiniApps = currentWorkspace.openMiniApps.map((openMiniApp) => {

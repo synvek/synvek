@@ -1,6 +1,7 @@
 import {
   Conversion,
   ConversionTreeNode,
+  CurrentWorkspace,
   FetchStatusData,
   Folder,
   ListFetchData,
@@ -611,5 +612,15 @@ export class WorkspaceUtils {
     }
     // @ts-ignore
     return storageTheme
+  }
+
+  public static checkIfModelRunning(modelName: string, currentWorkspace: CurrentWorkspace) {
+    let running = false
+    currentWorkspace.modelServers.forEach((modelServer) => {
+      if (modelServer.modelName === modelName && modelServer.started) {
+        running = true
+      }
+    })
+    return running
   }
 }

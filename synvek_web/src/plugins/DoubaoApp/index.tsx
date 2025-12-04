@@ -1,4 +1,4 @@
-import { PluginDefinition } from '@/components/Utils'
+import { PluginDefinition } from '@/components/Plugin'
 import { Icon } from './Icon'
 
 const DoubaoApp: PluginDefinition = {
@@ -40,8 +40,7 @@ const DoubaoApp: PluginDefinition = {
       document.body.style.height = document.documentElement.clientHeight + 'px'
     } else if (type === 'THEME_CHANGED') {
     } else if (type === 'LANGUAGE_CHANGED') {
-    } else if (type === 'TTS_RESULT') {
-    } else if (type === 'TTS_ERROR') {
+    } else if (type === 'SPEECH_GENERATION') {
     }
   });
 
