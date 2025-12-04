@@ -198,7 +198,7 @@ jobs:
     - name: Configure and build backend-> mistral.rs cuda 
       run: |
         export CUDA_COMPUTE_CAP=86
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
       run: |
@@ -213,7 +213,7 @@ jobs:
     - name: Configure and build backend-> mistral.rs cuda legacy
       run: |
         export CUDA_COMPUTE_CAP=75
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda legacy 
       run: |
