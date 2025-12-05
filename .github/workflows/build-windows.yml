@@ -12,21 +12,21 @@ jobs:
       VULKAN_SDK_VERSION: "1.4.321.1" 
 
     steps:
-    - name: Install HIP SDK
-      run: |
-        $sdkInstaller = "AMD-Software-PRO-Edition-25.Q3-WinSvr2022-For-HIP.exe"
-        curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"      
-        Start-Process $sdkInstaller -ArgumentList '-install' -NoNewWindow -Wait
+    # - name: Install HIP SDK
+    #   run: |
+    #     $sdkInstaller = "AMD-Software-PRO-Edition-25.Q3-WinSvr2022-For-HIP.exe"
+    #     curl.exe -o $sdkInstaller -L "https://download.amd.com/developer/eula/rocm-hub/$sdkInstaller"      
+    #     Start-Process $sdkInstaller -ArgumentList '-install' -NoNewWindow -Wait
 
-    - name: Setup HIP Environment Variables
-      run: |   
-        echo $env:HIP_PATH
-        echo "HIP_PATH=C:\Program Files\AMD\ROCm\6.4\" >> $env:GITHUB_ENV
-        echo "C:\Program Files\AMD\ROCm\6.4\bin" >> $env:GITHUB_PATH
+    # - name: Setup HIP Environment Variables
+    #   run: |   
+    #     echo $env:HIP_PATH
+    #     echo "HIP_PATH=C:\Program Files\AMD\ROCm\6.4\" >> $env:GITHUB_ENV
+    #     echo "C:\Program Files\AMD\ROCm\6.4\bin" >> $env:GITHUB_PATH
 
-    - name: Verify HIP SDK Installation
-      run: |
-        & "$env:HIP_PATH\bin\clang.exe" --version
+    # - name: Verify HIP SDK Installation
+    #   run: |
+    #     & "$env:HIP_PATH\bin\clang.exe" --version
 
     - name: Install Vulkan SDK
       run: |
@@ -136,10 +136,10 @@ jobs:
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
         echo "Disk space - ${available_gb}GB available"
 
-    - name: Configure and build backend-> llama.cpp hip 
-      run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_hip -G Ninja -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        cmake --build build/llama.cpp/build_hip --config Release --target synvek_backend_llama -j 4
+    # - name: Configure and build backend-> llama.cpp hip 
+    #   run: |
+    #     cmake -S third_party/llama.cpp -B build/llama.cpp/build_hip -G Ninja -DGGML_HIP=ON -DAMDGPU_TARGETS="gfx1030;gfx1100;gfx1150" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    #     cmake --build build/llama.cpp/build_hip --config Release --target synvek_backend_llama -j 4
 
     - name: Disk space check
       run: |
@@ -261,8 +261,8 @@ jobs:
         Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cuda.dll" 
         Copy-Item "build/llama.cpp/build_vulkan/bin/Release/synvek_backend_llama.dll" "output/" 
         Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_vulkan.dll" 
-        Copy-Item "build/llama.cpp/build_hip/bin/synvek_backend_llama.dll" "output/" 
-        Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_hip.dll" 
+        # Copy-Item "build/llama.cpp/build_hip/bin/synvek_backend_llama.dll" "output/" 
+        # Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_hip.dll" 
         Copy-Item "build/stable-diffusion.cpp/build_cuda/bin/Release/synvek_backend_sd.dll" "output/" 
         Rename-Item  "output/synvek_backend_sd.dll" "synvek_backend_sd_cuda.dll" 
         Copy-Item "build/stable-diffusion.cpp/build_vulkan/bin/Release/synvek_backend_sd.dll" "output/" 
