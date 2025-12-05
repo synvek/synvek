@@ -116,31 +116,6 @@ jobs:
       run: |
         echo "Build will start"
 
-    - name: Environment setup for mistral.rs cuda
-      run: |
-        echo "CUDA_COMPUTE_CAP=86" >> $env:GITHUB_ENV
-
-    - name: Configure and build backend-> mistral.rs cuda 
-      shell: cmd
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
-
-    - name: Disk space check
-      run: |
-        $available_gb = (Get-PSDrive -Name C).Free / 1GB
-        echo "Disk space - ${available_gb}GB available"
-
-    - name: Environment setup for mistral.rs cuda legacy
-      run: |
-        echo "CUDA_COMPUTE_CAP=75" >> $env:GITHUB_ENV
-
-    - name: Configure and build backend-> mistral.rs cuda legacy
-      shell: cmd
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
-
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
         cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -211,6 +186,30 @@ jobs:
         $available_gb = (Get-PSDrive -Name C).Free / 1GB
         echo "Disk space - ${available_gb}GB available"
 
+    - name: Environment setup for mistral.rs cuda
+      run: |
+        echo "CUDA_COMPUTE_CAP=86" >> $env:GITHUB_ENV
+
+    - name: Configure and build backend-> mistral.rs cuda 
+      shell: cmd
+      run: |
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
+
+    - name: Disk space check
+      run: |
+        $available_gb = (Get-PSDrive -Name C).Free / 1GB
+        echo "Disk space - ${available_gb}GB available"
+
+    - name: Environment setup for mistral.rs cuda legacy
+      run: |
+        echo "CUDA_COMPUTE_CAP=75" >> $env:GITHUB_ENV
+
+    - name: Configure and build backend-> mistral.rs cuda legacy
+      shell: cmd
+      run: |
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Disk space check
       run: |
