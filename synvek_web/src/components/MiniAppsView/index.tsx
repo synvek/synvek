@@ -151,39 +151,35 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   }
 
   const handleChatCompletionRequest = async (plugin: PluginDefinition, pluginIndex: number, payload: ChatCompletionRequest) => {
-    const defaultModel = currentWorkspace.settings.defaultTextModel
-    console.log('Data completion for:', payload)
+    const defaultModel = currentWorkspace.settings.defaultApplicationModel
+    console.log('Chat completion for:', payload)
     const chatData: ChatCompletionResponse = {
       success: true,
       code: null,
       message: null,
       data: null,
     }
-    console.log(`Speech generation for model: ${defaultModel}`)
+    console.log(`Chat completion for model: ${defaultModel}`)
     if (defaultModel) {
-      console.log(`Speech generation request: ${defaultModel}`)
-      const response = await RequestUtils.chatDirectly(payload.user_prompts, payload.system_prompts, defaultModel, payload.temperature, payload.topN)
-      console.log(`Speech generation response: ${response}`)
-      await WorkspaceUtils.handleRequest(
-        messageApi,
-        response,
-        (data: string) => {
-          chatData.data = data
-        },
-        (failure) => {
+      console.log(`Chat completion request: ${defaultModel}`)
+      try {
+        const response = await RequestUtils.chatDirectly(payload.user_prompts, payload.system_prompts, defaultModel, payload.temperature, payload.topN)
+        const content = response.data.content
+        if (content) {
+          chatData.data = content
+        } else {
           chatData.success = false
-          chatData.message = failure
-        },
-        (error) => {
-          chatData.success = false
-          chatData.message = error
-        },
-      )
+          chatData.message = 'No result found'
+        }
+      } catch (error) {
+        chatData.success = false
+        chatData.message = String(error)
+      }
     } else {
       chatData.success = false
       chatData.message = 'Default model not found'
     }
-    console.log(`Data completion: ${chatData}`)
+    console.log(`Chat completion: ${chatData}`)
     pluginRunnerRefsRef.current.forEach((pluginRunnerRef, index) => {
       if (pluginRunnerRef && index === pluginIndex) {
         pluginRunnerRef.sendMessage({

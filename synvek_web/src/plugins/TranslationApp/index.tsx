@@ -48,7 +48,7 @@ body {
 .container {
   width: 600px;
   max-width: 600px;
-  height: 400px;
+  height: 600px;
   background: var(--card-bg);
   padding: 24px;
   border-radius: 12px;
@@ -134,7 +134,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   margin-top: 10px;
   font-size: 0.9em;
   color: #888;
-  text-align: center;
+  text-align: left;
   min-height: 20px;
 }
 
@@ -154,7 +154,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   <div class="container">
     <h2>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-      AI Voice Generator
+      AI Translation
     </h2>
   
     <div class="controls">
@@ -170,8 +170,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   
     <div class="controls">
      <div></div>
-      <button id="translate-btn" onclick="translate()">
-        <span>Translate Text</span>
+      <button id="translate-btn" onclick="processTranslation()">
+        <span>Translate input to target language:</span>
       </button>
     </div>
   
@@ -188,7 +188,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
   // Elements
   const textInput = document.getElementById('text-input');
-  const modelSelect = document.getElementById('model-select');
+  const targetLanguageSelect = document.getElementById('target-language-select');
   const translateBtn = document.getElementById('translate-btn');
   const statusEl = document.getElementById('status');
   const resultArea = document.getElementById('result');
@@ -234,7 +234,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   })
   
   // Actions
-  function translate() {
+  function processTranslation() {
     const text = textInput.value.trim();
     if (!text) {
       statusEl.textContent = 'Please enter some text first.';
@@ -243,13 +243,15 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     }
 
     setLoading(true);
+    const targetLanguage = targetLanguageSelect.value
+    const systemPrompt = "Please use language and style: " + targetLanguage +  " and translate user inputs. Please translate precisely, no extra comments. /no_thinking"
 
     // Call Host
     window.parent.postMessage({
       type: 'CHAT_COMPLETION_REQUEST',
       payload: {
-        modelName: modelSelect.value,
-        system_prompts: [{type: 'text', text: ''}],
+        //modelName: modelSelect.value,
+        system_prompts: [{type: 'text', text: systemPrompt}],
         user_prompts: [{type: 'text', text: text}],
         temperature: 0.8,
         topN: 0.8
@@ -266,7 +268,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
       statusEl.style.color = '#888';
       resultArea.classList.remove('visible');
     } else {
-      translateBtn.innerHTML = '<span>Translate Text</span>';
+      translateBtn.innerHTML = '<span>Translate Now</span>';
     }
   }
 
