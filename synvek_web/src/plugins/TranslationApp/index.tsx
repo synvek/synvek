@@ -158,20 +158,20 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     </h2>
   
     <div class="controls">
-      <label for="text-input">Text to Speech</label>
+      <label for="text-input">Text to Translate</label>
       <select id="target-language-select">
         <option value="english">English</option>
         <option value="chinese">Chinese</option>
       </select>
     </div>
     <div class="input-group">
-      <textarea id="text-input" placeholder="Enter text here to generate speech..."></textarea>
+      <textarea id="text-input" placeholder="Enter text here to translate..."></textarea>
     </div>
   
     <div class="controls">
      <div></div>
-      <button id="generate-btn" onclick="translate()">
-        <span>Generate Audio</span>
+      <button id="translate-btn" onclick="translate()">
+        <span>Translate Text</span>
       </button>
     </div>
   
@@ -189,7 +189,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   // Elements
   const textInput = document.getElementById('text-input');
   const modelSelect = document.getElementById('model-select');
-  const generateBtn = document.getElementById('generate-btn');
+  const translateBtn = document.getElementById('translate-btn');
   const statusEl = document.getElementById('status');
   const resultArea = document.getElementById('result');
   const translation = document.getElementById('translation');
@@ -218,7 +218,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     } else if (type === 'THEME_CHANGED') {
       applyTheme(payload.theme);
     } else if (type === 'LANGUAGE_CHANGED') {
-    } else if (type === 'SPEECH_GENERATION_RESPONSE') {
+    } else if (type === 'CHAT_COMPLETION_RESPONSE') {
       console.log('speech=', payload);
       if(payload.success) {
         handleSuccess(payload.data)
@@ -246,24 +246,27 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
     // Call Host
     window.parent.postMessage({
-      type: 'SPEECH_GENERATION_REQUEST',
+      type: 'CHAT_COMPLETION_REQUEST',
       payload: {
-        text: text,
-        modelName: modelSelect.value
+        modelName: modelSelect.value,
+        system_prompts: [{type: 'text', text: ''}],
+        user_prompts: [{type: 'text', text: text}],
+        temperature: 0.8,
+        topN: 0.8
       }
     }, '*');
   }
 
   function setLoading(loading) {
     isTranslating = loading;
-    generateBtn.disabled = loading;
+    translateBtn.disabled = loading;
     if (loading) {
-      generateBtn.innerHTML = 'Generating<span class="loading-dots"></span>';
+      translateBtn.innerHTML = 'Translating<span class="loading-dots"></span>';
       statusEl.textContent = 'Processing with AI model...';
       statusEl.style.color = '#888';
       resultArea.classList.remove('visible');
     } else {
-      generateBtn.innerHTML = '<span>Generate Audio</span>';
+      translateBtn.innerHTML = '<span>Translate Text</span>';
     }
   }
 

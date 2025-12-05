@@ -9,10 +9,10 @@ export interface PluginMessage {
     | 'LANGUAGE_CHANGED'
     | 'SPEECH_GENERATION_REQUEST'
     | 'SPEECH_GENERATION_RESPONSE'
-    | 'REQUEST_IMAGE_GENERATION'
-    | 'RESPONSE_IMAGE_GENERATION'
-    | 'REQUEST_CHAT_COMPLETION'
-    | 'RESPONSE_CHAT_COMPLETION'
+    | 'IMAGE_GENERATION_REQUEST'
+    | 'IMAGE_GENERATION_RESPONSE'
+    | 'CHAT_COMPLETION_REQUEST'
+    | 'CHAT_COMPLETION_RESPONSE'
   payload:
     | PluginContext
     | PluginError
@@ -22,6 +22,10 @@ export interface PluginMessage {
     | LLMServerResponse
     | SpeechGenerationRequest
     | SpeechGenerationResponse
+    | ImageGenerationRequest
+    | ImageGenerationResponse
+    | ChatCompletionRequest
+    | ChatCompletionResponse
 }
 
 export interface PluginContext {
@@ -88,5 +92,32 @@ export interface SpeechGenerationRequest {
 }
 
 export interface SpeechGenerationResponse extends PluginResponse {
+  data: string | null
+}
+
+export interface ChatMessage {
+  type: 'text' | 'image_url' | 'audio_url'
+  text: string
+}
+
+export interface ChatCompletionRequest {
+  modelName: string
+  system_prompts: ChatMessage[]
+  user_prompts: ChatMessage[]
+  temperature: number
+  topN: number
+}
+
+export interface ChatCompletionResponse extends PluginResponse {
+  data: string | null
+}
+
+export interface ImageGenerationRequest {
+  modelName: string
+  text: string
+  format?: string // 'png' | 'jpg', default = 'wav'
+}
+
+export interface ImageGenerationResponse extends PluginResponse {
   data: string | null
 }

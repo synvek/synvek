@@ -2,6 +2,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 
 import { LLMServerData, LLMServerRequest, PluginContext, PluginDefinition, SpeechGenerationRequest, SpeechGenerationResponse } from '@/components/Plugin'
+import { ChatCompletionRequest, ChatCompletionResponse } from '@/components/Plugin/src/PluginTypes'
 import { PluginRunner, PluginRunnerRef } from '@/components/PluginRunner'
 import { RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import doubaoApp from '@/plugins/DoubaoApp'
@@ -149,6 +150,50 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     })
   }
 
+  const handleChatCompletionRequest = async (plugin: PluginDefinition, pluginIndex: number, payload: ChatCompletionRequest) => {
+    const defaultModel = currentWorkspace.settings.defaultTextModel
+    console.log('Data completion for:', payload)
+    const chatData: ChatCompletionResponse = {
+      success: true,
+      code: null,
+      message: null,
+      data: null,
+    }
+    console.log(`Speech generation for model: ${defaultModel}`)
+    if (defaultModel) {
+      console.log(`Speech generation request: ${defaultModel}`)
+      const response = await RequestUtils.chatDirectly(payload.user_prompts, payload.system_prompts, defaultModel, payload.temperature, payload.topN)
+      console.log(`Speech generation response: ${response}`)
+      await WorkspaceUtils.handleRequest(
+        messageApi,
+        response,
+        (data: string) => {
+          chatData.data = data
+        },
+        (failure) => {
+          chatData.success = false
+          chatData.message = failure
+        },
+        (error) => {
+          chatData.success = false
+          chatData.message = error
+        },
+      )
+    } else {
+      chatData.success = false
+      chatData.message = 'Default model not found'
+    }
+    console.log(`Data completion: ${chatData}`)
+    pluginRunnerRefsRef.current.forEach((pluginRunnerRef, index) => {
+      if (pluginRunnerRef && index === pluginIndex) {
+        pluginRunnerRef.sendMessage({
+          type: 'CHAT_COMPLETION_RESPONSE',
+          payload: chatData,
+        })
+      }
+    })
+  }
+
   const handleOpenPlugin = (plugin: PluginDefinition) => {
     let open = false
     currentWorkspace.openMiniApps.forEach((openMiniApp) => {
@@ -226,6 +271,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             setLastMessage(JSON.stringify(message))
             if (message.type === 'SPEECH_GENERATION_REQUEST') {
               await handleSpeechGenerationRequest(openMiniApp, appIndex, message.payload as SpeechGenerationRequest)
+            } else if (message.type === 'CHAT_COMPLETION_REQUEST') {
+              await handleChatCompletionRequest(openMiniApp, appIndex, message.payload as ChatCompletionRequest)
             }
           }}
         />
