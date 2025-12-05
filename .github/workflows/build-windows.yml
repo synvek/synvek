@@ -118,7 +118,7 @@ jobs:
 
     - name: Environment setup for mistral.rs cuda
       run: |
-        echo "CUDA_COMPUTE_CAP=86" >> $GITHUB_ENV
+        echo "CUDA_COMPUTE_CAP=86" >> $env:GITHUB_ENV
 
     - name: Configure and build backend-> mistral.rs cuda 
       run: |
@@ -131,7 +131,7 @@ jobs:
 
     - name: Environment setup for mistral.rs cuda legacy
       run: |
-        echo "CUDA_COMPUTE_CAP=75" >> $GITHUB_ENV
+        echo "CUDA_COMPUTE_CAP=75" >> $env:GITHUB_ENV
         
     - name: Configure and build backend-> mistral.rs cuda legacy
       run: |
