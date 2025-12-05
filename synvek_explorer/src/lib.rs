@@ -254,36 +254,36 @@ fn setup_app_data(app: &mut App) -> Result<(), String> {
         }
     }
 
-    //nsis installer have size limitation, we need to compress file and decompress them when opening on first launch
-    #[cfg(target_os = "windows")]
-    setup_backend_files(app, require_upgrade)?;
+    //Setup library path for windows here for explorer
+    // #[cfg(target_os = "windows")]
+    // setup_backend_files(app, require_upgrade)?;
 
     Ok(())
 }
 
-fn setup_backend_files(app: &mut App, require_upgrade: bool) -> Result<(), String> {
-    let config = config::Config::new();
-    let data_dir = config.get_data_dir();
-    println!("Data dir: {:?}", data_dir);
-
-    let resources = vec!["backend/"];
-
-    for resource in resources {
-        let bundled_file_path = app
-            .path()
-            .resolve(resource, tauri::path::BaseDirectory::Resource)
-            .map_err(|e| format!("Failed to resolve backend resource dir: {}", e))?;
-        println!("Process backend resource: {:?}", bundled_file_path);
-        let target_file_path = data_dir.join(resource);
-        println!("Target resource: {:?}", target_file_path);
-        let result = copy_folder(&bundled_file_path, &target_file_path, require_upgrade);
-        if let Err(e) = result {
-            return Err(format!("Failed to copy backend resource: {:?}", e));
-        }
-    }
-
-    Ok(())
-}
+// fn setup_backend_files(app: &mut App, require_upgrade: bool) -> Result<(), String> {
+//     let config = config::Config::new();
+//     let data_dir = config.get_data_dir();
+//     println!("Data dir: {:?}", data_dir);
+//
+//     let resources = vec!["backend/"];
+//
+//     for resource in resources {
+//         let bundled_file_path = app
+//             .path()
+//             .resolve(resource, tauri::path::BaseDirectory::Resource)
+//             .map_err(|e| format!("Failed to resolve backend resource dir: {}", e))?;
+//         println!("Process backend resource: {:?}", bundled_file_path);
+//         let target_file_path = data_dir.join(resource);
+//         println!("Target resource: {:?}", target_file_path);
+//         let result = copy_folder(&bundled_file_path, &target_file_path, require_upgrade);
+//         if let Err(e) = result {
+//             return Err(format!("Failed to copy backend resource: {:?}", e));
+//         }
+//     }
+//
+//     Ok(())
+// }
 
 #[tauri::command]
 fn run_external_command() -> Result<String, String> {

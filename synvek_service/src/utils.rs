@@ -52,14 +52,14 @@ pub fn get_backend_path(lib_name: &str) -> String {
         backend_dir.push(lib_name);
         backend_path = backend_dir.display().to_string();
     } else {
-        #[cfg(target_os = "windows")]
-        {
-            let config = Config::new();
-            let mut backend_dir = config.get_data_dir();
-            backend_dir.push(common::BACKEND_DIR_NAME);
-            backend_dir.push(lib_name);
-            backend_path = backend_dir.display().to_string();
-        }
+        // #[cfg(target_os = "windows")]
+        // {
+        //     let config = Config::new();
+        //     let mut backend_dir = config.get_data_dir();
+        //     backend_dir.push(common::BACKEND_DIR_NAME);
+        //     backend_dir.push(lib_name);
+        //     backend_path = backend_dir.display().to_string();
+        // }
     }
 
     tracing::info!("Currently lib_path is : {}", backend_path);
