@@ -122,6 +122,14 @@ jobs:
 
     - name: Configure and build backend-> mistral.rs cuda 
       run: |
+        cmd /c "`"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat`" > nul 2>&1 && set" | ForEach-Object {
+          if ($_ -match "^(.*?)=(.*)$") {
+              $varName = $matches[1]
+              $varValue = $matches[2]
+              Set-Item -Path "env:$varName" -Value $varValue
+              Write-Host "Env Setup: $varName = $varValue"
+          }
+        }
         cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Disk space check
@@ -135,6 +143,14 @@ jobs:
         
     - name: Configure and build backend-> mistral.rs cuda legacy
       run: |
+        cmd /c "`"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat`" > nul 2>&1 && set" | ForEach-Object {
+          if ($_ -match "^(.*?)=(.*)$") {
+              $varName = $matches[1]
+              $varValue = $matches[2]
+              Set-Item -Path "env:$varName" -Value $varValue
+              Write-Host "Env Setup: $varName = $varValue"
+          }
+        }
         cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
 
     - name: Configure and build backend-> llama.cpp cuda 
