@@ -52,12 +52,12 @@ fn start_agent() {
 }
 
 fn main() {
+    //It is for child model service process
     #[cfg(target_os = "linux")]
     unsafe {
-        std::env::set_var(
-            "LD_LIBRARY_PATH",
-            "/usr/lib/SynvekExplorer/backend:./backend",
-        );
+        let current_lib_path = env::var("LD_LIBRARY_PATH").unwrap_or_default();
+        let new_lib_path = format!("/usr/lib/SynvekExplorer/backend:./backend:{}", current_lib_path);
+        std::env::set_var("LD_LIBRARY_PATH",new_lib_path);
     }
 
     let args: Vec<String> = env::args().collect();
