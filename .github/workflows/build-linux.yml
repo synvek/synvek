@@ -27,6 +27,27 @@ jobs:
         df
 
 #   Need to release disk space ASAP because of disk space limitation        
+    - name: Install CUDA
+      uses: Jimver/cuda-toolkit@v0.2.28
+      with:
+        cuda: 12.9.1
+        method: network
+        linux-local-args: '[["--toolkit"]]'
+
+    - name: Verify Cuda
+      run: |
+        nvcc --version
+
+
+    - name: Disk space before code checkout
+      run: |
+        df
+
+    - name: Install Deno
+      run: |
+        curl -fsSL https://deno.land/install.sh | sh
+        echo "$HOME/.deno/bin" >> $GITHUB_PATH
+    
     - name: Install Vulkan SDK
       run: |
         wget https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_SDK_VERSION }}/linux/vulkansdk-linux-x86_64-${{ env.VULKAN_SDK_VERSION }}.tar.xz
@@ -40,12 +61,6 @@ jobs:
         echo "LD_LIBRARY_PATH=/opt/vulkan/${{ env.VULKAN_SDK_VERSION }}/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=/opt/vulkan/${{ env.VULKAN_SDK_VERSION }}/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
         echo "VK_ADD_LAYER_PATH=/opt/vulkan/${{ env.VULKAN_SDK_VERSION }}/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
-        # cd ${{ env.VULKAN_SDK_VERSION }}    
-        # echo "VULKAN_SDK=$(pwd)/x86_64" >> $GITHUB_ENV
-        # echo "$(pwd)/x86_64/bin:$PATH" >> $GITHUB_PATH
-        # echo "LD_LIBRARY_PATH=$(pwd)/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-        # echo "VK_LAYER_PATH=$(pwd)/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
-        # echo "VK_ADD_LAYER_PATH=$(pwd)/x86_64/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
 
     - name: Verify Vulkan SDK
       run: |
@@ -55,18 +70,10 @@ jobs:
         which vulkaninfo
         vulkaninfo
 
-    - name: Install CUDA
-      uses: Jimver/cuda-toolkit@v0.2.28
-      with:
-        cuda: 12.9.1
-        method: network
-        linux-local-args: '[["--toolkit"]]'
-
-    - name: Install Deno
+    - name: Disk space before code checkout
       run: |
-        curl -fsSL https://deno.land/install.sh | sh
-        echo "$HOME/.deno/bin" >> $GITHUB_PATH
-    
+        df
+
     - name: Cleanup for tools
       run: |
         sudo apt clean        
@@ -74,11 +81,7 @@ jobs:
         sudo rm -rf /var/tmp/*        
         sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
-        deno clean
 
-    - name: Verify Cuda
-      run: |
-        nvcc --version
 
     - name: Disk space before code checkout
       run: |
