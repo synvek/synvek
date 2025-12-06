@@ -75,3 +75,23 @@ Default folder for downloaded models：
 - Go to Chat tab, select Dia-1.6B from the drop-down menu of the model, set the model as the default dialogue model, and start Chat after launching the model.
 
 ![GPT-OSS](/usage_dia.jpg)
+
+###  Function Call/Tool usage:
+
+- Only some models support this right now. Please check snapshot with Qwen3-0.6B and backend: default-cuda.
+
+- Configure Tools
+
+- Turn on Tools in chat
+
+![Function Call](/usage_function_call.jpg)
+
+###  MCP usage:
+
+- Only some models support this right now. Please check snapshot with Qwen3-0.6B and backend: default-cuda 
+
+- Configure MCP Servers and turn on
+
+- Turn on MCP servers in chat
+
+![MCP](/usage_mcp.jpg)

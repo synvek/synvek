@@ -76,3 +76,24 @@
 - 进入对话标签页，点模型下拉选择框选择Dia-1.6B，将模型设置为默认对话模型，启动模型后即可开始对话。
 
 ![GPT-OSS](/usage_dia.jpg)
+
+
+###  工具用法(Function Call/Tool):
+
+- 仅部分模型支持. 请查看截图模型使用：Qwen3-0.6B， 引擎: default-cuda.
+
+- 配置工具
+
+- 对话里启用工具
+
+![Function Call](/usage_function_call.jpg)
+
+###  MCP用法:
+
+- 仅部分模型支持. 请查看截图模型使用：Qwen3-0.6B， 引擎: default-cuda.
+
+- 配置MCP服务器并启用
+
+- 对话里启用MCP服务器
+
+![MCP](/usage_mcp.jpg)
