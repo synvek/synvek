@@ -905,10 +905,10 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
   }
   const handleTopPChange = (value: number) => {
-    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TOP_P, String(value))
   }
   const handleContextChange = (value: number) => {
-    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_TEMPERATURE, String(value))
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_CONTEXT, String(value))
   }
 
   const temperatureMarks: SliderSingleProps['marks'] = {
