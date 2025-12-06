@@ -604,7 +604,8 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     if (task.private_model) {
       populateBackendMenuItems(task, 'llama_cpp', items)
       populateBackendMenuItems(task, 'stable_diffusion_cpp', items)
-      populateBackendMenuItems(task, 'whisper_cpp', items)
+      //Not implemented yet
+      //populateBackendMenuItems(task, 'whisper_cpp', items)
       populateBackendMenuItems(task, 'default', items)
     } else {
       modelProviders.forEach((modelProvider) => {
