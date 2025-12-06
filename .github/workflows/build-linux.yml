@@ -33,6 +33,7 @@ jobs:
         cuda: 12.9.1
         method: network
         sub-packages: '["nvcc", "runtime"]'
+        non-cuda-sub-packages: '["libcublas", "libcufft"]'
 
     - name: Verify Cuda
       run: |
