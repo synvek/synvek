@@ -84,6 +84,10 @@ export class SystemUtils {
     return path.join(SystemUtils.getDataDir(), Constants.CONFIG_DIR)
   }
 
+  public static getAgentPluginDir() {
+    return path.join(SystemUtils.getDataDir(), Constants.AGENT_PLUGINS_DIR)
+  }
+
   public static writeStringToFile(path: string, content: string) {
     let result = true
     try {

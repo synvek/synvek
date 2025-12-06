@@ -1,12 +1,15 @@
 import { PluginMetadata, ToolPlugin } from './PluginTypes.ts'
 import { SandboxExecutor } from './SandboxExecutor.ts'
 import { SecurityValidator } from './SecurityValidator.ts'
+import { SystemUtils } from '../../Utils/SystemUtils.ts'
 
 export class PluginManager {
   private pluginSystem: SandboxExecutor
   private securityValidator: SecurityValidator
+  private readonly pluginDir: string;
 
-  constructor(private pluginDir: string = './agent_plugins') {
+  constructor() {
+    this.pluginDir = SystemUtils.getAgentPluginDir()
     this.pluginSystem = new SandboxExecutor({
       timeoutMs: 15000,
       maxMemoryMB: 50,

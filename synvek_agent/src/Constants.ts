@@ -4,6 +4,7 @@ export class Constants {
   public static STORAGE_DIR = 'storage'
   public static MODELS_DIR = 'models'
   public static CONFIG_DIR = 'config'
+  public static AGENT_PLUGINS_DIR = 'agent_plugins'
   public static FILE_SETTINGS = 'settings.json'
   public static MCP_SERVERS = 'mcp_servers.json'
   public static GENERATION_TYPE_IMAGE = 'image'
