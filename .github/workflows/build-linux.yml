@@ -37,9 +37,9 @@ jobs:
       run: |
         nvcc --version
 
-        - name: Disk space check
-        run: |
-          df
+    - name: Disk space check
+      run: |
+        df
   
     - name: Cleanup for tools
       run: |
