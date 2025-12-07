@@ -37,6 +37,10 @@ jobs:
       run: |
         nvcc --version
 
+        - name: Disk space check
+        run: |
+          df
+  
     - name: Cleanup for tools
       run: |
         sudo apt clean        
@@ -51,7 +55,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        submodules: recursive    
+        submodules: false    
+
+    - name: Checkout sub submodule
+      run: |
+        git submodule update --init --depth 1 third_party/hf-hub
+        git submodule update --init --depth 1 third_party/deno
+        git submodule update --init --depth 1 third_party/llama.cpp
+        git submodule update --init --recursive --depth 1 third_party/stable-diffusion.cpp
+        git submodule update --init --depth 1 third_party/mistral.rs        
 
     - name: Prepare for build
       run: |
