@@ -26,29 +26,119 @@ jobs:
       run: |
         df
 
-#   Need to release disk space ASAP because of disk space limitation        
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive    
+
+    - name: Prepare for build
+      run: |
+        mkdir output
+
+    - name: Disk space after code checkout
+      run: |
+        df
+
     - name: Install CUDA
       uses: Jimver/cuda-toolkit@v0.2.28
       with:
         cuda: 12.9.1
-        method: network
-        sub-packages: '["nvcc", "runtime"]'
-        non-cuda-sub-packages: '["libcublas", "libcufft"]'
+        method: local
+        linux-local-args: '["--toolkit"]'
 
     - name: Verify Cuda
       run: |
         nvcc --version
-        echo "CUDA_PATH is: ${CUDA_PATH}"
 
+    - name: Cleanup for tools
+      run: |
+        sudo apt clean        
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/tmp/*        
+        sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
 
     - name: Disk space before code checkout
       run: |
         df
 
-    - name: Install Deno
+    - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        curl -fsSL https://deno.land/install.sh | sh
-        echo "$HOME/.deno/bin" >> $GITHUB_PATH
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
+      run: |
+        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output/ 
+        mv output/libsynvek_backend_llama.so output/libsynvek_backend_llama_cuda.so 
+        rm -rf  build/llama.cpp/build_cuda
+
+    - name: Disk space after build backend-> llama.cpp cuda 
+      run: |
+        df
+
+    - name: Configure and build backend-> stable-diffusion.cpp cuda 
+      run: |
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j  4
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
+      run: |
+        cp build/stable-diffusion.cpp/build_cuda/bin/libsynvek_backend_sd.so output/ 
+        mv output/libsynvek_backend_sd.so output/libsynvek_backend_sd_cuda.so 
+        rm -rf  build/stable-diffusion.cpp/build_cuda
+
+    - name: Disk space after build backend-> stable-diffusion.cpp cuda 
+      run: |
+        df
+       
+    - name: Configure and build backend-> mistral.rs cuda 
+      run: |
+        export CUDA_COMPUTE_CAP=86
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
+      run: |
+        cp build/mistral.rs/build_cuda/release/libsynvek_backend_default.so output/ 
+        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda.so 
+        rm -rf  build/mistral.rs/build_cuda
+
+    - name: Disk space after build backend-> mistral.rs cuda 
+      run: |
+        df
+
+    - name: Configure and build backend-> mistral.rs cuda legacy
+      run: |
+        export CUDA_COMPUTE_CAP=75
+        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
+
+    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda legacy 
+      run: |
+        cp build/mistral.rs/build_cuda_legacy/release/libsynvek_backend_default.so output/ 
+        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda_legacy.so 
+        rm -rf  build/mistral.rs/build_cuda_legacy
+
+    - name: Disk space after build backend-> mistral.rs cuda legacy
+      run: |
+        df
+
+    - name: Remove cuda for dispace
+      run: |
+        dpkg -l | grep cuda || true
+
+        sudo apt purge --autoremove -y "*cuda*" "*cudnn*" "*nvidia*"
+
+        sudo rm -rf /usr/local/cuda*
+        sudo rm -rf /opt/nvidia/
+
+        if ! command -v nvcc &> /dev/null; then
+          echo "Cuda is removed"
+        else
+          echo "nvcc still exists"
+        fi
+
+    - name: Disk space after Remove cuda
+      run: |
+        df
     
     - name: Install Vulkan SDK
       run: |
@@ -72,7 +162,7 @@ jobs:
         which vulkaninfo
         vulkaninfo
 
-    - name: Disk space before code checkout
+    - name: Disk space check
       run: |
         df
 
@@ -82,25 +172,10 @@ jobs:
         sudo rm -rf /tmp/*
         sudo rm -rf /var/tmp/*        
         sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
-        npm cache clean --force
 
-
-    - name: Disk space before code checkout
+    - name: Disk space check
       run: |
         df
-
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive    
-
-    - name: Disk space after code checkout
-      run: |
-        df
-
-    - name: Prepare for build
-      run: |
-        mkdir output
 
     - name: Configure and build backend-> llama.cpp vulkan 
       run: |
@@ -139,25 +214,7 @@ jobs:
     - name: Disk space check after removing Vulkan 
       run: |
         df
-
-    - name: Configure and build backend-> llama.cpp cuda 
-      env:
-        CUDAToolkit_ROOT: ${{env.CUDA_PATH}}  
-      run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCUDAToolkit_ROOT=$CUDA_PATH
-
-        cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
-      run: |
-        cp build/llama.cpp/build_cuda/bin/libsynvek_backend_llama.so output/ 
-        mv output/libsynvek_backend_llama.so output/libsynvek_backend_llama_cuda.so 
-        rm -rf  build/llama.cpp/build_cuda
-
-    - name: Disk space after build backend-> llama.cpp cuda 
-      run: |
-        df
-
+       
     - name: Configure and build backend-> llama.cpp cpu 
       run: |
         cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -173,21 +230,6 @@ jobs:
       run: |
         df
 
-    - name: Configure and build backend-> stable-diffusion.cpp cuda 
-      run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCUDAToolkit_ROOT=$CUDA_PATH
-        cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j  4
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
-      run: |
-        cp build/stable-diffusion.cpp/build_cuda/bin/libsynvek_backend_sd.so output/ 
-        mv output/libsynvek_backend_sd.so output/libsynvek_backend_sd_cuda.so 
-        rm -rf  build/stable-diffusion.cpp/build_cuda
-
-    - name: Disk space after build backend-> stable-diffusion.cpp cuda 
-      run: |
-        df
-       
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
         cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -202,37 +244,7 @@ jobs:
     - name: Disk space after build backend-> stable-diffusion.cpp cpu 
       run: |
         df
-
-    - name: Configure and build backend-> mistral.rs cuda 
-      run: |
-        export CUDA_COMPUTE_CAP=86
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda 
-      run: |
-        cp build/mistral.rs/build_cuda/release/libsynvek_backend_default.so output/ 
-        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda.so 
-        rm -rf  build/mistral.rs/build_cuda
-
-    - name: Disk space after build backend-> mistral.rs cuda 
-      run: |
-        df
-
-    - name: Configure and build backend-> mistral.rs cuda legacy
-      run: |
-        export CUDA_COMPUTE_CAP=75
-        cargo build --profile release --target-dir build/mistral.rs/build_cuda_legacy --manifest-path third_party/mistral.rs/Cargo.toml --features "cuda" --package mistralrs-server --lib
-
-    - name: Copy & cleanup reasources for synvek_explorer on build backend-> mistral.rs cuda legacy 
-      run: |
-        cp build/mistral.rs/build_cuda_legacy/release/libsynvek_backend_default.so output/ 
-        mv output/libsynvek_backend_default.so output/libsynvek_backend_default_cuda_legacy.so 
-        rm -rf  build/mistral.rs/build_cuda_legacy
-
-    - name: Disk space after build backend-> mistral.rs cuda legacy
-      run: |
-        df
-        
+     
     - name: Configure and build backend-> mistral.rs cpu 
       run: |
         cargo build --profile release --target-dir build/mistral.rs/build_cpu --manifest-path third_party/mistral.rs/Cargo.toml --package mistralrs-server --lib
@@ -247,25 +259,6 @@ jobs:
       run: |
         df
         
-    - name: Remove cuda for dispace
-      run: |
-        dpkg -l | grep cuda || true
-
-        sudo apt purge --autoremove -y "*cuda*" "*cudnn*" "*nvidia*"
-
-        sudo rm -rf /usr/local/cuda*
-        sudo rm -rf /opt/nvidia/
-
-        if ! command -v nvcc &> /dev/null; then
-          echo "Cuda is removed"
-        else
-          echo "nvcc still exists"
-        fi
-
-    - name: Disk space after Remove cuda
-      run: |
-        df
-
     - name: Configure and build synvek_web
       run: |
         npm install
@@ -284,6 +277,12 @@ jobs:
     - name: Disk space after build synvek_web
       run: |
         df
+
+
+    - name: Install Deno
+      run: |
+        curl -fsSL https://deno.land/install.sh | sh
+        echo "$HOME/.deno/bin" >> $GITHUB_PATH
 
     - name: Configure and build synvek_agent
       run: |
