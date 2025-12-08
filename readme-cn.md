@@ -22,7 +22,7 @@ https://www.synvek.com
 - 照片生成: Stable Diffusion 3.5, Flux
 - 语音生成: Dia 1.5
 - 多模态模型: Phi-4,Qwen2-VL
-- 更多在开发种
+- 更多在开发中
 
 ### GPU加速推理 
 
