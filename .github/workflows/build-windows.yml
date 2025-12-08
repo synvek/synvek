@@ -251,10 +251,10 @@ jobs:
       shell: pwsh
       run: |
         New-Item -ItemType Directory -Path "output" -Force | Out-Null
-        Copy-Item "synvek_service/agent_plugins" "output/" 
-        Copy-Item "synvek_service/config" "output/" 
-        Copy-Item "synvek_service/service_plugins" "output/" 
-        Copy-Item "synvek_service/storage" "output/" 
+        Copy-Item "synvek_explorer/agent_plugins" "output/" 
+        Copy-Item "synvek_explorer/config" "output/" 
+        Copy-Item "synvek_explorer/service_plugins" "output/" 
+        Copy-Item "synvek_explorer/storage" "output/" 
         Copy-Item "build/llama.cpp/build_cpu/bin/Release/synvek_backend_llama.dll" "output/" 
         Rename-Item  "output/synvek_backend_llama.dll" "synvek_backend_llama_cpu.dll"
         Copy-Item "build/llama.cpp/build_cuda/bin/Release/synvek_backend_llama.dll" "output/" 

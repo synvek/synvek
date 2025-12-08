@@ -319,10 +319,10 @@ jobs:
 
     - name: Copy reasources for synvek_explorer
       run: |
-        cp -r synvek_service/agent_plugins output 
-        cp -r synvek_service/config output 
-        cp -r synvek_service/service_plugins output 
-        cp -r synvek_service/storage output 
+        cp -r synvek_explorer/agent_plugins output 
+        cp -r synvek_explorer/config output 
+        cp -r synvek_explorer/service_plugins output 
+        cp -r synvek_explorer/storage output 
 
     - name: Copy artifacts for mistral rs cuda
       run: |
