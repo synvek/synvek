@@ -1,0 +1,18 @@
+name: Sync to GitCode
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror to GitCode
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/synvek
+          dst: gitcode/synvek
+          dst_key: ${{ secrets.GITCODE_ACCESS_KEY }}
+          dst_token: ${{ secrets.GIT_ACCESS_TOKEN }}
+          account_type: user
+          force_update: true
+          white_ist: "synvek,hf-hub,deno,llama.cpp,stable-diffusion.cpp, mistral.rs"
