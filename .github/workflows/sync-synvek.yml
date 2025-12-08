@@ -1,4 +1,4 @@
-name: Sync to GitCode
+name: Sync Code
 on:
   workflow_dispatch:
 
@@ -15,4 +15,4 @@ jobs:
           dst_token: ${{ secrets.GIT_ACCESS_TOKEN }}
           account_type: user
           force_update: true
-          white_ist: "synvek,hf-hub,deno,llama.cpp,stable-diffusion.cpp, mistral.rs"
+          white_list: "synvek,hf-hub,deno,llama.cpp,stable-diffusion.cpp, mistral.rs"
