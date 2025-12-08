@@ -41,9 +41,9 @@ if (fs.existsSync(webPackageJsonPath)) {
 }
 
 // 6. Syn to version.txt of Synvek Service config dir
-const versionPath = path.join(__dirname, '..', 'synvek_service', 'config', 'version.txt')
+const versionPath = path.join(__dirname, '..', 'synvek_explorer', 'config', 'version.txt')
 fs.writeFileSync(versionPath, version)
-console.log('✓ Updated synvek_service/config/version.txt')
+console.log('✓ Updated synvek_explorer/config/version.txt')
 
 // 7. Sync to Synvek docs package.json
 const docsJsonPath = path.join(__dirname, '..', 'docs', 'package.json')
