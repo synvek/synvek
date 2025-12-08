@@ -32,10 +32,11 @@ export class ToolExecutor {
 }
 
 export class PluginService {
-  public static pluginManager: PluginManager = new PluginManager()
+  public static pluginManager: PluginManager
 
   public static async initialize() {
     console.log('Start loading plugins...')
+    PluginService.pluginManager = new PluginManager()
     await PluginService.pluginManager.loadAllPlugins()
     console.log(
       'Loaded plugins:',

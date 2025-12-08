@@ -43,10 +43,10 @@
     ],
     resources: {
       './../synvek_agent/build/synvek_agent.cjs': 'resources/synvek_agent/synvek_agent.cjs',
-      './../synvek_service/agent_plugins/**/*': 'resources/agent_plugins/',
-      './../synvek_service/service_plugins/**/*': 'resources/service_plugins/',
-      './../synvek_service/config/**/*': 'resources/config/',
-      './../synvek_service/storage/**/*': 'resources/storage/',
+      'agent_plugins/': 'resources/agent_plugins/',
+      'service_plugins/': 'resources/service_plugins/',
+      'config/**/*': 'resources/config/',
+      'storage/**/*': 'resources/storage/',
     },
     windows: {
       webviewInstallMode: {
