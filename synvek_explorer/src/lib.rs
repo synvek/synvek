@@ -374,7 +374,7 @@ pub fn run() {
 
             let main_window = app.get_webview_window("main").unwrap();
 
-            #[cfg(any(target_os = "windows", target_os = "macos"))]
+            #[cfg(any(target_os = "macos"))]
             main_window.create_overlay_titlebar().unwrap();
 
             // Some macOS-specific helpers
@@ -389,6 +389,10 @@ pub fn run() {
                 // Set window level
                 // NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
                 main_window.set_window_level(25).unwrap();
+            }
+            #[cfg(target_os = "windows")]
+            {
+
             }
 
             // let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default())

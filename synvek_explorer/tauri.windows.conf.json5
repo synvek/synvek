@@ -1,4 +1,11 @@
 {
+  app: {
+    windows: [
+      {
+        decorations: false,
+      },
+    ],
+  },
   "bundle": {
     "resources": {
       "./../output/*":  "./",
