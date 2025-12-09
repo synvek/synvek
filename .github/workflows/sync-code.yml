@@ -1,11 +1,6 @@
 name: Sync Code
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        description: 'Tag for new release'
-        required: true
-        type: string
 
 jobs:
   sync-code:
