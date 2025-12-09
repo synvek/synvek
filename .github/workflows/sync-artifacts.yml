@@ -136,8 +136,8 @@ jobs:
               -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
               -H "Content-Type: application/json" \
               -d '{
-                "name": "${{ github.event.release.name }}",
-                "body": "${{ github.event.release.body }}"
+                "name": "${{ github.event.inputs.tag }}",
+                "body": "${{ github.event.inputs.tag }}"
               }' \
               "https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
             echo "Existing GitCode release updated"
