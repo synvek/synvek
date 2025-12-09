@@ -13,95 +13,93 @@ on:
         default: ''
         
 jobs:
-  download_and_verify_all:
+  build-linux:
+    name: Sync code & artifacts
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
 
     steps:
-      - name: Set Variables
-        id: vars
-        run: |
-          echo "REPO=synvek/synvek" >> $GITHUB_ENV
-          echo "DOWNLOAD_DIR=./downloads" >> $GITHUB_ENV
+    - name: Set Variables
+      id: vars
+      run: |
+        echo "REPO=synvek/synvek" >> $GITHUB_ENV
+        echo "DOWNLOAD_DIR=./downloads" >> $GITHUB_ENV
           
-          mkdir -p ${{ env.DOWNLOAD_DIR }}
+        mkdir -p ${{ env.DOWNLOAD_DIR }}
           
-      - name: Get Release Assets Data
-        id: get_assets
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.event.inputs.tag }}
-        run: |
-          echo "Fetching Release Assets for tag: $TAG"
+    - name: Get Release Assets Data
+      id: get_assets
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TAG: ${{ github.event.inputs.tag }}
+      run: |
+        echo "Fetching Release Assets for tag: $TAG"
+         
+        # 1. 获取 Release 信息
+        if [ "$TAG" == "latest" ]; then
+          RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/latest)
+        else
+          RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/tags/${TAG})
+        fi
           
-          # 1. 获取 Release 信息
-          if [ "$TAG" == "latest" ]; then
-            RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/latest)
-          else
-            RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/tags/${TAG})
-          fi
+        # 2. 使用 jq 提取 assets 数组，将每个 asset 对象的 NAME, URL, SHA256 格式化后输出
+        # 格式化输出为: NAME|URL|SHA256_HEX
+        ASSET_DATA=$(echo "${RELEASE_JSON}" | jq -r '.assets[] | 
+          # 可选的通配符/正则筛选
+          # 如果提供了 pattern，则筛选；否则不筛选（下载全部）
+          (
+            if ("${{ github.event.inputs.asset_pattern }}" != "") then
+              select(.name | test("${{ github.event.inputs.asset_pattern | replace('*', '.*') }}"))
+            else
+              .
+            end
+          ) |
+          # 格式化输出： name | browser_download_url | digest (去除 sha256: 前缀)
+          (.name + "|" + .browser_download_url + "|" + (.digest | ltrimstr("sha256:")))'
           
-          # 2. 使用 jq 提取 assets 数组，将每个 asset 对象的 NAME, URL, SHA256 格式化后输出
-          # 格式化输出为: NAME|URL|SHA256_HEX
-          ASSET_DATA=$(echo "${RELEASE_JSON}" | jq -r '.assets[] | 
-            # 可选的通配符/正则筛选
-            # 如果提供了 pattern，则筛选；否则不筛选（下载全部）
-            (
-              if ("${{ github.event.inputs.asset_pattern }}" != "") then
-                select(.name | test("${{ github.event.inputs.asset_pattern | replace('*', '.*') }}"))
-              else
-                .
-              end
-            ) |
-            # 格式化输出： name | browser_download_url | digest (去除 sha256: 前缀)
-            (.name + "|" + .browser_download_url + "|" + (.digest | ltrimstr("sha256:")))'
+        if [ -z "$ASSET_DATA" ]; then
+            echo "::warning::No assets found matching the pattern or the release."
+            exit 0 # 允许在没有找到 Asset 的情况下退出
+        fi
           
-          if [ -z "$ASSET_DATA" ]; then
-              echo "::warning::No assets found matching the pattern or the release."
-              exit 0 # 允许在没有找到 Asset 的情况下退出
-          fi
-          
-          # 将包含所有资产数据的字符串存储为输出变量
-          # 需要将换行符替换为特殊的字符（如 %NL%）以便作为单行输出存储，并在下一步中还原
-          ASSET_DATA_OUTPUT=$(echo "$ASSET_DATA" | sed ':a;N;$!ba;s/\n/%NL%/g')
-          echo "asset_list=$ASSET_DATA_OUTPUT" >> $GITHUB_OUTPUT
+        # 将包含所有资产数据的字符串存储为输出变量
+        # 需要将换行符替换为特殊的字符（如 %NL%）以便作为单行输出存储，并在下一步中还原
+        ASSET_DATA_OUTPUT=$(echo "$ASSET_DATA" | sed ':a;N;$!ba;s/\n/%NL%/g')
+        echo "asset_list=$ASSET_DATA_OUTPUT" >> $GITHUB_OUTPUT
 
-      # 3. 循环下载并校验所有文件
-      - name: Download and Verify Assets
-        env:
-          ASSET_LIST: ${{ steps.get_assets.outputs.asset_list }}
-          DOWNLOAD_DIR: ${{ env.DOWNLOAD_DIR }}
-        run: |
-          # 将特殊字符 %NL% 替换回换行符，并使用 while 循环处理每一行数据
-          echo "$ASSET_LIST" | sed 's/%NL%/\n/g' | while IFS="|" read -r ASSET_NAME DOWNLOAD_URL SHA256_DIGEST; do
+    # 3. 循环下载并校验所有文件
+    - name: Download and Verify Assets
+      env:
+        ASSET_LIST: ${{ steps.get_assets.outputs.asset_list }}
+        DOWNLOAD_DIR: ${{ env.DOWNLOAD_DIR }}
+      run: |
+        # 将特殊字符 %NL% 替换回换行符，并使用 while 循环处理每一行数据
+        echo "$ASSET_LIST" | sed 's/%NL%/\n/g' | while IFS="|" read -r ASSET_NAME DOWNLOAD_URL SHA256_DIGEST; do
               
-              if [ -z "$ASSET_NAME" ]; then
-                  continue
-              fi
+            if [ -z "$ASSET_NAME" ]; then
+                continue
+            fi
               
-              LOCAL_PATH="$DOWNLOAD_DIR/$ASSET_NAME"
+            LOCAL_PATH="$DOWNLOAD_DIR/$ASSET_NAME"
               
-              echo "---"
-              echo "Processing: $ASSET_NAME"
-              echo "Target Path: $LOCAL_PATH"
-              echo "Expected SHA256: $SHA256_DIGEST"
+            echo "---"
+            echo "Processing: $ASSET_NAME"
+            echo "Target Path: $LOCAL_PATH"
+            echo "Expected SHA256: $SHA256_DIGEST"
               
-              # 下载文件
-              # -L 跟随重定向, -sS 静默模式但显示错误
-              curl -L -sS "$DOWNLOAD_URL" -o "$LOCAL_PATH"
+            # 下载文件
+            # -L 跟随重定向, -sS 静默模式但显示错误
+            curl -L -sS "$DOWNLOAD_URL" -o "$LOCAL_PATH"
               
-              # 格式化校验字符串：<SHA256>  <文件路径> (注意双空格)
-              VERIFY_STRING="${SHA256_DIGEST}  ${LOCAL_PATH}"
+            # 格式化校验字符串：<SHA256>  <文件路径> (注意双空格)
+            VERIFY_STRING="${SHA256_DIGEST}  ${LOCAL_PATH}"
               
-              # 使用 shasum -a 256 --check - 校验文件
-              echo "$VERIFY_STRING" | shasum -a 256 --check -
+            # 使用 shasum -a 256 --check - 校验文件
+            echo "$VERIFY_STRING" | shasum -a 256 --check -
               
-              echo "$ASSET_NAME verification successful!"
-          done
-          echo "---"
-          echo "All required assets downloaded and verified."
+            echo "$ASSET_NAME verification successful!"
+        done
+        echo "---"
+        echo "All required assets downloaded and verified."
 
       # - name: Mirror to GitCode
       #   uses: Yikun/hub-mirror-action@master
