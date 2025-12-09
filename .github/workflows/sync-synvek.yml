@@ -20,20 +20,18 @@ jobs:
       contents: read 
 
     steps:
-      # 1. 设置变量和目录
-      - name: ⚙️ Set Variables and Directory
-        id: vars
+      - name: Set Variables
         run: |
-          # 替换为您希望下载的仓库（owner/repo）
           echo "REPO=synvek/synvek" >> $GITHUB_ENV
           echo "DOWNLOAD_DIR=./artifacts" >> $GITHUB_ENV
+
+      - name: Set Directory
+        run: |
           mkdir -p ${{ env.DOWNLOAD_DIR }}
 
-      # 2. 转换正则表达式模式 (修复了管道符问题)
-      - name: 🔁 Convert Asset Pattern to Regex
+      - name: Convert Asset Pattern to Regex
         id: pattern_convert
         shell: bash
-        # 注意：这里使用Shell来执行复杂的字符串替换，而不是Actions表达式
         run: |
           INPUT_PATTERN="${{ github.event.inputs.asset_pattern }}"
           
@@ -54,8 +52,7 @@ jobs:
           # 将最终的正则表达式设置给下一步骤使用的输出变量
           echo "regex_pattern=$REGEX_PATTERN" >> $GITHUB_OUTPUT
 
-      # 3. 获取 Release Asset 列表的 JSON 数据
-      - name: 🔍 Get Release Assets Data
+      - name: Get Release Assets Data
         id: get_assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -88,8 +85,7 @@ jobs:
           ASSET_DATA_OUTPUT=$(echo "$ASSET_DATA" | sed ':a;N;$!ba;s/\n/%NL%/g')
           echo "asset_list=$ASSET_DATA_OUTPUT" >> $GITHUB_OUTPUT
 
-      # 4. 循环下载并校验所有文件
-      - name: ⬇️ Download and Verify Assets
+      - name: Download and Verify Assets
         env:
           ASSET_LIST: ${{ steps.get_assets.outputs.asset_list }}
           DOWNLOAD_DIR: ${{ env.DOWNLOAD_DIR }}
