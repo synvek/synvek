@@ -16,6 +16,9 @@ hero:
     - theme: brand
       text: Download
       link: https://github.com/synvek/synvek/releases
+    - theme: brand
+      text: Download(Mirror)
+      link: https://gitcode.com/synvek/synvek/releases
   image:
     src: /synvek_explorer.png
     alt: Synvek

@@ -14,8 +14,11 @@ hero:
       text: 文档
       link: /installation
     - theme: brand
-      text: Download
+      text: 下载
       link: https://github.com/synvek/synvek/releases
+    - theme: brand
+      text: 下载(镜像)
+      link: https://gitcode.com/synvek/synvek/releases
   image:
     src: /synvek_explorer.png
     alt: Synvek
