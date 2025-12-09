@@ -19,7 +19,10 @@ jobs:
     permissions:
       contents: read 
 
-    steps:
+    steps:      
+      - name:  Install GitHub CLI
+        uses: actions/github-cli@v2
+
       - name: Set Variables
         run: |
           echo "REPO=synvek/synvek" >> $GITHUB_ENV
