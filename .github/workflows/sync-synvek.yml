@@ -13,18 +13,13 @@ on:
         default: ''
         
 jobs:
-  download_and_verify_all:
+  sync_code_and_artifacts:
     runs-on: ubuntu-latest
     
     permissions:
       contents: read 
 
     steps:      
-      - name: Install GitHub CLI
-        run: |
-          gh --help
-          gh --version
-
       - name: Set Variables
         run: |
           echo "REPO=synvek/synvek" >> $GITHUB_ENV
@@ -40,21 +35,17 @@ jobs:
         run: |
           INPUT_PATTERN="${{ github.event.inputs.asset_pattern }}"
           
-          # 1. 如果模式为空，使用 .* 匹配所有文件
           if [ -z "$INPUT_PATTERN" ]; then
             REGEX_PATTERN=".*"
           else
-            # 2. 将 . 转义为 \.，避免它被视为正则表达式的任意字符
             ESCAPED_DOTS=$(echo "$INPUT_PATTERN" | sed 's/\./\\\./g')
             
-            # 3. 将 * 通配符转换为 .* 正则表达式
             REGEX_PATTERN=$(echo "$ESCAPED_DOTS" | sed 's/*/.\*/g')
           fi
           
           echo "Input Pattern: $INPUT_PATTERN"
           echo "Regex Pattern: $REGEX_PATTERN"
           
-          # 将最终的正则表达式设置给下一步骤使用的输出变量
           echo "regex_pattern=$REGEX_PATTERN" >> $GITHUB_OUTPUT
 
       - name: Get Release Assets Data
@@ -71,13 +62,10 @@ jobs:
             RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/tags/${TAG})
           fi
           
-          # 使用 --arg 安全地将上一步的 REGEX_PATTERN 传递给 jq 变量 $regex
           ASSET_DATA=$(echo "${RELEASE_JSON}" | \
             jq -r --arg regex "${{ steps.pattern_convert.outputs.regex_pattern }}" '.assets[] | 
-              # 筛选逻辑：文件名匹配 $regex
               select(.name | test($regex)) |
               
-              # 格式化输出： name | browser_download_url | digest (去除 sha256: 前缀)
               (.name + "|" + .browser_download_url + "|" + (.digest | ltrimstr("sha256:")))'
           )
           
@@ -86,7 +74,6 @@ jobs:
               exit 0 
           fi
           
-          # 将包含所有资产数据的字符串存储为输出变量（处理多行问题）
           ASSET_DATA_OUTPUT=$(echo "$ASSET_DATA" | sed ':a;N;$!ba;s/\n/%NL%/g')
           echo "asset_list=$ASSET_DATA_OUTPUT" >> $GITHUB_OUTPUT
 
@@ -100,7 +87,6 @@ jobs:
             exit 0
           fi
           
-          # 将特殊字符 %NL% 替换回换行符，并使用 while 循环处理每一行数据
           echo "$ASSET_LIST" | sed 's/%NL%/\n/g' | while IFS="|" read -r ASSET_NAME DOWNLOAD_URL SHA256_DIGEST; do
               
               if [ -z "$ASSET_NAME" ]; then
@@ -112,18 +98,81 @@ jobs:
               echo "---"
               echo "Processing: $ASSET_NAME"
               
-              # 下载文件
               curl -L -sS "$DOWNLOAD_URL" -o "$LOCAL_PATH"
               
-              # 格式化校验字符串：<SHA256>  <文件路径> (注意双空格)
               VERIFY_STRING="${SHA256_DIGEST}  ${LOCAL_PATH}"
               
               echo "Verifying SHA256 checksum..."
               
-              # 使用 shasum -a 256 --check - 校验文件
               echo "$VERIFY_STRING" | shasum -a 256 --check -
               
-              echo "✅ $ASSET_NAME verification successful!"
+              echo "✅ $ASSET_NAME verification successful!"             
           done
           echo "---"
           echo "✅ All required assets downloaded and verified."
+
+      - name: Create or update GitCode Release
+        run: |
+          EXISTING_RELEASE=$(curl -s \
+            -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+            -H "Accept: application/json" \
+            "https://gitcode.net/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}" || echo "not_found")
+          
+          if [[ "$EXISTING_RELEASE" == *"not_found"* ]]; then
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "tag_name": "${{ github.event.inputs.tag }}",
+                "name": "${{ github.event.inputs.tag }}",
+                "body": "${{ github.event.inputs.tag }}",
+                "draft": true,
+                "prerelease": true
+              }' \
+              "https://gitcode.net/api/v5/repos/synvek/synvek/releases"
+            echo "New GitCode release created"
+          else
+            # 更新现有Release
+            RELEASE_ID=$(echo "$EXISTING_RELEASE" | jq -r '.id')
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "name": "${{ github.event.release.name }}",
+                "body": "${{ github.event.release.body }}",
+                "prerelease": ${{ github.event.release.prerelease }}
+              }' \
+              "https://gitcode.net/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
+            echo "Existing GitCode release updated"
+          fi
+
+      - name: Upload assets to GitCode Release
+        run: |
+          # 获取Release ID
+          RELEASE_INFO=$(curl -s \
+            -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+            -H "Accept: application/json" \
+            "https://gitcode.net/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}")
+          
+          RELEASE_ID=$(echo "$RELEASE_INFO" | jq -r '.id')
+          UPLOAD_URL="https://gitcode.net/api/v5/repos/synvek/synvek/releases/$RELEASE_ID/assets"
+          
+          # 上传所有资源文件
+          for asset_file in ${{ env.DOWNLOAD_DIR }}/*; do
+            if [ -f "$asset_file" ]; then
+              ASSET_NAME=$(basename "$asset_file")
+              echo "Uploading $ASSET_NAME to GitCode..."
+              
+              curl -X POST \
+                -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+                -H "Content-Type: multipart/form-data" \
+                -F "name=$ASSET_NAME" \
+                -F "attachment=@$asset_file" \
+                "$UPLOAD_URL"
+            fi
+          done
+
+      - name: Verify sync completion
+        run: |
+          echo "✅ Release synchronization completed"
+          echo "GitCode Release URL: https://gitcode.net/synvek/synvek/releases/tag/${{ github.event.inputs.tag }}"          
