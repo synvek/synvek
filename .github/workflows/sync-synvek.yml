@@ -3,7 +3,7 @@ name: Sync Code & Artifacts
 on:
   workflow_dispatch:
     inputs:
-      tag:
+      release_tag:
         description: 'Release Tag (Leave blank for latest)'
         required: false
         default: 'latest'
@@ -29,8 +29,7 @@ jobs:
     - name: Get Release Assets Data
       id: get_assets
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TAG: ${{ github.event.inputs.tag }}
+        TAG: ${{inputs.release_tag}}
       run: |
         echo "Fetching Release Assets for tag: $TAG"
          
@@ -47,8 +46,8 @@ jobs:
           # 可选的通配符/正则筛选
           # 如果提供了 pattern，则筛选；否则不筛选（下载全部）
           (
-            if ("${{ github.event.inputs.asset_pattern }}" != "") then
-              select(.name | test("${{ github.event.inputs.asset_pattern | replace('*', '.*') }}"))
+            if ("${{ inputs.asset_pattern }}" != "") then
+              select(.name | test("${{ inputs.asset_pattern | replace('*', '.*') }}"))
             else
               .
             end
