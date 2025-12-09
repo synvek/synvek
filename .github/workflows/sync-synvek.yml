@@ -22,7 +22,8 @@ jobs:
     steps:      
       - name: Install GitHub CLI
         run: |
-          sudo apt  install gh 
+          gh --help
+          gh --version
 
       - name: Set Variables
         run: |
