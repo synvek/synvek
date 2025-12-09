@@ -1,4 +1,4 @@
-name: Sync Code & Artifacts
+name: Sync Artifacts
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
         default: ''
         
 jobs:
-  sync_code_and_artifacts:
+  sync_artifacts:
     runs-on: ubuntu-latest
     
     permissions:
@@ -125,9 +125,7 @@ jobs:
               -d '{
                 "tag_name": "${{ github.event.inputs.tag }}",
                 "name": "${{ github.event.inputs.tag }}",
-                "body": "${{ github.event.inputs.tag }}",
-                "draft": true,
-                "prerelease": true
+                "body": "${{ github.event.inputs.tag }}"
               }' \
               "https://gitcode.com/api/v5/repos/synvek/synvek/releases"
             echo "New GitCode release created"
@@ -139,8 +137,7 @@ jobs:
               -H "Content-Type: application/json" \
               -d '{
                 "name": "${{ github.event.release.name }}",
-                "body": "${{ github.event.release.body }}",
-                "prerelease": ${{ github.event.release.prerelease }}
+                "body": "${{ github.event.release.body }}"
               }' \
               "https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
             echo "Existing GitCode release updated"

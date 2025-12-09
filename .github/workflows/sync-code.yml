@@ -1,0 +1,27 @@
+name: Sync Code
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Tag for new release'
+        required: true
+        type: string
+
+jobs:
+  sync-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare for sync
+        run: |
+          mkdir artifacts
+
+      - name: Mirror to GitCode
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/synvek
+          dst: gitcode/synvek
+          dst_key: ${{ secrets.GITCODE_ACCESS_KEY }}
+          dst_token: ${{ secrets.GIT_ACCESS_TOKEN }}
+          account_type: user
+          force_update: true
+          white_list: "synvek,hf-hub,deno,llama.cpp,stable-diffusion.cpp, mistral.rs"
