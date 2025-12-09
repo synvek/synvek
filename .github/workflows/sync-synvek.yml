@@ -116,7 +116,7 @@ jobs:
           EXISTING_RELEASE=$(curl -s \
             -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
             -H "Accept: application/json" \
-            "https://gitcode.net/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}" || echo "not_found")
+            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}" || echo "not_found")
           
           if [[ "$EXISTING_RELEASE" == *"not_found"* ]]; then
             curl -X POST \
@@ -129,7 +129,7 @@ jobs:
                 "draft": true,
                 "prerelease": true
               }' \
-              "https://gitcode.net/api/v5/repos/synvek/synvek/releases"
+              "https://gitcode.com/api/v5/repos/synvek/synvek/releases"
             echo "New GitCode release created"
           else
             # 更新现有Release
@@ -142,7 +142,7 @@ jobs:
                 "body": "${{ github.event.release.body }}",
                 "prerelease": ${{ github.event.release.prerelease }}
               }' \
-              "https://gitcode.net/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
+              "https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
             echo "Existing GitCode release updated"
           fi
 
@@ -152,10 +152,10 @@ jobs:
           RELEASE_INFO=$(curl -s \
             -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
             -H "Accept: application/json" \
-            "https://gitcode.net/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}")
+            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}")
           
           RELEASE_ID=$(echo "$RELEASE_INFO" | jq -r '.id')
-          UPLOAD_URL="https://gitcode.net/api/v5/repos/synvek/synvek/releases/$RELEASE_ID/assets"
+          UPLOAD_URL="https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID/assets"
           
           # 上传所有资源文件
           for asset_file in ${{ env.DOWNLOAD_DIR }}/*; do
