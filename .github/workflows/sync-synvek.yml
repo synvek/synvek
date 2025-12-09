@@ -20,8 +20,9 @@ jobs:
       contents: read 
 
     steps:      
-      - name:  Install GitHub CLI
-        uses: actions/github-cli@v2
+      - name: Install GitHub CLI
+        run: |
+          sudo apt  install gh 
 
       - name: Set Variables
         run: |
