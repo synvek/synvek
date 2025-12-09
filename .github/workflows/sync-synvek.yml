@@ -1,4 +1,4 @@
-name: Synvek Code & Artifacts
+name: Sync Code & Artifacts
 
 on:
   workflow_dispatch:
@@ -13,37 +13,55 @@ on:
         default: ''
         
 jobs:
-  sync_code:
+  download_and_verify_all:
     runs-on: ubuntu-latest
     
     permissions:
       contents: read 
 
     steps:
-      # 1. 设置变量
+      # 1. 设置变量和目录
       - name: ⚙️ Set Variables and Directory
         id: vars
         run: |
           # 替换为您希望下载的仓库（owner/repo）
           echo "REPO=owner/repo" >> $GITHUB_ENV
           echo "DOWNLOAD_DIR=./downloads" >> $GITHUB_ENV
-          
-          # 创建下载目录
           mkdir -p ${{ env.DOWNLOAD_DIR }}
+
+      # 2. 转换正则表达式模式 (修复了管道符问题)
+      - name: 🔁 Convert Asset Pattern to Regex
+        id: pattern_convert
+        shell: bash
+        # 注意：这里使用Shell来执行复杂的字符串替换，而不是Actions表达式
+        run: |
+          INPUT_PATTERN="${{ github.event.inputs.asset_pattern }}"
           
-      # 2. 获取 Release Asset 列表的 JSON 数据
-      # 关键修复：使用 --arg 传递模式，并在 Shell 中进行通配符转换
-      - name:  Get Release Assets Data
+          # 1. 如果模式为空，使用 .* 匹配所有文件
+          if [ -z "$INPUT_PATTERN" ]; then
+            REGEX_PATTERN=".*"
+          else
+            # 2. 将 . 转义为 \.，避免它被视为正则表达式的任意字符
+            ESCAPED_DOTS=$(echo "$INPUT_PATTERN" | sed 's/\./\\\./g')
+            
+            # 3. 将 * 通配符转换为 .* 正则表达式
+            REGEX_PATTERN=$(echo "$ESCAPED_DOTS" | sed 's/*/.\*/g')
+          fi
+          
+          echo "Input Pattern: $INPUT_PATTERN"
+          echo "Regex Pattern: $REGEX_PATTERN"
+          
+          # 将最终的正则表达式设置给下一步骤使用的输出变量
+          echo "regex_pattern=$REGEX_PATTERN" >> $GITHUB_OUTPUT
+
+      # 3. 获取 Release Asset 列表的 JSON 数据
+      - name: 🔍 Get Release Assets Data
         id: get_assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.event.inputs.tag }}
-          # 将输入的通配符模式转换为 jq可用的正则表达式，例如：*.zip -> .*\\.zip
-          # 注意：这里需要双重转义，因为我们将它作为Shell变量传递
-          # 模式为空时，使用 .* 匹配所有文件
-          REGEX_PATTERN: ${{ github.event.inputs.asset_pattern == '' && '.*' || github.event.inputs.asset_pattern | replace('*', '.*') | replace('.', '\\.') }}
         run: |
-          echo "Fetching Release Assets for tag: $TAG with pattern: ${{ env.REGEX_PATTERN }}"
+          echo "Fetching Release Assets for tag: $TAG with pattern: ${{ steps.pattern_convert.outputs.regex_pattern }}"
           
           if [ "$TAG" == "latest" ]; then
             RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/latest)
@@ -51,11 +69,10 @@ jobs:
             RELEASE_JSON=$(gh api /repos/${{ env.REPO }}/releases/tags/${TAG})
           fi
           
-          # 使用 --arg 安全地将 REGEX_PATTERN 传递给 jq 变量 $regex
-          # 在 jq 表达式中使用 $regex 变量进行筛选
+          # 使用 --arg 安全地将上一步的 REGEX_PATTERN 传递给 jq 变量 $regex
           ASSET_DATA=$(echo "${RELEASE_JSON}" | \
-            jq -r --arg regex "${{ env.REGEX_PATTERN }}" '.assets[] | 
-              # 筛选逻辑：如果模式为空 (在 env 变量中被替换为 .*)，或者文件名匹配 $regex
+            jq -r --arg regex "${{ steps.pattern_convert.outputs.regex_pattern }}" '.assets[] | 
+              # 筛选逻辑：文件名匹配 $regex
               select(.name | test($regex)) |
               
               # 格式化输出： name | browser_download_url | digest (去除 sha256: 前缀)
@@ -71,7 +88,7 @@ jobs:
           ASSET_DATA_OUTPUT=$(echo "$ASSET_DATA" | sed ':a;N;$!ba;s/\n/%NL%/g')
           echo "asset_list=$ASSET_DATA_OUTPUT" >> $GITHUB_OUTPUT
 
-      # 3. 循环下载并校验所有文件 (此步骤无需更改，因为它依赖于步骤 2 的输出)
+      # 4. 循环下载并校验所有文件
       - name: ⬇️ Download and Verify Assets
         env:
           ASSET_LIST: ${{ steps.get_assets.outputs.asset_list }}
@@ -93,7 +110,6 @@ jobs:
               
               echo "---"
               echo "Processing: $ASSET_NAME"
-              echo "Expected SHA256: $SHA256_DIGEST"
               
               # 下载文件
               curl -L -sS "$DOWNLOAD_URL" -o "$LOCAL_PATH"
