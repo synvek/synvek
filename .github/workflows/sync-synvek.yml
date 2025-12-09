@@ -25,8 +25,8 @@ jobs:
         id: vars
         run: |
           # 替换为您希望下载的仓库（owner/repo）
-          echo "REPO=owner/repo" >> $GITHUB_ENV
-          echo "DOWNLOAD_DIR=./downloads" >> $GITHUB_ENV
+          echo "REPO=synvek/synvek" >> $GITHUB_ENV
+          echo "DOWNLOAD_DIR=./artifacts" >> $GITHUB_ENV
           mkdir -p ${{ env.DOWNLOAD_DIR }}
 
       # 2. 转换正则表达式模式 (修复了管道符问题)
