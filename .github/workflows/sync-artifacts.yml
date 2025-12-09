@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Release Tag (Leave blank for latest)'
         required: false
-        default: 'latest'
+        default: 'v0.4.1'
       asset_pattern:
         description: 'Asset name pattern (e.g., *.zip, *cuda*) - Leave blank for ALL assets'
         required: false
@@ -114,13 +114,13 @@ jobs:
       - name: Create or update GitCode Release
         run: |
           EXISTING_RELEASE=$(curl -s \
-            -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+            -H "Authorization: ${{ secrets.GIT_ACCESS_TOKEN }}" \
             -H "Accept: application/json" \
-            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}" || echo "not_found")
+            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}?acces_token=${{ secrets.GIT_ACCESS_TOKEN }}" || echo "not_found")
           
           if [[ "$EXISTING_RELEASE" == *"not_found"* ]]; then
             curl -X POST \
-              -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+              -H "Authorization: ${{ secrets.GIT_ACCESS_TOKEN }}" \
               -H "Content-Type: application/json" \
               -d '{
                 "tag_name": "${{ github.event.inputs.tag }}",
@@ -133,13 +133,13 @@ jobs:
             # 更新现有Release
             RELEASE_ID=$(echo "$EXISTING_RELEASE" | jq -r '.id')
             curl -X PATCH \
-              -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+              -H "Authorization: ${{ secrets.GIT_ACCESS_TOKEN }}" \
               -H "Content-Type: application/json" \
               -d '{
                 "name": "${{ github.event.inputs.tag }}",
                 "body": "${{ github.event.inputs.tag }}"
               }' \
-              "https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID"
+              "https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID?acces_token=${{ secrets.GIT_ACCESS_TOKEN }}"
             echo "Existing GitCode release updated"
           fi
 
@@ -147,12 +147,12 @@ jobs:
         run: |
           # 获取Release ID
           RELEASE_INFO=$(curl -s \
-            -H "Authorization: token ${{ secrets.GIT_ACCESS_TOKEN }}" \
+            -H "Authorization: ${{ secrets.GIT_ACCESS_TOKEN }}" \
             -H "Accept: application/json" \
-            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}")
+            "https://gitcode.com/api/v5/repos/synvek/synvek/releases/tags/${{ github.event.inputs.tag }}?acces_token=${{ secrets.GIT_ACCESS_TOKEN }}")
           
           RELEASE_ID=$(echo "$RELEASE_INFO" | jq -r '.id')
-          UPLOAD_URL="https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID/assets"
+          UPLOAD_URL="https://gitcode.com/api/v5/repos/synvek/synvek/releases/$RELEASE_ID/assets?acces_token=${{ secrets.GIT_ACCESS_TOKEN }}"
           
           # 上传所有资源文件
           for asset_file in ${{ env.DOWNLOAD_DIR }}/*; do
