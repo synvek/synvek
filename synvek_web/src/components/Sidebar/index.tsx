@@ -90,19 +90,15 @@ export default (props: any) => {
     currentWorkspace.triggerRouterChanged()
   }
 
-  const handleGlobalThemeChange = (isDark: boolean) => {
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'light')
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark')
-    }
-  }
+
 
   const handleThemeChange = async () => {
     setAntdConfig((config: ConfigProviderProps) => {
       if (config.theme?.algorithm) {
         const algorithmMap = config.theme.algorithm as MappingAlgorithm[]
         const hasDark = algorithmMap.includes(theme.darkAlgorithm)
+        const newTheme = hasDark ? 'light' : 'dark'
+        
         if (hasDark) {
           config.theme.algorithm = [theme.defaultAlgorithm]
           setDarkTheme(false)
@@ -115,7 +111,11 @@ export default (props: any) => {
           document.documentElement.setAttribute('data-theme', 'dark')
         }
 
-        handleGlobalThemeChange(hasDark)
+        // Trigger custom theme change event for other components
+        const themeChangeEvent = new CustomEvent('themeChange', { 
+          detail: { theme: newTheme } 
+        });
+        window.dispatchEvent(themeChangeEvent);
       }
       return config
     })

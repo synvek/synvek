@@ -38,15 +38,30 @@ export const antd: RuntimeAntdConfig = (memo) => {
   }
   
   // Ensure algorithm is set correctly
-  //if (!memo.theme.algorithm) {
-    memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
-  //}
+  memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
   
   // Set data-theme attribute for CSS variables
-  if (storageTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark')
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light')
+  document.documentElement.setAttribute('data-theme', storageTheme)
+  
+  // Listen for theme changes and update accordingly
+  if (typeof window !== 'undefined') {
+    const handleThemeChange = (event: CustomEvent) => {
+      const newTheme = event.detail.theme
+      document.documentElement.setAttribute('data-theme', newTheme)
+      
+      // Force a re-render by updating a CSS custom property
+      document.documentElement.style.setProperty('--theme-transition', 'all 0.3s ease')
+      
+      // Trigger a small delay to ensure CSS variables are updated
+      setTimeout(() => {
+        document.documentElement.style.removeProperty('--theme-transition')
+      }, 300)
+    }
+    
+    // Remove existing listener to avoid duplicates
+    window.removeEventListener('themeChange', handleThemeChange as EventListener)
+    // Add new listener
+    window.addEventListener('themeChange', handleThemeChange as EventListener)
   }
   
   return memo

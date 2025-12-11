@@ -75,7 +75,7 @@
   }
   
   &.skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-bg-hover) 50%, var(--color-bg-secondary) 75%);
     background-size: 200px 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -86,27 +86,27 @@
   animation: slideIn 0.3s ease-out;
   
   &.success {
-    border-left-color: #059669;
-    color: #059669;
-    background-color: rgba(5, 150, 105, 0.1);
+    border-left-color: var(--color-interactive-success);
+    color: var(--color-interactive-success);
+    background-color: var(--color-bg-hover);
   }
   
   &.error {
-    border-left-color: #dc2626;
-    color: #dc2626;
-    background-color: rgba(220, 38, 38, 0.1);
+    border-left-color: var(--color-interactive-error);
+    color: var(--color-interactive-error);
+    background-color: var(--color-bg-hover);
   }
   
   &.warning {
-    border-left-color: #d97706;
-    color: #d97706;
-    background-color: rgba(217, 119, 6, 0.1);
+    border-left-color: var(--color-interactive-warning);
+    color: var(--color-interactive-warning);
+    background-color: var(--color-bg-hover);
   }
   
   &.info {
-    border-left-color: #2563eb;
-    color: #2563eb;
-    background-color: rgba(37, 99, 235, 0.1);
+    border-left-color: var(--color-interactive-primary);
+    color: var(--color-interactive-primary);
+    background-color: var(--color-bg-hover);
   }
 }
 
@@ -118,13 +118,13 @@
     animation: pulse 2s ease-in-out infinite;
     
     &.valid {
-      border-color: #059669;
-      background-color: rgba(5, 150, 105, 0.1);
+      border-color: var(--color-interactive-success);
+      background-color: var(--color-bg-hover);
     }
     
     &.invalid {
-      border-color: #dc2626;
-      background-color: rgba(220, 38, 38, 0.1);
+      border-color: var(--color-interactive-error);
+      background-color: var(--color-bg-hover);
     }
   }
 }
