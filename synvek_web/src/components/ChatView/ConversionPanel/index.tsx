@@ -678,7 +678,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
           </div>
           <div>{name}</div>
         </div>
-        <div style={{ display: visible || pinned ? undefined : 'none' }}>
+        <div style={{ opacity: visible || pinned ? undefined : 0 }}>
           <Dropdown menu={{ items: generateMenus(id, key, name, isFolder, parent, folders) }}>
             <Button variant={'filled'} color={'primary'} icon={commandIcon} size={'small'} type={'text'} shape={'circle'} />
           </Dropdown>
