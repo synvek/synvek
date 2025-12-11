@@ -189,6 +189,11 @@ body {
   transition: var(--transition-colors);
 }
 
+// Theme updating class for forced recalculation
+.theme-updating * {
+  transition: none !important;
+}
+
 // Enhanced Ant Design component overrides with improved click feedback
 .ant-btn {
   border-radius: var(--radius-md);

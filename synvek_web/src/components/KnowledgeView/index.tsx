@@ -116,7 +116,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                         </div>
                       )
                     }}
-                    style={{ backgroundColor: 'silver' }}
+                    style={{ backgroundColor: token.colorBgContainer }}
                   />
                 </MentionsInput>
               </div>

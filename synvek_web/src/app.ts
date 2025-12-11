@@ -2,9 +2,8 @@
 import { RuntimeAntdConfig } from '@umijs/max'
 
 import { RequestUtils } from '@/components/Utils'
-import { theme } from 'antd'
 import { history } from 'umi'
-import { getEnhancedTheme } from '@/styles/enhanced-theme'
+import { themeManager } from '@/styles/theme-manager'
 // @ts-ignore
 export function onRouteChange({ location, routes, action }) {
   // console.log('Route changed - location:', location)
@@ -25,44 +24,8 @@ export async function getInitialState(): Promise<{ name: string }> {
 }
 
 export const antd: RuntimeAntdConfig = (memo) => {
-  // Get enhanced theme configuration
-  const enhancedTheme = getEnhancedTheme()
-  
-  // Apply enhanced theme
-  memo.theme = enhancedTheme
-  
-  // Set theme algorithm based on current theme
-  let storageTheme = localStorage.getItem('synvek.theme')
-  if (!storageTheme) {
-    storageTheme = 'dark'
-  }
-  
-  // Ensure algorithm is set correctly
-  memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
-  
-  // Set data-theme attribute for CSS variables
-  document.documentElement.setAttribute('data-theme', storageTheme)
-  
-  // Listen for theme changes and update accordingly
-  if (typeof window !== 'undefined') {
-    const handleThemeChange = (event: CustomEvent) => {
-      const newTheme = event.detail.theme
-      document.documentElement.setAttribute('data-theme', newTheme)
-      
-      // Force a re-render by updating a CSS custom property
-      document.documentElement.style.setProperty('--theme-transition', 'all 0.3s ease')
-      
-      // Trigger a small delay to ensure CSS variables are updated
-      setTimeout(() => {
-        document.documentElement.style.removeProperty('--theme-transition')
-      }, 300)
-    }
-    
-    // Remove existing listener to avoid duplicates
-    window.removeEventListener('themeChange', handleThemeChange as EventListener)
-    // Add new listener
-    window.addEventListener('themeChange', handleThemeChange as EventListener)
-  }
+  // Get theme configuration from theme manager
+  memo.theme = themeManager.getAntdThemeConfig()
   
   return memo
 }

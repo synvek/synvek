@@ -20,7 +20,7 @@ const HeaderCommander: FC<HeaderCommanderProps> = ({}) => {
       initialize()
     }
     return () => {}
-  }, [])
+  })
 
   const initialize = async () => {
     setInitialized(true)

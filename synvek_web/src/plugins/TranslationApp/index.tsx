@@ -20,14 +20,16 @@ const TranslationApp: PluginDefinition = {
   --bg: #f0f2f5;
   --card-bg: #ffffff;
   --text: #333333;
+  --text-secondary: #666666;
   --border: #e8e8e8;
 }
 
-body.dark {
+[data-theme='dark'] {
   --primary: #177ddc;
   --bg: #1f1f1f;
   --card-bg: #141414;
   --text: #e8e8e8;
+  --text-secondary: #aaaaaa;
   --border: #303030;
 }
 
@@ -125,7 +127,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .status {
   margin-top: 10px;
   font-size: 0.9em;
-  color: #888;
+  color: var(--text-secondary);
   text-align: center;
   min-height: 20px;
 }
@@ -133,7 +135,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .translation {
   margin-top: 10px;
   font-size: 0.9em;
-  color: #888;
+  color: var(--text-secondary);
   text-align: left;
   min-height: 20px;
 }
@@ -265,7 +267,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     if (loading) {
       translateBtn.innerHTML = 'Translating<span class="loading-dots"></span>';
       statusEl.textContent = 'Processing with AI model...';
-      statusEl.style.color = '#888';
+      statusEl.style.color = 'var(--text-secondary)';
       resultArea.classList.remove('visible');
     } else {
       translateBtn.innerHTML = '<span>Translate Now</span>';

@@ -3,11 +3,13 @@ import { FC, KeyboardEvent, useCallback, useEffect, useState } from 'react'
 
 import { useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { ArrowUpOutlined, CodeOutlined, FileAddOutlined, GlobalOutlined, InteractionOutlined, ReadOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Input, message, Splitter, Typography } from 'antd'
+import { Button, ConfigProvider, Input, message, Splitter, theme, Typography } from 'antd'
 import { Mention, MentionItem, MentionsInput } from 'react-mentions'
 import styles from './index.less'
 const { Text, Title } = Typography
 const { TextArea } = Input
+
+const { useToken } = theme
 
 interface ChatViewProps {
   visible: boolean
@@ -31,6 +33,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [initialized, setInitialized] = useState<boolean>(false)
   const [userText, setUserText] = useState<string>('')
 
+  const { token } = useToken()
   useEffect(() => {
     console.log(`Initializing ChatView now ...`)
     if (!initialized) {
@@ -111,7 +114,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                         </div>
                       )
                     }}
-                    style={{ backgroundColor: 'silver' }}
+                    style={{ backgroundColor: token.colorBgContainer }}
                   />
                 </MentionsInput>
               </div>

@@ -1045,7 +1045,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       return (
         <div className={styles.chatFooterFileListItem} key={file.uid}>
           {file.name}
-          <span style={{ marginLeft: 8, color: '#999', fontSize: '9px' }}>{SystemUtils.formatFileSize(file.size || 0)}</span>
+          <span style={{ marginLeft: 8, color: token.colorTextSecondary, fontSize: '9px' }}>{SystemUtils.formatFileSize(file.size || 0)}</span>
           <Button
             icon={<DeleteOutlined />}
             danger
@@ -1333,7 +1333,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                               )
                             }
                           }
-                          style={{ backgroundColor: 'silver' }}
+                          style={{ backgroundColor: token.colorBgContainer }}
                         />
                       </MentionsInput>
                     </div>

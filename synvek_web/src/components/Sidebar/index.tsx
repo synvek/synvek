@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { PluginDefinition } from '@/components/Plugin'
 import { Consts, useGlobalContext, WorkMode } from '@/components/Utils'
+import { addThemeListener, removeThemeListener, themeManager } from '@/styles/theme-manager'
 import { useIntl } from '@@/exports'
 import { AppstoreOutlined, MessageOutlined, MoonOutlined, PictureOutlined, SettingOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons'
-import { Button, Divider, Dropdown, MappingAlgorithm, MenuProps, theme, Tooltip } from 'antd'
-import { ConfigProviderProps } from 'antd/es/config-provider'
+import { Button, Divider, Dropdown, MenuProps, theme, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { FormattedMessage, useAntdConfig, useAntdConfigSetter } from 'umi'
+import { FormattedMessage, useAntdConfigSetter } from 'umi'
 import styles from './index.less'
 
 const { useToken } = theme
@@ -14,23 +14,34 @@ const { useToken } = theme
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (props: any) => {
   const setAntdConfig = useAntdConfigSetter()
-  const antdConfig = useAntdConfig()
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
   const { token } = useToken()
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
-  //const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  let storageTheme = localStorage.getItem('synvek.theme')
-  if (!storageTheme) {
-    storageTheme = 'dark'
-  }
-  const [darkTheme, setDarkTheme] = useState<boolean>(storageTheme === 'dark')
+  const [darkTheme, setDarkTheme] = useState<boolean>(themeManager.getCurrentTheme() === 'dark')
 
   const intl = useIntl()
+
   useEffect(() => {
     currentWorkspace.onActivatedMiniAppChanged(handleActivatedMiniAppChanged)
+
+    // Listen for theme changes
+    const handleThemeChange = (newTheme: 'light' | 'dark') => {
+      setDarkTheme(newTheme === 'dark')
+
+      // Update Ant Design configuration
+      const newConfig = themeManager.getAntdThemeConfig()
+      setAntdConfig((prevConfig) => ({
+        ...prevConfig,
+        theme: newConfig,
+      }))
+    }
+
+    addThemeListener(handleThemeChange)
+
     return () => {
       currentWorkspace.removeActivatedMiniAppChangedListener(handleActivatedMiniAppChanged)
+      removeThemeListener(handleThemeChange)
     }
   })
 
@@ -90,35 +101,11 @@ export default (props: any) => {
     currentWorkspace.triggerRouterChanged()
   }
 
-
-
   const handleThemeChange = async () => {
-    setAntdConfig((config: ConfigProviderProps) => {
-      if (config.theme?.algorithm) {
-        const algorithmMap = config.theme.algorithm as MappingAlgorithm[]
-        const hasDark = algorithmMap.includes(theme.darkAlgorithm)
-        const newTheme = hasDark ? 'light' : 'dark'
-        
-        if (hasDark) {
-          config.theme.algorithm = [theme.defaultAlgorithm]
-          setDarkTheme(false)
-          localStorage.setItem('synvek.theme', 'light')
-          document.documentElement.setAttribute('data-theme', 'light')
-        } else {
-          config.theme.algorithm = [theme.darkAlgorithm]
-          setDarkTheme(true)
-          localStorage.setItem('synvek.theme', 'dark')
-          document.documentElement.setAttribute('data-theme', 'dark')
-        }
+    // Use the theme manager to switch themes
+    const newTheme = themeManager.switchTheme()
 
-        // Trigger custom theme change event for other components
-        const themeChangeEvent = new CustomEvent('themeChange', { 
-          detail: { theme: newTheme } 
-        });
-        window.dispatchEvent(themeChangeEvent);
-      }
-      return config
-    })
+    // Trigger workspace theme changed event
     currentWorkspace.triggerThemeChanged()
   }
 

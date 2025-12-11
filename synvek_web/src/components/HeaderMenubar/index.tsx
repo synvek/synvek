@@ -20,7 +20,7 @@ const HeaderMenubar: FC<HeaderMenubarProps> = ({}) => {
 
   useEffect(() => {
     return () => {}
-  }, [])
+  })
 
   const handleConversionListVisibleChange = () => {
     currentWorkspace.conversionListVisible = !currentWorkspace.conversionListVisible
