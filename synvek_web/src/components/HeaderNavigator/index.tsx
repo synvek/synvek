@@ -927,18 +927,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     let publicTaskSections = generatePopupRenderInternally(false)
     let privateTaskSections = generatePopupRenderInternally(true)
     return (
-      <div
-        style={{
-          width: '450px',
-          maxHeight: '400px',
-          backgroundColor: token.colorBorderSecondary,
-          borderRadius: '8px',
-          border: `${token.colorBorder} solid 1px`,
-          overflow: 'auto',
-          padding: '4px 12px',
-          scrollbarWidth: 'thin',
-        }}
-      >
+      <div className={styles.popupRender}>
         <div style={{ width: '100%', display: 'flex', gap: '4px', flexDirection: 'column' }}>
           {publicTaskSections}
           <Divider style={{ margin: '0 0' }}>

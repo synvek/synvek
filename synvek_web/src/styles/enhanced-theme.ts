@@ -160,6 +160,14 @@ export const lightTheme: ThemeConfig = {
     colorFillTertiary: designTokens.colors.light.background.secondary,
     colorFillQuaternary: designTokens.colors.light.background.primary,
   },
+  components: {
+    ...baseTheme.components,
+    Tooltip: {
+      borderRadius: 6,
+      colorBgDefault: designTokens.colors.light.text.primary,
+      colorText: designTokens.colors.light.text.inverse,
+    },
+  },
 };
 
 // Dark theme configuration
@@ -191,6 +199,14 @@ export const darkTheme: ThemeConfig = {
     colorFillSecondary: designTokens.colors.dark.background.hover,
     colorFillTertiary: designTokens.colors.dark.background.secondary,
     colorFillQuaternary: designTokens.colors.dark.background.primary,
+  },
+  components: {
+    ...baseTheme.components,
+    Tooltip: {
+      borderRadius: 6,
+      colorBgDefault: designTokens.colors.dark.text.primary,
+      colorText: designTokens.colors.dark.text.inverse,
+    },
   },
 };
 

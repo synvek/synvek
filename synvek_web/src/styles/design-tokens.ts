@@ -100,7 +100,7 @@ export const colors = {
       primary: '#f5f5f5',
       secondary: '#d0d0d0',
       disabled: '#7a7a7a', // Increased from #6a6a6a for better contrast
-      inverse: '#e293b',
+      inverse: '#0a0a0a',
     },
     interactive: {
       primary: '#60a5fa',
