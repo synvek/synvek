@@ -1,6 +1,7 @@
 .modelSearchPanel {
   width: 100%;
   height: 100%;
+  background: var(--color-bg-primary);
 }
 
 .modelSearchPanelSideBar {
@@ -9,16 +10,84 @@
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-color-elevated);
+  padding: var(--spacing-md);
+  
+  // Enhanced sidebar styling
+  .ant-menu {
+    background: var(--color-bg-elevated) !important;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-default);
+    
+    .ant-menu-item {
+      margin: var(--spacing-xs) 0;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-colors);
+      font-weight: var(--font-weight-medium);
+      
+      &:hover {
+        background-color: var(--color-bg-hover) !important;
+        color: var(--color-text-primary) !important;
+        transform: translateX(2px);
+        transition: var(--transition-default);
+      }
+      
+      &.ant-menu-item-selected {
+        background-color: var(--color-interactive-primary) !important;
+        color: white !important;
+        box-shadow: var(--shadow-sm);
+        
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .modelSearchPanelContent {
   width: 100%;
   height: 100%;
   display: flex;
-  padding: 24px;
+  padding: var(--spacing-xl);
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-color-elevated);
+  
+  // Enhanced card styling
+  .ant-space-item {
+    width: 100%;
+    
+    .ant-card {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-default);
+      margin-bottom: var(--spacing-lg);
+      
+      &:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        border-color: var(--color-border-hover);
+      }
+      
+      .ant-card-head {
+        border-bottom: 1px solid var(--color-border-default);
+        padding: var(--spacing-lg) var(--spacing-xl);
+        
+        .ant-card-head-title {
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-text-primary);
+        }
+      }
+      
+      .ant-card-body {
+        padding: var(--spacing-xl);
+      }
+    }
+  }
 }
 
 .modelSearchPanelPropertyContainer {
@@ -26,6 +95,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: var(--spacing-md) 0;
+  
+  // Enhanced typography
+  > div:first-child {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
 }
 
 .modelSearchPanelPropertyContent {
@@ -33,25 +110,68 @@
   flex-direction: column;
   justify-content: start;
   align-items: end;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .modelSearchPanelPropertyContentItem {
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
+  
+  .ant-btn {
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-default);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+  }
 }
 
 .modelSearchPanelModelOption {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-default);
+  margin-bottom: var(--spacing-sm);
+  transition: var(--transition-colors);
+  
+  &:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-bg-hover);
+  }
+  
+  // Enhanced typography
+  > div:first-child {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
 }
 
 .modelSearchPanelModelOptionContent {
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
+  
+  .ant-btn {
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    height: auto;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: var(--transition-default);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+  }
 }

@@ -4,6 +4,7 @@ import HeaderExtra from '@/components/HeaderExtra'
 import HeaderMenubar from '@/components/HeaderMenubar'
 import HeaderNavigator from '@/components/HeaderNavigator'
 import { Consts, OSType, SystemUtils } from '@/components/Utils'
+import { designTokens } from '@/styles/design-tokens'
 import { theme } from 'antd'
 import { FC, LegacyRef, useEffect, useRef } from 'react'
 import styles from './index.less'
@@ -38,17 +39,31 @@ const Header: FC<HeaderProps> = ({ online }) => {
       className={styles.header}
       ref={titleBarContainerRef as LegacyRef<HTMLDivElement> | undefined}
       style={{
-        backgroundColor: token.colorFillAlter,
-        height: Consts.HEADER_HEIGHT + 'px',
         borderBottom: `${token.colorBorder} solid 1px`,
+        height: Consts.HEADER_HEIGHT + 'px',
         paddingLeft: OSType.MACOS === SystemUtils.getOS() && process.env.ENV_NAME === Consts.ENV_DESKTOP ? macosTitleBarWidth : undefined,
+        paddingRight: designTokens.spacing.md,
+        paddingTop: designTokens.spacing.xs,
+        paddingBottom: designTokens.spacing.xs,
+        boxShadow: designTokens.shadows.sm,
+        transition: designTokens.animations.transitions.colors,
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
       }}
     >
       <HeaderMenubar />
       <HeaderNavigator />
       <div data-tauri-drag-region className={styles.extra}>
         <HeaderCommander />
-        <div data-tauri-drag-region className={styles.divider} />
+        <div
+          data-tauri-drag-region
+          className={styles.divider}
+          style={{
+            background: `linear-gradient(to bottom, transparent 0%, ${token.colorBorder} 50%, transparent 100%)`,
+            opacity: 0.6,
+            transition: designTokens.animations.transitions.opacity,
+          }}
+        />
         <HeaderExtra online={online} />
       </div>
     </div>

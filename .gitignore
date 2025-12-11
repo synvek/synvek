@@ -9,6 +9,8 @@ node_modules
 /docs/.vitepress/dist
 /synvek_web/.env.local
 /synvek_web/.idea
+/synvek_web/.kiro
+/synvek_web/.vscode
 /synvek_web/.mfsu
 /synvek_web/.umi
 /synvek_web/.umi-production

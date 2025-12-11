@@ -1,6 +1,7 @@
 .settingsView {
   width: 100%;
   height: 100%;
+  background: var(--color-bg-primary);
 }
 
 .settingsContent {
@@ -8,9 +9,43 @@
   height: 100%;
   display: flex;
   justify-content: start;
+  gap: 0;
 }
+
 .settingsSideBar {
   width: 100%;
   height: 100%;
-  padding: 4px;
+  padding: var(--spacing-sm);
+  
+  // Enhanced sidebar styling
+  .ant-menu {
+    background: var(--color-bg-elevated) !important;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-default);
+    
+    .ant-menu-item {
+      margin: var(--spacing-xs) 0;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-colors);
+      font-weight: var(--font-weight-medium);
+      
+      &:hover {
+        background-color: var(--color-bg-hover) !important;
+        color: var(--color-text-primary) !important;
+        transform: translateX(2px);
+        transition: var(--transition-default);
+      }
+      
+      &.ant-menu-item-selected {
+        background-color: var(--color-interactive-primary) !important;
+        color: white !important;
+        box-shadow: var(--shadow-sm);
+        
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
 }

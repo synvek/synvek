@@ -24,7 +24,8 @@
     "prepare": "husky",
     "prod:build": "cross-env UMI_ENV=production max build",
     "setup": "max setup",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "test": "jest"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -50,6 +51,9 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.5.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -57,12 +61,16 @@
     "cross-env": "^7.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "fast-check": "^4.4.0",
     "husky": "^9",
+    "jest-environment-jsdom": "^30.2.0",
+    "jsdom": "^27.0.1",
     "lint-staged": "^13.2.0",
     "prettier": "^3.3.3",
     "prettier-eslint": "^16.3.0",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-packagejson": "^2.4.3",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.0.3"
   },
   "engines": {

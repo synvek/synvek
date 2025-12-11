@@ -1,38 +1,671 @@
-html,
-body,
-#root {
+// Import enhanced CSS variables
+@import './styles/css-variables.less';
+
+// Reset and base styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
   height: 100%;
+  font-size: 16px; // Base font size for rem calculations
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  height: 100%;
   margin: 0;
+  padding: 0;
   overflow: hidden;
-  background-color: var(--container-background-color);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 
+               'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+  transition: var(--transition-colors);
   scrollbar-color: var(--scroll-color);
+  scrollbar-width: thin;
 }
 
-:root {
-  --scroll-color: silver transparent ;
-  --scroll-color-elevated: silver transparent ;
-  --layout-background-color: white;
-  --container-background-color: white;
-  --container-background-color-hover: whitesmoke;
-  --setting-background-color: #f5f5f5;
-  --windows-title-button-color: silver;
-  --windows-title-close-button-color: #c11b1e;
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-[data-theme='dark'] {
-  //Scroll color
-  --scroll-color: #424242 transparent ;     //colorBgSpotlight  colorBgContainer
-  //Scroll color on some special case ,it is useless now after use transparent color
-  --scroll-color-elevated: #424242 transparent ;     //colorBgSpotlight  colorBgElevated
-  --layout-background-color: #141414;     //colorBgContainer
-  --container-background-color: #1f1f1f;    //colorBgElevated
-  --container-background-color-hover: #424242;  //colorBgSpotlight
-  //Setting window background
-  --setting-background-color: #1f1f1f;
-  //Windows custom title bar
-  --windows-title-button-color: #424242;     //windows min max button
-  --windows-title-close-button-color: #c11b1e; //windows close button
+// Enhanced scrollbar styling with proper overflow handling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-interactive-secondary);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-colors);
+  
+  &:hover {
+    background: var(--color-interactive-secondary-hover);
+  }
+  
+  &:active {
+    background: var(--color-interactive-primary);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-bg-secondary);
+}
+
+// Standardized spacing system classes
+.spacing-xs { padding: var(--spacing-xs); }
+.spacing-sm { padding: var(--spacing-sm); }
+.spacing-md { padding: var(--spacing-md); }
+.spacing-lg { padding: var(--spacing-lg); }
+.spacing-xl { padding: var(--spacing-xl); }
+.spacing-2xl { padding: var(--spacing-2xl); }
+.spacing-3xl { padding: var(--spacing-3xl); }
+.spacing-4xl { padding: var(--spacing-4xl); }
+.spacing-5xl { padding: var(--spacing-5xl); }
+.spacing-6xl { padding: var(--spacing-6xl); }
+
+// Margin utilities
+.margin-xs { margin: var(--spacing-xs); }
+.margin-sm { margin: var(--spacing-sm); }
+.margin-md { margin: var(--spacing-md); }
+.margin-lg { margin: var(--spacing-lg); }
+.margin-xl { margin: var(--spacing-xl); }
+.margin-2xl { margin: var(--spacing-2xl); }
+.margin-3xl { margin: var(--spacing-3xl); }
+.margin-4xl { margin: var(--spacing-4xl); }
+.margin-5xl { margin: var(--spacing-5xl); }
+.margin-6xl { margin: var(--spacing-6xl); }
+
+// Gap utilities for flexbox and grid
+.gap-xs { gap: var(--spacing-xs); }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+.gap-xl { gap: var(--spacing-xl); }
+.gap-2xl { gap: var(--spacing-2xl); }
+.gap-3xl { gap: var(--spacing-3xl); }
+.gap-4xl { gap: var(--spacing-4xl); }
+.gap-5xl { gap: var(--spacing-5xl); }
+.gap-6xl { gap: var(--spacing-6xl); }
+
+// Enhanced overflow handling classes
+.overflow-auto {
+  overflow: auto;
+  padding: var(--spacing-sm);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-interactive-secondary) var(--color-bg-secondary);
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+  padding: var(--spacing-sm);
+}
+
+// Scrollable container with enhanced styling
+.scrollable-container {
+  overflow: auto;
+  padding: var(--spacing-md);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-interactive-secondary) var(--color-bg-secondary);
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-sm);
+    margin: var(--spacing-xs);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-interactive-secondary);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-colors);
+    
+    &:hover {
+      background: var(--color-interactive-secondary-hover);
+    }
+  }
+}
+
+// Enhanced focus styles with accessibility
+*:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-default);
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Smooth transitions for theme changes
+* {
+  transition: var(--transition-colors);
+}
+
+// Enhanced Ant Design component overrides with improved click feedback
+.ant-btn {
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--duration-fast) var(--easing-ease), 
+              transform var(--duration-fast) var(--easing-ease),
+              box-shadow var(--duration-fast) var(--easing-ease);
+  min-height: 32px; // Minimum touch target for accessibility
+  padding: var(--spacing-xs) var(--spacing-md);
+  position: relative;
+  overflow: hidden;
+  
+  // Enhanced hover state with smooth transitions
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-interactive-primary-hover);
+    border-color: var(--color-interactive-primary-hover);
+  }
+  
+  // Immediate click feedback with scale animation
+  &:active:not(:disabled) {
+    transform: scale(0.98) translateY(0);
+    box-shadow: var(--shadow-lg);
+    transition-duration: var(--duration-fast); // Fast feedback for immediacy
+  }
+  
+  // Enhanced focus state with smooth border transitions
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-border-focus);
+    border-color: var(--color-border-focus);
+    outline: none;
+  }
+  
+  // Primary button enhancements
+  &.ant-btn-primary {
+    background: var(--color-interactive-primary);
+    border-color: var(--color-interactive-primary);
+    
+    &:hover:not(:disabled) {
+      background: var(--color-interactive-primary-hover);
+      border-color: var(--color-interactive-primary-hover);
+    }
+    
+    &:active:not(:disabled) {
+      background: var(--color-interactive-primary);
+      border-color: var(--color-interactive-primary);
+    }
+  }
+  
+  // Ripple effect for click feedback
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+    pointer-events: none;
+  }
+  
+  &:active::after {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.ant-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-default);
+  border: 1px solid var(--color-border-default);
+  
+  .ant-card-body {
+    padding: var(--spacing-lg);
+  }
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--color-border-hover);
+  }
+}
+
+// Enhanced input field styling with smooth focus transitions
+.ant-input,
+.ant-input-affix-wrapper {
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s ease-in-out, 
+              box-shadow 0.2s ease-in-out,
+              background-color 0.2s ease-in-out;
+  min-height: 32px; // Minimum touch target for accessibility
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-width: 2px;
+  position: relative;
+  
+  // Enhanced focus state with smooth highlighting
+  &:focus,
+  &:focus-within {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); // Semi-transparent focus ring
+    border-color: var(--color-border-focus);
+    background-color: var(--color-bg-elevated);
+    outline: none; // Remove default outline when custom focus styling is applied
+  }
+  
+  // Smooth hover transitions
+  &:hover:not(:focus):not(:focus-within) {
+    border-color: var(--color-border-hover);
+    background-color: var(--color-bg-hover);
+  }
+  
+  // Enhanced disabled state
+  &:disabled {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border-default);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// Textarea specific enhancements
+.ant-input {
+  &[type="textarea"],
+  textarea& {
+    resize: vertical;
+    min-height: 80px;
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+// Enhanced select component with smooth focus highlighting
+.ant-select {
+  .ant-select-selector {
+    border-radius: var(--radius-md) !important;
+    min-height: 32px !important;
+    padding: var(--spacing-xs) var(--spacing-sm) !important;
+    border-width: 2px !important;
+    transition: border-color 0.2s ease-in-out, 
+                box-shadow 0.2s ease-in-out,
+                background-color 0.2s ease-in-out !important;
+  }
+  
+  // Enhanced hover state
+  &:hover .ant-select-selector {
+    border-color: var(--color-border-hover) !important;
+    background-color: var(--color-bg-hover) !important;
+  }
+  
+  // Enhanced focus state with smooth border transitions
+  &.ant-select-focused .ant-select-selector {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+    border-color: var(--color-border-focus) !important;
+    background-color: var(--color-bg-elevated) !important;
+    outline: none !important;
+  }
+  
+  // Enhanced disabled state
+  &.ant-select-disabled .ant-select-selector {
+    background-color: var(--color-bg-secondary) !important;
+    border-color: var(--color-border-default) !important;
+    color: var(--color-text-disabled) !important;
+    cursor: not-allowed !important;
+  }
+}
+
+// Enhanced modal with smooth presentation animations
+.ant-modal {
+  .ant-modal-content {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid var(--color-border-default);
+    overflow: hidden;
+    background-color: var(--color-bg-elevated);
+    
+    // Smooth fade-in and scale animations
+    animation: modalFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+  
+  .ant-modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border-default);
+    background-color: var(--color-bg-elevated);
+  }
+  
+  .ant-modal-body {
+    padding: var(--spacing-lg);
+    background-color: var(--color-bg-primary);
+  }
+  
+  .ant-modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-default);
+    background-color: var(--color-bg-elevated);
+  }
+  
+  // Modal mask animation
+  .ant-modal-mask {
+    animation: modalMaskFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Modal animation keyframes
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalMaskFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Enhanced dropdown with smooth animations
+.ant-dropdown {
+  .ant-dropdown-menu {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-border-default);
+    padding: var(--spacing-xs);
+    background-color: var(--color-bg-elevated);
+    
+    // Smooth fade-in and scale animation
+    animation: dropdownFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top;
+    
+    .ant-dropdown-menu-item {
+      border-radius: var(--radius-md);
+      margin: var(--spacing-xs) 0;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.15s ease-in-out,
+                  transform 0.15s ease-in-out;
+      
+      &:hover {
+        background-color: var(--color-bg-hover);
+        transform: translateX(2px);
+      }
+      
+      &:active {
+        transform: translateX(1px) scale(0.98);
+        transition-duration: 0.1s;
+      }
+    }
+  }
+}
+
+// Dropdown animation keyframes
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ant-tooltip {
+  .ant-tooltip-content {
+    .ant-tooltip-inner {
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: var(--font-size-sm);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+}
+
+// Enhanced table styles
+.ant-table {
+  .ant-table-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  
+  .ant-table-thead > tr > th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  .ant-table-tbody > tr > td {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .ant-table-tbody > tr:hover > td {
+    background-color: var(--color-bg-hover);
+  }
+}
+
+// Enhanced form styles with improved interactive elements
+.ant-form {
+  .ant-form-item {
+    margin-bottom: var(--spacing-lg);
+    
+    .ant-form-item-label {
+      padding-bottom: var(--spacing-xs);
+      
+      > label {
+        font-weight: var(--font-weight-medium);
+        color: var(--color-text-primary);
+      }
+    }
+  }
+}
+
+// Enhanced checkbox styling with smooth animations
+.ant-checkbox {
+  .ant-checkbox-inner {
+    border-radius: var(--radius-sm);
+    border-width: 2px;
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      border-color: var(--color-border-hover);
+    }
+  }
+  
+  &.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: var(--color-interactive-primary);
+    border-color: var(--color-interactive-primary);
+  }
+  
+  &:hover .ant-checkbox-inner {
+    border-color: var(--color-interactive-primary-hover);
+  }
+  
+  input:focus + .ant-checkbox-inner {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }
+}
+
+// Enhanced radio button styling
+.ant-radio {
+  .ant-radio-inner {
+    border-width: 2px;
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      border-color: var(--color-border-hover);
+    }
+  }
+  
+  &.ant-radio-checked .ant-radio-inner {
+    border-color: var(--color-interactive-primary);
+    
+    &::after {
+      background-color: var(--color-interactive-primary);
+      transform: scale(0.5);
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+  
+  input:focus + .ant-radio-inner {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }
+}
+
+// Enhanced switch styling with smooth animations
+.ant-switch {
+  background-color: var(--color-interactive-secondary);
+  border: 2px solid var(--color-interactive-secondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover:not(.ant-switch-disabled) {
+    background-color: var(--color-interactive-secondary-hover);
+    border-color: var(--color-interactive-secondary-hover);
+  }
+  
+  &.ant-switch-checked {
+    background-color: var(--color-interactive-primary);
+    border-color: var(--color-interactive-primary);
+    
+    &:hover:not(.ant-switch-disabled) {
+      background-color: var(--color-interactive-primary-hover);
+      border-color: var(--color-interactive-primary-hover);
+    }
+  }
+  
+  .ant-switch-handle {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &::before {
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+    }
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }
+}
+
+// Enhanced slider styling
+.ant-slider {
+  .ant-slider-rail {
+    background-color: var(--color-interactive-secondary);
+    border-radius: var(--radius-full);
+  }
+  
+  .ant-slider-track {
+    background-color: var(--color-interactive-primary);
+    border-radius: var(--radius-full);
+  }
+  
+  .ant-slider-handle {
+    border: 2px solid var(--color-interactive-primary);
+    background-color: var(--color-bg-primary);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      border-color: var(--color-interactive-primary-hover);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.1);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), var(--shadow-md);
+      outline: none;
+    }
+  }
+}
+
+// Layout utilities
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-bg-primary);
+}
+
+.layout-header {
+  flex-shrink: 0;
+  background-color: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.layout-content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-primary);
+}
+
+.layout-sidebar {
+  flex-shrink: 0;
+  background-color: var(--color-bg-elevated);
+  border-right: 1px solid var(--color-border-default);
+  overflow-y: auto;
+  padding: var(--spacing-md);
+}
+
+.layout-footer {
+  flex-shrink: 0;
+  background-color: var(--color-bg-elevated);
+  border-top: 1px solid var(--color-border-default);
+  padding: var(--spacing-sm) var(--spacing-lg);
 }

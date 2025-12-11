@@ -1269,7 +1269,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                 },
               }}
             >
-              <Splitter layout={'vertical'} className={styles.chatSplitter} style={{ backgroundColor: token.colorBgElevated }}>
+              <Splitter layout={'vertical'} className={styles.chatSplitter}>
                 <Splitter.Panel style={{ padding: '0 0' }}>
                   <div className={styles.chatContent} ref={chatSectionsRef as LegacyRef<HTMLDivElement>} onScroll={handleChatContentScroll}>
                     {chatSections}

@@ -9,26 +9,89 @@
 .main {
   display: flex;
   height: 100%;
-  min-width: 60px;
+  min-width: 80px;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 0;
+  gap: 8px;
+  padding: 0 12px;
+  
+  /* Enhanced typography */
+  font-size: 14px;
+  font-weight: 500;
+  
+  /* Improved button styling */
+  .ant-btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  /* Enhanced dropdown styling */
+  .ant-dropdown-button {
+    border-radius: 6px;
+    overflow: hidden;
+    
+    .ant-btn {
+      border-radius: 0;
+      
+      &:first-child {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+      }
+      
+      &:last-child {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+    }
+  }
 }
 
 .content {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
-
 
 .onlineModelsContainer {
   display: flex;
   height: 100%;
-  min-width: 60px;
+  min-width: 80px;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 10px;
+  gap: 12px;
+  padding: 0 8px;
+  
+  /* Enhanced typography and spacing */
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  
+  /* Improved visual hierarchy */
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  /* Enhanced status indicators */
+  .anticon {
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }

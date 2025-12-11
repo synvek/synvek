@@ -63,6 +63,10 @@ export { OSType, SystemUtils } from './src/SystemUtils'
 export { ThemeUtils } from './src/ThemeUtils'
 export { usePluginBridge } from './src/usePluginBridge'
 export { WorkspaceUtils } from './src/WorkspaceUtils'
+export * from './src/LoadingStates'
+export * from './src/IconUtils'
+export * from './src/EnhancedIcon'
+export * from './src/BackgroundEnhancement'
 export {
   Attachment,
   Chat,

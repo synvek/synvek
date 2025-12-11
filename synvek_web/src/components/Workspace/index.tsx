@@ -47,7 +47,7 @@ const Workspace: FC<WorkspaceProps> = () => {
   }
 
   return (
-    <div className={styles.workspace} style={{ backgroundColor: token.colorBgElevated }}>
+    <div className={styles.workspace}>
       {contextHolder}
       <Splitter>
         <Splitter.Panel defaultSize={Consts.SIDEBAR_WIDTH} min={Consts.SIDEBAR_WIDTH} max={Consts.SIDEBAR_WIDTH} resizable={false} style={{ padding: '0 0' }}>

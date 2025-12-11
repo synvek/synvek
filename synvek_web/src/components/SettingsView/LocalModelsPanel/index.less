@@ -1,26 +1,96 @@
 .localModelPanel {
   width: 100%;
   height: 100%;
+  background: var(--color-bg-primary);
 }
 
 .localModelHint {
   display: flex;
   justify-content: start;
+  margin-bottom: var(--spacing-lg);
+  
+  .ant-typography {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
 }
 
 .localModelHeader {
   display: flex;
   justify-content: end;
+  margin-bottom: var(--spacing-xl);
+  
+  .ant-btn {
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-default);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  }
 }
 
 .localModelContent {
   width: 100%;
   height: 100%;
   display: flex;
-  padding: 24px;
+  padding: var(--spacing-xl);
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-color);
+  gap: var(--spacing-lg);
+  
+  // Enhanced card styling for model items
+  .ant-space-item {
+    width: 100%;
+    
+    .ant-card {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-default);
+      margin-bottom: var(--spacing-lg);
+      overflow: hidden;
+      
+      &:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        border-color: var(--color-border-hover);
+      }
+      
+      .ant-card-head {
+        background: var(--gradient-subtle);
+        border-bottom: 1px solid var(--color-border-default);
+        padding: var(--spacing-lg) var(--spacing-xl);
+        
+        .ant-card-head-title {
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-text-primary);
+          
+          span {
+            display: block;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-normal);
+            color: var(--color-text-secondary);
+            margin-top: var(--spacing-xs);
+          }
+        }
+      }
+      
+      .ant-card-body {
+        padding: var(--spacing-xl);
+      }
+      
+      .ant-divider {
+        margin: var(--spacing-md) 0;
+        border-color: var(--color-border-default);
+      }
+    }
+  }
 }
 
 .localModelItemPropertyContainer {
@@ -28,11 +98,89 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: var(--spacing-sm) 0;
+  
+  // Enhanced typography
+  > div:first-child {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
+  
+  > div:last-child {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-normal);
+  }
+  
+  // Enhanced form controls
+  .ant-select {
+    .ant-select-selector {
+      border-radius: var(--radius-sm);
+      border-color: var(--color-border-default);
+      transition: var(--transition-colors);
+      
+      &:hover {
+        border-color: var(--color-border-hover);
+      }
+      
+      &:focus,
+      &.ant-select-focused {
+        border-color: var(--color-border-focus);
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+  
+  .ant-switch {
+    &.ant-switch-checked {
+      background-color: var(--color-interactive-primary);
+    }
+    
+    &:hover:not(.ant-switch-disabled) {
+      background-color: var(--color-interactive-primary-hover);
+    }
+  }
+  
+  .ant-btn {
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-default);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    &.ant-btn-primary {
+      background-color: var(--color-interactive-primary);
+      border-color: var(--color-interactive-primary);
+      
+      &:hover {
+        background-color: var(--color-interactive-primary-hover);
+        border-color: var(--color-interactive-primary-hover);
+      }
+    }
+  }
 }
 
 .localModelItemPropertyContent {
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
+  
+  // Enhanced button styling
+  .ant-btn {
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    height: auto;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: var(--transition-default);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+  }
 }

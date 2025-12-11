@@ -2,7 +2,25 @@
   width: 100%;
   height: 100%;
   padding: 12px 0;
-
+  position: relative;
+  
+  // Enhanced background with subtle gradient
+  background: linear-gradient(180deg, 
+    var(--sidebar-bg-start) 0%,
+    var(--sidebar-bg-end) 100%);
+  
+  // Smooth backdrop filter for modern glass effect
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  // Enhanced border with subtle shadow
+  border-right: 1px solid var(--sidebar-border, rgba(148, 163, 184, 0.2));
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  
+  // Smooth transitions for theme changes
+  transition: background 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .controlBar {
@@ -13,7 +31,8 @@
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-  gap:  12px;
+  gap: 12px;
+  padding: 8px 0;
 }
 
 .settingBar {
@@ -24,9 +43,207 @@
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-  gap:  12px;
+  gap: 12px;
+  padding: 8px 0;
 }
 
 .button {
   font-size: @button-sidebar-size;
+  
+  // Enhanced touch target sizing for accessibility (minimum 44x44px)
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  
+  // Enhanced visual styling
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  
+  // Smooth transitions for all interactive states
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Enhanced default state
+  background: transparent;
+  border: 1px solid transparent;
+  
+  // Improved hover effects
+  &:hover {
+    background: var(--button-hover-bg, rgba(37, 99, 235, 0.08));
+    border-color: var(--button-hover-border, rgba(37, 99, 235, 0.2));
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    
+    // Subtle glow effect
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+      opacity: 1;
+      transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+  
+  // Enhanced active state for mode switching
+  &[color="primary"] {
+    background: var(--button-active-bg, linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%));
+    color: var(--button-active-text, #ffffff);
+    border-color: var(--button-active-border, #1d4ed8);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    
+    // Enhanced active state glow
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+      opacity: 1;
+    }
+    
+    // Maintain hover effects on active buttons
+    &:hover {
+      transform: translateY(-1px) scale(1.08);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+  }
+  
+  // Enhanced focus state for accessibility
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-outline, #2563eb);
+    outline-offset: 2px;
+    background: var(--button-focus-bg, rgba(37, 99, 235, 0.1));
+  }
+  
+  // Enhanced pressed state
+  &:active {
+    transform: scale(0.98);
+    transition-duration: 100ms;
+  }
+  
+  // Disabled state
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    
+    &:hover {
+      background: transparent;
+      border-color: transparent;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  // Icon styling within buttons
+  .anticon {
+    font-size: inherit;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover .anticon {
+    transform: scale(1.1);
+  }
+  
+  // Ripple effect for click feedback
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 300ms ease-out, height 300ms ease-out, opacity 300ms ease-out;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  &:active::after {
+    width: 100px;
+    height: 100px;
+    opacity: 1;
+    transition-duration: 0ms;
+  }
+}
+
+// Enhanced responsive behavior
+@media (max-width: 768px) {
+  .button {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 12px;
+  }
+}
+
+// Dark theme enhancements
+[data-theme="dark"] {
+  .sidebar {
+    --sidebar-bg-start: var(--sider-background-color-start);
+    --sidebar-bg-end: var(--sider-background-color_end);;
+    --sidebar-border: var(--sider-border-color);
+
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .button {
+    --button-hover-bg: rgba(96, 165, 250, 0.1);
+    --button-hover-border: rgba(96, 165, 250, 0.3);
+    --button-active-bg: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    --button-active-text: #0f172a;
+    --button-active-border: #3b82f6;
+    --button-focus-outline: #60a5fa;
+    --button-focus-bg: rgba(96, 165, 250, 0.15);
+  }
+}
+
+// Light theme enhancements
+[data-theme="light"] {
+  .sidebar {
+    --sidebar-bg-start: var(--sider-background-color-start);
+    --sidebar-bg-end: var(--sider-background-color_end);
+    --sidebar-border: var(--sider-border-color);
+  }
+  
+  .button {
+    --button-hover-bg: rgba(37, 99, 235, 0.08);
+    --button-hover-border: rgba(37, 99, 235, 0.2);
+    --button-active-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --button-active-text: #ffffff;
+    --button-active-border: #1d4ed8;
+    --button-focus-outline: #2563eb;
+    --button-focus-bg: rgba(37, 99, 235, 0.1);
+  }
+}
+
+// Animation for mode switching
+.button {
+  // Smooth mode switching animation
+  &.mode-switching {
+    animation: modeSwitchPulse 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes modeSwitchPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+  }
 }

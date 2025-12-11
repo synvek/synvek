@@ -4,6 +4,7 @@ import { RuntimeAntdConfig } from '@umijs/max'
 import { RequestUtils } from '@/components/Utils'
 import { theme } from 'antd'
 import { history } from 'umi'
+import { getEnhancedTheme } from '@/styles/enhanced-theme'
 // @ts-ignore
 export function onRouteChange({ location, routes, action }) {
   // console.log('Route changed - location:', location)
@@ -24,20 +25,30 @@ export async function getInitialState(): Promise<{ name: string }> {
 }
 
 export const antd: RuntimeAntdConfig = (memo) => {
-  memo.theme ??= {}
-  // memo.theme.algorithm = [theme.compactAlgorithm]
-  //memo.theme.algorithm = [theme.darkAlgorithm]//, theme.compactAlgorithm]
-  //const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  // Get enhanced theme configuration
+  const enhancedTheme = getEnhancedTheme()
+  
+  // Apply enhanced theme
+  memo.theme = enhancedTheme
+  
+  // Set theme algorithm based on current theme
   let storageTheme = localStorage.getItem('synvek.theme')
   if (!storageTheme) {
     storageTheme = 'dark'
   }
-  memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
+  
+  // Ensure algorithm is set correctly
+  //if (!memo.theme.algorithm) {
+    memo.theme.algorithm = [storageTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm]
+  //}
+  
+  // Set data-theme attribute for CSS variables
   if (storageTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark')
   } else {
     document.documentElement.setAttribute('data-theme', 'light')
   }
+  
   return memo
 }
 
