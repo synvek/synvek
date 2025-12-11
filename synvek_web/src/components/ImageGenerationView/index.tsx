@@ -229,7 +229,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   },
                 }}
               >
-                <Collapse ghost={false} defaultActiveKey={['general']} bordered={false}>
+                <Collapse ghost={false} defaultActiveKey={['general']} bordered={false} className={styles.imageGenerationPropertyRegion}>
                   <Collapse.Panel
                     key={'general'}
                     header={
