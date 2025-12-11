@@ -104,6 +104,9 @@ const baseTheme: Partial<ThemeConfig> = {
     },
     Modal: {
       borderRadius: 12,
+      contentBg: designTokens.colors.light.background.elevated,
+      headerBg: designTokens.colors.light.background.elevated,
+      footerBg: designTokens.colors.light.background.elevated,
     },
     Drawer: {
       borderRadius: 0,
@@ -202,6 +205,12 @@ export const darkTheme: ThemeConfig = {
   },
   components: {
     ...baseTheme.components,
+    Modal: {
+      borderRadius: 12,
+      contentBg: designTokens.colors.dark.background.elevated,
+      headerBg: designTokens.colors.dark.background.elevated,
+      footerBg: designTokens.colors.dark.background.elevated,
+    },
     Tooltip: {
       borderRadius: 6,
       colorBgDefault: designTokens.colors.dark.text.primary,

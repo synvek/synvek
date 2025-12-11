@@ -370,7 +370,7 @@ body {
     box-shadow: var(--shadow-2xl);
     border: 1px solid var(--color-border-default);
     overflow: hidden;
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-bg-elevated) !important;
     
     // Smooth fade-in and scale animations
     animation: modalFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -380,23 +380,42 @@ body {
   .ant-modal-header {
     padding: var(--spacing-lg);
     border-bottom: 1px solid var(--color-border-default);
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-bg-elevated) !important;
+    color: var(--color-text-primary) !important;
+    
+    .ant-modal-title {
+      color: var(--color-text-primary) !important;
+    }
   }
   
   .ant-modal-body {
     padding: var(--spacing-lg);
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-bg-elevated) !important;
+    color: var(--color-text-primary) !important;
   }
   
   .ant-modal-footer {
     padding: var(--spacing-lg);
     border-top: 1px solid var(--color-border-default);
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-bg-elevated) !important;
+    
+    .ant-btn {
+      background-color: var(--color-interactive-secondary);
+      border-color: var(--color-border-default);
+      color: var(--color-text-primary);
+      
+      &.ant-btn-primary {
+        background-color: var(--color-interactive-primary);
+        border-color: var(--color-interactive-primary);
+        color: var(--color-text-inverse);
+      }
+    }
   }
   
   // Modal mask animation
   .ant-modal-mask {
     animation: modalMaskFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(0, 0, 0, 0.45);
   }
 }
 
@@ -519,7 +538,28 @@ body {
       
       > label {
         font-weight: var(--font-weight-medium);
-        color: var(--color-text-primary);
+        color: var(--color-text-primary) !important;
+      }
+    }
+    
+    .ant-form-item-control-input {
+      .ant-input,
+      .ant-input-affix-wrapper {
+        background-color: var(--color-bg-primary) !important;
+        border-color: var(--color-border-default) !important;
+        color: var(--color-text-primary) !important;
+        
+        &:hover {
+          border-color: var(--color-border-hover) !important;
+          background-color: var(--color-bg-hover) !important;
+        }
+        
+        &:focus,
+        &:focus-within {
+          border-color: var(--color-border-focus) !important;
+          background-color: var(--color-bg-elevated) !important;
+          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+        }
       }
     }
   }
