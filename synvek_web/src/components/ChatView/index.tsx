@@ -1074,19 +1074,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const generateToolsSection = (chatMessage: ChatMessage) => {
     const toolCalls = chatMessage.toolCalls.map((toolCall) => {
       return (
-        <div
-          key={chatMessage.chatId + ':' + toolCall.id}
-          style={{
-            backgroundColor: token.colorFillAlter,
-            border: token.colorBorder + ' solid 1px',
-            borderRadius: '4px',
-            padding: '6px 12px',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            gap: '8px',
-            flexWrap: 'nowrap',
-          }}
-        >
+        <div key={chatMessage.chatId + ':' + toolCall.id} className={styles.chatToolSection}>
           <CheckOutlined style={{ color: token.colorSuccess }} />
           {toolCall.name}
           {toolRunning && chatMessage.key === currentChatKey ? <Loading3QuartersOutlined spin={true} /> : ''}
@@ -1097,19 +1085,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   }
 
   const generateFailedChatSection = (chatContent: string) => {
-    return (
-      <div
-        style={{
-          backgroundColor: token.colorFillAlter,
-          border: token.colorBorder + ' solid 1px',
-          borderRadius: '4px',
-          padding: '6px 12px',
-          color: token.colorError,
-        }}
-      >
-        {chatContent}
-      </div>
-    )
+    return <div className={styles.chatFailedSection}>{chatContent}</div>
   }
 
   const findThinkStartIndex = (output: string) => {

@@ -1077,5 +1077,23 @@
         "revision": "master",
         "endpoint": "",
         "access_token": null
+    },    
+    {
+        "repo_source": "modelscope",
+        "repo_name": "OpenBMB/MiniCPM-V-4_5-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },    
+    {
+        "repo_source": "huggingface",
+        "repo_name": "openbmb/MiniCPM-V-4_5-gguf",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
     }
 ]

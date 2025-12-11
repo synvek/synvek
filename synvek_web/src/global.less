@@ -194,6 +194,53 @@ body {
   transition: none !important;
 }
 
+// Enhanced Ant Design Splitter component styling for dark theme
+.ant-splitter {
+  .ant-splitter-bar {
+    .ant-splitter-bar-dragger {
+      &::before {
+        background-color: var(--color-bg-hover);
+      }
+      &::after {
+        background-color: var(--color-text-disabled);
+      }
+      &:hover {
+        &::before {
+          background-color: var(--color-border-hover);
+        }
+        &::after {
+          background-color: var(--color-text-disabled);
+        }
+      }
+    }
+  }    
+}
+
+// Dark theme specific overrides for Splitter
+[data-theme='dark'] {
+  .ant-splitter {
+    .ant-splitter-bar {
+      .ant-splitter-bar-dragger {
+        &::before {
+          background-color: var(--color-bg-hover);
+        }
+        &::after {
+          background-color: var(--color-text-disabled);
+        }
+        &:hover {
+          &::before {
+            background-color: var(--color-border-hover);
+          }
+          &::after {
+            background-color: var(--color-text-disabled);
+          }
+        }
+      }
+    }
+  }
+}
+
+
 // Enhanced Ant Design component overrides with improved click feedback
 .ant-btn {
   border-radius: var(--radius-md);
@@ -661,24 +708,24 @@ body {
     background-color: var(--color-interactive-secondary);
     border-radius: var(--radius-full);
   }
-  
+
   .ant-slider-track {
     background-color: var(--color-interactive-primary);
     border-radius: var(--radius-full);
   }
-  
+
   .ant-slider-handle {
     border: 2px solid var(--color-interactive-primary);
     background-color: var(--color-bg-primary);
     box-shadow: var(--shadow-sm);
     transition: all 0.2s ease-in-out;
-    
+
     &:hover {
       border-color: var(--color-interactive-primary-hover);
       box-shadow: var(--shadow-md);
       transform: scale(1.1);
     }
-    
+
     &:focus {
       box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), var(--shadow-md);
       outline: none;
@@ -686,6 +733,21 @@ body {
   }
 }
 
+.ant-divider {
+  border-color: var(--color-border-default);
+}
+
+.ant-tabs {
+  .ant-tabs-nav {
+
+    &::before {
+      border-color: var(--color-border-hover);
+    }
+  }
+  .ant-tabs-ink-bar {
+    //background: var(--color-border-hover);
+  }
+}
 // Layout utilities
 .layout-container {
   display: flex;

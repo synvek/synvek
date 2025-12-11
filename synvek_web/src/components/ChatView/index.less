@@ -30,7 +30,28 @@
 
 .chatThinking {
   margin: 8px 0;
+  background-color: var(--collapse-header-background);
 }
+
+.chatToolSection {
+  background-color: var(--hightlight-container-background);
+  border: var(--color-border-default) solid 1px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.chatFailedSection {
+  background-color: var(--hightlight-container-background);
+  border: var(--color-border-default) solid 1px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: var(--color-interactive-error);
+}
+
 .chatSectionFrom {
   font-weight: bold;
 }
