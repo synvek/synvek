@@ -1,4 +1,4 @@
-import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages'
 import { DynamicStructuredTool, tool } from '@langchain/core/tools'
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 import { MultiServerMCPClient } from '@langchain/mcp-adapters'
@@ -106,7 +106,9 @@ class LLMService {
     //   updatedMessage = [...rest, first]
     // }
     if (message.length === 0) {
-      return message[0].text
+      return {
+        content: []
+      }
     }
     const messageItems = message.map((messageItem) => {
       if (messageItem.type === 'text') {
@@ -283,6 +285,189 @@ class LLMService {
     } else {
       return "Model server not found"
     }
+  }
+
+  // OpenAI API compatible methods
+  public static async openAIChatCompletions(req: {
+    model: string;
+    messages: Array<{ role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }>;
+    temperature?: number;
+    top_p?: number;
+    n?: number;
+    stream?: boolean;
+    stop?: string | Array<string>;
+    max_tokens?: number;
+    presence_penalty?: number;
+    frequency_penalty?: number;
+    logit_bias?: Record<string, number>;
+    user?: string;
+  }) {
+    // Convert OpenAI messages to internal format
+    const userMessage: ChatContent[] = [];
+    const systemMessage: ChatContent[] = [];
+    const historyMessage: ChatContent[] = [];
+
+    req.messages.forEach((msg) => {
+      if (msg.role === 'system') {
+        systemMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' });
+      } else if (msg.role === 'user') {
+        if (typeof msg.content === 'string') {
+          userMessage.push({ type: 'text', text: msg.content });
+        } else {
+          // Handle multi-modal content
+          msg.content.forEach((contentItem) => {
+            if (contentItem.type === 'text') {
+              userMessage.push({ type: 'text', text: contentItem.text || '' });
+            } else if (contentItem.type === 'image_url') {
+              userMessage.push({ type: 'image', text: contentItem.image_url?.url || '' });
+            }
+          });
+        }
+      } else if (msg.role === 'assistant') {
+        historyMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' });
+      }
+    });
+
+    if (req.stream) {
+      const chatStream = await LLMService.chatStream(
+        userMessage,
+        systemMessage,
+        historyMessage,
+        req.model,
+        false, // enableThinking
+        false, // enableWebSearch
+        [], // activatedToolPlugins
+        [], // activatedMCPServices
+        req.temperature,
+        req.top_p
+      );
+      return chatStream;
+    } else {
+      const response = await LLMService.chat(
+        userMessage,
+        systemMessage,
+        historyMessage,
+        req.model,
+        false, // enableThinking
+        false, // enableWebSearch
+        [], // activatedToolPlugins
+        [], // activatedMCPServices
+        req.temperature,
+        req.top_p
+      );
+      return response;
+    }
+  }
+
+  public static async openAIModels() {
+    const modelServers = ModelServerService.getModelServers();
+    return modelServers.map((server) => ({
+      id: server.modelName,
+      object: 'model',
+      created: Date.now() / 1000 | 0,
+      owned_by: 'organization-owner',
+      permission: [{
+        id: 'modelperm-' + SystemUtils.generateUUID(),
+        object: 'model_permission',
+        created: Date.now() / 1000 | 0,
+        allow_create_engine: false,
+        allow_sampling: true,
+        allow_logprobs: true,
+        allow_search_indices: false,
+        allow_view: true,
+        allow_fine_tuning: false,
+        organization: '*',
+        group: null,
+        is_blocking: false
+      }],
+      root: server.modelName,
+      parent: null
+    }));
+  }
+
+  public static async openAIImageGenerations(req: {
+    model: string;
+    prompt: string;
+    n?: number;
+    size?: string;
+    response_format?: string;
+    user?: string;
+  }) {
+    // Convert OpenAI parameters to internal format
+    const count = req.n || 1;
+    const [width, height] = req.size ? req.size.split('x').map(Number) : [1024, 1024];
+    const format = req.response_format === 'url' ? 'url' : 'b64_json';
+    
+    // Use existing generateImage method
+    const result = await LLMService.generateImage(
+      req.prompt,
+      req.model,
+      count,
+      width,
+      height,
+      0, // seed
+      'png' // format
+    );
+    
+    return result;
+  }
+
+  public static async openAITextToSpeech(req: {
+    model: string;
+    input: string;
+    voice?: string;
+    response_format?: string;
+    speed?: number;
+  }) {
+    // Convert OpenAI parameters to internal format
+    const format = req.response_format || 'mp3';
+    const speed = req.speed || 1.0;
+    
+    // Use existing generateSpeech method
+    const result = await LLMService.generateSpeech(
+      req.input,
+      req.model,
+      speed,
+      format
+    );
+    
+    return result;
+  }
+
+  public static async openAIAudioTranscriptions(req: any) {
+    // For now, return a simple response as we don't have full Whisper implementation
+    return {
+      text: 'This is a placeholder response for audio transcription. Full implementation needed.'
+    };
+  }
+
+  public static async openAIAudioTranslations(req: any) {
+    // For now, return a simple response as we don't have full Whisper implementation
+    return {
+      text: 'This is a placeholder response for audio translation. Full implementation needed.'
+    };
+  }
+
+  public static async openAIEmbeddings(req: {
+    model: string;
+    input: string | Array<string>;
+    encoding_format?: string;
+    user?: string;
+  }) {
+    // For now, return a placeholder response as we don't have full embeddings implementation
+    const texts = Array.isArray(req.input) ? req.input : [req.input];
+    return {
+      object: 'list',
+      data: texts.map((text, index) => ({
+        object: 'embedding',
+        index,
+        embedding: Array(1536).fill(0).map(() => Math.random() * 2 - 1), // Random embedding for placeholder
+        usage: {
+          prompt_tokens: text.length,
+          total_tokens: text.length
+        }
+      }))
+    };
   }
 }
 
@@ -496,4 +681,241 @@ export const chatService = new Elysia()
         format: t.String(),
       }),
     },
+  )
+  // OpenAI API compatible endpoints
+  .get(
+    '/v1/models',
+    async ({ set }) => {
+      set.headers['content-type'] = 'application/json; charset=UTF-8'
+      const models = await LLMService.openAIModels()
+      return {
+        object: 'list',
+        data: models
+      }
+    }
+  )
+  .post(
+    '/v1/chat/completions',
+    async ({ body, set }) => {
+      if (body.stream) {
+        set.headers['content-type'] = 'text/event-stream; charset=UTF-8'
+        set.headers['Cache-Control'] = 'no-cache'
+        set.headers['Connection'] = 'keep-alive'
+        
+        const sseStream = new ReadableStream({
+          async cancel(reason) {
+            Logger.warn(`OpenAI chat stream is cancelled: ${reason}`)
+          },
+          async start(controller) {
+            try {
+              const chatStream = await LLMService.openAIChatCompletions(body)
+              const id = `chatcmpl-${SystemUtils.generateUUID()}`
+              const created = Date.now() / 1000 | 0
+              
+              for await (const [chunk, metadata] of chatStream) {
+                const content = chunk.content.toString()
+                const finishReason = chunk.response_metadata?.finish_reason
+                
+                const eventData = {
+                  id,
+                  object: 'chat.completion.chunk',
+                  created,
+                  model: body.model,
+                  choices: [{
+                    index: 0,
+                    delta: finishReason ? {} : {
+                      role: 'assistant',
+                      content: content
+                    },
+                    finish_reason: finishReason || null
+                  }]
+                }
+                
+                controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(eventData)}\n\n`))
+                
+                if (finishReason) {
+                  break
+                }
+              }
+              
+              controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
+            } catch (error) {
+              Logger.error(`OpenAI chat error: ${error}`)
+              const errorData = {
+                error: {
+                  message: error instanceof Error ? error.message : 'An error occurred',
+                  type: 'server_error',
+                  param: null,
+                  code: null
+                }
+              }
+              controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(errorData)}\n\n`))
+            } finally {
+              controller.close()
+            }
+          }
+        })
+        
+        return new Response(sseStream)
+      } else {
+        set.headers['content-type'] = 'application/json; charset=UTF-8'
+        const response = await LLMService.openAIChatCompletions(body)
+        
+        return {
+          id: `chatcmpl-${SystemUtils.generateUUID()}`,
+          object: 'chat.completion',
+          created: Date.now() / 1000 | 0,
+          model: body.model,
+          choices: [{
+            index: 0,
+            message: {
+              role: 'assistant',
+              content: response.content.toString()
+            },
+            finish_reason: response.response_metadata?.finish_reason || 'stop'
+          }],
+          usage: response.usage_metadata ? {
+            prompt_tokens: response.usage_metadata.input_tokens,
+            completion_tokens: response.usage_metadata.output_tokens,
+            total_tokens: response.usage_metadata.total_tokens
+          } : undefined
+        }
+      }
+    },
+    {
+      body: t.Object({
+        model: t.String(),
+        messages: t.Array(t.Object({
+          role: t.String(),
+          content: t.Union([t.String(), t.Array(t.Object({
+            type: t.String(),
+            text: t.Optional(t.String()),
+            image_url: t.Optional(t.Object({
+              url: t.String()
+            }))
+          }))])
+        })),
+        temperature: t.Optional(t.Number()),
+        top_p: t.Optional(t.Number()),
+        n: t.Optional(t.Number()),
+        stream: t.Optional(t.Boolean()),
+        stop: t.Optional(t.Union([t.String(), t.Array(t.String())])),
+        max_tokens: t.Optional(t.Number()),
+        presence_penalty: t.Optional(t.Number()),
+        frequency_penalty: t.Optional(t.Number()),
+        logit_bias: t.Optional(t.Record(t.String(), t.Number())),
+        user: t.Optional(t.String())
+      })
+    }
+  )
+  .post(
+    '/v1/images/generations',
+    async ({ body, set }) => {
+      set.headers['content-type'] = 'application/json; charset=UTF-8'
+      const result = await LLMService.openAIImageGenerations(body)
+      
+      if (typeof result === 'string') {
+        // Error case
+        return {
+          error: {
+            message: result,
+            type: 'server_error',
+            param: null,
+            code: null
+          }
+        }
+      }
+      
+      // Format response according to OpenAI API
+      const created = Date.now() / 1000 | 0
+      const images = (result.data.data || result.data).map((item: any, index: number) => ({
+        revised_prompt: body.prompt,
+        url: item.url,
+        b64_json: item.b64_json
+      }))
+      
+      return {
+        created,
+        data: images
+      }
+    },
+    {
+      body: t.Object({
+        model: t.String(),
+        prompt: t.String(),
+        n: t.Optional(t.Number()),
+        size: t.Optional(t.String()),
+        response_format: t.Optional(t.String()),
+        user: t.Optional(t.String())
+      })
+    }
+  )
+  .post(
+    '/v1/audio/speech',
+    async ({ body, set }) => {
+      const result = await LLMService.openAITextToSpeech(body)
+      
+      if (typeof result === 'string') {
+        // Error case
+        set.headers['content-type'] = 'application/json; charset=UTF-8'
+        return {
+          error: {
+            message: result,
+            type: 'server_error',
+            param: null,
+            code: null
+          }
+        }
+      }
+      
+      // Return binary audio data
+      set.headers['content-type'] = `audio/${body.response_format || 'mp3'}`
+      return new Response(result.data)
+    },
+    {
+      body: t.Object({
+        model: t.String(),
+        input: t.String(),
+        voice: t.Optional(t.String()),
+        response_format: t.Optional(t.String()),
+        speed: t.Optional(t.Number())
+      })
+    }
+  )
+  .post(
+    '/v1/audio/transcriptions',
+    async ({ body, set }) => {
+      set.headers['content-type'] = 'application/json; charset=UTF-8'
+      const result = await LLMService.openAIAudioTranscriptions(body)
+      
+      return result
+    }
+    // Note: We don't specify body schema here as it might be multipart/form-data
+  )
+  .post(
+    '/v1/audio/translations',
+    async ({ body, set }) => {
+      set.headers['content-type'] = 'application/json; charset=UTF-8'
+      const result = await LLMService.openAIAudioTranslations(body)
+      
+      return result
+    }
+    // Note: We don't specify body schema here as it might be multipart/form-data
+  )
+  .post(
+    '/v1/embeddings',
+    async ({ body, set }) => {
+      set.headers['content-type'] = 'application/json; charset=UTF-8'
+      const result = await LLMService.openAIEmbeddings(body)
+      
+      return result
+    },
+    {
+      body: t.Object({
+        model: t.String(),
+        input: t.Union([t.String(), t.Array(t.String())]),
+        encoding_format: t.Optional(t.String()),
+        user: t.Optional(t.String())
+      })
+    }
   )
