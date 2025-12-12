@@ -26,7 +26,7 @@ export default (props: any) => {
     currentWorkspace.onActivatedMiniAppChanged(handleActivatedMiniAppChanged)
 
     // Listen for theme changes
-    const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    const handleSystemThemeChange = (newTheme: 'light' | 'dark') => {
       setDarkTheme(newTheme === 'dark')
 
       // Update Ant Design configuration
@@ -37,11 +37,11 @@ export default (props: any) => {
       }))
     }
 
-    addThemeListener(handleThemeChange)
+    addThemeListener(handleSystemThemeChange)
 
     return () => {
       currentWorkspace.removeActivatedMiniAppChangedListener(handleActivatedMiniAppChanged)
-      removeThemeListener(handleThemeChange)
+      removeThemeListener(handleSystemThemeChange)
     }
   })
 
