@@ -58,19 +58,19 @@ export const colors = {
   light: {
     background: {
       primary: '#ffffff',
-      secondary: '#f8fafc',
+      secondary: '#f8f8f8',
       elevated: '#ffffff',
       hover: '#f1f5f9',
     },
     text: {
       primary: '#1e293b',
-      secondary: '#475569',
+      secondary: '#64748b',
       disabled: '#94a3b8',
       inverse: '#ffffff',
     },
     interactive: {
       primary: '#2563eb',
-      primaryHover: '#1d4ed8',
+      primaryHover: '#3b82f6',
       secondary: '#e2e8f0',
       secondaryHover: '#cbd5e1',
       success: '#059669',
@@ -79,9 +79,9 @@ export const colors = {
       disabled: '#e2e8f0',
     },
     border: {
-      default: '#94a3b8',
-      hover: '#64748b',
-      focus: '#2563eb',
+      default: '#e2e8f0',
+      hover: '#cbd5e1',
+      focus: '#3b82f6',
     },
     gradients: {
       primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -103,7 +103,7 @@ export const colors = {
       inverse: '#0a0a0a',
     },
     interactive: {
-      primary: '#60a5fa',
+      primary: '#2563eb',
       primaryHover: '#3b82f6',
       secondary: '#475569',
       secondaryHover: '#64748b',
