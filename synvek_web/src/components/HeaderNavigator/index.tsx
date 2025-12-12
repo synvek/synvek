@@ -972,7 +972,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         icon={<CaretDownOutlined />}
         type={'text'}
         popupRender={generatePopupRender}
-        placement="bottom"
+        placement="bottomRight"
         arrow={{ pointAtCenter: true }}
         style={{ display: isValidWorkMode() ? undefined : 'none' }}
       >

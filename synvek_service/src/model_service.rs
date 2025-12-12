@@ -680,22 +680,28 @@ fn populate_args_with_backend_llama_cpp(
     start_args: &mut Vec<OsString>,
 ) {
     let mut gguf_found = false;
-    task.task_items.iter().for_each(|item| {
+    let model_type = args.model_type.as_str();
+    task.task_items.iter().enumerate().for_each(|(index, item)| {
         let uniform_name = item.file_name.to_uppercase();
-        if uniform_name.ends_with(".GGUF") {
-            let mut model_path = model_dir.clone();
-            let mut model_dir_name =
-                "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
-            if task.model_source == MODEL_SOURCE_MODELSCOPE {
-                model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
-            }
-            model_path.push(model_dir_name);
-            model_path.push("snapshots");
-            model_path.push(item.commit_hash.clone());
-            model_path.push(item.file_name.clone());
+        let mut model_path = model_dir.clone();
+        let mut model_dir_name =
+            "models--".to_owned() + item.repo_name.replace("/", "--").as_str();
+        if task.model_source == MODEL_SOURCE_MODELSCOPE {
+            model_dir_name = model_dir_name.replace("models--", "modelscope-models--");
+        }
+        model_path.push(model_dir_name);
+        model_path.push("snapshots");
+        model_path.push(item.commit_hash.clone());
+        model_path.push(item.file_name.clone());
+        if index == 0 &&  uniform_name.ends_with(".GGUF") {
             gguf_found = true;
             start_args.push(OsString::from("-m"));
-            start_args.push(OsString::from(model_path));
+            start_args.push(OsString::from(model_path.to_str().unwrap() ));
+        }
+        //TODO: Make it generic
+        if model_type == "vision-plain" && task.task_items.len() > 1 {
+            start_args.push(OsString::from("--mmproj"));
+            start_args.push(OsString::from(model_path.to_str().unwrap() ));
         }
         start_args.push(OsString::from("--jinja"));
     });

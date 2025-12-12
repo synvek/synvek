@@ -51,6 +51,7 @@ export interface ModelProvider {
   summary: string
   description: string
   accessTokenRequired: boolean
+  extraArgs: string[]
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -80,6 +81,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'GPT OSS 20b GGUF',
     description: 'GPT OSS 20b GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'GPT-OSS-120b-GGUF',
@@ -111,6 +113,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'GPT OSS 120b GGUF',
     description: 'GPT OSS 120b GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-1.7B-UQFF',
@@ -147,6 +150,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'EricB/Qwen3-1.7B-UQFF summary',
     description: 'EricB/Qwen3-1.7B-UQFF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Llama-3.2-1B-Instruct-UQFF',
@@ -186,6 +190,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'EricB/Qwen3-1.7B-UQFF summary',
     description: 'EricB/Qwen3-1.7B-UQFF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-0.6B-GGUF',
@@ -213,6 +218,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-0.6B-GGUF summary',
     description: 'Qwen/Qwen3-0.6B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-1.7B-GGUF',
@@ -240,6 +246,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-1.7B-GGUF summary',
     description: 'Qwen/Qwen3-1.7B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-4B-GGUF',
@@ -267,6 +274,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-4B-GGUF summary',
     description: 'Qwen/Qwen3-4B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-8B-GGUF',
@@ -294,6 +302,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-8B-GGUF summary',
     description: 'Qwen/Qwen3-8B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-14B-GGUF',
@@ -321,6 +330,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-14B-GGUF summary',
     description: 'Qwen/Qwen3-14B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-32B-GGUF',
@@ -348,6 +358,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-32B-GGUF summary',
     description: 'Qwen/Qwen3-32B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-235B-A22B-GGUF',
@@ -385,6 +396,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-235B-A22B-GGUF summary',
     description: 'Qwen/Qwen3-235B-A22B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen2-VL',
@@ -420,6 +432,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3',
@@ -447,6 +460,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-V3',
@@ -481,6 +495,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek summary',
     description: 'DeepSeek details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1',
@@ -545,6 +560,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek summary',
     description: 'DeepSeek details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'FLUX.1-schnell',
@@ -575,6 +591,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'Phi-4-multimodal-instruct',
@@ -602,6 +619,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Phi-4-multimodal-instruct summary',
     description: 'Phi-4-multimodal-instruct details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Dia-1.6B',
@@ -629,6 +647,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Dia-1.6B summary',
     description: 'Dia-1.6B details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3n-E4B-it',
@@ -656,6 +675,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'gemma-3n-E4B-it summary',
     description: 'gemma-3n-E4B-it details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   // {
   //   modelId: 'NousResearch-Llama-3.2-1B',
@@ -763,6 +783,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen/Qwen3-0.6B-GGUF',
@@ -790,6 +811,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-0.6B-GGUF summary',
     description: 'Qwen/Qwen3-0.6B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-1.7B-GGUF',
@@ -817,6 +839,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-1.7B-GGUF summary',
     description: 'Qwen/Qwen3-1.7B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-4B-GGUF',
@@ -844,6 +867,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-4B-GGUF summary',
     description: 'Qwen/Qwen3-4B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-8B-GGUF',
@@ -871,6 +895,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-8B-GGUF summary',
     description: 'Qwen/Qwen3-8B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-14B-GGUF',
@@ -898,6 +923,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-14B-GGUF summary',
     description: 'Qwen/Qwen3-14B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-32B-GGUF',
@@ -925,6 +951,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-32B-GGUF summary',
     description: 'Qwen/Qwen3-32B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-235B-A22B-GGUF',
@@ -962,6 +989,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen/Qwen3-235B-A22B-GGUF summary',
     description: 'Qwen/Qwen3-235B-A22B-GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Dia-1.6B',
@@ -989,6 +1017,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Dia-1.6B summary',
     description: 'Dia-1.6B details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'GPT-OSS-20b-GGUF',
@@ -1016,6 +1045,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'GPT OSS 20b GGUF',
     description: 'GPT OSS 20b GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'GPT-OSS-120b-GGUF',
@@ -1047,6 +1077,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'GPT OSS 120b GGUF',
     description: 'GPT OSS 120b GGUF details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Phi-4-multimodal-instruct',
@@ -1074,6 +1105,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Phi-4-multimodal-instruct summary',
     description: 'Phi-4-multimodal-instruct details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'FLUX.1-schnell-gguf',
@@ -1106,6 +1138,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen2-VL summary',
     description: 'Qwen2-VL details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
@@ -1157,6 +1190,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
     description: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
@@ -1202,6 +1236,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
@@ -1247,6 +1282,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
@@ -1292,6 +1328,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-V3-0324-GGUF',
@@ -1396,6 +1433,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-V3-0324-GGUF',
     description: 'DeepSeek-V3-0324-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-GGUF',
@@ -1500,6 +1538,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-GGUF',
     description: 'DeepSeek-R1-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-0528-GGUF',
@@ -1604,6 +1643,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-0528-GGUF',
     description: 'DeepSeek-R1-0528-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-1b-it-qat-q4_0-gguf',
@@ -1631,6 +1671,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-1b-it-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-1b-it-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-1b-pt-qat-q4_0-gguf',
@@ -1658,6 +1699,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-1b-pt-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-1b-pt-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-4b-it-qat-q4_0-gguf',
@@ -1685,6 +1727,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-4b-it-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-4b-it-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-4b-pt-qat-q4_0-gguf',
@@ -1712,8 +1755,8 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-4b-pt-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-4b-pt-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
-
   {
     modelId: 'gemma-3-12b-it-qat-q4_0-gguf',
     modelCreator: 'AI-ModelScope',
@@ -1740,6 +1783,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-12b-it-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-12b-it-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-12b-pt-qat-q4_0-gguf',
@@ -1767,8 +1811,8 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-12b-pt-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-12b-pt-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
-
   {
     modelId: 'gemma-3-27b-it-qat-q4_0-gguf',
     modelCreator: 'AI-ModelScope',
@@ -1795,6 +1839,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-27b-it-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-27b-it-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-27b-pt-qat-q4_0-gguf',
@@ -1822,6 +1867,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'AI-ModelScope/gemma-3-27b-pt-qat-q4_0-gguf summary',
     description: 'AI-ModelScope/gemma-3-27b-pt-qat-q4_0-gguf details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
@@ -1873,6 +1919,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
     description: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
@@ -1918,6 +1965,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-32B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
@@ -1963,6 +2011,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-14B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
@@ -2008,6 +2057,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
     description: 'DeepSeek-R1-Distill-Qwen-7B-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-V3-0324-GGUF',
@@ -2112,6 +2162,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-V3-0324-GGUF',
     description: 'DeepSeek-V3-0324-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-GGUF',
@@ -2216,6 +2267,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-GGUF',
     description: 'DeepSeek-R1-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'DeepSeek-R1-0528-GGUF',
@@ -2320,6 +2372,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'DeepSeek-R1-0528-GGUF',
     description: 'DeepSeek-R1-0528-GGUF',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-1b-it-qat-q4_0-gguf',
@@ -2347,6 +2400,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-1b-it-qat-q4_0-gguf summary',
     description: 'google/gemma-3-1b-it-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-1b-pt-qat-q4_0-gguf',
@@ -2374,6 +2428,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-1b-pt-qat-q4_0-gguf summary',
     description: 'google/gemma-3-1b-pt-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-4b-it-qat-q4_0-gguf',
@@ -2401,6 +2456,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-4b-it-qat-q4_0-gguf summary',
     description: 'google/gemma-3-4b-it-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-4b-pt-qat-q4_0-gguf',
@@ -2428,8 +2484,8 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-4b-pt-qat-q4_0-gguf summary',
     description: 'google/gemma-3-4b-pt-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
-
   {
     modelId: 'gemma-3-12b-it-qat-q4_0-gguf',
     modelCreator: 'google',
@@ -2456,6 +2512,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-12b-it-qat-q4_0-gguf summary',
     description: 'google/gemma-3-12b-it-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-12b-pt-qat-q4_0-gguf',
@@ -2483,8 +2540,8 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-12b-pt-qat-q4_0-gguf summary',
     description: 'google/gemma-3-12b-pt-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
-
   {
     modelId: 'gemma-3-27b-it-qat-q4_0-gguf',
     modelCreator: 'google',
@@ -2511,6 +2568,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-27b-it-qat-q4_0-gguf summary',
     description: 'google/gemma-3-27b-it-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'gemma-3-27b-pt-qat-q4_0-gguf',
@@ -2538,6 +2596,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'google/gemma-3-27b-pt-qat-q4_0-gguf summary',
     description: 'google/gemma-3-27b-pt-qat-q4_0-gguf details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-large',
@@ -2570,6 +2629,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-large summary',
     description: 'stable-diffusion-3.5-large details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2602,6 +2662,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-medium summary',
     description: 'stable-diffusion-3.5-medium details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2634,6 +2695,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-large-turbo summary',
     description: 'stable-diffusion-3.5-large-turbo details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-large',
@@ -2666,6 +2728,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-large summary',
     description: 'stable-diffusion-3.5-large details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2698,6 +2761,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-medium summary',
     description: 'stable-diffusion-3.5-medium details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2730,6 +2794,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'stable-diffusion-3.5-large-turbo summary',
     description: 'stable-diffusion-3.5-large-turbo details',
     accessTokenRequired: true,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-0.6B',
@@ -2750,6 +2815,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-1.7B',
@@ -2770,6 +2836,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-4B',
@@ -2790,6 +2857,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-8B',
@@ -2810,6 +2878,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-14B',
@@ -2830,6 +2899,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-32B',
@@ -2850,6 +2920,7 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
   },
   {
     modelId: 'Qwen3-235B-A22B',
@@ -2870,5 +2941,55 @@ export const modelProviders: ModelProvider[] = [
     summary: 'Qwen3 summary',
     description: 'Qwen3 details',
     accessTokenRequired: false,
+    extraArgs: [],
+  },
+  {
+    modelId: 'MiniCPM-V-4_5',
+    modelCreator: 'OpenBMB',
+    modelSource: 'modelscope',
+    modelOptions: [
+      {
+        name: 'OpenBMB/MiniCPM-V-4_5-Q4_K_M-gguf',
+        fileSize: '6GB',
+        repos: [],
+        files: [
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-Q4_K_M.gguf' },
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'mmproj-model-f16.gguf' },
+        ],
+      },
+      {
+        name: 'OpenBMB/MiniCPM-V-4_5-Q8_0-gguf',
+        fileSize: '10GB',
+        repos: [],
+        files: [
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-Q8_0.gguf' },
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'mmproj-model-f16.gguf' },
+        ],
+      },
+      {
+        name: 'OpenBMB/MiniCPM-V-4_5-F16-gguf',
+        fileSize: '17GB',
+        repos: [],
+        files: [
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-F16.gguf' },
+          { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'mmproj-model-f16.gguf' },
+        ],
+      },
+    ],
+    categories: ['text-to-text', 'image-to-text'],
+    backends: ['llama_cpp'],
+    modelType: 'vision-plain',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'OpenBMB/MiniCPM-V-4_5-gguf summary',
+    description: 'OpenBMB/MiniCPM-V-4_5-gguf details',
+    accessTokenRequired: false,
+    extraArgs: [],
   },
 ]
