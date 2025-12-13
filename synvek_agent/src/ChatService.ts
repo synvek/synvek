@@ -52,6 +52,12 @@ class LLMService {
         },
         streaming: streaming,
         streamUsage: true,
+        // Additional configuration for better llama.cpp compatibility
+        ...(streaming && {
+          streamOptions: {
+            includeUsage: true
+          }
+        })
       })
     } else {
       return new ChatOpenAI({
@@ -67,6 +73,12 @@ class LLMService {
         //   configuration: { baseURL: 'http://192.168.0.105:11434/v1', apiKey: 'abc' },
         streaming: streaming,
         streamUsage: true,
+        // Additional configuration for better llama.cpp compatibility
+        ...(streaming && {
+          streamOptions: {
+            includeUsage: true
+          }
+        })
       })
     }
   }
@@ -241,7 +253,7 @@ class LLMService {
     //return model.invoke(userMessage[0].text)
     //const test = await toolModel.invoke(messages)
     //console.log(`Test result = ${test}`)
-    return agent.stream({ messages: messages }, { streamMode: 'messages', })
+    return agent.stream({ messages: messages }, { streamMode: ['messages', 'debug'], })
     //return toolModel.stream(messages)
   }
 
@@ -497,48 +509,92 @@ export const chatService = new Elysia()
                 body.topN
               )
               //Logger.info(`Chat stream is created`)
-              for await (const [chunk, metadata] of chatStream) {
+              
+              // Track cumulative usage for streaming
+              let cumulativeUsage = {
+                inputTokens: 0,
+                outputTokens: 0,
+                totalTokens: 0
+              }
+              
+              for await (const [mode, chunk] of chatStream) {
                 //Logger.info(`${chunk.content}  -  ${chunk.response_metadata}`)
                 const id = SystemUtils.generateUUID()
                 const event = 'Chat Event'
-                // console.log(`CHUNK = ${JSON.stringify(chunk)}`)
-                // console.log(`METADATA = ${JSON.stringify(metadata)}`)
-                // console.log(`content = ${JSON.stringify(chunk.content)}`)
-                // console.log(`content = ${chunk.content.toString()}`)
+                 console.log(`CHUNK = ${JSON.stringify(chunk)}`)
+                 //console.log(`METADATA = ${JSON.stringify(metadata)}`)
+                 //console.log(`content = ${JSON.stringify(chunk.content)}`)
+                 //console.log(`content = ${chunk.content ? chunk.content.toString() : chunk.content}`)
                 const output: Chunk = {
-                  content: chunk.content.toString(),
-                  sourceType: chunk.getType(),
-                  success: true,
+                  content: '',
+                  sourceType: 'ai',
+                  success: true
                 }
-                if (chunk.lc_kwargs.tool_call_chunks) {
-                  output.toolCallChunks = chunk.lc_kwargs.tool_call_chunks
+                let message = chunk[0];
+                if(mode === 'debug') {
+                  //Sometimes token usages are here. It is for llama.cpp & Qwen-0.6B-GGUF right now. We skip if it already generated to avoid duplicate output
+                  if(chunk.payload?.result?.messages?.length > 0 && !cumulativeUsage.totalTokens) {
+                    message = chunk.payload.result.messages[0]
+                  } else {
+                    continue
+                  }
+                } if(mode === 'messages' && chunk.length >= 2) {
+                  //Sometimes token usages are here. It is for mistral.rs & Qwen-0.6B
+                  output.content = message.content.toString();
+                  output.sourceType = message.type;
                 }
-                if (chunk.lc_kwargs.tool_calls) {
-                  output.toolCalls = chunk.lc_kwargs.tool_calls
+                if (message.lc_kwargs.tool_call_chunks) {
+                  output.toolCallChunks = message.lc_kwargs.tool_call_chunks
                 }
-                if (chunk.lc_kwargs.invalid_tool_calls) {
-                  output.invalidToolCalls = chunk.lc_kwargs.invalid_tool_calls
+                if (message.lc_kwargs.tool_calls) {
+                  output.toolCalls = message.lc_kwargs.tool_calls
                 }
-                if (chunk.response_metadata?.finish_reason) {
+                if (message.lc_kwargs.invalid_tool_calls) {
+                  output.invalidToolCalls = message.lc_kwargs.invalid_tool_calls
+                }
+                if (message.response_metadata.finish_reason) {
                   output.responseMetadata = {
-                    finishReason: chunk.response_metadata.finish_reason,
-                    systemFingerprint: chunk.response_metadata.system_fingerprint,
+                    finishReason: message.response_metadata.finish_reason,
+                    systemFingerprint: message.response_metadata.system_fingerprint,
                   }
                 }
-                // if (chunk.usage_metadata?.total_tokens) {
-                //   output.usageMetadata = {
-                //     inputTokens: chunk.usage_metadata.input_tokens,
-                //     outputTokens: chunk.usage_metadata.output_tokens,
-                //     totalTokens: chunk.usage_metadata.total_tokens,
-                //   }
-                // }
-                if (chunk.response_metadata?.usage) {
+                
+                // Handle usage metadata from multiple possible sources
+                let usageFound = false
+                
+                // Try message.usage_metadata first (LangChain v1.x standard)
+                if (message.usage_metadata?.total_tokens) {
                   output.usageMetadata = {
-                    inputTokens: chunk.response_metadata.usage.prompt_tokens,
-                    outputTokens: chunk.response_metadata.usage.completion_tokens,
-                    totalTokens: chunk.response_metadata.usage.total_tokens,
+                    inputTokens: message.usage_metadata.input_tokens,
+                    outputTokens: message.usage_metadata.output_tokens,
+                    totalTokens: message.usage_metadata.total_tokens,
                   }
+                  cumulativeUsage = output.usageMetadata
+                  usageFound = true
                 }
+                
+                // Try chunk.response_metadata.usage (OpenAI format)
+                if (!usageFound && message.response_metadata.usage) {
+                  output.usageMetadata = {
+                    inputTokens: message.response_metadata.usage.prompt_tokens,
+                    outputTokens: message.response_metadata.usage.completion_tokens,
+                    totalTokens: message.response_metadata.usage.total_tokens,
+                  }
+                  cumulativeUsage = output.usageMetadata
+                  usageFound = true
+                }
+                
+                // For llama.cpp streaming, usage might only be available in the final chunk
+                // If this is the final chunk (has finish_reason) and we have cumulative usage, include it
+                if (!usageFound && message.response_metadata?.finish_reason && cumulativeUsage.totalTokens > 0) {
+                  output.usageMetadata = cumulativeUsage
+                }
+                
+                // If no usage in this chunk but we have cumulative usage from previous chunks, include it
+                if (!usageFound && cumulativeUsage.totalTokens > 0) {
+                  output.usageMetadata = cumulativeUsage
+                }
+                
                 const data = `data: ${JSON.stringify(output)}\nid:${id}\nevent:${event}\n\n`
                 //Logger.info(data)
                 controller.enqueue(new TextEncoder().encode(data))
@@ -712,9 +768,30 @@ export const chatService = new Elysia()
               const id = `chatcmpl-${SystemUtils.generateUUID()}`
               const created = Date.now() / 1000 | 0
               
+              // Track cumulative usage for OpenAI streaming
+              let cumulativeUsage = {
+                prompt_tokens: 0,
+                completion_tokens: 0,
+                total_tokens: 0
+              }
+              
               for await (const [chunk, metadata] of chatStream) {
                 const content = chunk.content.toString()
                 const finishReason = chunk.response_metadata?.finish_reason
+                
+                // Extract usage information from chunk
+                let usage = null
+                if (chunk.usage_metadata?.total_tokens) {
+                  usage = {
+                    prompt_tokens: chunk.usage_metadata.input_tokens,
+                    completion_tokens: chunk.usage_metadata.output_tokens,
+                    total_tokens: chunk.usage_metadata.total_tokens
+                  }
+                  cumulativeUsage = usage
+                } else if (chunk.response_metadata?.usage) {
+                  usage = chunk.response_metadata.usage
+                  cumulativeUsage = usage
+                }
                 
                 const eventData = {
                   id,
@@ -728,12 +805,30 @@ export const chatService = new Elysia()
                       content: content
                     },
                     finish_reason: finishReason || null
-                  }]
+                  }],
+                  // Include usage in streaming response if available
+                  ...(usage && { usage })
                 }
                 
                 controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(eventData)}\n\n`))
                 
                 if (finishReason) {
+                  // Send final chunk with cumulative usage if not already included
+                  if (!usage && cumulativeUsage.total_tokens > 0) {
+                    const finalEventData = {
+                      id,
+                      object: 'chat.completion.chunk',
+                      created,
+                      model: body.model,
+                      choices: [{
+                        index: 0,
+                        delta: {},
+                        finish_reason: finishReason
+                      }],
+                      usage: cumulativeUsage
+                    }
+                    controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(finalEventData)}\n\n`))
+                  }
                   break
                 }
               }
