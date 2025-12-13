@@ -882,40 +882,40 @@ export const chatService = new Elysia()
       })
     }
   )
-  .post(
-    '/v1/audio/transcriptions',
-    async ({ body, set }) => {
-      set.headers['content-type'] = 'application/json; charset=UTF-8'
-      const result = await LLMService.openAIAudioTranscriptions(body)
-      
-      return result
-    }
-    // Note: We don't specify body schema here as it might be multipart/form-data
-  )
-  .post(
-    '/v1/audio/translations',
-    async ({ body, set }) => {
-      set.headers['content-type'] = 'application/json; charset=UTF-8'
-      const result = await LLMService.openAIAudioTranslations(body)
-      
-      return result
-    }
-    // Note: We don't specify body schema here as it might be multipart/form-data
-  )
-  .post(
-    '/v1/embeddings',
-    async ({ body, set }) => {
-      set.headers['content-type'] = 'application/json; charset=UTF-8'
-      const result = await LLMService.openAIEmbeddings(body)
-      
-      return result
-    },
-    {
-      body: t.Object({
-        model: t.String(),
-        input: t.Union([t.String(), t.Array(t.String())]),
-        encoding_format: t.Optional(t.String()),
-        user: t.Optional(t.String())
-      })
-    }
-  )
+  // .post(
+  //   '/v1/audio/transcriptions',
+  //   async ({ body, set }) => {
+  //     set.headers['content-type'] = 'application/json; charset=UTF-8'
+  //     const result = await LLMService.openAIAudioTranscriptions(body)
+  //
+  //     return result
+  //   }
+  //   // Note: We don't specify body schema here as it might be multipart/form-data
+  // )
+  // .post(
+  //   '/v1/audio/translations',
+  //   async ({ body, set }) => {
+  //     set.headers['content-type'] = 'application/json; charset=UTF-8'
+  //     const result = await LLMService.openAIAudioTranslations(body)
+  //
+  //     return result
+  //   }
+  //   // Note: We don't specify body schema here as it might be multipart/form-data
+  // )
+  // .post(
+  //   '/v1/embeddings',
+  //   async ({ body, set }) => {
+  //     set.headers['content-type'] = 'application/json; charset=UTF-8'
+  //     const result = await LLMService.openAIEmbeddings(body)
+  //
+  //     return result
+  //   },
+  //   {
+  //     body: t.Object({
+  //       model: t.String(),
+  //       input: t.Union([t.String(), t.Array(t.String())]),
+  //       encoding_format: t.Optional(t.String()),
+  //       user: t.Optional(t.String())
+  //     })
+  //   }
+  // )
