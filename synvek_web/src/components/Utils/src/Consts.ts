@@ -104,6 +104,22 @@ export class Consts {
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
 
+  //Local storage for image generation settings
+  public static LOCAL_STORAGE_IMAGE_COUNT = 'synvek.image.count'
+  public static LOCAL_STORAGE_IMAGE_SIZE = 'synvek.image.size'
+  public static LOCAL_STORAGE_IMAGE_RANDOM_SEED = 'synvek.image.random-seed'
+  public static LOCAL_STORAGE_IMAGE_SEED = 'synvek.image.seed'
+  public static LOCAL_STORAGE_IMAGE_STEPS_COUNT = 'synvek.image.steps-count'
+  public static LOCAL_STORAGE_IMAGE_CFG_SCALE = 'synvek.image.cfg-scale'
+  public static LOCAL_STORAGE_IMAGE_PERFORMANCE = 'synvek.image.performance'
+  public static IMAGE_COUNT_DEFAULT = 1
+  public static IMAGE_SIZE_DEFAULT = 1
+  public static IMAGE_RANDOM_SEED_DEFAULT = true
+  public static IMAGE_SEED_DEFAULT = 42
+  public static IMAGE_STEPS_COUNT_DEFAULT = 20
+  public static IMAGE_CFG_SCALE_DEFAULT = 7.0
+  public static IMAGE_PERFORMANCE_DEFAULT = 1
+
   public static PLUGIN_MESSAGE_TYPE_THEME_CHANGED = 'THEME_CHANGED'
   public static PLUGIN_MESSAGE_TYPE_LANGUAGE_CHANGED = 'LANGUAGE_CHANGED'
   public static PLUGIN_MESSAGE_TYPE_PLUGIN_READY = 'PLUGIN_READY'

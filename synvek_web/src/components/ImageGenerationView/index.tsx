@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 
-import { Consts, ImageSize, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
+import { Consts, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { ArrowUpOutlined } from '@ant-design/icons'
 import {
@@ -15,6 +15,8 @@ import {
   InputNumber,
   message,
   Select,
+  Slider,
+  SliderSingleProps,
   Splitter,
   theme,
   Typography,
@@ -37,14 +39,30 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const currentWorkspace = globalContext.currentWorkspace
   const [initialized, setInitialized] = useState<boolean>(false)
   const [userText, setUserText] = useState<string>('')
-  const [count, setCount] = useState<number>(1)
-  const [performance, setPerformance] = useState<number>(1)
-  const [size, setSize] = useState<ImageSize>(Consts.IMAGE_SIZES[3])
-  const [seed, setSeed] = useState<number>(0)
+  const oldCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_COUNT)
+  const defaultCount = oldCount ? Number.parseInt(oldCount) : Consts.IMAGE_COUNT_DEFAULT
+  const oldSize = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_SIZE)
+  const defaultSize = oldSize ? Number.parseInt(oldSize) : Consts.IMAGE_SIZE_DEFAULT
+  const oldRandomSeed = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_RANDOM_SEED)
+  const defaultRandomSeed = oldRandomSeed ? oldRandomSeed.toUpperCase() === 'TRUE' : Consts.IMAGE_RANDOM_SEED_DEFAULT
+  const oldSeed = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_SEED)
+  const defaultSeed = oldSeed ? Number.parseInt(oldSeed) : Consts.IMAGE_SEED_DEFAULT
+  const oldStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_STEPS_COUNT)
+  const defaultStepsCount = oldStepsCount ? Number.parseInt(oldStepsCount) : Consts.IMAGE_STEPS_COUNT_DEFAULT
+  const oldCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CFG_SCALE)
+  const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.IMAGE_CFG_SCALE_DEFAULT
+  const oldPerformance = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_PERFORMANCE)
+  const defaultPerformance = oldPerformance ? Number.parseInt(oldPerformance) : Consts.IMAGE_PERFORMANCE_DEFAULT
+  const [count, setCount] = useState<number>(defaultCount)
+  const [performance, setPerformance] = useState<number>(defaultPerformance)
+  const [size, setSize] = useState<number>(defaultSize)
+  const [seed, setSeed] = useState<number>(defaultSeed)
   const [negativePrompt, setNegativePrompt] = useState<string>('')
-  const [enableRandomSeed, setEnableRandomSeed] = useState<boolean>(true)
+  const [enableRandomSeed, setEnableRandomSeed] = useState<boolean>(defaultRandomSeed)
   const [images, setImages] = useState<string[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
+  const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
 
   const { token } = useToken()
   const intl = useIntl()
@@ -86,7 +104,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       return
     }
     const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
-    const imageData = await RequestUtils.generateImage(userText, userText, count, size.width, size.height, seedNumber)
+    const imageSize = Consts.IMAGE_SIZES[size]
+    const imageData = await RequestUtils.generateImage(userText, userText, count, imageSize.width, imageSize.height, seedNumber)
     await WorkspaceUtils.handleRequest(
       messageApi,
       imageData,
@@ -136,21 +155,26 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
 
   const handlePerformanceChange = (value: number) => {
     setPerformance(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_PERFORMANCE, '' + value)
   }
 
   const handleCountChange = (value: number) => {
     setCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_COUNT, '' + value)
   }
 
-  const handleSizeChange = (value: ImageSize) => {
+  const handleSizeChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SIZE, '' + value)
     setSize(value)
   }
 
   const handleSeedChange = (value: number | null) => {
     if (value !== null) {
       setSeed(value)
+      localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SEED, '' + value)
     } else {
       setSeed(0)
+      localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SEED, '0')
     }
   }
 
@@ -160,6 +184,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
 
   const handleEnableRandomSeedChange = (e: CheckboxChangeEvent) => {
     setEnableRandomSeed(e.target.checked)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_RANDOM_SEED, e.target.checked ? 'true' : 'false')
   }
 
   const generateImageList = () => {
@@ -196,12 +221,37 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     { value: '3', label: 'Extrame Speed' },
   ]
 
-  const sizeOptions = Consts.IMAGE_SIZES.map((imageSize) => {
+  const sizeOptions = Consts.IMAGE_SIZES.map((imageSize, index) => {
     return {
-      value: imageSize.key,
+      value: index,
       label: imageSize.key,
     }
   })
+
+  const stepsCountMarks: SliderSingleProps['marks'] = {
+    1: '1',
+    20: '20',
+    40: '40',
+    60: '60',
+    80: '80',
+    100: '100',
+  }
+
+  const cfgScaleMarks: SliderSingleProps['marks'] = {
+    0: '0',
+    10: '10',
+    20: '20',
+  }
+
+  const handleStepsCountChange = (value: number) => {
+    setStepsCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_STEPS_COUNT, '' + value)
+  }
+
+  const handleCfgScaleSChange = (value: number) => {
+    setCfgScale(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CFG_SCALE, '' + value)
+  }
 
   return (
     <div className={styles.imageGenerationView} style={{ display: visible ? 'block' : 'none' }}>
@@ -229,7 +279,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   },
                 }}
               >
-                <Collapse ghost={false} defaultActiveKey={['general']} bordered={false} className={styles.imageGenerationPropertyRegion}>
+                <Collapse ghost={false} defaultActiveKey={['general', 'advanced']} bordered={false} className={styles.imageGenerationPropertyRegion}>
                   <Collapse.Panel
                     key={'general'}
                     header={
@@ -320,6 +370,49 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             placeholder={intl.formatMessage({ id: 'translation-view.source.placeholder' })}
                             onChange={handleNegativePromptChange}
                           ></TextArea>
+                        </div>
+                      </div>
+                    </div>
+                  </Collapse.Panel>
+                  <Collapse.Panel
+                    key={'advanced'}
+                    header={
+                      <div style={{ fontWeight: 'bold' }}>
+                        <FormattedMessage id={'image-generation-view.setting-category-advanced'} />
+                      </div>
+                    }
+                  >
+                    <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgElevated, borderColor: token.colorBorder }}>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-steps-count'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={1}
+                            max={100}
+                            defaultValue={stepsCount}
+                            value={stepsCount}
+                            step={1}
+                            marks={stepsCountMarks}
+                            onChange={handleStepsCountChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-cfg-scale'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={0}
+                            max={20.0}
+                            defaultValue={cfgScale}
+                            step={0.5}
+                            value={cfgScale}
+                            marks={cfgScaleMarks}
+                            onChange={handleCfgScaleSChange}
+                          />
                         </div>
                       </div>
                     </div>
