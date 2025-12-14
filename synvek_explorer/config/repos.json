@@ -1095,5 +1095,41 @@
         "revision": "main",
         "endpoint": "",
         "access_token": null
-    }
+    },    
+    {
+        "repo_source": "modelscope",
+        "repo_name": "hf/leejet-Ovis-Image-7B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },    
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/Ovis-Image-7B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "Comfy-Org/Ovis-Image",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },    
+    {
+        "repo_source": "huggingface",
+        "repo_name": "Comfy-Org/Ovis-Image",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    }    
 ]
