@@ -52,6 +52,13 @@ export interface ModelProvider {
   description: string
   accessTokenRequired: boolean
   extraArgs: string[]
+  //Model may have optimized steps count as default steps count
+  defaultStepsCount?: number
+  //Model may have optimized cfg scale as default
+  defaultCfgScale?: number
+  supportStepsCount?: boolean
+  supportCfgScale?: boolean
+  supportNegativePrompt?: boolean
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -784,6 +791,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'Qwen2-VL details',
     accessTokenRequired: true,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 4,
+    defaultCfgScale: 1.0,
   },
   {
     modelId: 'Qwen/Qwen3-0.6B-GGUF',
@@ -1139,6 +1151,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'Qwen2-VL details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 4,
+    defaultCfgScale: 1.0,
   },
   {
     modelId: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
@@ -2630,6 +2647,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-large details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2663,6 +2685,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-medium details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2696,6 +2723,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-large-turbo details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'stable-diffusion-3.5-large',
@@ -2729,6 +2761,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-large details',
     accessTokenRequired: true,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2762,6 +2799,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-medium details',
     accessTokenRequired: true,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2795,6 +2837,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'stable-diffusion-3.5-large-turbo details',
     accessTokenRequired: true,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'Qwen3-0.6B',
@@ -3033,6 +3080,11 @@ export const modelProviders: ModelProvider[] = [
     description: 'hf/leejet-Ovis-Image-7B-GGUF details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
   {
     modelId: 'leejet-Ovis-Image-7B-GGUF',
@@ -3075,5 +3127,10 @@ export const modelProviders: ModelProvider[] = [
     description: 'leejet/Ovis-Image-7B-GGUF details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
   },
 ]

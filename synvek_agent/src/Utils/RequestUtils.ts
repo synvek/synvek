@@ -159,7 +159,7 @@ export class RequestUtils {
     return axios.post(`${serverAddress}`, data, config)
   }
 
-  public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string) {
+  public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number) {
     const data = {
       model: modelName,
       prompt: message,
@@ -169,6 +169,9 @@ export class RequestUtils {
       height: height,
       seed: seed,
       format: format,
+      negativePrompt: negativePrompt,
+      stepsCount: stepsCount,
+      cfgScale: cfgScale,
     }
     const config = {
       headers: {

@@ -661,6 +661,9 @@ export class RequestUtils {
     height: number = 256,
     seed: number = 43,
     format: string = 'png',
+    negativePrompt: string = '',
+    stepsCount: number = 20,
+    cfgScale: number = 7.0,
   ) {
     const data = {
       userMessage: userMessage,
@@ -670,6 +673,9 @@ export class RequestUtils {
       height: height,
       seed: seed,
       format: format,
+      negativePrompt: negativePrompt,
+      stepsCount: stepsCount,
+      cfgScale: cfgScale,
     }
     const config = {
       headers: {

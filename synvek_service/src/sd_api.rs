@@ -13,7 +13,10 @@ pub struct ImageGenerationRequest {
     pub width: usize,
     pub height: usize,
     pub seed: i32,
-    pub format: String
+    pub format: String,
+    pub negative_prompt: String,
+    pub steps_count: i32,
+    pub cfg_scale: f32
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -50,6 +53,9 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         height: req.height,
         seed: req.seed,
         format: req.format.clone(),
+        negative_prompt: req.negative_prompt.clone(),
+        steps_count: req.steps_count,
+        cfg_scale: req.cfg_scale
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];

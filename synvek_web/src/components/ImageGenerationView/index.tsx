@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 
-import { Consts, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
+import { Consts, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { ArrowUpOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
@@ -19,6 +19,7 @@ import {
   SliderSingleProps,
   Splitter,
   theme,
+  Tooltip,
   Typography,
 } from 'antd'
 import moment from 'moment/moment'
@@ -37,7 +38,6 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
-  const [initialized, setInitialized] = useState<boolean>(false)
   const [userText, setUserText] = useState<string>('')
   const oldCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_COUNT)
   const defaultCount = oldCount ? Number.parseInt(oldCount) : Consts.IMAGE_COUNT_DEFAULT
@@ -63,20 +63,43 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
   const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
+  const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+  let modelDefaultStepsCount: number | undefined = undefined
+  let modelDefaultCfgScale: number | undefined = undefined
+  let enableNegativePrompt: boolean | undefined = undefined
+  let enableStepsCount: boolean | undefined = undefined
+  let enableCfgScale: boolean | undefined = undefined
+  if (currentWorkspace.settings.defaultImageGenerationModel) {
+    currentWorkspace.tasks.forEach((task) => {
+      if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
+        modelProviders.forEach((modelProvider) => {
+          modelProvider.modelOptions.forEach((modelOption) => {
+            if (modelOption.name === task.model_id) {
+              modelDefaultStepsCount = modelProvider.defaultStepsCount
+              modelDefaultCfgScale = modelProvider.defaultCfgScale
+              enableNegativePrompt = modelProvider.supportNegativePrompt
+              enableStepsCount = modelProvider.supportStepsCount
+              enableCfgScale = modelProvider.supportCfgScale
+            }
+          })
+        })
+      }
+    })
+  }
 
   const { token } = useToken()
   const intl = useIntl()
 
   useEffect(() => {
     console.log(`Initializing ImageGenerationView now ...`)
-    if (!initialized) {
-      initialize()
+    currentWorkspace.onSettingsChanged(handleDefaultServerChange)
+    return () => {
+      currentWorkspace.removeSettingsChangedListener(handleDefaultServerChange)
     }
-    return () => {}
   })
 
-  const initialize = () => {
-    setInitialized(true)
+  const handleDefaultServerChange = () => {
+    setForceUpdate(!forceUpdate)
   }
 
   const handleUserTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -105,7 +128,18 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     }
     const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
     const imageSize = Consts.IMAGE_SIZES[size]
-    const imageData = await RequestUtils.generateImage(userText, userText, count, imageSize.width, imageSize.height, seedNumber)
+    const imageData = await RequestUtils.generateImage(
+      userText,
+      userText,
+      count,
+      imageSize.width,
+      imageSize.height,
+      seedNumber,
+      'png',
+      negativePrompt,
+      stepsCount,
+      cfgScale,
+    )
     await WorkspaceUtils.handleRequest(
       messageApi,
       imageData,
@@ -304,21 +338,21 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                           />
                         </div>
                       </div>
-                      <div className={styles.imageGenerationPropertyContainer}>
-                        <div className={styles.imageGenerationPropertyTitle}>
-                          <FormattedMessage id={'image-generation-view.setting-property-performance'} />
-                        </div>
-                        <div className={styles.imageGenerationPropertyValue}>
-                          <Select
-                            size={'small'}
-                            defaultValue={performance}
-                            value={performance}
-                            style={{ width: '100%' }}
-                            onChange={(value) => handlePerformanceChange(value)}
-                            options={performanceOptions}
-                          />
-                        </div>
-                      </div>
+                      {/*<div className={styles.imageGenerationPropertyContainer}>*/}
+                      {/*  <div className={styles.imageGenerationPropertyTitle}>*/}
+                      {/*    <FormattedMessage id={'image-generation-view.setting-property-performance'} />*/}
+                      {/*  </div>*/}
+                      {/*  <div className={styles.imageGenerationPropertyValue}>*/}
+                      {/*    <Select*/}
+                      {/*      size={'small'}*/}
+                      {/*      defaultValue={performance}*/}
+                      {/*      value={performance}*/}
+                      {/*      style={{ width: '100%' }}*/}
+                      {/*      onChange={(value) => handlePerformanceChange(value)}*/}
+                      {/*      options={performanceOptions}*/}
+                      {/*    />*/}
+                      {/*  </div>*/}
+                      {/*</div>*/}
                       <div className={styles.imageGenerationPropertyContainer}>
                         <div className={styles.imageGenerationPropertyTitle}>
                           <FormattedMessage id={'image-generation-view.setting-property-size'} />
@@ -363,9 +397,13 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         </div>
                         <div className={styles.imageGenerationPropertyDescription} style={{ color: token.colorTextSecondary }}>
                           <FormattedMessage id={'image-generation-view.setting-property-negative-prompt-description'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-negative-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
                         </div>
                         <div className={styles.imageGenerationPropertyValue}>
                           <TextArea
+                            disabled={!enableNegativePrompt}
                             className={styles.imageGenerationPropertyTextArea}
                             placeholder={intl.formatMessage({ id: 'translation-view.source.placeholder' })}
                             onChange={handleNegativePromptChange}
@@ -386,11 +424,20 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       <div className={styles.imageGenerationPropertyContainer}>
                         <div className={styles.imageGenerationPropertyTitle}>
                           <FormattedMessage id={'image-generation-view.setting-property-steps-count'} />
+                          <Tooltip
+                            title={
+                              intl.formatMessage({ id: 'image-generation-view.setting-property-steps-count-tooltip' }) +
+                              (modelDefaultStepsCount ? modelDefaultStepsCount : '')
+                            }
+                          >
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
                         </div>
                         <div className={styles.imageGenerationPropertyValue}>
                           <Slider
                             min={1}
                             max={100}
+                            disabled={!enableStepsCount}
                             defaultValue={stepsCount}
                             value={stepsCount}
                             step={1}
@@ -402,11 +449,20 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       <div className={styles.imageGenerationPropertyContainer}>
                         <div className={styles.imageGenerationPropertyTitle}>
                           <FormattedMessage id={'image-generation-view.setting-property-cfg-scale'} />
+                          <Tooltip
+                            title={
+                              intl.formatMessage({ id: 'image-generation-view.setting-property-cfg-scale-tooltip' }) +
+                              (modelDefaultCfgScale ? modelDefaultCfgScale : '')
+                            }
+                          >
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
                         </div>
                         <div className={styles.imageGenerationPropertyValue}>
                           <Slider
                             min={0}
                             max={20.0}
+                            disabled={!enableCfgScale}
                             defaultValue={cfgScale}
                             step={0.5}
                             value={cfgScale}
@@ -474,7 +530,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     )}
                   </div>
                 </Splitter.Panel>
-                <Splitter.Panel defaultSize={110} min={100} max={500} style={{ padding: '0 16px 16px 16px' }}>
+                <Splitter.Panel defaultSize={160} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
                   <div
                     className={styles.imageGenerationViewContentFooter}
                     style={{ backgroundColor: token.colorBgElevated, border: `${token.colorBorder} solid 1.5px` }}

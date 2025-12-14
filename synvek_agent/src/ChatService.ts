@@ -257,7 +257,8 @@ class LLMService {
     //return toolModel.stream(messages)
   }
 
-  public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number, seed: number, format: string) {
+  public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number,
+                                    seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number) {
     const modelServer = LLMService.buildGenerate(modelName)
     if(modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
@@ -683,7 +684,7 @@ export const chatService = new Elysia()
     '/image',
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
-      const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format)
+      const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale)
       if(typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
@@ -711,6 +712,9 @@ export const chatService = new Elysia()
         height: t.Number(),
         seed: t.Number(),
         format: t.String(),
+        negativePrompt: t.String(),
+        stepsCount: t.Number(),
+        cfgScale: t.Number(),
       }),
     },
   )
