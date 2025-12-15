@@ -14,6 +14,7 @@ import {
   Consts,
   ConversionData,
   InvalidToolCall,
+  modelProviders,
   RequestUtils,
   SystemUtils,
   Tag,
@@ -722,7 +723,22 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       currentWorkspace.selectedConversionData.scrollTop = chatSectionsRef.current.scrollHeight
     }
     const seed = SystemUtils.generateRandomInteger(1, 999999)
-    const response = await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed)
+    let stepsCount: number = Consts.IMAGE_STEPS_COUNT_DEFAULT
+    let cfgScale: number = Consts.IMAGE_CFG_SCALE_DEFAULT
+    currentWorkspace.tasks.forEach((task) => {
+      if (task.task_name === currentWorkspace.settings.defaultTextModel) {
+        modelProviders.forEach((modelProvider) => {
+          modelProvider.modelOptions.forEach((modelOption) => {
+            if (modelOption.name === task.model_id) {
+              stepsCount = modelProvider.defaultStepsCount ? modelProvider.defaultStepsCount : Consts.IMAGE_STEPS_COUNT_DEFAULT
+              cfgScale = modelProvider.defaultCfgScale ? modelProvider.defaultCfgScale : Consts.IMAGE_CFG_SCALE_DEFAULT
+            }
+          })
+        })
+      }
+    })
+
+    const response = await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale)
     await WorkspaceUtils.handleRequest(
       messageApi,
       response,

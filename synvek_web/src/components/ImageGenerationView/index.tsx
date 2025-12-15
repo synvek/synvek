@@ -130,7 +130,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     const imageSize = Consts.IMAGE_SIZES[size]
     const imageData = await RequestUtils.generateImage(
       userText,
-      userText,
+      currentWorkspace.settings.defaultImageGenerationModel,
       count,
       imageSize.width,
       imageSize.height,

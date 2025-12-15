@@ -169,9 +169,9 @@ export class RequestUtils {
       height: height,
       seed: seed,
       format: format,
-      negativePrompt: negativePrompt,
-      stepsCount: stepsCount,
-      cfgScale: cfgScale,
+      negative_prompt: negativePrompt,
+      steps_count: stepsCount,
+      cfg_scale: cfgScale,
     }
     const config = {
       headers: {

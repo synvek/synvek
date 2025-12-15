@@ -273,7 +273,7 @@ class LLMService {
         }
       } else {
         try {
-          const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format)
+          const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format, negativePrompt, stepsCount, cfgScale)
           return imageResponse
         } catch(error) {
           return `Internal error: ${error}`
