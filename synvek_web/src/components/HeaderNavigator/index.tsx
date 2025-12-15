@@ -874,7 +874,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                   onClick={() => handleStartDownloadModelByProvider(task)}
                 ></Button>
               </Tooltip>
-              <Tooltip title={intl.formatMessage({ id: 'header.navigator.suspend-downloading' })}>
+              <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-suspend-downloading' })}>
                 <Button
                   size={'small'}
                   type={'text'}
