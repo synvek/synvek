@@ -388,7 +388,8 @@ pub fn run() {
 
                 // Set window level
                 // NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
-                main_window.set_window_level(25).unwrap();
+                //Don't need this, which make window always on top.
+                //main_window.set_window_level(25).unwrap();
             }
             #[cfg(target_os = "windows")]
             {
