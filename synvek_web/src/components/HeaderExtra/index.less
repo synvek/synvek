@@ -11,7 +11,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 8px;
+  //gap: 8px;
 }
 
 .main {
@@ -27,27 +27,27 @@
   justify-content: center;
   height: 100%;
   padding-right: 8px;
-  
+
   /* Enhanced button styling */
   .ant-btn {
-    border-radius: 6px;
+    border-radius: 0;
     font-weight: 500;
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    
+
     &:active {
       transform: translateY(0);
     }
-    
+
     /* Enhanced primary button styling */
     &.ant-btn-primary {
       background: var(--gradient-primary);
       border: none;
-      
+
       &:hover {
         background: var(--color-interactive-primary-hover);
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
@@ -62,9 +62,12 @@
   user-select: none;
   display: flex;
   align-items: center;
+  margin-left: 8px;
 }
 
 .titleBarButton {
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
   border: none;
@@ -72,22 +75,16 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  width: 46px;
-  height: 32px;
-  border-radius: 4px;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     background: var(--windows-title-button-color, rgba(0, 0, 0, 0.1));
-    transform: translateY(-1px);
   }
-  
-  &:active {
-    transform: translateY(0);
-  }
+
 }
 
 .titleBarCloseButton {
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
   border: none;
@@ -95,18 +92,8 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  width: 46px;
-  height: 32px;
-  border-radius: 4px;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     background: var(--windows-title-close-button-color, #e81123);
-    color: white;
-    transform: translateY(-1px);
-  }
-  
-  &:active {
-    transform: translateY(0);
   }
 }
