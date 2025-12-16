@@ -1387,7 +1387,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                             type={'primary'}
                             shape={'circle'}
                             icon={<ArrowUpOutlined />}
-                            style={{ fontSize: '17px' }}
+                            style={{ fontSize: '14px', minHeight: '28px', minWidth: '28px', width: '28px', height: '28px' }}
                             onClick={handleChat}
                           />
                         </Tooltip>

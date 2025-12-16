@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, KeyboardEvent, useEffect, useState } from 'react'
 
 import { Consts, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
@@ -104,6 +104,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
 
   const handleUserTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setUserText(e.target.value)
+  }
+
+  const handleKeyDown = async (event: KeyboardEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      await handleGeneration()
+    }
   }
 
   const handleGeneration = async () => {
@@ -541,12 +547,19 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         className={styles.imageGenerationViewContentFooterTextBox}
                         style={{ resize: 'none' }}
                         onChange={handleUserTextChange}
+                        onKeyDown={handleKeyDown}
                       ></TextArea>
                     </div>
                     <div className={styles.imageGenerationViewContentFooterButton}>
                       <div className={styles.imageGenerationViewContentFooterButtonSettingSection}></div>
                       <div className={styles.imageGenerationViewContentFooterButtonSubmitSection}>
-                        <Button type={'primary'} shape={'circle'} icon={<ArrowUpOutlined />} style={{ fontSize: '17px' }} onClick={handleGeneration} />
+                        <Button
+                          type={'primary'}
+                          shape={'circle'}
+                          icon={<ArrowUpOutlined />}
+                          style={{ fontSize: '14px', minHeight: '28px', minWidth: '28px', width: '28px', height: '28px' }}
+                          onClick={handleGeneration}
+                        />
                       </div>
                     </div>
                   </div>
