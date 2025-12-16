@@ -156,10 +156,10 @@ export default function GlobalLayout(props: any) {
       {contextHolder}
       <GlobalContextProvider value={globalContext}>
         <Splitter layout={'vertical'}>
-          <Splitter.Panel defaultSize={Consts.HEADER_HEIGHT} resizable={false}>
+          <Splitter.Panel defaultSize={Consts.HEADER_HEIGHT} resizable={false} style={{ padding: 0 }}>
             <Header online={true} />
           </Splitter.Panel>
-          <Splitter.Panel resizable={false}>
+          <Splitter.Panel resizable={false} style={{ padding: 0 }}>
             <Content>
               <Outlet />
             </Content>
