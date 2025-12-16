@@ -6,6 +6,7 @@
   build: {
     frontendDist: './../synvek_web/build',
     devUrl: null,
+    //devUrl: 'http://localhost:8000',
     beforeDevCommand: null,
     beforeBuildCommand: null,
   },
