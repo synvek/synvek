@@ -39,7 +39,7 @@ const Header: FC<HeaderProps> = ({ online }) => {
       className={styles.header}
       ref={titleBarContainerRef as LegacyRef<HTMLDivElement> | undefined}
       style={{
-        borderBottom: `${token.colorBorder} solid 1px`,
+        //borderBottom: `${token.colorBorder} solid 1px`,
         height: Consts.HEADER_HEIGHT + 'px',
         paddingLeft: OSType.MACOS === SystemUtils.getOS() && process.env.ENV_NAME === Consts.ENV_DESKTOP ? macosTitleBarWidth : undefined,
         paddingRight: OSType.WINDOWS === SystemUtils.getOS() && process.env.ENV_NAME === Consts.ENV_DESKTOP ? undefined : designTokens.spacing.md,

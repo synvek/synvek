@@ -173,7 +173,7 @@ export default (props: any) => {
     )
   })
   return (
-    <div data-tauri-drag-region className={styles.sidebar} style={{ borderRight: `${token.colorBorder} solid 1px` }}>
+    <div data-tauri-drag-region className={styles.sidebar}>
       <div data-tauri-drag-region className={styles.controlBar}>
         <Tooltip placement={'right'} title={intl.formatMessage({ id: 'sidebar.button-tooltip-chat' })}>
           <Button
