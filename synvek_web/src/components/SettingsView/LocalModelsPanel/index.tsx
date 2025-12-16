@@ -5,7 +5,7 @@ import TextEditWindow from '@/components/TextEditWindow'
 import { Consts, modelProviders, RequestUtils, SystemUtils, Task, UpdateFetchRequest, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { BulbFilled, DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Button, Card, Divider, message, Select, Space, Switch, theme, Tooltip, Typography } from 'antd'
+import { Button, Card, Divider, message, Space, theme, Tooltip, Typography } from 'antd'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
@@ -375,46 +375,46 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
           {/*  </div>*/}
           {/*</div>*/}
           {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
-          <div className={styles.localModelItemPropertyContainer}>
-            <div>
-              <FormattedMessage id={'setting-view.local-models.isq'} />
-            </div>
-            <div>
-              <Select
-                disabled={!supportISQ}
-                size={'small'}
-                defaultValue={isqValue}
-                value={isqValue}
-                onChange={(value) => handleISQChange(value, task)}
-                style={{ width: '140px' }}
-                options={isqOptions}
-              />
-            </div>
-          </div>
-          <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
-          <div className={styles.localModelItemPropertyContainer}>
-            <div>
-              <FormattedMessage id={'setting-view.local-models.cpu'} />
-            </div>
-            <div>
-              <Switch defaultValue={cpuValue} value={cpuValue} onChange={(value) => handleCPUChange(value, task)} />
-            </div>
-          </div>
-          <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
-          <div className={styles.localModelItemPropertyContainer}>
-            <div>
-              <FormattedMessage id={'setting-view.local-models.offloaded'} />
-            </div>
-            <div>
-              <Switch
-                disabled={!supportOffloaded}
-                defaultValue={offloadedValue}
-                value={offloadedValue}
-                onChange={(value) => handleOffloadedChange(value, task)}
-              />
-            </div>
-          </div>
-          <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
+          {/*<div className={styles.localModelItemPropertyContainer}>*/}
+          {/*  <div>*/}
+          {/*    <FormattedMessage id={'setting-view.local-models.isq'} />*/}
+          {/*  </div>*/}
+          {/*  <div>*/}
+          {/*    <Select*/}
+          {/*      disabled={!supportISQ}*/}
+          {/*      size={'small'}*/}
+          {/*      defaultValue={isqValue}*/}
+          {/*      value={isqValue}*/}
+          {/*      onChange={(value) => handleISQChange(value, task)}*/}
+          {/*      style={{ width: '140px' }}*/}
+          {/*      options={isqOptions}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
+          {/*<div className={styles.localModelItemPropertyContainer}>*/}
+          {/*  <div>*/}
+          {/*    <FormattedMessage id={'setting-view.local-models.cpu'} />*/}
+          {/*  </div>*/}
+          {/*  <div>*/}
+          {/*    <Switch defaultValue={cpuValue} value={cpuValue} onChange={(value) => handleCPUChange(value, task)} />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
+          {/*<div className={styles.localModelItemPropertyContainer}>*/}
+          {/*  <div>*/}
+          {/*    <FormattedMessage id={'setting-view.local-models.offloaded'} />*/}
+          {/*  </div>*/}
+          {/*  <div>*/}
+          {/*    <Switch*/}
+          {/*      disabled={!supportOffloaded}*/}
+          {/*      defaultValue={offloadedValue}*/}
+          {/*      value={offloadedValue}*/}
+          {/*      onChange={(value) => handleOffloadedChange(value, task)}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
           {/*<div className={styles.localModelItemPropertyContainer}>*/}
           {/*  <div>*/}
           {/*    <FormattedMessage id={'setting-view.local-models.status'} />*/}
