@@ -918,6 +918,23 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
     Ok(true)
 }
 
+//TODO: Not implemented yet
+pub fn delete_task(task_name: &str) -> Result<bool> {
+    tracing::info!("Starting task {}", task_name);
+    let running_tasks = has_running_task(task_name);
+    if running_tasks {
+        tracing::warn!("Task {} is still running", task_name);
+        return Err(anyhow::anyhow!("Task {} still running", task_name));
+    }
+    let task = load_local_task(task_name);
+    if let Some(task) = task {
+
+    } else {
+        return Err(anyhow::anyhow!("Task {} not found", task_name));
+    }
+    Ok(true)
+}
+
 fn update_running_task_item(
     task_name: &str,
     model_source: &str,
