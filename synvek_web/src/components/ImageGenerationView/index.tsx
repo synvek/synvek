@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { ChangeEvent, FC, KeyboardEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 import { Consts, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
@@ -17,6 +17,7 @@ import {
   Select,
   Slider,
   SliderSingleProps,
+  Spin,
   Splitter,
   theme,
   Tooltip,
@@ -64,6 +65,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
   const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
   let enableNegativePrompt: boolean | undefined = undefined
@@ -89,6 +91,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
 
   const { token } = useToken()
   const intl = useIntl()
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     console.log(`Initializing ImageGenerationView now ...`)
@@ -106,58 +109,69 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     setUserText(e.target.value)
   }
 
-  const handleKeyDown = async (event: KeyboardEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      await handleGeneration()
+  const handlePressEnter = async (e: KeyboardEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (e.ctrlKey || e.shiftKey) {
+        setUserText(userText + '\n')
+      } else {
+        await handleGeneration()
+      }
     }
   }
 
   const handleGeneration = async () => {
-    if (!currentWorkspace.settings.defaultImageGenerationModel) {
-      await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view-view.message-no-default-model-found' }))
-      return
-    }
-    let modelStarted = false
-    for (let i = 0; i < currentWorkspace.modelServers.length; i++) {
-      const modelServer = currentWorkspace.modelServers[i]
-      if (modelServer.modelName === currentWorkspace.settings.defaultImageGenerationModel && modelServer.started) {
-        modelStarted = true
+    setLoading(true)
+    setUserText('')
+    try {
+      if (!currentWorkspace.settings.defaultImageGenerationModel) {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view-view.message-no-default-model-found' }))
+        return
       }
+      let modelStarted = false
+      for (let i = 0; i < currentWorkspace.modelServers.length; i++) {
+        const modelServer = currentWorkspace.modelServers[i]
+        if (modelServer.modelName === currentWorkspace.settings.defaultImageGenerationModel && modelServer.started) {
+          modelStarted = true
+        }
+      }
+      if (!modelStarted) {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-model-not-started' }))
+        return
+      }
+      if (!userText || userText.trim().length === 0) {
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-user-prompt-is-required' }))
+        return
+      }
+      const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
+      const imageSize = Consts.IMAGE_SIZES[size]
+      const imageData = await RequestUtils.generateImage(
+        userText,
+        currentWorkspace.settings.defaultImageGenerationModel,
+        count,
+        imageSize.width,
+        imageSize.height,
+        seedNumber,
+        'png',
+        negativePrompt,
+        stepsCount,
+        cfgScale,
+      )
+      await WorkspaceUtils.handleRequest(
+        messageApi,
+        imageData,
+        async (data: string[]) => {
+          const newImages: string[] = [...images, ...data]
+          setImages(newImages)
+          setCurrentImageIndex(newImages.length - 1)
+          await saveGeneration(data)
+        },
+        () => {},
+        () => {},
+      )
+    } finally {
+      setLoading(false)
     }
-    if (!modelStarted) {
-      await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-model-not-started' }))
-      return
-    }
-    if (!userText || userText.trim().length === 0) {
-      await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-user-prompt-is-required' }))
-      return
-    }
-    const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
-    const imageSize = Consts.IMAGE_SIZES[size]
-    const imageData = await RequestUtils.generateImage(
-      userText,
-      currentWorkspace.settings.defaultImageGenerationModel,
-      count,
-      imageSize.width,
-      imageSize.height,
-      seedNumber,
-      'png',
-      negativePrompt,
-      stepsCount,
-      cfgScale,
-    )
-    await WorkspaceUtils.handleRequest(
-      messageApi,
-      imageData,
-      async (data: string[]) => {
-        const newImages: string[] = [...images, ...data]
-        setImages(newImages)
-        setCurrentImageIndex(newImages.length - 1)
-        await saveGeneration(data)
-      },
-      () => {},
-      () => {},
-    )
   }
 
   const saveGeneration = async (images: string[]) => {
@@ -527,13 +541,18 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               <Splitter layout={'vertical'} className={styles.imageGenerationViewContent}>
                 <Splitter.Panel>
                   <div className={styles.imageGenerationImagePreviewContainer}>
-                    {images.length > currentImageIndex ? (
+                    {loading ? (
+                      <div className={styles.loadingOverlay}>
+                        <Spin indicator={<LoadingOutlined spin size={48} />} />
+                      </div>
+                    ) : images.length > currentImageIndex ? (
                       <img src={images[currentImageIndex]} alt={''} className={styles.imageGenerationImagePreview} style={{ borderColor: token.colorError }} />
                     ) : (
                       <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>
                         Please click and generate
                       </div>
                     )}
+                    {}
                   </div>
                 </Splitter.Panel>
                 <Splitter.Panel defaultSize={160} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
@@ -543,11 +562,14 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   >
                     <div className={styles.imageGenerationViewContentFooterText}>
                       <TextArea
+                        ref={inputRef}
                         variant={'borderless'}
                         className={styles.imageGenerationViewContentFooterTextBox}
                         style={{ resize: 'none' }}
+                        defaultValue={userText}
+                        value={userText}
                         onChange={handleUserTextChange}
-                        onKeyDown={handleKeyDown}
+                        onPressEnter={handlePressEnter}
                       ></TextArea>
                     </div>
                     <div className={styles.imageGenerationViewContentFooterButton}>
