@@ -1,0 +1,157 @@
+name: Notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner:
+        description: 'Repository owner (e.g., "synvek")'
+        required: true
+        default: 'synvek'
+      repo:
+        description: 'Repository name (e.g., "synvek")'
+        required: true
+        default: 'synvek'
+      tag:
+        description: 'Release tag (e.g., "v1.0.0")'
+        required: true
+        default: ''
+      api_url:
+        description: 'API endpoint URL to send data'
+        required: true
+        default: 'https://release.synvek.com'
+      api_auth_token:
+        description: 'API authentication token (optional)'
+        required: false
+        default: ''
+
+jobs:
+  get-release-info:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Get Release Information
+        id: get-release
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo, tag } = process.env;
+            
+            console.log(`Fetching release info for ${owner}/${repo} tag: ${tag}`);
+            
+            try {
+              const releaseResponse = await github.rest.repos.getReleaseByTag({
+                owner: owner,
+                repo: repo,
+                tag: tag
+              });
+              
+              const release = releaseResponse.data;
+              
+              const assetsResponse = await github.rest.repos.listReleaseAssets({
+                owner: owner,
+                repo: repo,
+                release_id: release.id
+              });
+              
+              const responseData = {
+                release: {
+                  tag_name: release.tag_name,
+                  name: release.name,
+                  body: release.body,
+                  html_url: release.html_url,
+                  assets_url: release.assets_url,
+                  upload_url: release.upload_url,
+                  tarball_url: release.tarball_url,
+                  zipball_url: release.zipball_url,
+                  target_commitish: release.target_commitish,
+                  draft: release.draft,
+                  prerelease: release.prerelease,
+                  created_at: release.created_at,
+                  published_at: release.published_at,
+                  updated_at: release.updated_at || release.published_at
+                },
+                assets: assetsResponse.data.map(asset => ({
+                  name: asset.name,
+                  label: asset.label,
+                  url: asset.url,
+                  browser_download_url: asset.browser_download_url,
+                  content_type: asset.content_type,
+                  size: asset.size,
+                  download_count: asset.download_count,
+                  digest: asset.digest,
+                  created_at: asset.created_at,
+                  updated_at: asset.updated_at
+                }))
+              };
+              
+              core.setOutput('release_data', JSON.stringify(responseData));
+              console.log(`✓ Successfully fetched release info for tag: ${tag}`);
+              
+              return responseData;
+              
+            } catch (error) {
+              console.error('❌ Error fetching release info:', error.message);
+              if (error.status === 404) {
+                throw new Error(`Release with tag "${tag}" not found in ${owner}/${repo}`);
+              }
+              throw error;
+            }
+        env:
+          owner: ${{ github.event.inputs.owner }}
+          repo: ${{ github.event.inputs.repo }}
+          tag: ${{ github.event.inputs.tag }}
+    
+      - name: Send Data to API
+        id: send-to-api
+        run: |
+          RELEASE_DATA='${{ steps.get-release.outputs.release_data }}'
+        
+          if [ -z "$RELEASE_DATA" ]; then
+            echo "❌ No release data received"
+            exit 1
+          fi
+        
+          echo "Sending release data to API..."
+          echo "API URL: ${{ github.event.inputs.api_url }}"
+        
+          CURL_CMD="curl -X POST"
+          CURL_CMD="$CURL_CMD -H 'Content-Type: application/json'"
+          CURL_CMD="$CURL_CMD -H 'User-Agent: GitHub-Actions-Release-Notifier'"
+        
+          API_AUTH_TOKEN='${{ github.event.inputs.api_auth_token }}'
+          if [ -n "$API_AUTH_TOKEN" ]; then
+            echo "Using authentication token"
+            CURL_CMD="$CURL_CMD -H 'Authorization: Bearer $API_AUTH_TOKEN'"
+          fi
+        
+          CURL_CMD="$CURL_CMD -d '$RELEASE_DATA'"
+          CURL_CMD="$CURL_CMD '${{ github.event.inputs.api_url }}'"
+        
+          RESPONSE=$(eval $CURL_CMD 2>&1)
+          CURL_EXIT_CODE=$?
+        
+          if [ $CURL_EXIT_CODE -eq 0 ]; then
+            echo "✅ Successfully sent data to API"
+            echo "API Response: $RESPONSE"
+          else
+            echo "❌ Failed to send data to API"
+            echo "Curl error: $RESPONSE"
+            exit 1
+          fi
+      
+      - name: Create Summary
+        if: always()
+        run: |
+          echo "# Release Information Sent" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** \`${{ github.event.inputs.owner }}/${{ github.event.inputs.repo }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag:** \`${{ github.event.inputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**API Endpoint:** \`${{ github.event.inputs.api_url }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Execution Status" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Release info fetched successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Data sent to API" >> $GITHUB_STEP_SUMMARY
