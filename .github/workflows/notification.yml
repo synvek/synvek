@@ -119,6 +119,7 @@ jobs:
           echo "API URL: ${{ github.event.inputs.api_url }}"
         
           CURL_CMD="curl -X POST"
+          CURL_CMD="$CURL_CMD -H 'Authorization: Bearer ${{ secrets.NOTIFICATION_TOKEN }}'"
           CURL_CMD="$CURL_CMD -H 'Content-Type: application/json'"
           CURL_CMD="$CURL_CMD -H 'User-Agent: GitHub-Actions-Release-Notifier'"
         
