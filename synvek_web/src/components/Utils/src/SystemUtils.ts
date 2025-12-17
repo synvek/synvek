@@ -268,4 +268,34 @@ export class SystemUtils {
 
     return finalParts.join('')
   }
+
+  /**
+   * Compare version number
+   * @param v1 version 1，e.g. "v.1.4.3"
+   * @param v2 version 2，e.g. "v.1.5.0"
+   * @returns
+   *   -1: v1 < v2
+   *    0: v1 = v2
+   *    1: v1 > v2
+   */
+  public static compareVersions(v1: string, v2: string): number {
+    const normalize = (version: string): number[] => {
+      const clean = version.replace(/^v\.?/, '')
+      return clean.split('.').map(Number)
+    }
+
+    const parts1 = normalize(v1)
+    const parts2 = normalize(v2)
+    const maxLength = Math.max(parts1.length, parts2.length)
+
+    for (let i = 0; i < maxLength; i++) {
+      const num1 = parts1[i] || 0
+      const num2 = parts2[i] || 0
+
+      if (num1 < num2) return -1
+      if (num1 > num2) return 1
+    }
+
+    return 0
+  }
 }

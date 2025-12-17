@@ -1560,4 +1560,12 @@ export class RequestUtils {
     }
     return axios.post(`${RequestUtils.agentServerAddress}/generation/delete`, data, config)
   }
+
+  public static checkVersion() {
+    const url = 'https://release.synvek.com/api/releases/latest'
+    const config = {
+      headers: {},
+    }
+    return axios.get(url, config)
+  }
 }

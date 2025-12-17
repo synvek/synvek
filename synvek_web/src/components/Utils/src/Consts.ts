@@ -120,6 +120,11 @@ export class Consts {
   public static IMAGE_CFG_SCALE_DEFAULT = 7.0
   public static IMAGE_PERFORMANCE_DEFAULT = 1
 
+  //Local storage for version check time
+  public static LOCAL_STORAGE_VERSION_CHECK_TIME = 'synvek.version.check-time'
+  public static LOCAL_STORAGE_VERSION_TAG_NAME = 'synvek.version.tag-name'
+  public static LOCAL_STORAGE_VERSION_BODY = 'synvek.version.body'
+
   public static PLUGIN_MESSAGE_TYPE_THEME_CHANGED = 'THEME_CHANGED'
   public static PLUGIN_MESSAGE_TYPE_LANGUAGE_CHANGED = 'LANGUAGE_CHANGED'
   public static PLUGIN_MESSAGE_TYPE_PLUGIN_READY = 'PLUGIN_READY'
