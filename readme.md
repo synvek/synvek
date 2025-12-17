@@ -22,9 +22,9 @@ This project is currently under active development​ and not yet production-rea
 ### Multiple models support. Chat completion, image generation or voice output in one application and one chat. 
 
 - Chat completions: GPT-oss, Deepseek, Qwen3, gemma-3
-- Image Generation: Stable Diffusion 3.5, Flux
+- Image Generation: Stable Diffusion 3.5, Flux, Ovis-Image-7B
 - Speech: Dia 1.5
-- Multimodels: Phi-4,Qwen2-VL
+- Multimodels: Phi-4,Qwen2-VL, MiniCPM-V-4.5
 - More in progress
 
 ### Speed up inference with GPU support 
