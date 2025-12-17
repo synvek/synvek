@@ -51,7 +51,6 @@ const HeaderExtra: FC<HeaderExtraProps> = ({ online }) => {
     const nowTime = moment().valueOf()
     if (lastCheckTimeValue) {
       const lastCheckTime = Number.parseInt(lastCheckTimeValue)
-      console.log(`Check time = ${nowTime - lastCheckTime}`)
       if (nowTime - lastCheckTime > LAST_CHECK_TIME) {
         requireCheck = true
       }
