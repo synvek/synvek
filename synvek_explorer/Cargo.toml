@@ -1,6 +1,6 @@
 [package]
 name = "synvek_explorer"
-version = "0.4.4"
+version = "0.4.5"
 description = "Run LLM locally with minimal effort"
 authors = ["iapoo"]
 license = "GPL"
