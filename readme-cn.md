@@ -1,6 +1,6 @@
 # Synvek
 
-Synvek似基于单一GUI应用下载、管理、运行和探索各种大语言模型，包括文本生成、图像生成和语音生成等等。
+Synvek在单一GUI应用内下载、管理、运行和探索各种大语言模型，包括文本生成、图像生成和语音生成等等。
 
 Synvek基于Rust、Deno、Tauri、llama.cpp、stable-diffusion.cpp和Mistral.rs/Candle构建。可以在本地使用单一应用运行和探索本地AI模型。不依赖Pyton或Node。
 
