@@ -715,19 +715,29 @@ body {
   }
 
   .ant-slider-handle {
+    width: 14px;
+    height: 14px;
     border: 2px solid var(--color-interactive-primary);
     background-color: var(--color-bg-primary);
-    box-shadow: var(--shadow-sm);
+    border-radius: 50%;
+    box-shadow: none;
     transition: all 0.2s ease-in-out;
+
+    &::before,
+    &::after {
+      display: none;
+    }
 
     &:hover {
       border-color: var(--color-interactive-primary-hover);
-      box-shadow: var(--shadow-md);
+      box-shadow: none;
       transform: scale(1.1);
     }
 
-    &:focus {
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), var(--shadow-md);
+    &:focus,
+    &:active,
+    &.ant-slider-handle-dragging {
+      box-shadow: none;
       outline: none;
     }
   }
