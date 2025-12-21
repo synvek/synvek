@@ -720,7 +720,7 @@ body {
     border: 2px solid var(--color-interactive-primary);
     background-color: var(--color-bg-primary);
     border-radius: 50%;
-    box-shadow: none;
+    box-shadow: 0 0 0 0 transparent;
     transition: all 0.2s ease-in-out;
 
     &::before,
@@ -729,15 +729,17 @@ body {
     }
 
     &:hover {
+      width: 17px;
+      height: 17px;
       border-color: var(--color-interactive-primary-hover);
-      box-shadow: none;
-      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      transform: scale(1.15);
     }
 
     &:focus,
     &:active,
     &.ant-slider-handle-dragging {
-      box-shadow: none;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
       outline: none;
     }
   }
