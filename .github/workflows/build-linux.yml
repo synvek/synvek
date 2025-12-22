@@ -76,7 +76,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp cuda 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_cuda -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DGGML_NATIVE=OFF -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_AVX512=OFF -DGGML_AVX512_VBMI=OFF -DGGML_AVX512_VNNI=OFF
         cmake --build build/llama.cpp/build_cuda --config Release --target synvek_backend_llama -j 4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cuda 
@@ -91,7 +91,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j  4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cuda 
@@ -192,7 +192,7 @@ jobs:
 
     - name: Configure and build backend-> llama.cpp vulkan 
       run: |
-        cmake -S third_party/llama.cpp -B build/llama.cpp/build_vulkan -DGGML_VULKAN=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/llama.cpp -B build/llama.cpp/build_vulkan -DGGML_VULKAN=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DGGML_NATIVE=OFF -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_AVX512=OFF -DGGML_AVX512_VBMI=OFF -DGGML_AVX512_VNNI=OFF
         cmake --build build/llama.cpp/build_vulkan --config Release --target synvek_backend_llama -j 4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp vulkan 
@@ -207,7 +207,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp vulkan 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_vulkan --config Release --target synvek_backend_sd -j  4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp vulkan 
@@ -230,7 +230,7 @@ jobs:
        
     - name: Configure and build backend-> llama.cpp cpu 
       run: |
-        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/llama.cpp  -B build/llama.cpp/build_cpu -DGGML_METAL=OFF  -DBUILD_SHARED_LIBS=OFF  -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DGGML_NATIVE=OFF -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_AVX512=OFF -DGGML_AVX512_VBMI=OFF -DGGML_AVX512_VNNI=OFF
         cmake --build build/llama.cpp/build_cpu --config Release --target synvek_backend_llama -j 4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> llama.cpp cpu 
@@ -245,7 +245,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DLLAMA_AVX=ON -DLLAMA_AVX2=ON -DLLAMA_AVX512=OFF -DLLAMA_FMA=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 
