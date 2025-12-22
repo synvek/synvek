@@ -203,6 +203,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
     let mut isFlux = false;
     let mut isOvis = false;
+    let mut isZImage = false;
 
     if let Some(task) = task {
         tracing::info!("Current task info: {:?}", task.clone());
@@ -226,6 +227,10 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         llm_path = find_relative_model_file_path(&task, "ovis_2.5.safetensors");
         isFlux = task.task_name.to_lowercase().contains("flux");
         isOvis = task.task_name.to_lowercase().contains("ovis");
+        isZImage = task.task_name.to_lowercase().contains("z-image");
+        if isZImage {
+            llm_path = find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
+        }
     }
 
     let base_lib_name = "synvek_backend_sd";
@@ -323,6 +328,31 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from("--clip-on-cpu"),
                     ]
                 } else if model_type == "diffusion" && isOvis {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--llm"),
+                        llm_path.to_str().unwrap().to_string(),
+                        String::from("-p"),
+                        String::from(generation_args.prompt.clone()),
+                        String::from("--cfg-scale"),
+                        //String::from("1.0"),
+                        String::from(generation_args.cfg_scale.to_string()),
+                        String::from("-v"),
+                        String::from("--seed"),
+                        String::from(generation_args.seed.to_string()),
+                        String::from("--steps"),
+                        //String::from("12"),
+                        String::from(generation_args.steps_count.to_string()),
+                        String::from("--batch-count"),
+                        String::from(generation_args.n.to_string()),
+                        String::from("--offload-to-cpu"),
+                        String::from("--diffusion-fa"),
+                    ]
+                } else if model_type == "diffusion" && isZImage {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),

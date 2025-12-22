@@ -1131,5 +1131,41 @@
         "revision": "main",
         "endpoint": "",
         "access_token": null
-    }    
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "hf/leejet-Z-Image-Turbo-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },    
+    {
+        "repo_source": "modelscope",
+        "repo_name": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },    
+    {
+        "repo_source": "huggingface",
+        "repo_name": "leejet/Z-Image-Turbo-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    }
 ]
