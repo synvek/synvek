@@ -204,6 +204,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut isFlux = false;
     let mut isOvis = false;
     let mut isZImage = false;
+    let mut isQwenImage = false;
 
     if let Some(task) = task {
         tracing::info!("Current task info: {:?}", task.clone());
@@ -228,8 +229,13 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         isFlux = task.task_name.to_lowercase().contains("flux");
         isOvis = task.task_name.to_lowercase().contains("ovis");
         isZImage = task.task_name.to_lowercase().contains("z-image");
+        isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
         if isZImage {
             llm_path = find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
+        }
+        if isQwenImage {
+            llm_path = find_relative_model_file_path(&task, "Qwen2.5-VL-7B-Instruct-Q4_0.gguf");
+            vae_path = find_relative_model_file_path(&task, "qwen_image_vae.safetensors");
         }
     }
 
@@ -376,6 +382,35 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from(generation_args.n.to_string()),
                         String::from("--offload-to-cpu"),
                         String::from("--diffusion-fa"),
+                    ]
+                } else if model_type == "diffusion" && isQwenImage {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--llm"),
+                        llm_path.to_str().unwrap().to_string(),
+                        String::from("-p"),
+                        String::from(generation_args.prompt.clone()),
+                        String::from("--cfg-scale"),
+                        //String::from("1.0"),
+                        String::from(generation_args.cfg_scale.to_string()),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("-v"),
+                        String::from("--seed"),
+                        String::from(generation_args.seed.to_string()),
+                        String::from("--steps"),
+                        //String::from("12"),
+                        String::from(generation_args.steps_count.to_string()),
+                        String::from("--batch-count"),
+                        String::from(generation_args.n.to_string()),
+                        String::from("--offload-to-cpu"),
+                        String::from("--diffusion-fa"),
+                        String::from("--flow-shift"),
+                        String::from("3"),
                     ]
                 } else {
                     vec![
