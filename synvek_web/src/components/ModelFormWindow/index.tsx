@@ -9,6 +9,7 @@ interface ModelFormWindowProps {
   modelName: string
   modelId: string
   modelSource: string
+  modelRepos: string[]
   mirror: string
   accessToken: string
   accessTokenRequired: boolean
@@ -22,6 +23,7 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
   modelName,
   modelId,
   modelSource,
+  modelRepos,
   mirror,
   accessToken,
   accessTokenRequired,
@@ -83,6 +85,17 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
       return 'https://modelscope.com'
     }
   }
+
+  const generateModelLicenseLinks = () => {
+    return modelRepos.map((modelRepo) => {
+      return (
+        <Link href={`${getModelHomePage()}/${modelRepo}`} target="_blank" style={{ marginLeft: '16px' }}>
+          {modelRepo}
+        </Link>
+      )
+    })
+  }
+
   return (
     <div key={modelName}>
       {contextHolder}
@@ -169,9 +182,7 @@ const ModelFormWindowPage: FC<ModelFormWindowProps> = ({
               <Text type={'secondary'}>
                 <FormattedMessage id={'model-form-window.message.download-for-model-license'} />
               </Text>
-              <Link href={`${getModelHomePage()}/${modelId}`} target="_blank" style={{ marginLeft: '8px' }}>
-                {modelId}
-              </Link>
+              {generateModelLicenseLinks()}
             </div>
           </Form>
         </div>

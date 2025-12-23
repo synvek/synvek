@@ -28,6 +28,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
   const [modelSource, setModelSource] = useState<string>('')
   const [mirror, setMirror] = useState<string>('')
   const [accessToken, setAccessToken] = useState<string>('')
+  const [modelRepos, setModelRepos] = useState<string[]>([])
   const [accessTokenRequired, setAccessTokenRequired] = useState<boolean>(false)
   const [modelType, setModelType] = useState<string>('plain')
   const [modelInfos, setModelInfos] = useState<ModelInfo[]>([])
@@ -105,7 +106,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     setModelFormWindowVisible(false)
   }
 
-  const handleDownloadModel = (modelSource: string, modelId: string, modelType: string, accessTokenRequired: boolean) => {
+  const handleDownloadModel = (modelSource: string, modelId: string, modelType: string, accessTokenRequired: boolean, modelRepos: string[]) => {
     const index = modelId.lastIndexOf('/')
     const modelName = index >= 0 ? modelId.slice(index + 1) : modelId
     setModelName(modelSource + ':' + modelName)
@@ -113,6 +114,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     setModelSource(modelSource)
     setMirror('')
     setAccessToken('')
+    setModelRepos(modelRepos)
     setAccessTokenRequired(accessTokenRequired)
     setModelFormWindowVisible(true)
     setModelType(modelType)
@@ -168,9 +170,33 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
     modelProviders.forEach((modelProvider) => {
       if (modelProvider.modelSource + ':' + modelProvider.modelId === activeItemKey) {
         const availableModels = modelProvider.modelOptions.map((modelOption) => {
+          const modelRepos: string[] = []
+          modelOption.repos.forEach((repo) => {
+            let found = false
+            modelRepos.forEach((modelRepo) => {
+              if (modelRepo === repo.repoName) {
+                found = true
+              }
+            })
+            if (!found) {
+              modelRepos.push(repo.repoName)
+            }
+          })
+          modelOption.files.forEach((file) => {
+            let found = false
+            modelRepos.forEach((modelRepo) => {
+              if (modelRepo === file.repoName) {
+                found = true
+              }
+            })
+            if (!found) {
+              modelRepos.push(file.repoName)
+            }
+          })
           return {
             name: modelOption.name,
             fileSize: modelOption.fileSize,
+            modelRepos: modelRepos,
           }
         })
 
@@ -256,7 +282,13 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
                               type={'primary'}
                               icon={<DownloadOutlined />}
                               onClick={() =>
-                                handleDownloadModel(modelProvider.modelSource, item.name, modelProvider.modelType, modelProvider.accessTokenRequired)
+                                handleDownloadModel(
+                                  modelProvider.modelSource,
+                                  item.name,
+                                  modelProvider.modelType,
+                                  modelProvider.accessTokenRequired,
+                                  item.modelRepos,
+                                )
                               }
                             >
                               <FormattedMessage id={'setting-view.model-search.model-options.download'} />
@@ -357,6 +389,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
           modelName={modelName}
           modelId={modelId}
           modelSource={modelSource}
+          modelRepos={modelRepos}
           mirror={mirror}
           accessToken={accessToken}
           accessTokenRequired={accessTokenRequired}
