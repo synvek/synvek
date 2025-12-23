@@ -29,7 +29,7 @@ features:
   - title: Multiple backend Support
     details: Support llama.cpp, stable-diffusion.cpp and mistral.rs.
   - title: Support many models 
-    details: GPT OSS, Qwen, Deepseek, Flux, Stable Diffusion, Dia and so on
+    details: GPT OSS, Qwen, Deepseek, Flux, Stable Diffusion, Dia, Z-Image-Turbo, Ovis-Image, MiniCPM-4.5 and so on
   - title: GPU support
     details: Support CUDA&Vulkan on windows/Linux, Metal on macos
   - title: Text, image and voice generation

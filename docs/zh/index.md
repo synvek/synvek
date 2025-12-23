@@ -29,7 +29,7 @@ features:
   - title: 多后端支持
     details: 支持多种后端引擎包括llama.cpp, stable-diffusion.cp和mistral.rs等
   - title: 支持众多大模型
-    details: 支持GPT OSS开源版，千问,DeepSeek，Flux，Stable Diffusion, Dia等
+    details: 支持GPT OSS开源版，千问,DeepSeek，Flux，Stable Diffusion, Dia, Z-Image-Turbo, Ovis-Image, MiniCPM-4.5等
   - title: GPU加速支持
     details: Windows/Linux版本支持Cuda&Vulkan加速。Macos支持Metal加速
   - title: 文本、图形和语音生成支持
