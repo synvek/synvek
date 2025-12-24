@@ -511,6 +511,12 @@ export interface Validation {
   message?: string
 }
 
+export interface ImageData {
+  width: number
+  height: number
+  data: string
+}
+
 export class RequestUtils {
   //public static agentServerAddress = 'http://192.168.0.109:8082'
   //public static backendServerAddress = 'http://192.168.0.109:12001/api/v1'
@@ -683,6 +689,40 @@ export class RequestUtils {
       },
     }
     return axios.post(`${RequestUtils.agentServerAddress}/image`, data, config)
+  }
+
+  public static editImage(
+    userMessage: string,
+    modelName: string,
+    count: number = 1,
+    width: number = 256,
+    height: number = 256,
+    seed: number = 43,
+    format: string = 'png',
+    negativePrompt: string = '',
+    stepsCount: number = 20,
+    cfgScale: number = 7.0,
+    refImages: ImageData[],
+  ) {
+    const data = {
+      userMessage: userMessage,
+      modelName: modelName,
+      count: count,
+      width: width,
+      height: height,
+      seed: seed,
+      format: format,
+      negativePrompt: negativePrompt,
+      stepsCount: stepsCount,
+      cfgScale: cfgScale,
+      refImages: refImages,
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    return axios.post(`${RequestUtils.agentServerAddress}/image-edit`, data, config)
   }
 
   public static generateSpeech(userMessage: string, modelName: string, speed: number = 1, format: 'wav' | 'pcm' = 'wav') {

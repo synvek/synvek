@@ -11,28 +11,32 @@ use base64::{
 use hf_hub::{Cache, Repo, RepoType};
 use libloading::{Library, Symbol};
 use std::collections::HashMap;
-use std::ffi::{CString, OsString, c_char, c_int, CStr};
+use std::ffi::{CString, OsString, c_char, c_int, CStr, c_uchar};
 use std::marker::PhantomData;
 use std::path::PathBuf;
-use std::{panic, ptr};
+use std::{mem, panic, ptr};
 use std::panic::AssertUnwindSafe;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
+use futures::future::Lazy;
+use serde::{Deserialize, Serialize};
+use regex::Regex;
 use crate::fetch_service::Task;
+use crate::utils::DataUrlDecoder;
 
 #[repr(C)]
 pub struct ImageOutput {
     _private: PhantomData<()>,
 }
 
-type GenerateImageData = unsafe fn(c_int, *const *const c_char) -> *mut ImageOutput;
+type GenerateImageData = unsafe fn(c_int, *const *const c_char, *const RefImageDataArray) -> *mut ImageOutput;
 type GetImageCount = unsafe fn(*mut ImageOutput) -> usize;
 type GetImageDataLength = unsafe fn(*mut ImageOutput, usize) -> usize;
 type GetImageData = unsafe fn(*mut ImageOutput, usize) -> *const u8;
 type FreeImageData = unsafe fn(*mut ImageOutput);
 type InitLogCallback = unsafe fn(Option<extern "C" fn(i32, *const c_char)>) -> ();
 type CleanupLogCallback = unsafe fn() -> ();
-
+type CleanupRefImagesCallback = extern "C" fn(*mut RefImageDataArray);
 
 #[derive(Debug, Clone, Default)]
 pub struct SdConfig {
@@ -43,6 +47,14 @@ pub struct SdConfig {
     pub path: String,
     pub is_spawn_process: bool,
     pub acceleration: String,
+}
+
+/// Request for edit image
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct RefImage {
+    pub width: usize,
+    pub height: usize,
+    pub data: String,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -56,7 +68,8 @@ pub struct GenerationArgs {
     pub format: String,
     pub negative_prompt: String,
     pub steps_count: i32,
-    pub cfg_scale: f32
+    pub cfg_scale: f32,
+    pub ref_images: Vec<RefImage>
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -444,12 +457,18 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     .iter()
                     .map(|s| CString::new(s.as_str()))
                     .collect::<anyhow::Result<Vec<_>, _>>();
+                let ref_image_array_wrapper = RefImageDataArrayWrapper::new(generation_args.ref_images.clone());
+                if ref_image_array_wrapper.is_err() {
+                    panic!("Failed to create reference images wrapper");
+                }
+                let c_ref_images_wrapper = ref_image_array_wrapper.unwrap();
+
                 if let Ok(c_start_strings) = c_start_strings {
                     let raw_ptrs: Vec<*const c_char> =
                         c_start_strings.iter().map(|cs| cs.as_ptr()).collect();
                     init_log_callback(Some(handle_stable_diffusion_cpp_log_callback));
                     let image_output =
-                        generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr());
+                        generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr(), c_ref_images_wrapper.as_ptr());
 
                     if image_output == null_mut() {
                         panic!("Failed to get string array from DLL");
@@ -478,4 +497,94 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         }
     }
     output
+}
+
+#[repr(C)]
+pub struct RefImageData {
+    pub width: c_int,
+    pub height: c_int,
+    pub data: *const c_uchar,
+    pub length: c_int,
+}
+
+#[repr(C)]
+pub struct RefImageDataArray {
+    images: *const RefImageData,
+    length: c_int,
+    capacity: c_int,
+}
+
+// Wrapper for memory in Rust
+pub struct RefImageDataArrayWrapper {
+    data_vec: Vec<Vec<u8>>,        // original
+    images: Vec<RefImageData>, // c structures after convert
+    array: RefImageDataArray,        // final data structure
+}
+
+impl RefImageDataArrayWrapper {
+    pub fn new(source: Vec<RefImage>) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut data: Vec<Vec<u8>> = vec![];
+        for (i, image) in source.iter().enumerate() {
+            let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
+            let img_length = img_data.len();
+            data.push(img_data);
+        }
+
+        let mut images = Vec::with_capacity(data.len());
+        let mut total_size = 0;
+
+        for (i, item) in data.iter().enumerate() {
+            let binary_data = RefImageData {
+                width: 0,
+                height: 0,
+                data: item.as_ptr() as *const c_uchar,
+                length: item.len() as c_int,
+
+            };
+            images.push(binary_data);
+            total_size += item.len();
+        }
+
+        let array = RefImageDataArray {
+            images: images.as_ptr(),
+            length: images.len() as c_int,
+            capacity: images.len() as c_int,
+        };
+
+        Ok(Self {
+            data_vec: data,
+            images,
+            array,
+        })
+    }
+
+    pub fn as_ptr(&self) -> *const RefImageDataArray {
+        &self.array
+    }
+
+    pub fn as_mut_data(&mut self) -> &mut Vec<Vec<u8>> {
+        &mut self.data_vec
+    }
+
+    pub fn len(&self) -> usize {
+        self.data_vec.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.data_vec.is_empty()
+    }
+
+    pub fn total_size(&self) -> usize {
+        self.data_vec.iter().map(|v| v.len()).sum()
+    }
+
+    pub fn get(&self, index: usize) -> Option<&[u8]> {
+        self.data_vec.get(index).map(|v| v.as_slice())
+    }
+
+}
+
+impl Drop for RefImageDataArrayWrapper {
+    fn drop(&mut self) {
+    }
 }

@@ -737,8 +737,20 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         })
       }
     })
-
-    const response = await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale)
+    const refImages = fileList.map((file, index) => {
+      const fileContent = fileContentMap.get(file.uid)
+      const fileContentText: string = fileContent ? fileContent : ''
+      //width and height can be ignored, backend will force to compute them later
+      return {
+        width: 0,
+        height: 0,
+        data: fileContentText,
+      }
+    })
+    const response =
+      chatAttachments.length > 0
+        ? await RequestUtils.editImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale, refImages)
+        : await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale)
     await WorkspaceUtils.handleRequest(
       messageApi,
       response,

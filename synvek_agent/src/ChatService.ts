@@ -284,6 +284,33 @@ class LLMService {
     }
   }
 
+  public static async editImage(userMessage: string, modelName: string, count: number, width: number, height: number,
+                                    seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number, refImages: {width: number, height: number, data: string}[]) {
+    const modelServer = LLMService.buildGenerate(modelName)
+    if(modelServer) {
+      const isDefaultBackend = modelServer.backend === 'default'
+      const settings = LLMService.getSettings()
+      const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/edit`
+      if (isDefaultBackend) {
+        try {
+          const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
+          return imageResponse
+        } catch(error) {
+          return `Internal error: ${error}`
+        }
+      } else {
+        try {
+          const imageResponse = await RequestUtils.editSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format, negativePrompt, stepsCount, cfgScale, refImages)
+          return imageResponse
+        } catch(error) {
+          return `Internal error: ${error}`
+        }
+      }
+    } else {
+      return "Model server not found"
+    }
+  }
+
   public static async generateSpeech(userMessage: string, modelName: string, speed: number, format: string) {
     const modelServer = LLMService.buildGenerate(modelName)
     if(modelServer) {
@@ -715,6 +742,49 @@ export const chatService = new Elysia()
         negativePrompt: t.String(),
         stepsCount: t.Number(),
         cfgScale: t.Number(),
+      }),
+    },
+  )
+  .post(
+    '/image-edit',
+    async ({ body, store: chatData, set }) => {
+      set.headers['content-type'] = 'text/plain; charset=UTF-8'
+      const imageResponse = await LLMService.editImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale, body.refImages)
+      if(typeof imageResponse !== 'string') {
+        if (imageResponse.status === 200 && imageResponse.data.created) {
+          // deno-lint-ignore no-explicit-any
+          const data = imageResponse.data.data.map((item: any) => item.b64_json)
+          return SystemUtils.buildResponse(true, data)
+        } else if (imageResponse.status === 200 && imageResponse.data.data.length > 0) {
+          // deno-lint-ignore no-explicit-any
+          const data = imageResponse.data.data.map((item: any) => item.b64_json)
+          return SystemUtils.buildResponse(true, data)
+        } else if (imageResponse.status === 200) {
+          return SystemUtils.buildResponse(false, null, `Failed to generate image with message`)
+        } else {
+          return SystemUtils.buildResponse(false, null, 'System error occurs, please check with administrator')
+        }
+      } else {
+        return SystemUtils.buildResponse(false, null, imageResponse)
+      }
+    },
+    {
+      body: t.Object({
+        userMessage: t.String(),
+        modelName: t.String(),
+        count: t.Number(),
+        width: t.Number(),
+        height: t.Number(),
+        seed: t.Number(),
+        format: t.String(),
+        negativePrompt: t.String(),
+        stepsCount: t.Number(),
+        cfgScale: t.Number(),
+        refImages: t.Array(t.Object({
+          width: t.Number(),
+          height: t.Number(),
+          data: t.String()
+        })),
       }),
     },
   )

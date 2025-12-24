@@ -1,10 +1,118 @@
 use std::env;
 use std::error::Error;
 use std::ffi::{CString, c_char};
+use base64::Engine;
+use base64::engine::general_purpose;
 use libloading::Library;
+use once_cell::sync::Lazy;
+use regex::Regex;
 use crate::common;
 use crate::config::Config;
 
+static DATA_URL_REGEX: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r"^data:(?P<mime>image/[^;]+);base64,(?P<data>.+)$").unwrap()
+});
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum ImageFormat {
+    Png,
+    Jpeg,
+    Gif,
+    Webp,
+    Bmp,
+    Other(String),
+}
+
+impl ImageFormat {
+    pub fn from_mime(mime: &str) -> Self {
+        match mime {
+            "image/png" => ImageFormat::Png,
+            "image/jpeg" | "image/jpg" => ImageFormat::Jpeg,
+            "image/gif" => ImageFormat::Gif,
+            "image/webp" => ImageFormat::Webp,
+            "image/bmp" => ImageFormat::Bmp,
+            other => ImageFormat::Other(other.to_string()),
+        }
+    }
+
+    pub fn extension(&self) -> &str {
+        match self {
+            ImageFormat::Png => "png",
+            ImageFormat::Jpeg => "jpg",
+            ImageFormat::Gif => "gif",
+            ImageFormat::Webp => "webp",
+            ImageFormat::Bmp => "bmp",
+            ImageFormat::Other(_) => "bin",
+        }
+    }
+}
+
+pub struct DataUrlDecoder;
+
+impl DataUrlDecoder {
+    pub fn decode(data_url: &str) -> Result<(Vec<u8>, ImageFormat), String> {
+        let captures = DATA_URL_REGEX.captures(data_url)
+            .ok_or_else(|| "Invalid data URL format".to_string())?;
+
+        let mime_type = captures.name("mime")
+            .ok_or_else(|| "No MIME type found".to_string())?
+            .as_str();
+
+        let base64_data = captures.name("data")
+            .ok_or_else(|| "No base64 data found".to_string())?
+            .as_str();
+
+        //tracing::debug!("BASE64 data: {}", base64_data);
+        let decoded = general_purpose::STANDARD.decode(base64_data)
+            .map_err(|e| format!("Base64 decode error: {}", e))?;
+
+        let format = ImageFormat::from_mime(mime_type);
+
+        if let Err(e) = Self::validate_image(&decoded, &format) {
+            eprintln!("Warning: Image validation failed: {}", e);
+        }
+
+        Ok((decoded, format))
+    }
+
+    pub fn decode_png(data_url: &str) -> Result<Vec<u8>, String> {
+        let (data, format) = Self::decode(data_url)?;
+
+        if format != ImageFormat::Png {
+            return Err(format!("Expected PNG, got {:?}", format));
+        }
+
+        Ok(data)
+    }
+
+    fn validate_image(data: &[u8], format: &ImageFormat) -> Result<(), String> {
+        if data.len() < 8 {
+            return Err("Data too short".to_string());
+        }
+
+        match format {
+            ImageFormat::Png => {
+                if data[0..8] != [137, 80, 78, 71, 13, 10, 26, 10] {
+                    return Err("Invalid PNG signature".to_string());
+                }
+            }
+            ImageFormat::Jpeg => {
+                if data[0..3] != [0xFF, 0xD8, 0xFF] {
+                    return Err("Invalid JPEG signature".to_string());
+                }
+            }
+            ImageFormat::Gif => {
+                if !(data.starts_with(b"GIF87a") || data.starts_with(b"GIF89a")) {
+                    return Err("Invalid GIF signature".to_string());
+                }
+            }
+            _ => {
+            }
+        }
+
+        Ok(())
+    }
+}
 pub fn format_file_size(bytes: u64, binary_units: bool) -> String {
     const BINARY_UNITS: [&str; 4] = ["B", "KiB", "MiB", "GiB"];
     const DECIMAL_UNITS: [&str; 4] = ["B", "KB", "MB", "GB"];

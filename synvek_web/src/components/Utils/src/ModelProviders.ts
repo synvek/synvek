@@ -59,6 +59,8 @@ export interface ModelProvider {
   supportStepsCount?: boolean
   supportCfgScale?: boolean
   supportNegativePrompt?: boolean
+  supportDiffusionFA?: boolean
+  supportOffloadedToCPU?: boolean
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -599,6 +601,8 @@ export const modelProviders: ModelProvider[] = [
     description: 'Qwen2-VL details',
     accessTokenRequired: true,
     extraArgs: [],
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Phi-4-multimodal-instruct',
@@ -796,6 +800,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 4,
     defaultCfgScale: 1.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen/Qwen3-0.6B-GGUF',
@@ -1156,6 +1162,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 4,
     defaultCfgScale: 1.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'DeepSeek-R1-Distill-Llama-70B-GGUF',
@@ -2652,6 +2660,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2690,6 +2699,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2728,6 +2738,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'stable-diffusion-3.5-large',
@@ -2766,6 +2777,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'stable-diffusion-3.5-medium',
@@ -2804,6 +2816,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'stable-diffusion-3.5-large-turbo',
@@ -2842,6 +2855,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
   },
   {
     modelId: 'Qwen3-0.6B',
@@ -3085,6 +3099,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'leejet-Ovis-Image-7B-GGUF',
@@ -3132,6 +3148,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 5.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'leejet-Z-Image-Turbo-GGUF',
@@ -3229,6 +3247,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 1.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Z-Image-Turbo-GGUF',
@@ -3326,6 +3346,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 1.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen-Image-GGUF',
@@ -3473,6 +3495,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 2.5,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen-Image-GGUF',
@@ -3767,6 +3791,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 2.5,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen-Image-Edit-GGUF',
@@ -3914,6 +3940,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 2.5,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen-Image-Edit-2509-GGUF',
@@ -4061,6 +4089,8 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 2.5,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
   {
     modelId: 'Qwen-Image-Edit-2509-GGUF',
@@ -4208,5 +4238,7 @@ export const modelProviders: ModelProvider[] = [
     supportNegativePrompt: true,
     defaultStepsCount: 20,
     defaultCfgScale: 2.5,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
   },
 ]

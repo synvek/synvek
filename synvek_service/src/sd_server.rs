@@ -48,7 +48,8 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/v1")
             .service(get_status)
-            .service(crate::sd_api::generate),
+            .service(crate::sd_api::generate)
+            .service(crate::sd_api::edit_image),
     );
 }
 

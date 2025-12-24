@@ -22,6 +22,7 @@ import type {
   DocumentsType,
   FetchStatusData,
   Folder,
+  ImageData,
   KnowledgeListType,
   ListFetchData,
   MCPServer,
@@ -51,10 +52,14 @@ import type {
   Validation,
   WorkspacesType,
 } from './src/RequestUtils'
+export * from './src/BackgroundEnhancement'
 export { Consts } from './src/Consts'
 export { CurrentWorkspace, WorkMode } from './src/CurrentWorkspace'
+export * from './src/EnhancedIcon'
 export { useGlobalContext } from './src/GlobalContext'
+export * from './src/IconUtils'
 export { Knowledge } from './src/Knowledge'
+export * from './src/LoadingStates'
 export { modelProviders } from './src/ModelProviders'
 export { Provider } from './src/Provider'
 export { ProviderUtils } from './src/ProviderUtils'
@@ -63,10 +68,6 @@ export { OSType, SystemUtils } from './src/SystemUtils'
 export { ThemeUtils } from './src/ThemeUtils'
 export { usePluginBridge } from './src/usePluginBridge'
 export { WorkspaceUtils } from './src/WorkspaceUtils'
-export * from './src/LoadingStates'
-export * from './src/IconUtils'
-export * from './src/EnhancedIcon'
-export * from './src/BackgroundEnhancement'
 export {
   Attachment,
   Chat,
@@ -80,6 +81,7 @@ export {
   DocumentsType,
   FetchStatusData,
   Folder,
+  ImageData,
   ImageSize,
   InvalidToolCall,
   KnowledgeListType,

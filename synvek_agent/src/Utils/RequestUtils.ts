@@ -181,6 +181,30 @@ export class RequestUtils {
     return axios.post(`${serverAddress}`, data, config)
   }
 
+
+  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number, refImages: {width: number, height: number, data: string}[]) {
+    const data = {
+      model: modelName,
+      prompt: message,
+      response_format: "B64Json",
+      n: count,
+      width: width,
+      height: height,
+      seed: seed,
+      format: format,
+      negative_prompt: negativePrompt,
+      steps_count: stepsCount,
+      cfg_scale: cfgScale,
+      ref_images: refImages,
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    return axios.post(`${serverAddress}`, data, config)
+  }
+
   public static generateSpeech(serverAddress: string, message: string, modelName: string, speed: number, format: string) {
     const data = {
       model: modelName,

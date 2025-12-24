@@ -2,9 +2,9 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use actix_web::{get, post, HttpRequest};
 use serde::{Deserialize, Serialize};
 use crate::{process_service, sd_service};
-use crate::sd_service::GenerationArgs;
+use crate::sd_service::{GenerationArgs, RefImage};
 
-/// Request for Start Model Server
+/// Request for Generate Image
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ImageGenerationRequest {
     pub model: String,
@@ -16,7 +16,23 @@ pub struct ImageGenerationRequest {
     pub format: String,
     pub negative_prompt: String,
     pub steps_count: i32,
-    pub cfg_scale: f32
+    pub cfg_scale: f32,
+    pub ref_images: Vec<RefImage>,
+}
+/// Request for edit image
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ImageEditRequest {
+    pub model: String,
+    pub prompt: String,
+    pub n: usize,
+    pub width: usize,
+    pub height: usize,
+    pub seed: i32,
+    pub format: String,
+    pub negative_prompt: String,
+    pub steps_count: i32,
+    pub cfg_scale: f32,
+    pub ref_images: Vec<RefImage>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -28,6 +44,22 @@ pub struct ImageData {
 /// Response for Start Model Server
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ImageGenerationResponse {
+
+    /// Status
+    pub success: bool,
+
+    /// Code
+    pub code: String,
+
+    /// Message
+    pub message: String,
+
+    /// Data
+    pub data: Vec<ImageData>,
+
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ImageEditResponse {
 
     /// Status
     pub success: bool,
@@ -55,7 +87,8 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         format: req.format.clone(),
         negative_prompt: req.negative_prompt.clone(),
         steps_count: req.steps_count,
-        cfg_scale: req.cfg_scale
+        cfg_scale: req.cfg_scale,
+        ref_images: req.ref_images.clone(),
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -67,6 +100,39 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
        image_data.push(image_item);
     });
     let response = ImageGenerationResponse {
+        success: true,
+        code: "".to_string(),
+        message: "".to_string(),
+        data: image_data,
+    };
+    HttpResponse::Ok().json(response)
+}
+
+#[post("/images/edit")]
+async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
+    let image_edit_args = GenerationArgs {
+        model: req.model.clone(),
+        prompt: req.prompt.clone(),
+        n: req.n,
+        width: req.width,
+        height: req.height,
+        seed: req.seed,
+        format: req.format.clone(),
+        negative_prompt: req.negative_prompt.clone(),
+        steps_count: req.steps_count,
+        cfg_scale: req.cfg_scale,
+        ref_images: req.ref_images.clone()
+    };
+    let image_output = sd_service::generate_image(&image_edit_args);
+    let mut image_data: Vec<ImageData> = vec![];
+    image_output.iter().for_each(|output| {
+        let image_item = ImageData {
+            url: None,
+            b64_json: Some(output.clone()),
+        };
+        image_data.push(image_item);
+    });
+    let response = ImageEditResponse {
         success: true,
         code: "".to_string(),
         message: "".to_string(),
