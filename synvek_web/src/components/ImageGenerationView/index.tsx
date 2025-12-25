@@ -3,7 +3,7 @@ import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'rea
 
 import { Consts, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { ArrowUpOutlined, LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
@@ -11,6 +11,8 @@ import {
   Collapse,
   ConfigProvider,
   Divider,
+  GetProp,
+  Image,
   Input,
   InputNumber,
   message,
@@ -22,10 +24,17 @@ import {
   theme,
   Tooltip,
   Typography,
+  Upload,
+  UploadFile,
+  UploadProps,
 } from 'antd'
+import { UploadChangeParam } from 'antd/es/upload'
 import moment from 'moment/moment'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+
 const { Text, Title } = Typography
 const { TextArea } = Input
 
@@ -66,6 +75,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileContentMap, setFileContentMap] = useState<Map<string, string>>(new Map())
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
   let enableNegativePrompt: boolean | undefined = undefined
@@ -307,6 +321,54 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CFG_SCALE, '' + value)
   }
 
+  const getFileBase64FromFile = (file: FileType, callback: (content: string) => void) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result as string))
+    reader.readAsDataURL(file)
+  }
+
+  const handleFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    fileContentMap.set(info.file.uid, content)
+    setFileContentMap(new Map([...fileContentMap]))
+  }
+
+  const handleUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setFileList([...info.fileList])
+  }
+
+  const removeFile = (uid: string) => {
+    setFileList(fileList.filter((file) => file.uid !== uid))
+    fileContentMap.delete(uid)
+    setFileContentMap(new Map([...fileContentMap]))
+  }
+
+  const getBase64 = (file: FileType): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType)
+    }
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
+  }
   return (
     <div className={styles.imageGenerationView} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
@@ -333,7 +395,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   },
                 }}
               >
-                <Collapse ghost={false} defaultActiveKey={['general', 'advanced']} bordered={false} className={styles.imageGenerationPropertyRegion}>
+                <Collapse ghost={false} defaultActiveKey={['general', 'advanced', 'filter']} bordered={false} className={styles.imageGenerationPropertyRegion}>
                   <Collapse.Panel
                     key={'general'}
                     header={
@@ -493,16 +555,38 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       </div>
                     </div>
                   </Collapse.Panel>
-                  {/*<Collapse.Panel*/}
-                  {/*  key={'style'}*/}
-                  {/*  header={*/}
-                  {/*    <div style={{ fontWeight: 'bold' }}>*/}
-                  {/*      <FormattedMessage id={'image-generation-view.setting-category-style'} />*/}
-                  {/*    </div>*/}
-                  {/*  }*/}
-                  {/*>*/}
-                  {/*  <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}></div>*/}
-                  {/*</Collapse.Panel>*/}
+                  <Collapse.Panel
+                    key={'filter'}
+                    header={
+                      <div style={{ fontWeight: 'bold' }}>
+                        <FormattedMessage id={'image-generation-view.setting-category-input'} />
+                      </div>
+                    }
+                  >
+                    <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
+                      <Upload onChange={handleUploadChange} onPreview={handlePreview} listType="picture-card" fileList={fileList} showUploadList={true}>
+                        {fileList.length > 5 ? null : (
+                          <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>
+                              <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                            </div>
+                          </button>
+                        )}
+                      </Upload>
+                      {previewImage && (
+                        <Image
+                          styles={{ root: { display: 'none' } }}
+                          preview={{
+                            open: previewOpen,
+                            onOpenChange: (visible) => setPreviewOpen(visible),
+                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                          }}
+                          src={previewImage}
+                        />
+                      )}
+                    </div>
+                  </Collapse.Panel>
                   {/*<Collapse.Panel*/}
                   {/*  key={'filter'}*/}
                   {/*  header={*/}
@@ -514,10 +598,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   {/*  <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}></div>*/}
                   {/*</Collapse.Panel>*/}
                   {/*<Collapse.Panel*/}
-                  {/*  key={'advanced'}*/}
+                  {/*  key={'style'}*/}
                   {/*  header={*/}
                   {/*    <div style={{ fontWeight: 'bold' }}>*/}
-                  {/*      <FormattedMessage id={'image-generation-view.setting-category-advanced'} />*/}
+                  {/*      <FormattedMessage id={'image-generation-view.setting-category-style'} />*/}
                   {/*    </div>*/}
                   {/*  }*/}
                   {/*>*/}
