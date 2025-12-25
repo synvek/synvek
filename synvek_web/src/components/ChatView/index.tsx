@@ -17,7 +17,6 @@ import {
   modelProviders,
   RequestUtils,
   SystemUtils,
-  Tag,
   ToolCall,
   ToolCallChunk,
   useGlobalContext,
@@ -117,6 +116,10 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultTopP = oldTopN ? Number.parseFloat(oldTopN) : Consts.CHAT_TOP_P_DEFAULT
   const oldContext = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_CONTEXT)
   const defaultContext = oldContext ? Number.parseFloat(oldContext) : Consts.CHAT_CONTEXT_DEFAULT
+  const oldStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT)
+  const defaultStepsCount = oldStepsCount ? Number.parseInt(oldStepsCount) : Consts.CHAT_IMAGE_STEPS_COUNT_DEFAULT
+  const oldCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE)
+  const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.CHAT_IMAGE_CFG_SCALE_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -131,12 +134,17 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
 
     currentWorkspace.onConversionListVisibleChange(handleConversionListVisibleChange)
     currentWorkspace.onSelectedConversionChangeEvent(handleSelectedConversionChange)
+    currentWorkspace.onSettingsChanged(handleSettingChange)
     return () => {
       currentWorkspace.removeConversionListVisibleChangeListener(handleConversionListVisibleChange)
       currentWorkspace.removeSelectedConversionChangeEventListener(handleSelectedConversionChange)
+      currentWorkspace.removeSettingsChangedListener(handleSettingChange)
     }
   })
 
+  const handleSettingChange = () => {
+    setForceUpdate(forceUpdate + 1)
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleUserTextChange = (event: { target: { value: string } }, newValue: string, newPlainTextValue: string, mentions: MentionItem[]) => {
     if (!isCompositing.current) {
@@ -153,10 +161,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     setHistoryIndex(Math.min(history.length - 1, historyIndex + 1))
   }
 
-  const mentionItems: User[] = [{ id: 'abc', display: 'bcd', avatar: 'https://abc.com' }]
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const tags: Tag[] = [{ id: 'abc', display: 'bcccc' }]
+  const mentionItems: User[] = [] // [{ id: 'abc', display: 'bcd', avatar: 'https://abc.com' }]
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleUserMention = useCallback((id: string | number, display: string) => {}, [])
@@ -723,16 +728,14 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       currentWorkspace.selectedConversionData.scrollTop = chatSectionsRef.current.scrollHeight
     }
     const seed = SystemUtils.generateRandomInteger(1, 999999)
-    let stepsCount: number = Consts.IMAGE_STEPS_COUNT_DEFAULT
-    let cfgScale: number = Consts.IMAGE_CFG_SCALE_DEFAULT
+    let stepsCount: number = defaultStepsCount
+    let cfgScale: number = defaultCfgScale
     let supportImageEdit: boolean = false
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultTextModel) {
         modelProviders.forEach((modelProvider) => {
           modelProvider.modelOptions.forEach((modelOption) => {
             if (modelOption.name === task.model_id) {
-              stepsCount = modelProvider.defaultStepsCount ? modelProvider.defaultStepsCount : Consts.IMAGE_STEPS_COUNT_DEFAULT
-              cfgScale = modelProvider.defaultCfgScale ? modelProvider.defaultCfgScale : Consts.IMAGE_CFG_SCALE_DEFAULT
               if (modelProvider.supportImageEdit) {
                 supportImageEdit = true
               }

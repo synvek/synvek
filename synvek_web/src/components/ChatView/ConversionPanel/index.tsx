@@ -9,6 +9,7 @@ import {
   Conversion,
   ConversionTreeNode,
   Folder,
+  modelProviders,
   RequestUtils,
   ResponseMetadata,
   UsageMetadata,
@@ -63,6 +64,34 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const defaultTopP = oldTopN ? Number.parseFloat(oldTopN) : Consts.CHAT_TOP_P_DEFAULT
   const oldContext = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_CONTEXT)
   const defaultContext = oldContext ? Number.parseFloat(oldContext) : Consts.CHAT_CONTEXT_DEFAULT
+  const oldStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT)
+  const defaultStepsCount = oldStepsCount ? Number.parseInt(oldStepsCount) : Consts.CHAT_IMAGE_STEPS_COUNT_DEFAULT
+  const oldCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE)
+  const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.CHAT_IMAGE_CFG_SCALE_DEFAULT
+  const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
+  const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
+  const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+
+  let modelDefaultStepsCount: number | undefined = undefined
+  let modelDefaultCfgScale: number | undefined = undefined
+  let enableStepsCount: boolean | undefined = undefined
+  let enableCfgScale: boolean | undefined = undefined
+  if (currentWorkspace.settings.defaultImageGenerationModel) {
+    currentWorkspace.tasks.forEach((task) => {
+      if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
+        modelProviders.forEach((modelProvider) => {
+          modelProvider.modelOptions.forEach((modelOption) => {
+            if (modelOption.name === task.model_id) {
+              modelDefaultStepsCount = modelProvider.defaultStepsCount
+              modelDefaultCfgScale = modelProvider.defaultCfgScale
+              enableStepsCount = modelProvider.supportStepsCount
+              enableCfgScale = modelProvider.supportCfgScale
+            }
+          })
+        })
+      }
+    })
+  }
 
   useEffect(() => {
     if (dirty) {
@@ -75,9 +104,11 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     }
     currentWorkspace.onAddFolderEvent(handleAddFolderOnTop)
     currentWorkspace.onAddConversionEvent(handleAddConversionOnTop)
+    currentWorkspace.onSettingsChanged(handleDefaultServerChange)
     return () => {
       currentWorkspace.removeAddFolderEventListener(handleAddFolderOnTop)
       currentWorkspace.removeAddConversionEventListener(handleAddConversionOnTop)
+      currentWorkspace.removeSettingsChangedListener(handleDefaultServerChange)
     }
   })
 
@@ -114,6 +145,10 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     if (changed) {
       generateTreeData(newFolders, newConversions)
     }
+  }
+
+  const handleDefaultServerChange = () => {
+    setForceUpdate(!forceUpdate)
   }
 
   const populateChatData = (chatData: Chat[]) => {
@@ -898,7 +933,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   }
 
   const onChange = (key: string) => {
-    console.log(key)
+    //console.log(key)
   }
 
   const handleTemperatureChange = (value: number) => {
@@ -926,6 +961,33 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     10: '10',
     15: '15',
     20: '20',
+  }
+
+  const stepsCountMarks: SliderSingleProps['marks'] = {
+    1: '1',
+    20: '20',
+    40: '40',
+    60: '60',
+    80: '80',
+    100: '100',
+  }
+
+  const cfgScaleMarks: SliderSingleProps['marks'] = {
+    0: '0',
+    10: '10',
+    20: '20',
+  }
+
+  const handleStepsCountChange = (value: number) => {
+    setStepsCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT, '' + value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleCfgScaleSChange = (value: number) => {
+    setCfgScale(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE, '' + value)
+    currentWorkspace.triggerSettingsChanged()
   }
 
   const chatSettingView = (
@@ -968,6 +1030,60 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
           </div>
         }
         value={<Slider min={0} max={20} step={1} defaultValue={defaultContext} marks={contextMarks} onChange={handleContextChange} />}
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-steps-count'} />
+            <Tooltip
+              title={intl.formatMessage({ id: 'conversion-panel.settings.image-steps-count.tooltip' }) + (modelDefaultStepsCount ? modelDefaultStepsCount : '')}
+            >
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <Slider
+            min={1}
+            max={100}
+            step={1}
+            disabled={!enableStepsCount}
+            defaultValue={stepsCount}
+            value={stepsCount}
+            marks={stepsCountMarks}
+            onChange={handleStepsCountChange}
+          />
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-cfg-scale'} />
+            <Tooltip
+              title={intl.formatMessage({ id: 'conversion-panel.settings.image-cfg-scale.tooltip' }) + (modelDefaultCfgScale ? modelDefaultCfgScale : '')}
+            >
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <Slider
+            min={0}
+            max={20.0}
+            step={0.5}
+            disabled={!enableCfgScale}
+            defaultValue={cfgScale}
+            value={cfgScale}
+            marks={cfgScaleMarks}
+            onChange={handleCfgScaleSChange}
+          />
+        }
         visible={true}
         enableDivider={false}
         columnMode={true}
