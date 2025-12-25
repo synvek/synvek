@@ -172,6 +172,7 @@ export class RequestUtils {
       negative_prompt: negativePrompt,
       steps_count: stepsCount,
       cfg_scale: cfgScale,
+      ref_images: [],
     }
     const config = {
       headers: {
