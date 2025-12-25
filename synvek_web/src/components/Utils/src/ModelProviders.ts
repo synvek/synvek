@@ -61,6 +61,7 @@ export interface ModelProvider {
   supportNegativePrompt?: boolean
   supportDiffusionFA?: boolean
   supportOffloadedToCPU?: boolean
+  supportImageEdit?: boolean
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -4091,6 +4092,7 @@ export const modelProviders: ModelProvider[] = [
     defaultCfgScale: 2.5,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
+    supportImageEdit: true,
   },
   {
     modelId: 'Qwen-Image-Edit-2509-GGUF',
@@ -4240,5 +4242,6 @@ export const modelProviders: ModelProvider[] = [
     defaultCfgScale: 2.5,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
+    supportImageEdit: true,
   },
 ]

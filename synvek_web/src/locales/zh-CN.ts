@@ -22,6 +22,7 @@ export default {
   'chat-view.message-copy-not-supported': '当前页面复制不支持',
   'chat-view.message-generate-failure': '图像生成失败:',
   'chat-view.message-generate-error': '图像生成错误:',
+  'chat-view.message-generate-warning-with-attachments': '当前的图像生成不支持附件，附件会被忽略',
   'chat-view.message-no-default-model-found': '未设置模型',
   'chat-view.message-model-not-started': '模型未启动',
   'chat-view.thinking': '深度思考中',

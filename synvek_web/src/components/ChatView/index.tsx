@@ -250,7 +250,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const handleCancelChat = async () => {
     chatStreamCancelled.current = true
     setForceUpdate(forceUpdate + 1)
-    console.log(`Checking chat stream 1 = ${chatStreaming}, ${chatStreamCancelled} `)
+    //console.log(`Checking chat stream 1 = ${chatStreaming}, ${chatStreamCancelled} `)
   }
 
   const handleChat = async () => {
@@ -287,20 +287,20 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     //chatStreaming.current = true
     setChatStreaming(true)
     setForceUpdate(forceUpdate + 1)
-    console.log('prepare send chat request：' + new Date())
-    console.log(`Checking chat stream 2= ${chatStreaming}, ${chatStreamCancelled} `)
+    //console.log('prepare send chat request：' + new Date())
+    //console.log(`Checking chat stream 2= ${chatStreaming}, ${chatStreamCancelled} `)
     if (isDiffusionType) {
       await handleGenerateImageRequest(chatContent, chatAttachments, currentWorkspace.settings.defaultTextModel)
       //chatStreaming.current = false
       setChatStreaming(false)
       setForceUpdate(forceUpdate + 1)
-      console.log(`Checking chat stream 3= ${chatStreaming}, ${chatStreamCancelled} `)
+      //console.log(`Checking chat stream 3= ${chatStreaming}, ${chatStreamCancelled} `)
     } else if (isSpeechType) {
       await handleGenerateSpeechRequest(chatContent, chatAttachments, currentWorkspace.settings.defaultTextModel)
       //chatStreaming.current = false
       setChatStreaming(false)
       setForceUpdate(forceUpdate + 1)
-      console.log(`Checking chat stream 4= ${chatStreaming}, ${chatStreamCancelled} `)
+      //console.log(`Checking chat stream 4= ${chatStreaming}, ${chatStreamCancelled} `)
     } else {
       handleChatRequest(chatContent, chatAttachments, currentWorkspace.settings.defaultTextModel)
     }
@@ -383,7 +383,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       () => {},
       () => {},
     )
-    console.log(`Check attachments === ${includeAttachments}`)
+    //console.log(`Check attachments === ${includeAttachments}`)
     if (includeAttachments && fileList.length > 0 && chatId) {
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i]
@@ -725,6 +725,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const seed = SystemUtils.generateRandomInteger(1, 999999)
     let stepsCount: number = Consts.IMAGE_STEPS_COUNT_DEFAULT
     let cfgScale: number = Consts.IMAGE_CFG_SCALE_DEFAULT
+    let supportImageEdit: boolean = false
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultTextModel) {
         modelProviders.forEach((modelProvider) => {
@@ -732,12 +733,15 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             if (modelOption.name === task.model_id) {
               stepsCount = modelProvider.defaultStepsCount ? modelProvider.defaultStepsCount : Consts.IMAGE_STEPS_COUNT_DEFAULT
               cfgScale = modelProvider.defaultCfgScale ? modelProvider.defaultCfgScale : Consts.IMAGE_CFG_SCALE_DEFAULT
+              if (modelProvider.supportImageEdit) {
+                supportImageEdit = true
+              }
             }
           })
         })
       }
     })
-    const refImages = fileList.map((file, index) => {
+    const refImages = fileList.map((file) => {
       const fileContent = fileContentMap.get(file.uid)
       const fileContentText: string = fileContent ? fileContent : ''
       //width and height can be ignored, backend will force to compute them later
@@ -747,8 +751,11 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         data: fileContentText,
       }
     })
+    if (!supportImageEdit && chatAttachments.length > 0) {
+      await WorkspaceUtils.showMessage(messageApi, 'warning', intl.formatMessage({ id: 'chat-view.message-generate-warning-with-attachments' }))
+    }
     const response =
-      chatAttachments.length > 0
+      chatAttachments.length > 0 && supportImageEdit
         ? await RequestUtils.editImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale, refImages)
         : await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale)
     await WorkspaceUtils.handleRequest(

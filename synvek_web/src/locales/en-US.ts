@@ -22,6 +22,7 @@ export default {
   'chat-view.message-copy-not-supported': 'Copy not supported here',
   'chat-view.message-generate-failure': 'Generation failed with reason:',
   'chat-view.message-generate-error': 'Generation failed with error:',
+  'chat-view.message-generate-warning-with-attachments': 'Image generation does not support attachments and any attachments will be ignored',
   'chat-view.message-no-default-model-found': 'No model found',
   'chat-view.message-model-not-started': 'Model not started',
   'chat-view.thinking': 'Thinking',
