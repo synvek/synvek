@@ -100,6 +100,7 @@ export default {
   'header.navigator.no-default-vision-model-found': '未找到视觉模型',
   'header.navigator.title.local-models': '本地模型',
   'header.navigator.title.local-models-not-found': '未检测到额外本地模型',
+  'image-generation-view.message-generate-warning-with-attachments': '当前的图像生成不支持引用图片，图片附件会被忽略',
   'image-generation-view.message-model-not-started': '模型未启动',
   'image-generation-view.message-no-default-model-found': '默认模型未检测到',
   'image-generation-view.message-user-prompt-is-required': '提示词不可为空',

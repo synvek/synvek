@@ -101,6 +101,7 @@ export default {
   'header.navigator.no-default-vision-model-found': 'No text model',
   'header.navigator.title.local-models': 'Local models',
   'header.navigator.title.local-models-not-found': 'No local models detected',
+  'image-generation-view.message-generate-warning-with-attachments': 'Image generation does not support input images and any input images will be ignored',
   'image-generation-view.message-model-not-started': 'Model not started',
   'image-generation-view.message-no-default-model-found': 'Default model not found',
   'image-generation-view.message-user-prompt-is-required': 'User prompt is required.',

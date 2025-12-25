@@ -85,6 +85,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   let enableNegativePrompt: boolean | undefined = undefined
   let enableStepsCount: boolean | undefined = undefined
   let enableCfgScale: boolean | undefined = undefined
+  let supportImageEdit: boolean = false
   if (currentWorkspace.settings.defaultImageGenerationModel) {
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
@@ -96,6 +97,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               enableNegativePrompt = modelProvider.supportNegativePrompt
               enableStepsCount = modelProvider.supportStepsCount
               enableCfgScale = modelProvider.supportCfgScale
+              if (modelProvider.supportImageEdit) {
+                supportImageEdit = true
+              }
             }
           })
         })
@@ -157,20 +161,48 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-user-prompt-is-required' }))
         return
       }
+      if (!supportImageEdit && fileList.length > 0) {
+        await WorkspaceUtils.showMessage(messageApi, 'warning', intl.formatMessage({ id: 'image-generation-view.message-generate-warning-with-attachments' }))
+      }
+      const refImages = fileList.map((file) => {
+        const fileContent = fileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
       const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
       const imageSize = Consts.IMAGE_SIZES[size]
-      const imageData = await RequestUtils.generateImage(
-        userText,
-        currentWorkspace.settings.defaultImageGenerationModel,
-        count,
-        imageSize.width,
-        imageSize.height,
-        seedNumber,
-        'png',
-        negativePrompt,
-        stepsCount,
-        cfgScale,
-      )
+      const imageData =
+        fileList.length > 0 && supportImageEdit
+          ? await RequestUtils.editImage(
+              userText,
+              currentWorkspace.settings.defaultImageGenerationModel,
+              count,
+              imageSize.width,
+              imageSize.height,
+              seedNumber,
+              'png',
+              negativePrompt,
+              stepsCount,
+              cfgScale,
+              refImages,
+            )
+          : await RequestUtils.generateImage(
+              userText,
+              currentWorkspace.settings.defaultImageGenerationModel,
+              count,
+              imageSize.width,
+              imageSize.height,
+              seedNumber,
+              'png',
+              negativePrompt,
+              stepsCount,
+              cfgScale,
+            )
       await WorkspaceUtils.handleRequest(
         messageApi,
         imageData,
@@ -564,7 +596,16 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     }
                   >
                     <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
-                      <Upload onChange={handleUploadChange} onPreview={handlePreview} listType="picture-card" fileList={fileList} showUploadList={true}>
+                      <Upload
+                        onChange={handleUploadChange}
+                        onPreview={(file) => {
+                          handlePreview(file)
+                          return false
+                        }}
+                        listType="picture-card"
+                        fileList={fileList}
+                        showUploadList={{ showPreviewIcon: true }}
+                      >
                         {fileList.length > 5 ? null : (
                           <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
                             <PlusOutlined />
@@ -576,11 +617,15 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       </Upload>
                       {previewImage && (
                         <Image
-                          styles={{ root: { display: 'none' } }}
+                          style={{ display: 'none' }}
                           preview={{
-                            open: previewOpen,
-                            onOpenChange: (visible) => setPreviewOpen(visible),
-                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                            visible: previewOpen,
+                            onVisibleChange: (visible: boolean) => {
+                              setPreviewOpen(visible)
+                              if (!visible) {
+                                setPreviewImage('')
+                              }
+                            },
                           }}
                           src={previewImage}
                         />
