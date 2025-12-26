@@ -100,6 +100,9 @@ pub async fn start_sd_server(
     .bind((host, port))?
     .run();
     notify_main_process(task_id.to_string());
+    //Sleep and avoid startup too fast and fail to check on web UI!
+    tokio::time::sleep(std::time::Duration::from_millis(2000)).await;
+    tracing::info!("synvek sd server is starting");
     http_server.await?;
     Ok(())
 }
