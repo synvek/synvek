@@ -218,6 +218,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut isOvis = false;
     let mut isZImage = false;
     let mut isQwenImage = false;
+    let mut isWan22TI2V = false;
 
     if let Some(task) = task {
         tracing::info!("Current task info: {:?}", task.clone());
@@ -243,12 +244,18 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         isOvis = task.task_name.to_lowercase().contains("ovis");
         isZImage = task.task_name.to_lowercase().contains("z-image");
         isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
+        isWan22TI2V = task.task_name.to_lowercase().contains("wan2.2-ti2v");
+
         if isZImage {
             llm_path = find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
         }
         if isQwenImage {
             llm_path = find_relative_model_file_path(&task, "Qwen2.5-VL-7B-Instruct-Q4_0.gguf");
             vae_path = find_relative_model_file_path(&task, "qwen_image_vae.safetensors");
+        }
+        if isWan22TI2V {
+            t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
+            vae_path = find_relative_model_file_path(&task, "wan2.2_vae.safetensors");
         }
     }
 
@@ -318,7 +325,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
                 //TODO: Can be removed or optimized if dynamic loading required
                 let cleanup_log_callback_func: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
-                let start_args: Vec<String> = if model_type == "diffusion" && isFlux {
+                let mut start_args: Vec<String> = if model_type == "diffusion" && isFlux {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -329,18 +336,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         clip_l_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
                         t5xxl_path.to_str().unwrap().to_string(),
-                        String::from("-p"),
-                        String::from(generation_args.prompt.clone()),
-                        String::from("--cfg-scale"),
-                        //String::from("1.0"),
-                        String::from(generation_args.cfg_scale.to_string()),
                         String::from("--sampling-method"),
                         String::from("euler"),
-                        String::from("-v"),
-                        String::from("--seed"),
-                        String::from(generation_args.seed.to_string()),
                         String::from("--steps"),
-                        //String::from("4"),
                         String::from(generation_args.steps_count.to_string()),
                         String::from("--batch-count"),
                         String::from(generation_args.n.to_string()),
@@ -355,16 +353,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("-p"),
-                        String::from(generation_args.prompt.clone()),
-                        String::from("--cfg-scale"),
-                        //String::from("1.0"),
-                        String::from(generation_args.cfg_scale.to_string()),
-                        String::from("-v"),
-                        String::from("--seed"),
-                        String::from(generation_args.seed.to_string()),
                         String::from("--steps"),
-                        //String::from("12"),
                         String::from(generation_args.steps_count.to_string()),
                         String::from("--batch-count"),
                         String::from(generation_args.n.to_string()),
@@ -380,16 +369,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("-p"),
-                        String::from(generation_args.prompt.clone()),
-                        String::from("--cfg-scale"),
-                        //String::from("1.0"),
-                        String::from(generation_args.cfg_scale.to_string()),
-                        String::from("-v"),
-                        String::from("--seed"),
-                        String::from(generation_args.seed.to_string()),
                         String::from("--steps"),
-                        //String::from("12"),
                         String::from(generation_args.steps_count.to_string()),
                         String::from("--batch-count"),
                         String::from(generation_args.n.to_string()),
@@ -405,18 +385,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("-p"),
-                        String::from(generation_args.prompt.clone()),
-                        String::from("--cfg-scale"),
-                        //String::from("1.0"),
-                        String::from(generation_args.cfg_scale.to_string()),
                         String::from("--sampling-method"),
                         String::from("euler"),
-                        String::from("-v"),
-                        String::from("--seed"),
-                        String::from(generation_args.seed.to_string()),
                         String::from("--steps"),
-                        //String::from("12"),
                         String::from(generation_args.steps_count.to_string()),
                         String::from("--batch-count"),
                         String::from(generation_args.n.to_string()),
@@ -425,7 +396,27 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from("--flow-shift"),
                         String::from("3"),
                     ]
-                } else {
+                } else if model_type == "diffusion" && isWan22TI2V {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("-M"),
+                        String::from("vid_gen"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--t5xxl"),
+                        t5xxl_path.to_str().unwrap().to_string(),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("--video-frames"),
+                        String::from("33"),
+                        String::from("--offload-to-cpu"),
+                        String::from("--diffusion-fa"),
+                        String::from("--flow-shift"),
+                        String::from("3"),
+                    ]
+                } else { //flux gguf
                     vec![
                         String::from("synvek_service"),
                         String::from("-m"),
@@ -436,22 +427,26 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         clip_g_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
                         t5xxl_path.to_str().unwrap().to_string(),
-                        String::from("-p"),
-                        String::from(generation_args.prompt.clone()),
-                        String::from("--cfg-scale"),
-                        //String::from("4.5"),
-                        String::from(generation_args.cfg_scale.to_string()),
                         String::from("--steps"),
-                        //String::from("12"),
                         String::from(generation_args.steps_count.to_string()),
                         String::from("--sampling-method"),
                         String::from("euler"),
-                        String::from("-v"),
-                        String::from("--seed"),
-                        String::from(generation_args.seed.to_string()),
                         String::from("--clip-on-cpu"),
                     ]
                 };
+                start_args.push(String::from("-p"));
+                start_args.push(generation_args.prompt.to_string());
+                start_args.push(String::from("--cfg-scale"));
+                start_args.push(generation_args.cfg_scale.to_string());
+                start_args.push(String::from("--seed"));
+                start_args.push(generation_args.seed.to_string());
+                start_args.push(String::from("-n"));
+                start_args.push(generation_args.negative_prompt.to_string());
+                start_args.push(String::from("-W"));
+                start_args.push(generation_args.width.to_string());
+                start_args.push(String::from("-H"));
+                start_args.push(generation_args.height.to_string());
+                start_args.push(String::from("-v"));
                 tracing::info!("Generate image with args = {:?}", start_args);
                 let c_start_strings = start_args
                     .iter()

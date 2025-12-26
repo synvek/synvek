@@ -14,7 +14,15 @@ export interface ModelOption {
   files: ModelFile[]
 }
 
-export type ModelCategory = 'text-to-text' | 'image-to-text' | 'speech-to-text' | 'video-to-text' | 'text-to-image' | 'text-to-speech'
+export type ModelCategory =
+  | 'text-to-text'
+  | 'image-to-text'
+  | 'speech-to-text'
+  | 'video-to-text'
+  | 'text-to-image'
+  | 'text-to-speech'
+  | 'text-to-video'
+  | 'image-to-video'
 export type ModelType = 'run' | 'plain' | 'vision-plain' | 'diffusion' | 'speech' | 'uqff' | 'gguf' | 'stable-diffusion'
 export type BackendType = 'default' | 'llama_cpp' | 'stable_diffusion_cpp' | 'whisper_cpp'
 export type AccelerationType = 'cpu' | 'cuda' | 'cuda_legacy' | 'metal' | 'cpu-mkl' | 'cpu-accelerate' | 'vulkan' | 'opencl' | 'webgpu' | 'hip'
@@ -4243,5 +4251,331 @@ export const modelProviders: ModelProvider[] = [
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: true,
+  },
+  {
+    modelId: 'Wan2.2-TI2V-5B-GGUF',
+    modelCreator: 'Wan-AI',
+    modelSource: 'modelscope',
+    modelOptions: [
+      {
+        name: 'wan2.2_ti2v_5B_fp16',
+        fileSize: '16.25GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q8_0.gguf',
+        fileSize: '12.8GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q6_K.gguf',
+        fileSize: '11.6GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_K_S.gguf',
+        fileSize: '11GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_K_M.gguf',
+        fileSize: '11.2GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_1.gguf',
+        fileSize: '11.3GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_0.gguf',
+        fileSize: '11.1GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_K_S.gguf',
+        fileSize: '10.5GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_K_M.gguf',
+        fileSize: '10.8GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_1.gguf',
+        fileSize: '10.6GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_0.gguf',
+        fileSize: '10.4GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q3_K_S.gguf',
+        fileSize: '9.7GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q3_K_M.gguf',
+        fileSize: '9.9GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q2_K.gguf',
+        fileSize: '9.2GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+    ],
+    categories: ['text-to-video', 'image-to-video'],
+    backends: ['stable_diffusion_cpp'],
+    modelType: 'diffusion',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'QuantStack/Wan2.2-TI2V-5B-GGUF summary',
+    description: 'QuantStack/Wan2.2-TI2V-5B-GGUF details',
+    accessTokenRequired: false,
+    extraArgs: [],
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultCfgScale: 6.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
+    supportImageEdit: false,
+  },
+  {
+    modelId: 'Wan2.2-TI2V-5B-GGUF',
+    modelCreator: 'Wan-AI',
+    modelSource: 'huggingface',
+    modelOptions: [
+      {
+        name: 'Wan2.2-TI2V-5B-Q8_0.gguf',
+        fileSize: '12.8GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q6_K.gguf',
+        fileSize: '11.6GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_K_S.gguf',
+        fileSize: '11GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_K_M.gguf',
+        fileSize: '11.2GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_1.gguf',
+        fileSize: '11.3GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q5_0.gguf',
+        fileSize: '11.1GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_K_S.gguf',
+        fileSize: '10.5GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_K_M.gguf',
+        fileSize: '10.8GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_1.gguf',
+        fileSize: '10.6GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q4_0.gguf',
+        fileSize: '10.4GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q3_K_S.gguf',
+        fileSize: '9.7GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q3_K_M.gguf',
+        fileSize: '9.9GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-TI2V-5B-Q2_K.gguf',
+        fileSize: '9.2GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
+    ],
+    categories: ['text-to-video', 'image-to-video'],
+    backends: ['stable_diffusion_cpp'],
+    modelType: 'diffusion',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'QuantStack/Wan2.2-TI2V-5B-GGUF summary',
+    description: 'QuantStack/Wan2.2-TI2V-5B-GGUF details',
+    accessTokenRequired: false,
+    extraArgs: [],
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultCfgScale: 6.0,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
+    supportImageEdit: false,
   },
 ]

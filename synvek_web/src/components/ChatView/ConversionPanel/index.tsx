@@ -78,7 +78,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   let enableCfgScale: boolean | undefined = undefined
   if (currentWorkspace.settings.defaultImageGenerationModel) {
     currentWorkspace.tasks.forEach((task) => {
-      if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
+      if (task.task_name === currentWorkspace.settings.defaultTextModel) {
         modelProviders.forEach((modelProvider) => {
           modelProvider.modelOptions.forEach((modelOption) => {
             if (modelOption.name === task.model_id) {
