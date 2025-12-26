@@ -109,7 +109,7 @@ fn get_library_cache() -> &'static LibraryCache {
     CACHE.get_or_init(|| Arc::new(Mutex::new(HashMap::new())))
 }
 
-fn get_model_file_path(
+pub fn get_model_file_path(
     model_source: &str,
     repo_name: &str,
     file_name: &str,
@@ -141,7 +141,7 @@ fn get_model_file_path(
     pointer_path
 }
 
-fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
+pub fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
     let mut file_path: PathBuf = PathBuf::new();
     task.task_items.iter().for_each(|item| {
         if item.file_name.ends_with(file_name) {

@@ -25,7 +25,10 @@ use std::{env, panic, thread};
 use actix_web::body::MessageBody;
 use tokio::runtime;
 use uuid::Uuid;
+use crate::sd_service::get_sd_config;
+
 type StartLlamaServer = unsafe fn(i32, *const *const c_char) -> i32;
+type StartSdServer = unsafe fn(i32, *const *const c_char) -> i32;
 type InitDefaultServer =
     unsafe fn(*const c_char, *const c_char, *const c_char, *const c_char) -> i32;
 type StartDefaultServer = unsafe fn(*const c_char, *const c_char) -> i32;
@@ -741,6 +744,155 @@ fn populate_args_with_backend_stable_diffusion_cpp(
     }
 }
 
+fn populate_args_with_backend_stable_diffusion_cpp_ex(
+    args: &ModelServiceArgs,
+    task: &Task,
+    model_dir: PathBuf,
+    start_args: &mut Vec<OsString>,
+) {
+    let mut output: Vec<String> = vec![];
+    let config = config::Config::new();
+    let sd_config = get_sd_config();
+    let model_name = sd_config.args.model_name;
+    let model_id = sd_config.args.model_id;
+    let model_type = sd_config.args.model_type;
+    let task = fetch_service::load_local_task(model_name.as_str());
+    let mut model_file_path: PathBuf = PathBuf::new();
+    let mut clip_l_path: PathBuf = PathBuf::new();
+    let mut clip_g_path: PathBuf = PathBuf::new();
+    let mut vae_path: PathBuf = PathBuf::new();
+    let mut t5xxl_path: PathBuf = PathBuf::new();
+    let mut llm_path: PathBuf = PathBuf::new();
+    let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
+    let mut isFlux = false;
+    let mut isOvis = false;
+    let mut isZImage = false;
+    let mut isQwenImage = false;
+
+    if let Some(task) = task {
+        tracing::info!("Current task info: {:?}", task.clone());
+        let task_item = task.task_items[0].clone();
+        let repo_name = task_item.repo_name;
+        let file_name = task_item.file_name;
+        let revision = task_item.revision;
+        let commit_hash = task_item.commit_hash;
+        model_source = task_item.model_source;
+        model_file_path = crate::sd_service::get_model_file_path(
+            model_source.as_str(),
+            repo_name.as_str(),
+            file_name.as_str(),
+            revision.as_str(),
+            commit_hash.as_str(),
+        );
+        clip_l_path = crate::sd_service::find_relative_model_file_path(&task, "clip_l.safetensors");
+        clip_g_path = crate::sd_service::find_relative_model_file_path(&task, "clip_g.safetensors");
+        vae_path = crate::sd_service::find_relative_model_file_path(&task, "ae.safetensors");
+        t5xxl_path = crate::sd_service::find_relative_model_file_path(&task, "t5xxl_fp16.safetensors");
+        llm_path = crate::sd_service::find_relative_model_file_path(&task, "ovis_2.5.safetensors");
+        isFlux = task.task_name.to_lowercase().contains("flux");
+        isOvis = task.task_name.to_lowercase().contains("ovis");
+        isZImage = task.task_name.to_lowercase().contains("z-image");
+        isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
+        if isZImage {
+            llm_path = crate::sd_service::find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
+        }
+        if isQwenImage {
+            llm_path = crate::sd_service::find_relative_model_file_path(&task, "Qwen2.5-VL-7B-Instruct-Q4_0.gguf");
+            vae_path = crate::sd_service::find_relative_model_file_path(&task, "qwen_image_vae.safetensors");
+        }
+    }
+    if model_type == "diffusion" && isFlux {
+        start_args.push(OsString::from("--diffusion-model"));
+        start_args.push(OsString::from(model_file_path));
+        start_args.push(OsString::from("--vae"));
+        start_args.push(OsString::from(vae_path));
+        start_args.push(OsString::from("--clip_l"));
+        start_args.push(OsString::from(clip_l_path));
+        start_args.push(OsString::from("--t5xxl"));
+        start_args.push(OsString::from(t5xxl_path));
+        //start_args.push(OsString::from("--cfg-scale"));
+        //start_args.push(OsString::from(generation_args.cfg_scale.to_string()));
+        start_args.push(OsString::from("--sampling-method"));
+        start_args.push(OsString::from("euler"));
+        start_args.push(OsString::from("-v"));
+        //start_args.push(OsString::from("--steps"));
+        //start_args.push(OsString::from(generation_args.steps_count.to_string()));
+        //start_args.push(OsString::from("--batch-count"));
+        //start_args.push(OsString::from(generation_args.n.to_string()));
+        start_args.push(OsString::from("--clip-on-cpu"));
+    } else if model_type == "diffusion" && isOvis {
+        start_args.push(OsString::from("--diffusion-model"));
+        start_args.push(OsString::from(model_file_path));
+        start_args.push(OsString::from("--vae"));
+        start_args.push(OsString::from(vae_path));
+        start_args.push(OsString::from("--llm"));
+        start_args.push(OsString::from(llm_path));
+        //start_args.push(OsString::from("--cfg-scale"));
+        //start_args.push(OsString::from(generation_args.cfg_scale.to_string()));
+        start_args.push(OsString::from("-v"));
+        //start_args.push(OsString::from("--steps"));
+        //start_args.push(OsString::from(generation_args.steps_count.to_string()));
+        //start_args.push(OsString::from("--batch-count"));
+        //start_args.push(OsString::from(generation_args.n.to_string()));
+        start_args.push(OsString::from("--offload-to-cpu"));
+        start_args.push(OsString::from("--diffusion-fa"));
+    } else if model_type == "diffusion" && isZImage {
+        start_args.push(OsString::from("--diffusion-model"));
+        start_args.push(OsString::from(model_file_path));
+        start_args.push(OsString::from("--vae"));
+        start_args.push(OsString::from(vae_path));
+        start_args.push(OsString::from("--llm"));
+        start_args.push(OsString::from(llm_path));
+        //start_args.push(OsString::from("--cfg-scale"));
+        //start_args.push(OsString::from(generation_args.cfg_scale.to_string()));
+        start_args.push(OsString::from("-v"));
+        //start_args.push(OsString::from("--steps"));
+        //start_args.push(OsString::from(generation_args.steps_count.to_string()));
+        //start_args.push(OsString::from("--batch-count"));
+        //start_args.push(OsString::from(generation_args.n.to_string()));
+        start_args.push(OsString::from("--offload-to-cpu"));
+        start_args.push(OsString::from("--diffusion-fa"));
+    } else if model_type == "diffusion" && isQwenImage {
+        start_args.push(OsString::from("--diffusion-model"));
+        start_args.push(OsString::from(model_file_path));
+        start_args.push(OsString::from("--vae"));
+        start_args.push(OsString::from(vae_path));
+        start_args.push(OsString::from("--llm"));
+        start_args.push(OsString::from(llm_path));
+        //start_args.push(OsString::from("--cfg-scale"));
+        //start_args.push(OsString::from(generation_args.cfg_scale.to_string()));
+        start_args.push(OsString::from("--sampling-method"));
+        start_args.push(OsString::from("euler"));
+        start_args.push(OsString::from("-v"));
+        //start_args.push(OsString::from("--steps"));
+        //start_args.push(OsString::from(generation_args.steps_count.to_string()));
+        //start_args.push(OsString::from("--batch-count"));
+        //start_args.push(OsString::from(generation_args.n.to_string()));
+        start_args.push(OsString::from("--offload-to-cpu"));
+        start_args.push(OsString::from("--diffusion-fa"));
+        start_args.push(OsString::from("--flow-shift"));
+        start_args.push(OsString::from("3"));
+    } else {
+        start_args.push(OsString::from("--m"));
+        start_args.push(OsString::from(model_file_path));
+        start_args.push(OsString::from("--clip_l"));
+        start_args.push(OsString::from(clip_l_path));
+        start_args.push(OsString::from("--clip_g"));
+        start_args.push(OsString::from(clip_g_path));
+        start_args.push(OsString::from("--t5xxl"));
+        start_args.push(OsString::from(t5xxl_path));
+        //start_args.push(OsString::from("--cfg-scale"));
+        //start_args.push(OsString::from(generation_args.cfg_scale.to_string()));
+        start_args.push(OsString::from("--sampling-method"));
+        start_args.push(OsString::from("euler"));
+        start_args.push(OsString::from("-v"));
+        //start_args.push(OsString::from("--steps"));
+        //start_args.push(OsString::from(generation_args.steps_count.to_string()));
+        //start_args.push(OsString::from("--batch-count"));
+        //start_args.push(OsString::from(generation_args.n.to_string()));
+        start_args.push(OsString::from("--clip-on-cpu"));
+    };
+}
 async fn start_mistral_server(
     args: &ModelServiceArgs,
     start_args: &Vec<OsString>,
@@ -1138,4 +1290,113 @@ fn start_server_monitor(task_id: String, task_port: String) {
             }
         });
     });
+}
+
+
+/**
+For callback from c/c++
+LOG_LEVEL_DEBUG = 1,
+LOG_LEVEL_INFO  = 2,
+LOG_LEVEL_WARN  = 3,
+LOG_LEVEL_ERROR = 4,
+**/
+extern "C" fn handle_stable_diffusion_cpp_log_callback(log_level: i32, c_msg: *const c_char) {
+    let result = panic::catch_unwind(AssertUnwindSafe(|| {
+        let c_msg_ptr = unsafe { c_msg.as_ref() };
+        let rust_msg = match c_msg_ptr {
+            Some(ptr) => unsafe {
+                let mut log_message = CStr::from_ptr(ptr).to_string_lossy().into_owned();
+                if log_message.len() > 0 && log_message.as_bytes()[log_message.len() - 1] == b'\n' {
+                    log_message.pop();
+                }
+                match log_level {
+                    1 => tracing::debug!(target: "backend:llama.cpp", "{}", log_message),
+                    2 => tracing::info!(target: "backend:llama.cpp", "{}", log_message),
+                    3 => tracing::warn!(target: "backend:llama.cpp", "{}", log_message),
+                    4 => tracing::error!(target: "backend:llama.cpp", "{}", log_message),
+                    _ => tracing::error!(target: "backend:llama.cpp", "{}", log_message),
+                }
+            },
+            None => {
+                tracing::error!(target: "backend:llama.cpp", "Received null message from log callback");
+            }
+        };
+    }));
+
+    if let Err(_) = result {
+        tracing::error!(target: "backend:llama.cpp", "A panic occurred inside the log callback!");
+    }
+}
+
+async fn start_stable_diffusion_cpp_server_ex(
+    args: &ModelServiceArgs,
+    start_args: &Vec<OsString>,
+    task_id: &str,
+    port: &str,
+    path: &str,
+    is_spawn_process: bool,
+) {
+    let base_lib_name = "synvek_backend_sd";
+    let acceleration = args.acceleration.clone();
+    let lib_name = utils::get_load_library_name(base_lib_name, acceleration.as_str());
+    let lib_name = utils::get_backend_path(lib_name.as_str());
+
+    unsafe {
+        tracing::info!("Search stable diffusion server with name: {}", lib_name.clone());
+        let lib = Library::new(lib_name);
+        if let Ok(lib) = lib {
+            tracing::info!("Loading stable diffusion server...");
+            let start_sd_server_func = lib.get(b"start_sd_server");
+            let init_log_callback_func = lib.get(b"init_log_callback");
+            let cleanup_log_callback_func = lib.get(b"cleanup_log_callback");
+            match (
+                start_sd_server_func,
+                init_log_callback_func,
+                cleanup_log_callback_func,
+            ) {
+                (
+                    Ok(start_sd_server_func),
+                    Ok(init_log_callback_func),
+                    Ok(cleanup_log_callback_func),
+                ) => {
+                    let start_sd_server: Symbol<StartSdServer> = start_sd_server_func;
+                    let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
+                    let cleanup_log_callback: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
+                    let c_strings = start_args
+                        .iter()
+                        .map(|s| CString::new(s.to_str().unwrap()))
+                        .collect::<anyhow::Result<Vec<_>, _>>();
+                    if let Ok(c_strings) = c_strings {
+                        let raw_ptrs: Vec<*const c_char> =
+                            c_strings.iter().map(|cs| cs.as_ptr()).collect();
+                        tracing::info!("Starting Stable diffusion server...");
+                        start_server_monitor(task_id.to_string(), port.to_string());
+                        init_log_callback(Some(handle_stable_diffusion_cpp_log_callback));
+                        let result = start_sd_server(raw_ptrs.len() as c_int, raw_ptrs.as_ptr());
+                        cleanup_log_callback();
+                        tracing::info!("Stable diffusion server exited with result: {}", result);
+                    }
+                }
+                _ => {
+                    tracing::error!("Failed to load functions of backend Stable diffusion server.");
+                    // Need to terminate in multiprocess mode  right now.
+                    if is_spawn_process {
+                        panic!(
+                            "Failed to load functions of backend Stable diffusion server, args = {:?} ",
+                            args.clone(),
+                        );
+                    }
+                }
+            }
+        } else {
+            tracing::error!("Failed to load backend Stable diffusion server with error {:}.", lib.unwrap_err());
+            // Need to terminate in multiprocess mode  right now.
+            if is_spawn_process {
+                panic!(
+                    "Failed to load backend Stable diffusion server, args = {:?} ",
+                    args.clone(),
+                );
+            }
+        }
+    }
 }
