@@ -665,6 +665,8 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     let modelType = 'plain'
     let backends: BackendType[] = []
     let modelConfig = modelConfigRef.current.get(task.task_name)
+    let backend = 'default'
+    let acceleration = 'cpu'
     modelProviders.forEach((modelProvider) => {
       modelProvider.modelOptions.forEach((modelOption) => {
         if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
@@ -673,6 +675,22 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
         }
       })
     })
+    //modelConfigRef may be missing for task and we need to check local storage here too
+    if (modelConfig) {
+      backend = modelConfig.backend
+      acceleration = modelConfig.acceleration
+    } else {
+      let localConfig = localStorage.getItem(Consts.LOCAL_STORAGE_BACKEND_PREFIX + task.task_name)
+      if (localConfig) {
+        let localValues = localConfig.split(':')
+        backend = localValues[0]
+        acceleration = localValues[1]
+      } else {
+        if (backends.length > 0) {
+          backend = backends[0]
+        }
+      }
+    }
     const startModelServerRequest: StartModelServerRequest = {
       modelName: task.task_name,
       modelId: task.model_id ? task.model_id : '',
@@ -682,8 +700,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       tokenSource: task.access_token ? task.access_token : undefined,
       cpu: !!task.cpu,
       offloaded: !!task.offloaded,
-      backend: modelConfig ? modelConfig.backend : backends.length > 0 ? backends[0] : 'default',
-      acceleration: modelConfig ? modelConfig.acceleration : 'cpu',
+      // @ts-ignore
+      backend: backend,
+      acceleration: acceleration,
     }
     const startModelServerResponse = await RequestUtils.startModelServer(startModelServerRequest)
     await WorkspaceUtils.handleRequest(

@@ -44,6 +44,11 @@ interface ImageGenerationViewProps {
   visible: boolean
 }
 
+interface ImageData {
+  type: 'image' | 'video'
+  data: string
+}
+
 const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
@@ -69,16 +74,18 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [seed, setSeed] = useState<number>(defaultSeed)
   const [negativePrompt, setNegativePrompt] = useState<string>('')
   const [enableRandomSeed, setEnableRandomSeed] = useState<boolean>(defaultRandomSeed)
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<ImageData[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
   const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [fileContentMap, setFileContentMap] = useState<Map<string, string>>(new Map())
+  const [refImageFileList, setRefImageFileList] = useState<UploadFile[]>([])
+  const [refImageFileContentMap, setRefImageFileContentMap] = useState<Map<string, string>>(new Map())
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
+  const [initImageFileList, setInitImageFileList] = useState<UploadFile[]>([])
+  const [initImageFileContentMap, setInitImageFileContentMap] = useState<Map<string, string>>(new Map())
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -86,6 +93,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   let enableStepsCount: boolean | undefined = undefined
   let enableCfgScale: boolean | undefined = undefined
   let supportImageEdit: boolean = false
+  let supportVideoGen: boolean = false
   if (currentWorkspace.settings.defaultImageGenerationModel) {
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
@@ -99,6 +107,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               enableCfgScale = modelProvider.supportCfgScale
               if (modelProvider.supportImageEdit) {
                 supportImageEdit = true
+              }
+              if (modelProvider.supportVideoGen) {
+                supportVideoGen = true
               }
             }
           })
@@ -161,11 +172,21 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view.message-user-prompt-is-required' }))
         return
       }
-      if (!supportImageEdit && fileList.length > 0) {
+      if (!supportImageEdit && refImageFileList.length > 0) {
         await WorkspaceUtils.showMessage(messageApi, 'warning', intl.formatMessage({ id: 'image-generation-view.message-generate-warning-with-attachments' }))
       }
-      const refImages = fileList.map((file) => {
-        const fileContent = fileContentMap.get(file.uid)
+      const refImages = refImageFileList.map((file) => {
+        const fileContent = refImageFileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
+      const initImages = initImageFileList.map((file) => {
+        const fileContent = initImageFileContentMap.get(file.uid)
         const fileContentText: string = fileContent ? fileContent : ''
         //width and height can be ignored, backend will force to compute them later
         return {
@@ -177,7 +198,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
       const imageSize = Consts.IMAGE_SIZES[size]
       const imageData =
-        fileList.length > 0 && supportImageEdit
+        (refImageFileList.length > 0 && supportImageEdit) || supportVideoGen
           ? await RequestUtils.editImage(
               userText,
               currentWorkspace.settings.defaultImageGenerationModel,
@@ -190,6 +211,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               stepsCount,
               cfgScale,
               refImages,
+              initImages,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -207,7 +229,13 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         messageApi,
         imageData,
         async (data: string[]) => {
-          const newImages: string[] = [...images, ...data]
+          const newImages: ImageData[] = [...images]
+          data.forEach((item) => {
+            newImages.push({
+              type: supportVideoGen ? 'video' : 'image',
+              data: item,
+            })
+          })
           setImages(newImages)
           setCurrentImageIndex(newImages.length - 1)
           await saveGeneration(data)
@@ -225,7 +253,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       const image = images[i]
       const thumbData = await SystemUtils.resizeImage(image, 64, 64)
       const generationData = await RequestUtils.addGeneration(
-        Consts.GENERATION_TYPE_IMAGE,
+        supportVideoGen ? Consts.GENERATION_TYPE_VIDEO : Consts.GENERATION_TYPE_IMAGE,
         userText,
         '',
         SystemUtils.generateUUID(),
@@ -291,7 +319,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     return images.map((image, index) => {
       return (
         <div key={index} onClick={() => handleSwitchImage(index)} style={{ cursor: 'pointer' }}>
-          <img src={image} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          {image.type === 'image' ? (
+            <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          ) : (
+            <video src={image.data} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          )}
         </div>
       )
     })
@@ -318,7 +350,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const performanceOptions = [
     { value: '1', label: 'Quality' },
     { value: '2', label: 'Speed' },
-    { value: '3', label: 'Extrame Speed' },
+    { value: '3', label: 'Extreme Speed' },
   ]
 
   const sizeOptions = Consts.IMAGE_SIZES.map((imageSize, index) => {
@@ -359,31 +391,25 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     reader.readAsDataURL(file)
   }
 
-  const handleFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
-    fileContentMap.set(info.file.uid, content)
-    setFileContentMap(new Map([...fileContentMap]))
+  const handleRefImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    refImageFileContentMap.set(info.file.uid, content)
+    setRefImageFileContentMap(new Map([...refImageFileContentMap]))
   }
 
-  const handleUploadChange: UploadProps['onChange'] = (info) => {
+  const handleRefImageUploadChange: UploadProps['onChange'] = (info) => {
     const { status } = info.file
     if (status !== 'uploading') {
     }
     if (status === 'done') {
       getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
-        handleFileDetail(info, content)
+        handleRefImageFileDetail(info, content)
       })
     }
     if (status === 'error') {
     }
     if (status === 'removed') {
     }
-    setFileList([...info.fileList])
-  }
-
-  const removeFile = (uid: string) => {
-    setFileList(fileList.filter((file) => file.uid !== uid))
-    fileContentMap.delete(uid)
-    setFileContentMap(new Map([...fileContentMap]))
+    setRefImageFileList([...info.fileList])
   }
 
   const getBase64 = (file: FileType): Promise<string> =>
@@ -401,6 +427,28 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     setPreviewImage(file.url || (file.preview as string))
     setPreviewOpen(true)
   }
+
+  const handleInputImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    initImageFileContentMap.set(info.file.uid, content)
+    setInitImageFileContentMap(new Map([...initImageFileContentMap]))
+  }
+
+  const handleInputImageUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleInputImageFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setInitImageFileList([...info.fileList])
+  }
+
   return (
     <div className={styles.imageGenerationView} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
@@ -427,7 +475,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                   },
                 }}
               >
-                <Collapse ghost={false} defaultActiveKey={['general', 'advanced', 'filter']} bordered={false} className={styles.imageGenerationPropertyRegion}>
+                <Collapse
+                  ghost={false}
+                  defaultActiveKey={['general', 'advanced', 'image settings', 'video settings']}
+                  bordered={false}
+                  className={styles.imageGenerationPropertyRegion}
+                >
                   <Collapse.Panel
                     key={'general'}
                     header={
@@ -588,25 +641,70 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     </div>
                   </Collapse.Panel>
                   <Collapse.Panel
-                    key={'filter'}
+                    key={'image settings'}
                     header={
                       <div style={{ fontWeight: 'bold' }}>
-                        <FormattedMessage id={'image-generation-view.setting-category-input'} />
+                        <FormattedMessage id={'image-generation-view.setting-category-image-settings'} />
                       </div>
                     }
                   >
                     <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
                       <Upload
-                        onChange={handleUploadChange}
+                        onChange={handleRefImageUploadChange}
                         onPreview={(file) => {
                           handlePreview(file)
                           return false
                         }}
                         listType="picture-card"
-                        fileList={fileList}
+                        fileList={refImageFileList}
                         showUploadList={{ showPreviewIcon: true }}
                       >
-                        {fileList.length > 5 ? null : (
+                        {refImageFileList.length > 5 ? null : (
+                          <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>
+                              <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                            </div>
+                          </button>
+                        )}
+                      </Upload>
+                      {previewImage && (
+                        <Image
+                          style={{ display: 'none' }}
+                          preview={{
+                            visible: previewOpen,
+                            onVisibleChange: (visible: boolean) => {
+                              setPreviewOpen(visible)
+                              if (!visible) {
+                                setPreviewImage('')
+                              }
+                            },
+                          }}
+                          src={previewImage}
+                        />
+                      )}
+                    </div>
+                  </Collapse.Panel>
+                  <Collapse.Panel
+                    key={'video settings'}
+                    header={
+                      <div style={{ fontWeight: 'bold' }}>
+                        <FormattedMessage id={'image-generation-view.setting-category-video-settings'} />
+                      </div>
+                    }
+                  >
+                    <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
+                      <Upload
+                        onChange={handleInputImageUploadChange}
+                        onPreview={(file) => {
+                          handlePreview(file)
+                          return false
+                        }}
+                        listType="picture-card"
+                        fileList={initImageFileList}
+                        showUploadList={{ showPreviewIcon: true }}
+                      >
+                        {initImageFileList.length > 0 ? null : (
                           <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
                             <PlusOutlined />
                             <div style={{ marginTop: 8 }}>
@@ -675,7 +773,16 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         <Spin indicator={<LoadingOutlined spin size={48} />} />
                       </div>
                     ) : images.length > currentImageIndex ? (
-                      <img src={images[currentImageIndex]} alt={''} className={styles.imageGenerationImagePreview} style={{ borderColor: token.colorError }} />
+                      images[currentImageIndex].type === 'image' ? (
+                        <img
+                          src={images[currentImageIndex].data}
+                          alt={''}
+                          className={styles.imageGenerationImagePreview}
+                          style={{ borderColor: token.colorError }}
+                        />
+                      ) : (
+                        <video src={images[currentImageIndex].data} className={styles.imageGenerationImagePreview} style={{ borderColor: token.colorError }} />
+                      )
                     ) : (
                       <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>
                         Please click and generate

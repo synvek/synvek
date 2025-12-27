@@ -90,6 +90,7 @@ export class Consts {
   public static MESSAGE_TYPE_WORKER_FAILED_TO_TERMINATE = 'WorkerFailedToTerminate'
 
   public static GENERATION_TYPE_IMAGE = 'image'
+  public static GENERATION_TYPE_VIDEO = 'video'
   public static GENERATION_TYPE_SPEECH = 'speech'
   public static GENERATION_TYPE_TRANSLATION = 'translation'
 
@@ -144,6 +145,10 @@ export class Consts {
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },
     { key: '512x512 | 1:1', width: 512, height: 512 },
+    { key: '640x480 | 4:3', width: 640, height: 480 },
+    { key: '480x640 | 3:4', width: 480, height: 640 },
+    { key: '1280x720 | 16:9', width: 1280, height: 720 },
+    { key: '720x1280 | 9:16', width: 720, height: 1280 },
     { key: '768x1280 | 3:5', width: 768, height: 1280 },
     { key: '1024x1024 | 1:1', width: 1024, height: 1024 },
     { key: '1024x768 | 4:3', width: 1024, height: 768 },
@@ -151,5 +156,6 @@ export class Consts {
     { key: '1600x900 | 16:9', width: 1600, height: 900 },
     { key: '1600x1200 | 4:3', width: 1600, height: 1200 },
     { key: '1920x1080 | 16:9', width: 1920, height: 1080 },
+    { key: '1080x1920 | 9:16', width: 1080, height: 1920 },
   ]
 }

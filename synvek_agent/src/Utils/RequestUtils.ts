@@ -183,7 +183,7 @@ export class RequestUtils {
   }
 
 
-  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number, refImages: {width: number, height: number, data: string}[]) {
+  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number, refImages: {width: number, height: number, data: string}[], initImages: {width: number, height: number, data: string}[]) {
     const data = {
       model: modelName,
       prompt: message,
@@ -197,6 +197,7 @@ export class RequestUtils {
       steps_count: stepsCount,
       cfg_scale: cfgScale,
       ref_images: refImages,
+      init_images: initImages,
     }
     const config = {
       headers: {

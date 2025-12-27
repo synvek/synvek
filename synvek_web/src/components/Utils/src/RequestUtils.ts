@@ -703,6 +703,7 @@ export class RequestUtils {
     stepsCount: number = 20,
     cfgScale: number = 7.0,
     refImages: ImageData[],
+    initImages: ImageData[],
   ) {
     const data = {
       userMessage: userMessage,
@@ -716,6 +717,7 @@ export class RequestUtils {
       stepsCount: stepsCount,
       cfgScale: cfgScale,
       refImages: refImages,
+      initImages: initImages,
     }
     const config = {
       headers: {

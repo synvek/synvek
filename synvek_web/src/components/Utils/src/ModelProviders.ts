@@ -70,6 +70,7 @@ export interface ModelProvider {
   supportDiffusionFA?: boolean
   supportOffloadedToCPU?: boolean
   supportImageEdit?: boolean
+  supportVideoGen?: boolean
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -4419,6 +4420,7 @@ export const modelProviders: ModelProvider[] = [
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: false,
+    supportVideoGen: true,
   },
   {
     modelId: 'Wan2.2-TI2V-5B-GGUF',
@@ -4571,11 +4573,14 @@ export const modelProviders: ModelProvider[] = [
     description: 'QuantStack/Wan2.2-TI2V-5B-GGUF details',
     accessTokenRequired: false,
     extraArgs: [],
+    supportStepsCount: true,
     supportCfgScale: true,
     supportNegativePrompt: true,
+    defaultStepsCount: 20,
     defaultCfgScale: 6.0,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: false,
+    supportVideoGen: true,
   },
 ]

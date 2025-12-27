@@ -18,6 +18,7 @@ pub struct ImageGenerationRequest {
     pub steps_count: i32,
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
+    pub init_images: Vec<RefImage>,
 }
 /// Request for edit image
 #[derive(Debug, Deserialize, Serialize)]
@@ -33,6 +34,7 @@ pub struct ImageEditRequest {
     pub steps_count: i32,
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
+    pub init_images: Vec<RefImage>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -89,6 +91,7 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         steps_count: req.steps_count,
         cfg_scale: req.cfg_scale,
         ref_images: req.ref_images.clone(),
+        init_images: req.init_images.clone(),
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -121,7 +124,8 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         negative_prompt: req.negative_prompt.clone(),
         steps_count: req.steps_count,
         cfg_scale: req.cfg_scale,
-        ref_images: req.ref_images.clone()
+        ref_images: req.ref_images.clone(),
+        init_images: req.init_images.clone()
     };
     let image_output = sd_service::generate_image(&image_edit_args);
     let mut image_data: Vec<ImageData> = vec![];
