@@ -1176,7 +1176,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             danger
             type={'text'}
             size={'small'}
-            style={{ marginLeft: '8px', fontSize: '11px' }}
+            style={{ marginLeft: '8px', fontSize: '16px' }}
             onClick={() => removeFile(file.uid)}
           />
         </div>
