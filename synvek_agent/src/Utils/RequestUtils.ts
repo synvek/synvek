@@ -173,6 +173,7 @@ export class RequestUtils {
       steps_count: stepsCount,
       cfg_scale: cfgScale,
       ref_images: [],
+      init_images: [],
     }
     const config = {
       headers: {

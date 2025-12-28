@@ -572,7 +572,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                           <TextArea
                             disabled={!enableNegativePrompt}
                             className={styles.imageGenerationPropertyTextArea}
-                            placeholder={intl.formatMessage({ id: 'translation-view.source.placeholder' })}
+                            placeholder={intl.formatMessage({ id: 'image-generation-view.setting-property-negative-place-holder' })}
                             onChange={handleNegativePromptChange}
                           ></TextArea>
                         </div>
@@ -649,40 +649,47 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     }
                   >
                     <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
-                      <Upload
-                        onChange={handleRefImageUploadChange}
-                        onPreview={(file) => {
-                          handlePreview(file)
-                          return false
-                        }}
-                        listType="picture-card"
-                        fileList={refImageFileList}
-                        showUploadList={{ showPreviewIcon: true }}
-                      >
-                        {refImageFileList.length > 5 ? null : (
-                          <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>
-                              <FormattedMessage id={'image-generation-view.setting-property.upload'} />
-                            </div>
-                          </button>
-                        )}
-                      </Upload>
-                      {previewImage && (
-                        <Image
-                          style={{ display: 'none' }}
-                          preview={{
-                            visible: previewOpen,
-                            onVisibleChange: (visible: boolean) => {
-                              setPreviewOpen(visible)
-                              if (!visible) {
-                                setPreviewImage('')
-                              }
-                            },
-                          }}
-                          src={previewImage}
-                        />
-                      )}
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-ref-images'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleRefImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={refImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {refImageFileList.length > 5 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                          {previewImage && (
+                            <Image
+                              style={{ display: 'none' }}
+                              preview={{
+                                visible: previewOpen,
+                                onVisibleChange: (visible: boolean) => {
+                                  setPreviewOpen(visible)
+                                  if (!visible) {
+                                    setPreviewImage('')
+                                  }
+                                },
+                              }}
+                              src={previewImage}
+                            />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </Collapse.Panel>
                   <Collapse.Panel
@@ -694,40 +701,47 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     }
                   >
                     <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgContainer, borderColor: token.colorBorder }}>
-                      <Upload
-                        onChange={handleInputImageUploadChange}
-                        onPreview={(file) => {
-                          handlePreview(file)
-                          return false
-                        }}
-                        listType="picture-card"
-                        fileList={initImageFileList}
-                        showUploadList={{ showPreviewIcon: true }}
-                      >
-                        {initImageFileList.length > 0 ? null : (
-                          <button style={{ border: 0, background: 'none', cursor: 'pointer' }} type={'button'}>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>
-                              <FormattedMessage id={'image-generation-view.setting-property.upload'} />
-                            </div>
-                          </button>
-                        )}
-                      </Upload>
-                      {previewImage && (
-                        <Image
-                          style={{ display: 'none' }}
-                          preview={{
-                            visible: previewOpen,
-                            onVisibleChange: (visible: boolean) => {
-                              setPreviewOpen(visible)
-                              if (!visible) {
-                                setPreviewImage('')
-                              }
-                            },
-                          }}
-                          src={previewImage}
-                        />
-                      )}
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-init-image'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleInputImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={initImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {initImageFileList.length > 0 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                          {previewImage && (
+                            <Image
+                              style={{ display: 'none' }}
+                              preview={{
+                                visible: previewOpen,
+                                onVisibleChange: (visible: boolean) => {
+                                  setPreviewOpen(visible)
+                                  if (!visible) {
+                                    setPreviewImage('')
+                                  }
+                                },
+                              }}
+                              src={previewImage}
+                            />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </Collapse.Panel>
                   {/*<Collapse.Panel*/}

@@ -103,11 +103,15 @@ export class Consts {
   public static LOCAL_STORAGE_CHAT_CONTEXT = 'synvek.chat.context'
   public static LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE = 'synvek.chat.image.cfg-scale'
   public static LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT = 'synvek.chat.image.steps-count'
+  public static LOCAL_STORAGE_CHAT_IMAGE_SIZE = 'synvek.chat.image.size'
+  public static LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT = 'synvek.chat.image.negative-prompt'
   public static CHAT_TEMPERATURE_DEFAULT = 1
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
   public static CHAT_IMAGE_STEPS_COUNT_DEFAULT = 20
   public static CHAT_IMAGE_CFG_SCALE_DEFAULT = 7.0
+  public static CHAT_IMAGE_SIZE_DEFAULT = 1
+  public static CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT = ''
 
   //Local storage for image generation settings
   public static LOCAL_STORAGE_IMAGE_COUNT = 'synvek.image.count'

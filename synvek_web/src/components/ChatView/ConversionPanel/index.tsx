@@ -17,14 +17,30 @@ import {
   WorkspaceUtils,
 } from '@/components/Utils'
 import { EllipsisOutlined, FolderOpenOutlined, FolderOutlined, MessageOutlined, PushpinOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Dropdown, MenuProps, message, Modal, Slider, SliderSingleProps, Tabs, TabsProps, theme, Tooltip, Tree } from 'antd'
+import {
+  Button,
+  ConfigProvider,
+  Dropdown,
+  Input,
+  MenuProps,
+  message,
+  Modal,
+  Select,
+  Slider,
+  SliderSingleProps,
+  Tabs,
+  TabsProps,
+  theme,
+  Tooltip,
+  Tree,
+} from 'antd'
 import * as React from 'react'
-import { FC, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { FormattedMessage, useIntl } from 'umi'
 import styles from './index.less'
 
 const { confirm } = Modal
-
+const { TextArea } = Input
 const { useToken } = theme
 
 const PREFIX_PIN = 'PIN_'
@@ -70,6 +86,13 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.CHAT_IMAGE_CFG_SCALE_DEFAULT
   const [stepsCount, setStepsCount] = useState<number>(defaultStepsCount)
   const [cfgScale, setCfgScale] = useState<number>(defaultCfgScale)
+  const oldSize = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_SIZE)
+  const defaultSize = oldSize ? Number.parseInt(oldSize) : Consts.CHAT_IMAGE_SIZE_DEFAULT
+  const [size, setSize] = useState<number>(defaultSize)
+  const oldNegativePrompt = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT)
+  const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_SIZE_DEFAULT
+  const [negativePrompt, setNegativePrompt] = useState<string>(defaultNegativePrompt)
+
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
 
   let modelDefaultStepsCount: number | undefined = undefined
@@ -978,6 +1001,25 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     20: '20',
   }
 
+  const sizeOptions = Consts.IMAGE_SIZES.map((imageSize, index) => {
+    return {
+      value: index,
+      label: imageSize.key,
+    }
+  })
+
+  const handleSizeChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_SIZE, '' + value)
+    setSize(value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleNegativePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT, e.target.value)
+    setNegativePrompt(e.target.value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
   const handleStepsCountChange = (value: number) => {
     setStepsCount(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT, '' + value)
@@ -1083,6 +1125,50 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
             marks={cfgScaleMarks}
             onChange={handleCfgScaleSChange}
           />
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-size'} />
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.image-size.tooltip' })}>
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <Select
+            size={'small'}
+            defaultValue={size}
+            value={size}
+            style={{ width: '100%', margin: '8px 0 16px 0' }}
+            onChange={(value) => handleSizeChange(value)}
+            options={sizeOptions}
+          />
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-negative-prompt'} />
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.image-negative-prompt.tooltip' })}>
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <TextArea
+            className={styles.imageGenerationPropertyTextArea}
+            placeholder={intl.formatMessage({ id: 'conversion-panel.settings.image-negative-prompt.placeholder' })}
+            onChange={handleNegativePromptChange}
+            style={{ margin: '8px 0 16px 0' }}
+          ></TextArea>
         }
         visible={true}
         enableDivider={false}

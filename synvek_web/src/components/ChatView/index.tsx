@@ -120,6 +120,10 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultStepsCount = oldStepsCount ? Number.parseInt(oldStepsCount) : Consts.CHAT_IMAGE_STEPS_COUNT_DEFAULT
   const oldCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE)
   const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.CHAT_IMAGE_CFG_SCALE_DEFAULT
+  const oldSize = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_SIZE)
+  const defaultSize = oldSize ? Number.parseInt(oldSize) : Consts.CHAT_IMAGE_SIZE_DEFAULT
+  const oldNegativePrompt = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT)
+  const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -730,7 +734,11 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const seed = SystemUtils.generateRandomInteger(1, 999999)
     let stepsCount: number = defaultStepsCount
     let cfgScale: number = defaultCfgScale
+    let size: number = defaultSize
+    let negativePrompt: string = defaultNegativePrompt
+    const imageSize = Consts.IMAGE_SIZES[size]
     let supportImageEdit: boolean = false
+    let supportVideoGen: boolean = false
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultTextModel) {
         modelProviders.forEach((modelProvider) => {
@@ -738,6 +746,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             if (modelOption.name === task.model_id) {
               if (modelProvider.supportImageEdit) {
                 supportImageEdit = true
+              }
+              if (modelProvider.supportVideoGen) {
+                supportVideoGen = true
               }
             }
           })
@@ -754,13 +765,48 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         data: fileContentText,
       }
     })
-    if (!supportImageEdit && chatAttachments.length > 0) {
+    const initImages = fileList.map((file) => {
+      const fileContent = fileContentMap.get(file.uid)
+      const fileContentText: string = fileContent ? fileContent : ''
+      //width and height can be ignored, backend will force to compute them later
+      return {
+        width: 0,
+        height: 0,
+        data: fileContentText,
+      }
+    })
+    if (!supportImageEdit && !supportVideoGen && chatAttachments.length > 0) {
       await WorkspaceUtils.showMessage(messageApi, 'warning', intl.formatMessage({ id: 'chat-view.message-generate-warning-with-attachments' }))
     }
+    let format = supportVideoGen ? 'webp' : 'png'
     const response =
-      chatAttachments.length > 0 && supportImageEdit
-        ? await RequestUtils.editImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale, refImages)
-        : await RequestUtils.generateImage(chatContent[0].text, defaultTextModel, 1, 512, 512, seed, 'png', '', stepsCount, cfgScale)
+      (chatAttachments.length > 0 && supportImageEdit) || supportVideoGen
+        ? await RequestUtils.editImage(
+            chatContent[0].text,
+            defaultTextModel,
+            1,
+            imageSize.width,
+            imageSize.height,
+            seed,
+            format,
+            negativePrompt,
+            stepsCount,
+            cfgScale,
+            supportImageEdit ? refImages : [],
+            supportVideoGen ? initImages : [],
+          )
+        : await RequestUtils.generateImage(
+            chatContent[0].text,
+            defaultTextModel,
+            1,
+            imageSize.width,
+            imageSize.height,
+            seed,
+            format,
+            negativePrompt,
+            stepsCount,
+            cfgScale,
+          )
     await WorkspaceUtils.handleRequest(
       messageApi,
       response,
