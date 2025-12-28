@@ -1311,5 +1311,41 @@
         "revision": "main",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "QuantStack/Wan2.2-T2V-A14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "QuantStack/Wan2.2-I2V-A14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "QuantStack/Wan2.2-T2V-A14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "QuantStack/Wan2.2-I2V-A14B-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
     }
 ]
