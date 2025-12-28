@@ -19,8 +19,10 @@ use std::panic::AssertUnwindSafe;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
 use futures::future::Lazy;
+use image::GenericImageView;
 use serde::{Deserialize, Serialize};
 use regex::Regex;
+use webp_animation::{Encoder, EncoderOptions, EncodingConfig, LossyEncodingConfig};
 use crate::fetch_service::Task;
 use crate::utils::DataUrlDecoder;
 
@@ -478,16 +480,31 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
 
                     let image_count = get_image_count(image_output);
                     tracing::info!("Image count = {}", image_count);
-                    for i in 0..image_count {
-                        let image_data_length = get_image_data_length(image_output, i);
-                        let image_data = get_image_data(image_output, i);
-                        let image_data_slice: &[u8] =
-                            std::slice::from_raw_parts(image_data, image_data_length);
-                        tracing::info!("Image data = {:?}", image_data_slice.len());
-                        let base64_string = STANDARD.encode(image_data_slice);
-                        let data_format = if isWan22TI2V { "video/avi" } else {"image/png"};
-                        let data_url = format!("data:{};base64,{}",data_format, base64_string);
-                        output.push(data_url);
+                    if isWan22TI2V {
+                        if image_count > 0 {
+                            let webp_data = create_webp_from_images(image_count,image_output, get_image_data_length, get_image_data);
+                            if let Ok(webp_data) = webp_data {
+                                tracing::info!("Image data = {:?}", webp_data.len());
+                                let base64_string = STANDARD.encode(webp_data);
+                                let data_format = "image/webp";
+                                let data_url = format!("data:{};base64,{}",data_format, base64_string);
+                                output.push(data_url);
+                            } else {
+                                tracing::error!("Failed to parse video data with error: {}", webp_data.err().unwrap());
+                            }
+                        }
+                    } else {
+                        for i in 0..image_count {
+                            let image_data_length = get_image_data_length(image_output, i);
+                            let image_data = get_image_data(image_output, i);
+                            let image_data_slice: &[u8] =
+                                std::slice::from_raw_parts(image_data, image_data_length);
+                            tracing::info!("Image data = {:?}", image_data_slice.len());
+                            let base64_string = STANDARD.encode(image_data_slice);
+                            let data_format = "image/png";
+                            let data_url = format!("data:{};base64,{}",data_format, base64_string);
+                            output.push(data_url);
+                        }
                     }
                     tracing::info!("Image generation is finished and release resource now");
                     free_image_data(image_output);
@@ -500,6 +517,59 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         }
     }
     output
+}
+
+unsafe fn create_webp_from_images(image_count: usize, image_output: *mut ImageOutput,
+                                  get_image_data_length: Symbol<GetImageDataLength>,
+                                  get_image_data: Symbol<GetImageData>)
+    -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    // 1. Get dimensions from the first image to initialize the encoder
+    let image_data_length = get_image_data_length(image_output, 0);
+    let image_data = get_image_data(image_output, 0);
+    let image_data_slice: &[u8] = std::slice::from_raw_parts(image_data, image_data_length);
+    let first_img = image::load_from_memory(image_data_slice)?;
+    let (width, height) = first_img.dimensions();
+
+    // 2. Setup encoder
+    let mut config = EncodingConfig::new_lossy(80.0);
+    let mut options = EncoderOptions::default();
+    options.encoding_config = Some(config);
+    let mut encoder = Encoder::new_with_options((width, height), options)?;
+
+    let frame_duration = 1000 / 24;
+    let mut timestamp = 0;
+
+    // 3. Loop through paths, decode, and add to animation
+    for i in 0 ..image_count {
+        let image_data_length = get_image_data_length(image_output, i);
+        let image_data = get_image_data(image_output, i);
+        let image_data_slice: &[u8] = std::slice::from_raw_parts(image_data, image_data_length);
+        let img = image::load_from_memory(image_data_slice)?;
+        let rgba = img.into_rgba8();
+
+        encoder.add_frame(&rgba, timestamp)?;
+        timestamp += frame_duration;
+    }
+
+    // 4. Finalize
+    let webp_data = encoder.finalize(timestamp)?;
+    Ok(webp_data.to_vec())
+}
+
+fn create_webp_streaming<I>(paths: I, fps: i32, width: u32, height: u32)
+                                -> Result<Vec<u8>, Box<dyn std::error::Error>>
+where I: Iterator<Item = String> {
+    let mut encoder = Encoder::new((width, height))?;
+    let mut timestamp = 0;
+    let frame_duration = 1000 / fps;
+
+    for path in paths {
+        let img = image::open(path)?;
+        encoder.add_frame(&img.to_rgba8(), timestamp)?;
+        timestamp += frame_duration;
+    }
+
+    Ok(encoder.finalize(timestamp)?.to_vec())
 }
 
 #[repr(C)]

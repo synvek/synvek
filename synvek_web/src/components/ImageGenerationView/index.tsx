@@ -322,7 +322,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           {image.type === 'image' ? (
             <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           ) : (
-            <video src={image.data} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           )}
         </div>
       )
@@ -781,7 +781,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                           style={{ borderColor: token.colorError }}
                         />
                       ) : (
-                        <video src={images[currentImageIndex].data} className={styles.imageGenerationImagePreview} style={{ borderColor: token.colorError }} />
+                        <img
+                          src={images[currentImageIndex].data}
+                          alt={''}
+                          className={styles.imageGenerationImagePreview}
+                          style={{ borderColor: token.colorError }}
+                        />
                       )
                     ) : (
                       <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>

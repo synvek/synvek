@@ -43,6 +43,7 @@ tracing-appender = "0.2"
 tracing-chrome = "0.7.2"
 tracing-actix-web = "0.7"
 uuid = { version = "1.7", features = ["v4", "serde"] }
+webp-animation = "0.9"
 #tauri = { version = "2.5.0", features = [] }
 #rustpython = "0.4.0"
 #[features]
