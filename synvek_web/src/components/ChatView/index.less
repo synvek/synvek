@@ -126,7 +126,6 @@
   padding: 0 0 0 4px;
 }
 
-
 .chatFooterTextBox {
   width: 100%;
   height: 100%;
@@ -157,4 +156,9 @@
   justify-content: end;
   align-items: center;
   gap: 8px;
+
+  // Reset Upload component background to default (override global.less)
+  :global(.ant-upload) {
+    background-color: transparent;
+  }
 }
