@@ -81,7 +81,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-20b-GGUF',
-        fileSize: '11.2GB',
+        fileSize: '11.28GB',
         repos: [],
         files: [{ repoName: 'ggml-org/gpt-oss-20b-GGUF', repoFile: 'gpt-oss-20b-mxfp4.gguf' }],
       },
@@ -109,7 +109,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-120b-GGUF',
-        fileSize: '59GB',
+        fileSize: '59.03GB',
         repos: [],
         files: [
           { repoName: 'ggml-org/gpt-oss-120b-GGUF', repoFile: 'gpt-oss-120b-mxfp4-00001-of-00003.gguf' },
@@ -141,7 +141,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'EricB/Qwen3-1.7B-UQFF',
-        fileSize: '1.49G',
+        fileSize: '1.49GB',
         repos: [],
         files: [
           { repoName: 'EricB/Qwen3-1.7B-UQFF', repoFile: 'qwen31.7b-q4k-0.uqff' },
@@ -178,7 +178,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'EricB/Llama-3.2-1B-Instruct-UQFF',
-        fileSize: '1.15G',
+        fileSize: '1.15GB',
         repos: [],
         files: [
           {
@@ -218,7 +218,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-0.6B-GGUF',
-        fileSize: '0.6G',
+        fileSize: '0.60GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-0.6B-GGUF', repoFile: 'Qwen3-0.6B-Q8_0.gguf' }],
       },
@@ -246,7 +246,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-1.7B-GGUF',
-        fileSize: '1.8G',
+        fileSize: '1.71GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-1.7B-GGUF', repoFile: 'Qwen3-1.7B-Q8_0.gguf' }],
       },
@@ -274,7 +274,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-4B-GGUF',
-        fileSize: '4.2G',
+        fileSize: '3.99GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-4B-GGUF', repoFile: 'Qwen3-4B-Q8_0.gguf' }],
       },
@@ -302,7 +302,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-8B-GGUF',
-        fileSize: '8.7G',
+        fileSize: '8.11GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-8B-GGUF', repoFile: 'Qwen3-8B-Q8_0.gguf' }],
       },
@@ -330,7 +330,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-14B-GGUF',
-        fileSize: '15.7G',
+        fileSize: '14.62GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-14B-GGUF', repoFile: 'Qwen3-14B-Q8_0.gguf' }],
       },
@@ -358,7 +358,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-32B-GGUF',
-        fileSize: '34.8G',
+        fileSize: '32.43GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-32B-GGUF', repoFile: 'Qwen3-32B-Q8_0.gguf' }],
       },
@@ -386,7 +386,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-235B-A22B-GGUF',
-        fileSize: '250G',
+        fileSize: '232.77GB',
         repos: [],
         files: [
           { repoName: 'Qwen/Qwen3-235B-A22B-GGUF', repoFile: 'Q8_0/Qwen3-235B-A22B-Q8_0-00001-of-00009.gguf' },
@@ -422,17 +422,17 @@ export const modelProviders: ModelProvider[] = [
     modelCreator: 'Qwen',
     modelSource: 'huggingface',
     modelOptions: [
-      { name: 'Qwen/Qwen2-VL-2B', fileSize: '4GB', repos: [{ repoName: 'Qwen/Qwen2-VL-2B' }], files: [] },
+      { name: 'Qwen/Qwen2-VL-2B', fileSize: '8.25GB', repos: [{ repoName: 'Qwen/Qwen2-VL-2B' }], files: [] },
       {
         name: 'Qwen/Qwen2-VL-2B-Instruct',
-        fileSize: '4GB',
+        fileSize: '4.13GB',
         repos: [{ repoName: 'Qwen/Qwen2-VL-2B-Instruct' }],
         files: [],
       },
-      { name: 'Qwen/Qwen2-VL-7B', fileSize: '15GB', repos: [{ repoName: 'Qwen/Qwen2-VL-7B' }], files: [] },
+      { name: 'Qwen/Qwen2-VL-7B', fileSize: '30.91GB', repos: [{ repoName: 'Qwen/Qwen2-VL-7B' }], files: [] },
       {
         name: 'Qwen/Qwen2-VL-7B-Instruct',
-        fileSize: '15GB',
+        fileSize: '15.45GB',
         repos: [{ repoName: 'Qwen/Qwen2-VL-7B-Instruct' }],
         files: [],
       },
@@ -458,12 +458,12 @@ export const modelProviders: ModelProvider[] = [
     modelCreator: 'Qwen',
     modelSource: 'huggingface',
     modelOptions: [
-      { name: 'Qwen/Qwen3-0.6B', fileSize: '1GB', repos: [{ repoName: 'Qwen/Qwen3-0.6B' }], files: [] },
-      { name: 'Qwen/Qwen3-1.7B', fileSize: '4GB', repos: [{ repoName: 'Qwen/Qwen3-1.7B' }], files: [] },
-      { name: 'Qwen/Qwen3-4B', fileSize: '8GB', repos: [{ repoName: 'Qwen/Qwen3-4B' }], files: [] },
-      { name: 'Qwen/Qwen3-8B', fileSize: '16GB', repos: [{ repoName: 'Qwen/Qwen3-8B' }], files: [] },
-      { name: 'Qwen/Qwen3-14B', fileSize: '28GB', repos: [{ repoName: 'Qwen/Qwen3-14B' }], files: [] },
-      { name: 'Qwen/Qwen3-32B', fileSize: '64GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] },
+      { name: 'Qwen/Qwen3-0.6B', fileSize: '1.41GB', repos: [{ repoName: 'Qwen/Qwen3-0.6B' }], files: [] },
+      { name: 'Qwen/Qwen3-1.7B', fileSize: '3.80GB', repos: [{ repoName: 'Qwen/Qwen3-1.7B' }], files: [] },
+      { name: 'Qwen/Qwen3-4B', fileSize: '7.51GB', repos: [{ repoName: 'Qwen/Qwen3-4B' }], files: [] },
+      { name: 'Qwen/Qwen3-8B', fileSize: '15.27GB', repos: [{ repoName: 'Qwen/Qwen3-8B' }], files: [] },
+      { name: 'Qwen/Qwen3-14B', fileSize: '27.52GB', repos: [{ repoName: 'Qwen/Qwen3-14B' }], files: [] },
+      { name: 'Qwen/Qwen3-32B', fileSize: '61.04GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] },
     ],
     categories: ['text-to-text'],
     backends: ['default'],
@@ -488,14 +488,14 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'deepseek-ai/DeepSeek-V3-Base',
-        fileSize: '900GB',
+        fileSize: '641.31GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-V3-Base' }],
         files: [],
       },
-      { name: 'deepseek-ai/DeepSeek-V3', fileSize: '900GB', repos: [{ repoName: 'Qwen/DeepSeek-V3' }], files: [] },
+      { name: 'deepseek-ai/DeepSeek-V3', fileSize: '641.31GB', repos: [{ repoName: 'deepseek-ai/DeepSeek-V3' }], files: [] },
       {
         name: 'deepseek-ai/DeepSeek-V3-0324',
-        fileSize: '900GB',
+        fileSize: '641.31GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-V3-0324' }],
         files: [],
       },
@@ -521,46 +521,40 @@ export const modelProviders: ModelProvider[] = [
     modelCreator: 'deepseek-ai',
     modelSource: 'huggingface',
     modelOptions: [
-      { name: 'deepseek-ai/DeepSeek-R1', fileSize: '900GB', repos: [{ repoName: 'Qwen/DeepSeek-R1' }], files: [] },
+      { name: 'deepseek-ai/DeepSeek-R1', fileSize: '641.31GB', repos: [{ repoName: 'deepseek-ai/DeepSeek-R1' }], files: [] },
       {
         name: 'deepseek-ai/DeepSeek-R1-0528',
-        fileSize: '900GB',
+        fileSize: '641.31GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-0528' }],
         files: [],
       },
       {
         name: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B',
-        fileSize: '4GB',
+        fileSize: '3.32GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B' }],
         files: [],
       },
       {
         name: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B',
-        fileSize: '17GB',
+        fileSize: '14.19GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B' }],
         files: [],
       },
       {
         name: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-14B',
-        fileSize: '32GB',
+        fileSize: '27.52GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-14B' }],
         files: [],
       },
       {
         name: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B',
-        fileSize: '70GB',
+        fileSize: '61.03GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B' }],
         files: [],
       },
       {
-        name: 'deepseek-ai/DeepSeek-R1-Distill-Llama-7B',
-        fileSize: '16GB',
-        repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-Distill-Llama-7B' }],
-        files: [],
-      },
-      {
         name: 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B',
-        fileSize: '17GB',
+        fileSize: '15.26GB',
         repos: [{ repoName: 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B' }],
         files: [],
       },
@@ -588,7 +582,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'black-forest-labs/FLUX.1-schnell',
-        fileSize: '54GB',
+        fileSize: '31.33GB',
         repos: [{ repoName: 'EricB/t5_tokenizer' }, { repoName: 'EricB/t5-v1_1-xxl-enc-only' }],
         files: [
           { repoName: 'black-forest-labs/FLUX.1-schnell', repoFile: 'flux1-schnell.safetensors' },
@@ -621,7 +615,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'microsoft/Phi-4-multimodal-instruct',
-        fileSize: '12GB',
+        fileSize: '11.99GB',
         repos: [{ repoName: 'microsoft/Phi-4-multimodal-instruct' }],
         files: [],
       },
@@ -649,7 +643,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'nari-labs/Dia-1.6B',
-        fileSize: '12.9GB',
+        fileSize: '12.58GB',
         repos: [{ repoName: 'nari-labs/Dia-1.6B' }, { repoName: 'EricB/dac_44khz' }],
         files: [],
       },
@@ -677,7 +671,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3n-E4B-it',
-        fileSize: '12.9GB',
+        fileSize: '14.66GB',
         repos: [{ repoName: 'google/gemma-3n-E4B-it' }],
         files: [],
       },
@@ -698,81 +692,6 @@ export const modelProviders: ModelProvider[] = [
     accessTokenRequired: false,
     extraArgs: [],
   },
-  // {
-  //   modelId: 'NousResearch-Llama-3.2-1B',
-  //   modelCreator: 'NousResearch',
-  //   modelSource: 'huggingface',
-  //   modelOptions: [
-  //     {
-  //       name: 'NousResearch/Llama-3.2-1B',
-  //       fileSize: '5GB',
-  //       repos: [{ repoName: 'NousResearch/Llama-3.2-1B' }],
-  //       files: [],
-  //     },
-  //   ],
-  //   categories: ['text-to-text'],
-  //   modelType: 'run',
-  //   supportISQ: false,
-  //   isAnyMoE: false,
-  //   supportTool: false,
-  //   supportOffloaded: false,
-  //   supportThinking: false,
-  //   supportMoQE: false,
-  //   adapter: undefined,
-  //   chatTemplate: undefined,
-  //   summary: 'NousResearch-Llama-3.2-1B summary',
-  //   description: 'NousResearch-Llama-3.2-1B details',
-  // },
-  // {
-  //   modelId: 'NousResearch/Hermes-3-Llama-3.2-3B',
-  //   modelCreator: 'NousResearch',
-  //   modelSource: 'huggingface',
-  //   modelOptions: [
-  //     {
-  //       name: 'NousResearch/Hermes-3-Llama-3.2-3B',
-  //       fileSize: '6.5GB',
-  //       repos: [{ repoName: 'NousResearch/Hermes-3-Llama-3.2-3B' }],
-  //       files: [],
-  //     },
-  //   ],
-  //   categories: ['text-to-text'],
-  //   modelType: 'run',
-  //   supportISQ: false,
-  //   isAnyMoE: false,
-  //   supportTool: false,
-  //   supportOffloaded: false,
-  //   supportThinking: false,
-  //   supportMoQE: false,
-  //   adapter: undefined,
-  //   chatTemplate: undefined,
-  //   summary: 'NousResearch/Hermes-3-Llama-3.2-3B summary',
-  //   description: 'NousResearch/Hermes-3-Llama-3.2-3B details',
-  // },
-  // {
-  //   modelId: 'Mistral-Nemo-Instruct-FP8-2407',
-  //   modelCreator: 'mistralai',
-  //   modelSource: 'huggingface',
-  //   modelOptions: [
-  //     {
-  //       name: 'mistralai/Mistral-Nemo-Instruct-FP8-2407',
-  //       fileSize: '13GB',
-  //       repos: [{ repoName: 'mistralai/Mistral-Nemo-Instruct-FP8-2407' }],
-  //       files: [],
-  //     },
-  //   ],
-  //   categories: ['text-to-text'],
-  //   modelType: 'run',
-  //   supportISQ: false,
-  //   isAnyMoE: false,
-  //   supportTool: false,
-  //   supportOffloaded: false,
-  //   supportThinking: false,
-  //   supportMoQE: false,
-  //   adapter: undefined,
-  //   chatTemplate: undefined,
-  //   summary: 'mistralai/Mistral-Nemo-Instruct-FP8-2407 summary',
-  //   description: 'mistralai/Mistral-Nemo-Instruct-FP8-2407 details',
-  // },
   {
     modelId: 'FLUX.1-schnell-gguf',
     modelCreator: 'leejet',
@@ -780,7 +699,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'FLUX.1-schnell-gguf-q4_0',
-        fileSize: '15.76GB',
+        fileSize: '16.07GB',
         repos: [],
         files: [
           { repoName: 'leejet/FLUX.1-schnell-gguf', repoFile: 'flux1-schnell-q4_0.gguf' },
@@ -820,7 +739,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-0.6B-GGUF',
-        fileSize: '0.6G',
+        fileSize: '0.60GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-0.6B-GGUF', repoFile: 'Qwen3-0.6B-Q8_0.gguf' }],
       },
@@ -848,7 +767,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-1.7B-GGUF',
-        fileSize: '1.8G',
+        fileSize: '1.71GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-1.7B-GGUF', repoFile: 'Qwen3-1.7B-Q8_0.gguf' }],
       },
@@ -876,7 +795,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-4B-GGUF',
-        fileSize: '4.2G',
+        fileSize: '3.99GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-4B-GGUF', repoFile: 'Qwen3-4B-Q8_0.gguf' }],
       },
@@ -904,7 +823,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-8B-GGUF',
-        fileSize: '8.7G',
+        fileSize: '8.11GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-8B-GGUF', repoFile: 'Qwen3-8B-Q8_0.gguf' }],
       },
@@ -932,7 +851,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-14B-GGUF',
-        fileSize: '15.7G',
+        fileSize: '14.62GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-14B-GGUF', repoFile: 'Qwen3-14B-Q8_0.gguf' }],
       },
@@ -960,7 +879,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-32B-GGUF',
-        fileSize: '34.8G',
+        fileSize: '32.43GB',
         repos: [],
         files: [{ repoName: 'Qwen/Qwen3-32B-GGUF', repoFile: 'Qwen3-32B-Q8_0.gguf' }],
       },
@@ -988,7 +907,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen/Qwen3-235B-A22B-GGUF',
-        fileSize: '250G',
+        fileSize: '232.77GB',
         repos: [],
         files: [
           { repoName: 'Qwen/Qwen3-235B-A22B-GGUF', repoFile: 'Q8_0/Qwen3-235B-A22B-Q8_0-00001-of-00009.gguf' },
@@ -1026,7 +945,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'nari-labs/Dia-1.6B',
-        fileSize: '12.9GB',
+        fileSize: '12.58GB',
         repos: [{ repoName: 'nari-labs/Dia-1.6B' }, { repoName: 'synvek/dac_44khz' }],
         files: [],
       },
@@ -1054,7 +973,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-20b-GGUF',
-        fileSize: '11.2GB',
+        fileSize: '11.28GB',
         repos: [],
         files: [{ repoName: 'ggml-org/gpt-oss-20b-GGUF', repoFile: 'gpt-oss-20b-mxfp4.gguf' }],
       },
@@ -1082,7 +1001,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'ggml-org/gpt-oss-120b-GGUF',
-        fileSize: '59GB',
+        fileSize: '59.03GB',
         repos: [],
         files: [
           { repoName: 'ggml-org/gpt-oss-120b-GGUF', repoFile: 'gpt-oss-120b-mxfp4-00001-of-00003.gguf' },
@@ -1114,7 +1033,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'LLM-Research/Phi-4-multimodal-instruct',
-        fileSize: '12GB',
+        fileSize: '11.99GB',
         repos: [{ repoName: 'LLM-Research/Phi-4-multimodal-instruct' }],
         files: [],
       },
@@ -1182,19 +1101,19 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q3_K_L-GGUF',
-        fileSize: '37GB',
+        fileSize: '34.59GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q4_K_M-GGUF',
-        fileSize: '42GB',
+        fileSize: '39.60GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q6_K-GGUF',
-        fileSize: '58GB',
+        fileSize: '53.91GB',
         repos: [],
         files: [
           { repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q6_K-00001-of-00002.gguf' },
@@ -1203,7 +1122,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q8_0-GGUF',
-        fileSize: '75GB',
+        fileSize: '69.83GB',
         repos: [],
         files: [
           { repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q8_0-00001-of-00002.gguf' },
@@ -1234,25 +1153,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q3_K_L-GGUF',
-        fileSize: '17GB',
+        fileSize: '16.06GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M-GGUF',
-        fileSize: '20GB',
+        fileSize: '18.49GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q6_K-GGUF',
-        fileSize: '27GB',
+        fileSize: '25.04GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q8_0-GGUF',
-        fileSize: '35GB',
+        fileSize: '32.43GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q8_0.gguf' }],
       },
@@ -1280,25 +1199,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q3_K_L-GGUF',
-        fileSize: '7.9GB',
+        fileSize: '7.38GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M-GGUF',
-        fileSize: '8.9GB',
+        fileSize: '8.37GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q6_K-GGUF',
-        fileSize: '12.1GB',
+        fileSize: '11.29GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q8_0-GGUF',
-        fileSize: '15.7GB',
+        fileSize: '14.62GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q8_0.gguf' }],
       },
@@ -1326,25 +1245,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q3_K_L-GGUF',
-        fileSize: '4.1GB',
+        fileSize: '3.81GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q4_K_M-GGUF',
-        fileSize: '4.7GB',
+        fileSize: '4.36GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q6_K-GGUF',
-        fileSize: '6.2GB',
+        fileSize: '5.82GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q8_0-GGUF',
-        fileSize: '8.1GB',
+        fileSize: '7.54GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf' }],
       },
@@ -1372,85 +1291,85 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L',
-        fileSize: '355GB',
+        fileSize: '323.58GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M-GGUF',
-        fileSize: '410GB',
+        fileSize: '376.65GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q-GGUF',
-        fileSize: '540GB',
+        name: 'lmstudio-community/DeepSeek-V3-0324-Q6_K-GGUF',
+        fileSize: '512.97GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q8_0-GGUF',
-        fileSize: '725GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -1476,86 +1395,86 @@ export const modelProviders: ModelProvider[] = [
     modelSource: 'modelscope',
     modelOptions: [
       {
-        name: 'lmstudio-community/DeepSeek-R1-Q3_K_L',
-        fileSize: '345GB',
+        name: 'lmstudio-community/DeepSeek-R1-Q3_K_L-GGUF',
+        fileSize: '323.58GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Q4_K_M-GGUF',
-        fileSize: '398GB',
+        fileSize: '376.65GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-R1-Q6_Q-GGUF',
-        fileSize: '520GB',
+        name: 'lmstudio-community/DeepSeek-R1-Q6_K-GGUF',
+        fileSize: '512.97GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Q8_0-GGUF',
-        fileSize: '710GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -1581,86 +1500,86 @@ export const modelProviders: ModelProvider[] = [
     modelSource: 'modelscope',
     modelOptions: [
       {
-        name: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L',
-        fileSize: '345GB',
+        name: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L-GGUF',
+        fileSize: '297.75GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M-GGUF',
-        fileSize: '398GB',
+        fileSize: '381.12GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q-GGUF',
-        fileSize: '526GB',
+        name: 'lmstudio-community/DeepSeek-R1-0528-Q6_K-GGUF',
+        fileSize: '514.51GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-0528-Q8_0-GGUF',
-        fileSize: '698GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -1687,7 +1606,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-1b-it-qat-q4_0-gguf',
-        fileSize: '1G',
+        fileSize: '0.93GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-1b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1715,7 +1634,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-1b-pt-qat-q4_0-gguf',
-        fileSize: '1G',
+        fileSize: '0.93GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-1b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1743,7 +1662,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-4b-it-qat-q4_0-gguf',
-        fileSize: '4G',
+        fileSize: '3.73GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-4b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1771,7 +1690,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-4b-pt-qat-q4_0-gguf',
-        fileSize: '4G',
+        fileSize: '3.73GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-4b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1799,7 +1718,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-12b-it-qat-q4_0-gguf',
-        fileSize: '9G',
+        fileSize: '8.32GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-12b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1827,7 +1746,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-12b-pt-qat-q4_0-gguf',
-        fileSize: '9G',
+        fileSize: '8.32GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-12b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1855,7 +1774,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-27b-it-qat-q4_0-gguf',
-        fileSize: '19G',
+        fileSize: '16.85GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-27b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1883,7 +1802,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/gemma-3-27b-pt-qat-q4_0-gguf',
-        fileSize: '19G',
+        fileSize: '16.85GB',
         repos: [{ repoName: 'AI-ModelScope/gemma-3-27b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -1911,19 +1830,19 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q3_K_L-GGUF',
-        fileSize: '37GB',
+        fileSize: '34.59GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q4_K_M-GGUF',
-        fileSize: '42GB',
+        fileSize: '39.60GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q6_K-GGUF',
-        fileSize: '58GB',
+        fileSize: '53.91GB',
         repos: [],
         files: [
           { repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q6_K-00001-of-00002.gguf' },
@@ -1932,7 +1851,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-Q8_0-GGUF',
-        fileSize: '75GB',
+        fileSize: '69.83GB',
         repos: [],
         files: [
           { repoName: 'lmstudio-community/DeepSeek-R1-Distill-Llama-70B-GGUF', repoFile: 'DeepSeek-R1-Distill-Llama-70B-Q8_0-00001-of-00002.gguf' },
@@ -1963,25 +1882,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q3_K_L-GGUF',
-        fileSize: '17GB',
+        fileSize: '16.06GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M-GGUF',
-        fileSize: '20GB',
+        fileSize: '18.49GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q6_K-GGUF',
-        fileSize: '27GB',
+        fileSize: '25.04GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-Q8_0-GGUF',
-        fileSize: '35GB',
+        fileSize: '32.43GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-32B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-32B-Q8_0.gguf' }],
       },
@@ -2009,25 +1928,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q3_K_L-GGUF',
-        fileSize: '7.9GB',
+        fileSize: '7.38GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M-GGUF',
-        fileSize: '8.9GB',
+        fileSize: '8.37GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q6_K-GGUF',
-        fileSize: '12.1GB',
+        fileSize: '11.29GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-Q8_0-GGUF',
-        fileSize: '15.7GB',
+        fileSize: '14.62GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-14B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-14B-Q8_0.gguf' }],
       },
@@ -2055,25 +1974,25 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q3_K_L-GGUF',
-        fileSize: '4.1GB',
+        fileSize: '3.81GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q3_K_L.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q4_K_M-GGUF',
-        fileSize: '4.7GB',
+        fileSize: '4.36GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q6_K-GGUF',
-        fileSize: '6.2GB',
+        fileSize: '5.82GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q6_K.gguf' }],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-Q8_0-GGUF',
-        fileSize: '8.1GB',
+        fileSize: '7.54GB',
         repos: [],
         files: [{ repoName: 'lmstudio-community/DeepSeek-R1-Distill-Qwen-7B-GGUF', repoFile: 'DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf' }],
       },
@@ -2101,85 +2020,85 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L',
-        fileSize: '355GB',
+        fileSize: '323.58GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q3_K_L', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M-GGUF',
-        fileSize: '410GB',
+        fileSize: '376.65GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q4_K_M', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q-GGUF',
-        fileSize: '540GB',
+        name: 'lmstudio-community/DeepSeek-V3-0324-Q6_K-GGUF',
+        fileSize: '512.97GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q6_Q', repoFile: 'DeepSeek-V3-0324-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-V3-0324-Q8_0-GGUF',
-        fileSize: '725GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-V3-0324-Q8_0', repoFile: 'DeepSeek-V3-0324-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-V3-0324-GGUF', repoFile: 'DeepSeek-V3-0324-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -2205,86 +2124,86 @@ export const modelProviders: ModelProvider[] = [
     modelSource: 'huggingface',
     modelOptions: [
       {
-        name: 'lmstudio-community/DeepSeek-R1-Q3_K_L',
-        fileSize: '345GB',
+        name: 'lmstudio-community/DeepSeek-R1-Q3_K_L-GGUF',
+        fileSize: '323.58GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q3_K_L', repoFile: 'DeepSeek-R1-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Q4_K_M-GGUF',
-        fileSize: '398GB',
+        fileSize: '376.65GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q4_K_M', repoFile: 'DeepSeek-R1-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-R1-Q6_Q-GGUF',
-        fileSize: '520GB',
+        name: 'lmstudio-community/DeepSeek-R1-Q6_K-GGUF',
+        fileSize: '512.97GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q6_Q', repoFile: 'DeepSeek-R1-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-Q8_0-GGUF',
-        fileSize: '710GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-Q8_0', repoFile: 'DeepSeek-R1-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-GGUF', repoFile: 'DeepSeek-R1-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -2310,86 +2229,86 @@ export const modelProviders: ModelProvider[] = [
     modelSource: 'huggingface',
     modelOptions: [
       {
-        name: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L',
-        fileSize: '345GB',
+        name: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L-GGUF',
+        fileSize: '297.75GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00001-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00002-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00003-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00004-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00005-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00006-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00007-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00008-of-00009.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q3_K_L', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00009-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00001-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00002-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00003-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00004-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00005-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00006-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00007-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00008-of-00009.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q3_K_L-00009-of-00009.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M-GGUF',
-        fileSize: '398GB',
+        fileSize: '381.12GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00001-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00002-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00003-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00004-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00005-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00006-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00007-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00008-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00009-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00010-of-00011.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q4_K_M', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00011-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00001-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00002-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00003-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00004-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00005-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00006-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00007-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00008-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00009-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00010-of-00011.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q4_K_M-00011-of-00011.gguf' },
         ],
       },
       {
-        name: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q-GGUF',
-        fileSize: '526GB',
+        name: 'lmstudio-community/DeepSeek-R1-0528-Q6_K-GGUF',
+        fileSize: '514.51GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00001-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00002-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00003-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00004-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00005-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00006-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00007-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00008-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00009-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00010-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00011-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00012-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00013-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00014-of-00015.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q6_Q', repoFile: 'DeepSeek-R1-0528-Q6_Q-00015-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00001-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00002-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00003-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00004-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00005-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00006-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00007-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00008-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00009-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00010-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00011-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00012-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00013-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00014-of-00015.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q6_K-00015-of-00015.gguf' },
         ],
       },
       {
         name: 'lmstudio-community/DeepSeek-R1-0528-Q8_0-GGUF',
-        fileSize: '698GB',
+        fileSize: '664.30GB',
         repos: [],
         files: [
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00001-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00002-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00003-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00004-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00005-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00006-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00007-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00008-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00009-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00010-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00011-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00012-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00013-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00014-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00015-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00016-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00017-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00018-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00019-of-00020.gguf' },
-          { repoName: 'lmstudio-community/DeepSeek-R1-0528-Q8_0', repoFile: 'DeepSeek-R1-0528-Q8_0-00020-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00001-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00002-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00003-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00004-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00005-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00006-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00007-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00008-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00009-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00010-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00011-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00012-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00013-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00014-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00015-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00016-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00017-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00018-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00019-of-00020.gguf' },
+          { repoName: 'lmstudio-community/DeepSeek-R1-0528-GGUF', repoFile: 'DeepSeek-R1-0528-Q8_0-00020-of-00020.gguf' },
         ],
       },
     ],
@@ -2416,7 +2335,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-1b-it-qat-q4_0-gguf',
-        fileSize: '1G',
+        fileSize: '0.93GB',
         repos: [{ repoName: 'google/gemma-3-1b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2444,7 +2363,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-1b-pt-qat-q4_0-gguf',
-        fileSize: '1G',
+        fileSize: '0.93GB',
         repos: [{ repoName: 'google/gemma-3-1b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2472,7 +2391,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-4b-it-qat-q4_0-gguf',
-        fileSize: '4G',
+        fileSize: '3.73GB',
         repos: [{ repoName: 'google/gemma-3-4b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2500,7 +2419,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-4b-pt-qat-q4_0-gguf',
-        fileSize: '4G',
+        fileSize: '3.73GB',
         repos: [{ repoName: 'google/gemma-3-4b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2528,7 +2447,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-12b-it-qat-q4_0-gguf',
-        fileSize: '9G',
+        fileSize: '8.32GB',
         repos: [{ repoName: 'google/gemma-3-12b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2556,7 +2475,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-12b-pt-qat-q4_0-gguf',
-        fileSize: '9G',
+        fileSize: '8.32GB',
         repos: [{ repoName: 'google/gemma-3-12b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2584,7 +2503,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-27b-it-qat-q4_0-gguf',
-        fileSize: '19G',
+        fileSize: '16.85GB',
         repos: [{ repoName: 'google/gemma-3-27b-it-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2612,7 +2531,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'google/gemma-3-27b-pt-qat-q4_0-gguf',
-        fileSize: '19G',
+        fileSize: '16.85GB',
         repos: [{ repoName: 'google/gemma-3-27b-pt-qat-q4_0-gguf' }],
         files: [],
       },
@@ -2640,7 +2559,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/stable-diffusion-3.5-large',
-        fileSize: '26GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'AI-ModelScope/stable-diffusion-3.5-large', repoFile: 'sd3.5_large.safetensors' },
@@ -2679,7 +2598,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/stable-diffusion-3.5-medium',
-        fileSize: '15.4GB',
+        fileSize: '15.40GB',
         repos: [],
         files: [
           { repoName: 'AI-ModelScope/stable-diffusion-3.5-medium', repoFile: 'sd3.5_medium.safetensors' },
@@ -2718,7 +2637,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'AI-ModelScope/stable-diffusion-3.5-large-turbo',
-        fileSize: '26GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'AI-ModelScope/stable-diffusion-3.5-large-turbo', repoFile: 'sd3.5_large_turbo.safetensors' },
@@ -2757,7 +2676,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'stabilityai/stable-diffusion-3.5-large',
-        fileSize: '26GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'stabilityai/stable-diffusion-3.5-large', repoFile: 'sd3.5_large.safetensors' },
@@ -2796,7 +2715,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'stabilityai/stable-diffusion-3.5-medium',
-        fileSize: '15.4GB',
+        fileSize: '15.40GB',
         repos: [],
         files: [
           { repoName: 'stabilityai/stable-diffusion-3.5-medium', repoFile: 'sd3.5_medium.safetensors' },
@@ -2835,7 +2754,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'stabilityai/stable-diffusion-3.5-large-turbo',
-        fileSize: '26GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'stabilityai/stable-diffusion-3.5-large-turbo', repoFile: 'sd3.5_large_turbo.safetensors' },
@@ -2871,7 +2790,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-0.6B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-0.6B', fileSize: '1.4GB', repos: [{ repoName: 'Qwen/Qwen3-0.6B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-0.6B', fileSize: '1.41GB', repos: [{ repoName: 'Qwen/Qwen3-0.6B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2892,7 +2811,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-1.7B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-1.7B', fileSize: '4GB', repos: [{ repoName: 'Qwen/Qwen3-1.7B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-1.7B', fileSize: '3.80GB', repos: [{ repoName: 'Qwen/Qwen3-1.7B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2913,7 +2832,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-4B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-4B', fileSize: '8GB', repos: [{ repoName: 'Qwen/Qwen3-4B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-4B', fileSize: '7.51GB', repos: [{ repoName: 'Qwen/Qwen3-4B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2934,7 +2853,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-8B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-8B', fileSize: '16GB', repos: [{ repoName: 'Qwen/Qwen3-8B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-8B', fileSize: '15.27GB', repos: [{ repoName: 'Qwen/Qwen3-8B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2955,7 +2874,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-14B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-14B', fileSize: '28GB', repos: [{ repoName: 'Qwen/Qwen3-14B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-14B', fileSize: '27.52GB', repos: [{ repoName: 'Qwen/Qwen3-14B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2976,7 +2895,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-32B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/Qwen3-32B', fileSize: '64GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/Qwen3-32B', fileSize: '61.04GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -2997,7 +2916,7 @@ export const modelProviders: ModelProvider[] = [
     modelId: 'Qwen3-235B-A22B',
     modelCreator: 'Qwen',
     modelSource: 'modelscope',
-    modelOptions: [{ name: 'Qwen/-235B-A22B', fileSize: '464GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] }],
+    modelOptions: [{ name: 'Qwen/-235B-A22B', fileSize: '61.04GB', repos: [{ repoName: 'Qwen/Qwen3-32B' }], files: [] }],
     categories: ['text-to-text'],
     backends: ['default'],
     modelType: 'plain',
@@ -3021,7 +2940,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'OpenBMB/MiniCPM-V-4_5-Q4_K_M-gguf',
-        fileSize: '6GB',
+        fileSize: '5.70GB',
         repos: [],
         files: [
           { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-Q4_K_M.gguf' },
@@ -3030,7 +2949,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'OpenBMB/MiniCPM-V-4_5-Q8_0-gguf',
-        fileSize: '10GB',
+        fileSize: '9.13GB',
         repos: [],
         files: [
           { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-Q8_0.gguf' },
@@ -3039,7 +2958,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'OpenBMB/MiniCPM-V-4_5-F16-gguf',
-        fileSize: '17GB',
+        fileSize: '16.28GB',
         repos: [],
         files: [
           { repoName: 'OpenBMB/MiniCPM-V-4_5-gguf', repoFile: 'MiniCPM-V-4_5-F16.gguf' },
@@ -3070,7 +2989,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'leejet-Ovis-Image-7B-Q4_0.GGUF',
-        fileSize: '10GB',
+        fileSize: '9.01GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Ovis-Image-7B-GGUF', repoFile: 'ovis_image-Q4_0.gguf' },
@@ -3080,7 +2999,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Ovis-Image-7B-Q8_0.GGUF',
-        fileSize: '13.8GB',
+        fileSize: '12.43GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Ovis-Image-7B-GGUF', repoFile: 'ovis_image-Q8_0.gguf' },
@@ -3119,7 +3038,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'leejet/Ovis-Image-7B-Q4_0.GGUF',
-        fileSize: '10GB',
+        fileSize: '9.01GB',
         repos: [],
         files: [
           { repoName: 'leejet/Ovis-Image-7B-GGUF', repoFile: 'ovis_image-Q4_0.gguf' },
@@ -3129,7 +3048,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet/Ovis-Image-7B-Q8_0.GGUF',
-        fileSize: '13.8GB',
+        fileSize: '12.43GB',
         repos: [],
         files: [
           { repoName: 'leejet/Ovis-Image-7B-GGUF', repoFile: 'ovis_image-Q8_0.gguf' },
@@ -3168,7 +3087,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'leejet-Z-Image-Turbo-Q8_0-GGUF',
-        fileSize: '9.3GB',
+        fileSize: '8.76GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q8_0.gguf' },
@@ -3178,7 +3097,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q6_K-GGUF',
-        fileSize: '7.9GB',
+        fileSize: '7.54GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q6_K.gguf' },
@@ -3188,7 +3107,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q5_0-GGUF',
-        fileSize: '7.2GB',
+        fileSize: '6.87GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q5_0.gguf' },
@@ -3198,7 +3117,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q4_K-GGUF',
-        fileSize: '6.6GB',
+        fileSize: '6.24GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q4_K.gguf' },
@@ -3208,7 +3127,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q4_0-GGUF',
-        fileSize: '6.4GB',
+        fileSize: '6.07GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q4_0.gguf' },
@@ -3218,7 +3137,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q3_K-GGUF',
-        fileSize: '5.8GB',
+        fileSize: '5.57GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q3_K.gguf' },
@@ -3228,7 +3147,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'leejet-Z-Image-Turbo-Q2_K-GGUF',
-        fileSize: '5.3GB',
+        fileSize: '2.64GB',
         repos: [],
         files: [
           { repoName: 'hf/leejet-Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q2_K.gguf.gguf' },
@@ -3267,7 +3186,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Z-Image-Turbo-Q8_0-GGUF',
-        fileSize: '9.3GB',
+        fileSize: '8.76GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q8_0.gguf' },
@@ -3277,7 +3196,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q6_K-GGUF',
-        fileSize: '7.9GB',
+        fileSize: '7.54GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q6_K.gguf' },
@@ -3287,7 +3206,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q5_0-GGUF',
-        fileSize: '7.2GB',
+        fileSize: '6.87GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q5_0.gguf' },
@@ -3297,7 +3216,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q4_K-GGUF',
-        fileSize: '6.6GB',
+        fileSize: '6.24GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q4_K.gguf' },
@@ -3307,7 +3226,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q4_0-GGUF',
-        fileSize: '6.4GB',
+        fileSize: '6.07GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q4_0.gguf' },
@@ -3317,7 +3236,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q3_K-GGUF',
-        fileSize: '5.8GB',
+        fileSize: '5.57GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q3_K.gguf' },
@@ -3327,7 +3246,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Z-Image-Turbo-Q2_K-GGUF',
-        fileSize: '5.3GB',
+        fileSize: '2.64GB',
         repos: [],
         files: [
           { repoName: 'leejet/Z-Image-Turbo-GGUF', repoFile: 'z_image_turbo-Q2_K.gguf.gguf' },
@@ -3366,7 +3285,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen_Image-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q8_0.gguf' },
@@ -3376,7 +3295,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q6_K.gguf' },
@@ -3386,7 +3305,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_K.gguf' },
@@ -3396,7 +3315,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_K_M.gguf' },
@@ -3406,7 +3325,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_1.gguf' },
@@ -3416,7 +3335,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_0.gguf' },
@@ -3426,7 +3345,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.68GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_K_S.gguf' },
@@ -3436,7 +3355,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_K_M.gguf' },
@@ -3446,7 +3365,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.41GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_0.gguf' },
@@ -3456,7 +3375,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q3_K_S.gguf' },
@@ -3466,7 +3385,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.39GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q3_K_M.gguf' },
@@ -3515,7 +3434,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen_Image-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q8_0.gguf' },
@@ -3525,7 +3444,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q6_K.gguf' },
@@ -3535,7 +3454,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_K.gguf' },
@@ -3545,7 +3464,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_K_M.gguf' },
@@ -3555,7 +3474,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_1.gguf' },
@@ -3565,7 +3484,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q5_0.gguf' },
@@ -3575,7 +3494,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.68GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_K_S.gguf' },
@@ -3585,7 +3504,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_K_M.gguf' },
@@ -3595,7 +3514,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.41GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q4_0.gguf' },
@@ -3605,7 +3524,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q3_K_S.gguf' },
@@ -3615,7 +3534,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.39GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-GGUF', repoFile: 'Qwen_Image-Q3_K_M.gguf' },
@@ -3662,7 +3581,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen_Image_Edit-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q8_0.gguf' },
@@ -3672,7 +3591,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q6_K.gguf' },
@@ -3682,7 +3601,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_K.gguf' },
@@ -3692,7 +3611,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_K_M.gguf' },
@@ -3702,7 +3621,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_1.gguf' },
@@ -3712,7 +3631,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_0.gguf' },
@@ -3722,7 +3641,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.68GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_K_S.gguf' },
@@ -3732,7 +3651,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_K_M.gguf' },
@@ -3742,7 +3661,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.41GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_0.gguf' },
@@ -3752,7 +3671,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q3_K_S.gguf' },
@@ -3762,7 +3681,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.39GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q3_K_M.gguf' },
@@ -3811,7 +3730,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen_Image_Edit-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q8_0.gguf' },
@@ -3821,7 +3740,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q6_K.gguf' },
@@ -3831,7 +3750,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_K.gguf' },
@@ -3841,7 +3760,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_K_M.gguf' },
@@ -3851,7 +3770,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_1.gguf' },
@@ -3861,7 +3780,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q5_0.gguf' },
@@ -3871,7 +3790,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.68GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_K_S.gguf' },
@@ -3881,7 +3800,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_K_M.gguf' },
@@ -3891,7 +3810,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.41GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q4_0.gguf' },
@@ -3901,7 +3820,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q3_K_S.gguf' },
@@ -3911,7 +3830,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen_Image_Edit-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.39GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-GGUF', repoFile: 'Qwen_Image_Edit-Q3_K_M.gguf' },
@@ -3960,7 +3879,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen-Image-Edit-2509-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q8_0.gguf' },
@@ -3970,7 +3889,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q6_K.gguf' },
@@ -3980,7 +3899,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_K.gguf' },
@@ -3990,7 +3909,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_K_M.gguf' },
@@ -4000,7 +3919,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_1.gguf' },
@@ -4010,7 +3929,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_0.gguf' },
@@ -4020,7 +3939,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_K_S.gguf' },
@@ -4030,7 +3949,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_K_M.gguf' },
@@ -4040,7 +3959,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.48GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_0.gguf' },
@@ -4050,7 +3969,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q3_K_S.gguf' },
@@ -4060,7 +3979,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.47GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q3_K_M.gguf' },
@@ -4070,7 +3989,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q2_K.gguf',
-        fileSize: '10.95GB',
+        fileSize: '11.03GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q2_K.gguf' },
@@ -4110,7 +4029,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'Qwen-Image-Edit-2509-Q8_0.gguf',
-        fileSize: '25.2GB',
+        fileSize: '24.64GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q8_0.gguf' },
@@ -4120,7 +4039,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q6_K.gguf',
-        fileSize: '20.3GB',
+        fileSize: '20.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q6_K.gguf' },
@@ -4130,7 +4049,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_K.gguf',
-        fileSize: '17.7GB',
+        fileSize: '4.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_K.gguf' },
@@ -4140,7 +4059,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_K_M.gguf',
-        fileSize: '18.6GB',
+        fileSize: '18.28GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_K_M.gguf' },
@@ -4150,7 +4069,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_1.gguf',
-        fileSize: '19GB',
+        fileSize: '18.71GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_1.gguf' },
@@ -4160,7 +4079,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q5_0.gguf',
-        fileSize: '18GB',
+        fileSize: '17.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q5_0.gguf' },
@@ -4170,7 +4089,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_K_S.gguf',
-        fileSize: '15.9GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_K_S.gguf' },
@@ -4180,7 +4099,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_K_M.gguf',
-        fileSize: '17.6GB',
+        fileSize: '16.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_K_M.gguf' },
@@ -4190,7 +4109,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q4_0.gguf',
-        fileSize: '15.4GB',
+        fileSize: '15.48GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q4_0.gguf' },
@@ -4200,7 +4119,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q3_K_S.gguf',
-        fileSize: '12.4GB',
+        fileSize: '12.79GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q3_K_S.gguf' },
@@ -4210,7 +4129,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q3_K_M.gguf',
-        fileSize: '13GB',
+        fileSize: '13.47GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q3_K_M.gguf' },
@@ -4220,7 +4139,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Qwen-Image-Edit-2509-Q2_K.gguf',
-        fileSize: '10.95GB',
+        fileSize: '11.03GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Qwen-Image-Edit-2509-GGUF', repoFile: 'Qwen-Image-Edit-2509-Q2_K.gguf' },
@@ -4270,7 +4189,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q8_0.gguf',
-        fileSize: '12.8GB',
+        fileSize: '11.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q8_0.gguf' },
@@ -4280,7 +4199,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q6_K.gguf',
-        fileSize: '11.6GB',
+        fileSize: '10.86GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q6_K.gguf' },
@@ -4290,7 +4209,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_K_S.gguf',
-        fileSize: '11GB',
+        fileSize: '10.26GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_S.gguf' },
@@ -4300,7 +4219,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_K_M.gguf',
-        fileSize: '11.2GB',
+        fileSize: '10.49GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_M.gguf' },
@@ -4310,7 +4229,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_1.gguf',
-        fileSize: '11.3GB',
+        fileSize: '10.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_1.gguf' },
@@ -4320,7 +4239,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_0.gguf',
-        fileSize: '11.1GB',
+        fileSize: '10.33GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_0.gguf' },
@@ -4330,7 +4249,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_K_S.gguf',
-        fileSize: '10.5GB',
+        fileSize: '9.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_S.gguf' },
@@ -4340,7 +4259,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_K_M.gguf',
-        fileSize: '10.8GB',
+        fileSize: '10.14GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_M.gguf' },
@@ -4350,7 +4269,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_1.gguf',
-        fileSize: '10.6GB',
+        fileSize: '9.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_1.gguf' },
@@ -4360,7 +4279,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_0.gguf',
-        fileSize: '10.4GB',
+        fileSize: '9.76GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_0.gguf' },
@@ -4370,7 +4289,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q3_K_S.gguf',
-        fileSize: '9.7GB',
+        fileSize: '9.08GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_S.gguf' },
@@ -4380,7 +4299,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q3_K_M.gguf',
-        fileSize: '9.9GB',
+        fileSize: '9.31GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_M.gguf' },
@@ -4390,7 +4309,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q2_K.gguf',
-        fileSize: '9.2GB',
+        fileSize: '8.67GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q2_K.gguf' },
@@ -4417,8 +4336,8 @@ export const modelProviders: ModelProvider[] = [
     supportStepsCount: true,
     supportCfgScale: true,
     supportNegativePrompt: true,
-    defaultCfgScale: 6.0,
-    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
+    defaultStepsCount: 50,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: false,
@@ -4441,7 +4360,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q8_0.gguf',
-        fileSize: '12.8GB',
+        fileSize: '11.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q8_0.gguf' },
@@ -4451,7 +4370,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q6_K.gguf',
-        fileSize: '11.6GB',
+        fileSize: '10.86GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q6_K.gguf' },
@@ -4461,7 +4380,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_K_S.gguf',
-        fileSize: '11GB',
+        fileSize: '10.26GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_S.gguf' },
@@ -4471,7 +4390,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_K_M.gguf',
-        fileSize: '11.2GB',
+        fileSize: '10.49GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_K_M.gguf' },
@@ -4481,7 +4400,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_1.gguf',
-        fileSize: '11.3GB',
+        fileSize: '10.54GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_1.gguf' },
@@ -4491,7 +4410,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q5_0.gguf',
-        fileSize: '11.1GB',
+        fileSize: '10.33GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q5_0.gguf' },
@@ -4501,7 +4420,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_K_S.gguf',
-        fileSize: '10.5GB',
+        fileSize: '9.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_S.gguf' },
@@ -4511,7 +4430,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_K_M.gguf',
-        fileSize: '10.8GB',
+        fileSize: '10.14GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_K_M.gguf' },
@@ -4521,7 +4440,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_1.gguf',
-        fileSize: '10.6GB',
+        fileSize: '9.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_1.gguf' },
@@ -4531,7 +4450,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q4_0.gguf',
-        fileSize: '10.4GB',
+        fileSize: '9.76GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q4_0.gguf' },
@@ -4541,7 +4460,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q3_K_S.gguf',
-        fileSize: '9.7GB',
+        fileSize: '9.08GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_S.gguf' },
@@ -4551,7 +4470,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q3_K_M.gguf',
-        fileSize: '9.9GB',
+        fileSize: '9.31GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q3_K_M.gguf' },
@@ -4561,7 +4480,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-TI2V-5B-Q2_K.gguf',
-        fileSize: '9.2GB',
+        fileSize: '8.67GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-TI2V-5B-GGUF', repoFile: 'Wan2.2-TI2V-5B-Q2_K.gguf' },
@@ -4588,8 +4507,8 @@ export const modelProviders: ModelProvider[] = [
     supportStepsCount: true,
     supportCfgScale: true,
     supportNegativePrompt: true,
-    defaultStepsCount: 20,
-    defaultCfgScale: 6.0,
+    defaultStepsCount: 50,
+    defaultCfgScale: 5.0,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: false,
@@ -4602,7 +4521,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'wan2.2_t2v_high_noise_14B_fp16',
-        fileSize: '16.25GB',
+        fileSize: '32.48GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
@@ -4612,7 +4531,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_t2v_high_noise_14B_fp8_scaled',
-        fileSize: '16.25GB',
+        fileSize: '19.18GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
@@ -4622,7 +4541,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_t2v_low_noise_14B_fp16',
-        fileSize: '16.25GB',
+        fileSize: '32.48GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors' },
@@ -4632,7 +4551,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_t2v_low_noise_14B_fp8_scaled',
-        fileSize: '16.25GB',
+        fileSize: '19.18GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors' },
@@ -4642,7 +4561,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf',
-        fileSize: '12.8GB',
+        fileSize: '20.21GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
@@ -4652,7 +4571,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf',
-        fileSize: '11.6GB',
+        fileSize: '17.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
@@ -4662,7 +4581,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf',
-        fileSize: '11GB',
+        fileSize: '15.30GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
@@ -4672,7 +4591,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf',
-        fileSize: '11.2GB',
+        fileSize: '15.91GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
@@ -4682,7 +4601,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf',
-        fileSize: '11.3GB',
+        fileSize: '16.12GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
@@ -4692,7 +4611,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf',
-        fileSize: '11.1GB',
+        fileSize: '15.47GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
@@ -4702,7 +4621,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf',
-        fileSize: '10.5GB',
+        fileSize: '14.01GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
@@ -4712,7 +4631,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf',
-        fileSize: '10.8GB',
+        fileSize: '14.85GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
@@ -4722,7 +4641,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf',
-        fileSize: '10.6GB',
+        fileSize: '14.49GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
@@ -4732,7 +4651,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf',
-        fileSize: '10.4GB',
+        fileSize: '13.83GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
@@ -4742,7 +4661,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf',
-        fileSize: '9.7GB',
+        fileSize: '11.93GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
@@ -4752,7 +4671,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf',
-        fileSize: '9.9GB',
+        fileSize: '12.55GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
@@ -4762,7 +4681,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf',
-        fileSize: '9.2GB',
+        fileSize: '10.80GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
@@ -4772,7 +4691,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf',
-        fileSize: '12.8GB',
+        fileSize: '20.21GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf' },
@@ -4782,7 +4701,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf',
-        fileSize: '11.6GB',
+        fileSize: '17.04GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf' },
@@ -4792,7 +4711,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf',
-        fileSize: '11GB',
+        fileSize: '15.30GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf' },
@@ -4802,7 +4721,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf',
-        fileSize: '11.2GB',
+        fileSize: '15.91GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf' },
@@ -4812,7 +4731,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf',
-        fileSize: '11.3GB',
+        fileSize: '16.12GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf' },
@@ -4822,7 +4741,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf',
-        fileSize: '11.1GB',
+        fileSize: '15.47GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf' },
@@ -4832,7 +4751,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf',
-        fileSize: '10.5GB',
+        fileSize: '14.01GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf' },
@@ -4842,7 +4761,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf',
-        fileSize: '10.8GB',
+        fileSize: '14.85GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf' },
@@ -4852,7 +4771,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf',
-        fileSize: '10.6GB',
+        fileSize: '14.49GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf' },
@@ -4862,7 +4781,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf',
-        fileSize: '10.4GB',
+        fileSize: '13.83GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf' },
@@ -4872,7 +4791,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf',
-        fileSize: '9.7GB',
+        fileSize: '11.93GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf' },
@@ -4882,7 +4801,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf',
-        fileSize: '9.9GB',
+        fileSize: '12.55GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf' },
@@ -4892,7 +4811,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf',
-        fileSize: '9.2GB',
+        fileSize: '10.80GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf' },
@@ -4919,8 +4838,1001 @@ export const modelProviders: ModelProvider[] = [
     supportStepsCount: true,
     supportCfgScale: true,
     supportNegativePrompt: true,
-    defaultCfgScale: 6.0,
-    defaultStepsCount: 20,
+    defaultCfgScale: 5.0,
+    defaultStepsCount: 50,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
+    supportImageEdit: false,
+    supportVideoGen: true,
+  },
+  {
+    modelId: 'Wan2.2-T2V-A14B',
+    modelCreator: 'Wan-AI',
+    modelSource: 'huggingface',
+    modelOptions: [
+      {
+        name: 'wan2.2_t2v_high_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_t2v_high_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_t2v_low_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_t2v_low_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf',
+        fileSize: '15.30GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf',
+        fileSize: '15.91GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf',
+        fileSize: '14.49GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf',
+        fileSize: '13.83GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf',
+        fileSize: '15.30GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf',
+        fileSize: '15.91GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf',
+        fileSize: '14.49GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf',
+        fileSize: '13.83GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+    ],
+    categories: ['text-to-video', 'image-to-video'],
+    backends: ['stable_diffusion_cpp'],
+    modelType: 'diffusion',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'Wan2.2-T2V-A14B summary',
+    description: 'Wan2.2-T2V-A14B details',
+    accessTokenRequired: false,
+    extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultCfgScale: 5.0,
+    defaultStepsCount: 50,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
+    supportImageEdit: false,
+    supportVideoGen: true,
+  },
+  {
+    modelId: 'Wan2.2-I2V-A14B',
+    modelCreator: 'Wan-AI',
+    modelSource: 'modelscope',
+    modelOptions: [
+      {
+        name: 'wan2.2_i2v_high_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_high_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_low_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_low_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf',
+        fileSize: '15.31GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf',
+        fileSize: '15.92GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf',
+        fileSize: '5.86GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf',
+        fileSize: '5.86GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf',
+        fileSize: '15.31GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf',
+        fileSize: '15.92GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf',
+        fileSize: '14.49GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf',
+        fileSize: '13.83GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+    ],
+    categories: ['text-to-video', 'image-to-video'],
+    backends: ['stable_diffusion_cpp'],
+    modelType: 'diffusion',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'Wan2.2-I2V-A14B summary',
+    description: 'Wan2.2-I2V-A14B details',
+    accessTokenRequired: false,
+    extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultCfgScale: 5.0,
+    defaultStepsCount: 50,
+    supportOffloadedToCPU: true,
+    supportDiffusionFA: true,
+    supportImageEdit: false,
+    supportVideoGen: true,
+  },
+  {
+    modelId: 'Wan2.2-I2V-A14B',
+    modelCreator: 'Wan-AI',
+    modelSource: 'huggingface',
+    modelOptions: [
+      {
+        name: 'wan2.2_i2v_high_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_high_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_low_noise_14B_fp16',
+        fileSize: '32.48GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'wan2.2_i2v_low_noise_14B_fp8_scaled',
+        fileSize: '19.18GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf',
+        fileSize: '15.31GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf',
+        fileSize: '15.92GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf',
+        fileSize: '5.86GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf',
+        fileSize: '5.86GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf',
+        fileSize: '20.21GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf',
+        fileSize: '17.04GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf',
+        fileSize: '15.31GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf',
+        fileSize: '15.92GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf',
+        fileSize: '16.12GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf',
+        fileSize: '15.47GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf',
+        fileSize: '14.01GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf',
+        fileSize: '14.85GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf',
+        fileSize: '14.49GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf',
+        fileSize: '13.83GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf',
+        fileSize: '11.93GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf',
+        fileSize: '12.55GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+      {
+        name: 'Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf',
+        fileSize: '10.80GB',
+        repos: [],
+        files: [
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
+        ],
+      },
+    ],
+    categories: ['text-to-video', 'image-to-video'],
+    backends: ['stable_diffusion_cpp'],
+    modelType: 'diffusion',
+    supportISQ: true,
+    isAnyMoE: false,
+    supportTool: false,
+    supportOffloaded: false,
+    supportThinking: false,
+    supportMoQE: false,
+    adapter: undefined,
+    chatTemplate: undefined,
+    summary: 'Wan2.2-I2V-A14B summary',
+    description: 'Wan2.2-I2V-A14B details',
+    accessTokenRequired: false,
+    extraArgs: [],
+    supportStepsCount: true,
+    supportCfgScale: true,
+    supportNegativePrompt: true,
+    defaultCfgScale: 5.0,
+    defaultStepsCount: 50,
     supportOffloadedToCPU: true,
     supportDiffusionFA: true,
     supportImageEdit: false,
