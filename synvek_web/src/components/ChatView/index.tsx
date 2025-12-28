@@ -75,6 +75,8 @@ interface ChatViewProps {
   visible: boolean
 }
 
+type BadChatType = 'cancelled' | 'failure' | 'empty' | 'error'
+
 const initChatContent: ChatContent[] = [{ type: 'text', text: '' }]
 
 const ChatView: FC<ChatViewProps> = ({ visible }) => {
@@ -100,6 +102,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const [toolRunning, setToolRunning] = useState<boolean>(false)
   const [chatStreaming, setChatStreaming] = useState<boolean>(false)
   const chatStreamCancelled = useRef<boolean>(false)
+  const [chatRunning, setChatRunning] = useState<boolean>(false)
 
   const intl = useIntl()
   const chatSectionsRef: MutableRefObject<HTMLDivElement | undefined> = useRef<HTMLDivElement | undefined>(undefined)
@@ -296,6 +299,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     //chatStreaming.current = true
     setChatStreaming(true)
     setForceUpdate(forceUpdate + 1)
+    setChatRunning(true)
     //console.log('prepare send chat request：' + new Date())
     //console.log(`Checking chat stream 2= ${chatStreaming}, ${chatStreamCancelled} `)
     if (isDiffusionType) {
@@ -311,8 +315,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       setForceUpdate(forceUpdate + 1)
       //console.log(`Checking chat stream 4= ${chatStreaming}, ${chatStreamCancelled} `)
     } else {
-      handleChatRequest(chatContent, chatAttachments, currentWorkspace.settings.defaultTextModel)
+      await handleChatRequest(chatContent, chatAttachments, currentWorkspace.settings.defaultTextModel)
     }
+    setChatRunning(false)
   }
 
   const updateChat = async (key: string) => {
@@ -566,12 +571,6 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     response
       .then(async (value) => {
         console.log('prepare to receive chat message：' + new Date())
-        const body = value.body
-        if (!body) {
-          throw new Error('No readable event data received.')
-        }
-        const reader = body.getReader()
-        const decoder = new TextDecoder()
         const chatMessage: ChatMessage = {
           chatId: null,
           key: SystemUtils.generateUUID(),
@@ -588,6 +587,13 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
           sourceType: null,
           success: true,
         }
+        const body = value.body
+        if (!body) {
+          await populateFailureContent(chatMessage, 'failure', 'No readable event data received')
+          throw new Error('No readable event data received.')
+        }
+        const reader = body.getReader()
+        const decoder = new TextDecoder()
         currentWorkspace.selectedConversionData.chatMessages.push(chatMessage)
         setConversion(currentWorkspace.selectedConversionData)
         setForceUpdate(forceUpdate + 1)
@@ -610,7 +616,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
               chatStreamCancelled.current = false
               setChatStreaming(false)
               setForceUpdate(forceUpdate + 1)
-              console.log(`Checking chat stream 5= ${chatStreaming}, ${chatStreamCancelled} `)
+              //console.log(`Checking chat stream 5= ${chatStreaming}, ${chatStreamCancelled} `)
               return
             }
             if (chatStreamCancelled.current) {
@@ -620,7 +626,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
               chatStreamCancelled.current = false
               setChatStreaming(false)
               setForceUpdate(forceUpdate + 1)
-              console.log(`Checking chat stream 6= ${chatStreaming}, ${chatStreamCancelled} `)
+              //console.log(`Checking chat stream 6= ${chatStreaming}, ${chatStreamCancelled} `)
               return
             }
             const chunk = partChunkText + decoder.decode(data.value, { stream: true })
@@ -677,7 +683,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         chatStreamCancelled.current = false
         setChatStreaming(false)
         setForceUpdate(forceUpdate + 1)
-        console.log(`Checking chat stream 7= ${chatStreaming}, ${chatStreamCancelled} `)
+        //console.log(`Checking chat stream 7= ${chatStreaming}, ${chatStreamCancelled} `)
         //console.log(`Error happens: ${reason}`)
       })
       .finally(() => {
@@ -827,13 +833,46 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       },
       async (failure) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'chat-view.message-generate-failure' }) + failure)
+        await populateFailureContent(chatMessage, 'failure', failure)
       },
       async (error) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'chat-view.message-generate-error' }) + error)
+        await populateFailureContent(chatMessage, 'error', error)
       },
     )
   }
 
+  const populateFailureContent = async (chatMessage: ChatMessage, badChatType: BadChatType, data: any = '') => {
+    let content: string
+    switch (badChatType) {
+      case 'failure':
+        content = intl.formatMessage({ id: 'chat-view.output.failure' }) + data
+        break
+      case 'error':
+        content = intl.formatMessage({ id: 'chat-view.output.failure' }) + data
+        break
+      case 'cancelled':
+        content = intl.formatMessage({ id: 'chat-view.output.canceled' })
+        break
+      case 'empty':
+      default:
+        content = intl.formatMessage({ id: 'chat-view.output.empty' })
+        break
+    }
+    chatMessage.content = [{ type: 'text', text: content }]
+    setConversion(currentWorkspace.selectedConversionData)
+    setForceUpdate(forceUpdate + 1)
+    setCurrentChatKey(chatMessage.key)
+    setCurrentContent([{ type: 'text', text: content }])
+    setHistoryIndex(0)
+    await addChat(false)
+    setHistory([''])
+    if (chatSectionsRef.current) {
+      chatSectionsRef.current.scrollTo({ top: chatSectionsRef.current.scrollHeight })
+      //setCurrentScrollTop(chatSectionsRef.current.scrollHeight)
+      currentWorkspace.selectedConversionData.scrollTop = chatSectionsRef.current.scrollHeight
+    }
+  }
   const handleGenerateSpeechRequest = async (chatContent: ChatContent[], chatAttachments: ChatAttachment[], defaultTextModel: string) => {
     const userChatMessage: ChatMessage = {
       chatId: null,
@@ -901,9 +940,11 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
       },
       async (failure) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'chat-view.message-generate-failure' }) + failure)
+        await populateFailureContent(chatMessage, 'failure', failure)
       },
       async (error) => {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'chat-view.message-generate-error' }) + error)
+        await populateFailureContent(chatMessage, 'failure', error)
       },
     )
   }
@@ -1237,6 +1278,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
         break
       }
     }
+    const isEmptyOutput = !chatContent || chatContent.length <= 0 || !chatContent[0].text || chatContent[0].text.length <= 0
     return (
       <div key={chatMessage.key} className={styles.chatSection}>
         <div className={styles.chatSectionHeader}>
@@ -1244,7 +1286,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
           <div className={styles.chatSectionDatetime}>{moment(chatMessage.time).format('YYYY-MM-DD HH:mm:ss')}</div>
         </div>
         <div>
-          {!chatContent || chatContent.length <= 0 || !chatContent[0].text || chatContent[0].text.length <= 0 ? <Loading3QuartersOutlined spin /> : ''}
+          {chatRunning ? isEmptyOutput ? <Loading3QuartersOutlined spin /> : '' : ''}
           {thinkEnabled && validThinking ? generateThinkSection(chatMessage.key, thinkFinished, thinkContent, thinkTime) : ''}
           {isImage ? <img src={nonThinkContent} alt={''} /> : ''}
           {isSpeech ? <AudioPlayer src={nonThinkContent ? nonThinkContent : ''} hasKeyBindings={true} onPlay={() => console.log('Playing')} /> : ''}

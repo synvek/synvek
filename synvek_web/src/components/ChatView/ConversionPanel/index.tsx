@@ -90,7 +90,8 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const defaultSize = oldSize ? Number.parseInt(oldSize) : Consts.CHAT_IMAGE_SIZE_DEFAULT
   const [size, setSize] = useState<number>(defaultSize)
   const oldNegativePrompt = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT)
-  const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_SIZE_DEFAULT
+  const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [negativePrompt, setNegativePrompt] = useState<string>(defaultNegativePrompt)
 
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
@@ -955,7 +956,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     setTextEditWindowVisible(false)
   }
 
-  const onChange = (key: string) => {
+  const onChange = () => {
     //console.log(key)
   }
 
