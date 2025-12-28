@@ -4254,7 +4254,7 @@ export const modelProviders: ModelProvider[] = [
     supportImageEdit: true,
   },
   {
-    modelId: 'Wan2.2-TI2V-5B-GGUF',
+    modelId: 'Wan2.2-TI2V-5B',
     modelCreator: 'Wan-AI',
     modelSource: 'modelscope',
     modelOptions: [
@@ -4425,10 +4425,20 @@ export const modelProviders: ModelProvider[] = [
     supportVideoGen: true,
   },
   {
-    modelId: 'Wan2.2-TI2V-5B-GGUF',
+    modelId: 'Wan2.2-TI2V-5B',
     modelCreator: 'Wan-AI',
     modelSource: 'huggingface',
     modelOptions: [
+      {
+        name: 'wan2.2_ti2v_5B_fp16',
+        fileSize: '16.25GB',
+        repos: [],
+        files: [
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors' },
+          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan2.2_vae.safetensors' },
+        ],
+      },
       {
         name: 'Wan2.2-TI2V-5B-Q8_0.gguf',
         fileSize: '12.8GB',
