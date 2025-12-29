@@ -4521,7 +4521,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'wan2.2_t2v_14B_fp16',
-        fileSize: '32.48GB',
+        fileSize: '59.09GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
@@ -4532,7 +4532,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_t2v_14B_fp8_scaled',
-        fileSize: '19.18GB',
+        fileSize: '32.49GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
@@ -4543,7 +4543,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q8_0.gguf',
-        fileSize: '20.21GB',
+        fileSize: '34.56GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
@@ -4554,7 +4554,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q6_K.gguf',
-        fileSize: '17.04GB',
+        fileSize: '28.22GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
@@ -4565,7 +4565,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_K_S.gguf',
-        fileSize: '15.30GB',
+        fileSize: '24.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
@@ -4576,7 +4576,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_K_M.gguf',
-        fileSize: '15.91GB',
+        fileSize: '25.96GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
@@ -4587,7 +4587,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_1.gguf',
-        fileSize: '16.12GB',
+        fileSize: '26.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
@@ -4598,7 +4598,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_0.gguf',
-        fileSize: '15.47GB',
+        fileSize: '25.07GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
@@ -4609,7 +4609,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_K_S.gguf',
-        fileSize: '14.01GB',
+        fileSize: '22.16GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
@@ -4620,7 +4620,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_K_M.gguf',
-        fileSize: '14.85GB',
+        fileSize: '23.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
@@ -4631,7 +4631,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_1.gguf',
-        fileSize: '14.49GB',
+        fileSize: '23.11GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
@@ -4642,7 +4642,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_0.gguf',
-        fileSize: '13.83GB',
+        fileSize: '21.80GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
@@ -4653,7 +4653,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q3_K_S.gguf',
-        fileSize: '11.93GB',
+        fileSize: '18.00GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
@@ -4664,7 +4664,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q3_K_M.gguf',
-        fileSize: '12.55GB',
+        fileSize: '19.23GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
@@ -4675,7 +4675,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q2_K.gguf',
-        fileSize: '10.80GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
@@ -4717,7 +4717,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'wan2.2_t2v_14B_fp16',
-        fileSize: '32.48GB',
+        fileSize: '59.09GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
@@ -4728,7 +4728,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_t2v_14B_fp8_scaled',
-        fileSize: '19.18GB',
+        fileSize: '32.49GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
@@ -4739,7 +4739,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q8_0.gguf',
-        fileSize: '20.21GB',
+        fileSize: '34.56GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
@@ -4750,7 +4750,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q6_K.gguf',
-        fileSize: '17.04GB',
+        fileSize: '28.22GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
@@ -4761,7 +4761,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_K_S.gguf',
-        fileSize: '15.30GB',
+        fileSize: '24.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
@@ -4772,7 +4772,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_K_M.gguf',
-        fileSize: '15.91GB',
+        fileSize: '25.96GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
@@ -4783,7 +4783,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_1.gguf',
-        fileSize: '16.12GB',
+        fileSize: '26.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
@@ -4794,7 +4794,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q5_0.gguf',
-        fileSize: '15.47GB',
+        fileSize: '25.07GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
@@ -4805,7 +4805,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_K_S.gguf',
-        fileSize: '14.01GB',
+        fileSize: '22.16GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
@@ -4816,7 +4816,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_K_M.gguf',
-        fileSize: '14.85GB',
+        fileSize: '23.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
@@ -4827,7 +4827,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_1.gguf',
-        fileSize: '14.49GB',
+        fileSize: '23.11GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
@@ -4838,7 +4838,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q4_0.gguf',
-        fileSize: '13.83GB',
+        fileSize: '21.80GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
@@ -4849,7 +4849,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q3_K_S.gguf',
-        fileSize: '11.93GB',
+        fileSize: '18.00GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
@@ -4860,7 +4860,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q3_K_M.gguf',
-        fileSize: '12.55GB',
+        fileSize: '19.23GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
@@ -4871,7 +4871,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-T2V-A14B-Q2_K.gguf',
-        fileSize: '10.80GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
@@ -4913,7 +4913,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'wan2.2_i2v_14B_fp16',
-        fileSize: '32.48GB',
+        fileSize: '59.09GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
@@ -4924,7 +4924,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_i2v_14B_fp8_scaled',
-        fileSize: '19.18GB',
+        fileSize: '32.49GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
@@ -4935,7 +4935,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q8_0.gguf',
-        fileSize: '20.21GB',
+        fileSize: '34.56GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
@@ -4946,7 +4946,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q6_K.gguf',
-        fileSize: '17.04GB',
+        fileSize: '28.22GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
@@ -4957,7 +4957,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_K_S.gguf',
-        fileSize: '15.31GB',
+        fileSize: '24.75GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
@@ -4968,7 +4968,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_K_M.gguf',
-        fileSize: '15.92GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
@@ -4979,7 +4979,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_1.gguf',
-        fileSize: '16.12GB',
+        fileSize: '26.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
@@ -4990,7 +4990,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_0.gguf',
-        fileSize: '15.47GB',
+        fileSize: '25.08GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
@@ -5001,7 +5001,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_K_S.gguf',
-        fileSize: '14.01GB',
+        fileSize: '22.16GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
@@ -5012,7 +5012,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_K_M.gguf',
-        fileSize: '14.85GB',
+        fileSize: '23.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
@@ -5022,30 +5022,8 @@ export const modelProviders: ModelProvider[] = [
         ],
       },
       {
-        name: 'Wan2.2-I2V-A14B-Q4_1.gguf',
-        fileSize: '5.86GB',
-        repos: [],
-        files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf' },
-          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
-        ],
-      },
-      {
-        name: 'Wan2.2-I2V-A14B-Q4_0.gguf',
-        fileSize: '5.86GB',
-        repos: [],
-        files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf' },
-          { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
-        ],
-      },
-      {
         name: 'Wan2.2-I2V-A14B-Q3_K_S.gguf',
-        fileSize: '11.93GB',
+        fileSize: '18.00GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
@@ -5056,7 +5034,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q3_K_M.gguf',
-        fileSize: '12.55GB',
+        fileSize: '19.23GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
@@ -5067,7 +5045,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf',
-        fileSize: '10.80GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
@@ -5109,7 +5087,7 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'wan2.2_i2v_14B_fp16',
-        fileSize: '32.48GB',
+        fileSize: '59.09GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
@@ -5120,7 +5098,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'wan2.2_i2v_14B_fp8_scaled',
-        fileSize: '19.18GB',
+        fileSize: '32.49GB',
         repos: [],
         files: [
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
@@ -5131,7 +5109,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q8_0.gguf',
-        fileSize: '20.21GB',
+        fileSize: '34.56GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
@@ -5142,7 +5120,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q6_K.gguf',
-        fileSize: '17.04GB',
+        fileSize: '28.22GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
@@ -5153,7 +5131,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_K_S.gguf',
-        fileSize: '15.31GB',
+        fileSize: '24.75GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
@@ -5164,7 +5142,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_K_M.gguf',
-        fileSize: '15.92GB',
+        fileSize: '25.97GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
@@ -5175,7 +5153,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_1.gguf',
-        fileSize: '16.12GB',
+        fileSize: '26.38GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
@@ -5186,7 +5164,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q5_0.gguf',
-        fileSize: '15.47GB',
+        fileSize: '25.08GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
@@ -5197,7 +5175,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_K_S.gguf',
-        fileSize: '14.01GB',
+        fileSize: '22.16GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
@@ -5208,7 +5186,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_K_M.gguf',
-        fileSize: '14.85GB',
+        fileSize: '23.84GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
@@ -5219,7 +5197,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_1.gguf',
-        fileSize: '5.86GB',
+        fileSize: '14.49GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
@@ -5230,7 +5208,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q4_0.gguf',
-        fileSize: '5.86GB',
+        fileSize: '13.83GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
@@ -5241,7 +5219,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q3_K_S.gguf',
-        fileSize: '11.93GB',
+        fileSize: '18.00GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
@@ -5252,7 +5230,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-Q3_K_M.gguf',
-        fileSize: '12.55GB',
+        fileSize: '19.23GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
@@ -5263,7 +5241,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf',
-        fileSize: '10.80GB',
+        fileSize: '15.74GB',
         repos: [],
         files: [
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
