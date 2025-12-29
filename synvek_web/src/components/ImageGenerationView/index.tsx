@@ -68,6 +68,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const defaultCfgScale = oldCfgScale ? Number.parseFloat(oldCfgScale) : Consts.IMAGE_CFG_SCALE_DEFAULT
   const oldPerformance = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_PERFORMANCE)
   const defaultPerformance = oldPerformance ? Number.parseInt(oldPerformance) : Consts.IMAGE_PERFORMANCE_DEFAULT
+  const oldCustomWidth = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_WIDTH)
+  const defaultCustomWidth = oldCustomWidth ? Number.parseInt(oldCustomWidth) : Consts.IMAGE_CUSTOM_WIDTH_DEFAULT
+  const oldCustomHeight = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_HEIGHT)
+  const defaultCustomHeight = oldCustomHeight ? Number.parseInt(oldCustomHeight) : Consts.IMAGE_CUSTOM_HEIGHT_DEFAULT
+  const oldCustomSize = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_SIZE)
+  const defaultCustomSize = oldCustomSize ? oldCustomSize.toUpperCase() === 'TRUE' : Consts.IMAGE_CUSTOM_SIZE_DEFAULT
   const [count, setCount] = useState<number>(defaultCount)
   const [performance, setPerformance] = useState<number>(defaultPerformance)
   const [size, setSize] = useState<number>(defaultSize)
@@ -86,6 +92,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [previewImage, setPreviewImage] = useState('')
   const [initImageFileList, setInitImageFileList] = useState<UploadFile[]>([])
   const [initImageFileContentMap, setInitImageFileContentMap] = useState<Map<string, string>>(new Map())
+  const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
+  const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
+  const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -203,8 +212,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               userText,
               currentWorkspace.settings.defaultImageGenerationModel,
               count,
-              imageSize.width,
-              imageSize.height,
+              enableCustomSize ? customWidth : imageSize.width,
+              enableCustomSize ? customHeight : imageSize.height,
               seedNumber,
               'png',
               negativePrompt,
@@ -217,8 +226,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               userText,
               currentWorkspace.settings.defaultImageGenerationModel,
               count,
-              imageSize.width,
-              imageSize.height,
+              enableCustomSize ? customWidth : imageSize.width,
+              enableCustomSize ? customHeight : imageSize.height,
               seedNumber,
               'png',
               negativePrompt,
@@ -313,6 +322,21 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const handleEnableRandomSeedChange = (e: CheckboxChangeEvent) => {
     setEnableRandomSeed(e.target.checked)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_RANDOM_SEED, e.target.checked ? 'true' : 'false')
+  }
+
+  const handleEnableCustomSizeChange = (e: CheckboxChangeEvent) => {
+    setEnableCustomSize(e.target.checked)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_SIZE, e.target.checked ? 'true' : 'false')
+  }
+
+  const handleCustomWidthChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_WIDTH, '' + value)
+    setCustomWidth(value)
+  }
+
+  const handleCustomHeightChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_HEIGHT, '' + value)
+    setCustomHeight(value)
   }
 
   const generateImageList = () => {
@@ -522,17 +546,59 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       {/*</div>*/}
                       <div className={styles.imageGenerationPropertyContainer}>
                         <div className={styles.imageGenerationPropertyTitle}>
-                          <FormattedMessage id={'image-generation-view.setting-property-size'} />
+                          <Checkbox defaultChecked={enableCustomSize} checked={enableCustomSize} onChange={handleEnableCustomSizeChange}>
+                            <FormattedMessage id={'image-generation-view.setting-property-enable-custom-size'} />
+                          </Checkbox>
                         </div>
-                        <div className={styles.imageGenerationPropertyValue}>
-                          <Select
-                            size={'small'}
-                            defaultValue={size}
-                            value={size}
-                            style={{ width: '100%' }}
-                            onChange={(value) => handleSizeChange(value)}
-                            options={sizeOptions}
-                          />
+                        <Divider type={'horizontal'} style={{ margin: '8px 0 4px 0' }} />
+                        <div style={{ display: enableCustomSize ? 'none' : undefined }}>
+                          <div className={styles.imageGenerationPropertyTitle}>
+                            <FormattedMessage id={'image-generation-view.setting-property-size'} />
+                          </div>
+                          <div className={styles.imageGenerationPropertyValue}>
+                            <Select
+                              size={'small'}
+                              defaultValue={size}
+                              value={size}
+                              style={{ width: '100%' }}
+                              onChange={(value) => handleSizeChange(value)}
+                              options={sizeOptions}
+                            />
+                          </div>
+                        </div>
+                        <div style={{ display: !enableCustomSize ? 'none' : undefined }}>
+                          <div className={styles.imageGenerationPropertyTitle}>
+                            <FormattedMessage id={'image-generation-view.setting-property-custom-width'} />
+                          </div>
+                          <div className={styles.imageGenerationPropertyValue}>
+                            <InputNumber
+                              size={'small'}
+                              defaultValue={customWidth}
+                              value={customWidth}
+                              style={{ width: '100%' }}
+                              controls={false}
+                              min={256}
+                              max={4096}
+                              onChange={handleCustomWidthChange}
+                            />
+                          </div>
+                        </div>
+                        <div style={{ display: !enableCustomSize ? 'none' : undefined }}>
+                          <div className={styles.imageGenerationPropertyTitle}>
+                            <FormattedMessage id={'image-generation-view.setting-property-custom-height'} />
+                          </div>
+                          <div className={styles.imageGenerationPropertyValue}>
+                            <InputNumber
+                              size={'small'}
+                              defaultValue={customHeight}
+                              value={customHeight}
+                              style={{ width: '100%' }}
+                              controls={false}
+                              min={256}
+                              max={4096}
+                              onChange={handleCustomHeightChange}
+                            />
+                          </div>
                         </div>
                       </div>
                       <div className={styles.imageGenerationPropertyContainer}>

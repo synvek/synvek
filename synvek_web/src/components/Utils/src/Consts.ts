@@ -105,6 +105,9 @@ export class Consts {
   public static LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT = 'synvek.chat.image.steps-count'
   public static LOCAL_STORAGE_CHAT_IMAGE_SIZE = 'synvek.chat.image.size'
   public static LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT = 'synvek.chat.image.negative-prompt'
+  public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH = 'synvek.chat.image.custom-width'
+  public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_HEIGHT = 'synvek.chat.image.custom-height'
+  public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE = 'synvek.chat.image.custom-size'
   public static CHAT_TEMPERATURE_DEFAULT = 1
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
@@ -112,17 +115,26 @@ export class Consts {
   public static CHAT_IMAGE_CFG_SCALE_DEFAULT = 7.0
   public static CHAT_IMAGE_SIZE_DEFAULT = 1
   public static CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT = ''
+  public static CHAT_IMAGE_CUSTOM_WIDTH_DEFAULT = 512
+  public static CHAT_IMAGE_CUSTOM_HEIGHT_DEFAULT = 512
+  public static CHAT_IMAGE_CUSTOM_SIZE_DEFAULT = false
 
   //Local storage for image generation settings
   public static LOCAL_STORAGE_IMAGE_COUNT = 'synvek.image.count'
   public static LOCAL_STORAGE_IMAGE_SIZE = 'synvek.image.size'
+  public static LOCAL_STORAGE_IMAGE_CUSTOM_WIDTH = 'synvek.image.custom-width'
+  public static LOCAL_STORAGE_IMAGE_CUSTOM_HEIGHT = 'synvek.image.custom-height'
   public static LOCAL_STORAGE_IMAGE_RANDOM_SEED = 'synvek.image.random-seed'
+  public static LOCAL_STORAGE_IMAGE_CUSTOM_SIZE = 'synvek.image.custom-size'
   public static LOCAL_STORAGE_IMAGE_SEED = 'synvek.image.seed'
   public static LOCAL_STORAGE_IMAGE_STEPS_COUNT = 'synvek.image.steps-count'
   public static LOCAL_STORAGE_IMAGE_CFG_SCALE = 'synvek.image.cfg-scale'
   public static LOCAL_STORAGE_IMAGE_PERFORMANCE = 'synvek.image.performance'
   public static IMAGE_COUNT_DEFAULT = 1
   public static IMAGE_SIZE_DEFAULT = 1
+  public static IMAGE_CUSTOM_WIDTH_DEFAULT = 512
+  public static IMAGE_CUSTOM_HEIGHT_DEFAULT = 512
+  public static IMAGE_CUSTOM_SIZE_DEFAULT = false
   public static IMAGE_RANDOM_SEED_DEFAULT = true
   public static IMAGE_SEED_DEFAULT = 42
   public static IMAGE_STEPS_COUNT_DEFAULT = 20
@@ -149,17 +161,19 @@ export class Consts {
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },
     { key: '512x512 | 1:1', width: 512, height: 512 },
-    { key: '640x480 | 4:3', width: 640, height: 480 },
-    { key: '480x640 | 3:4', width: 480, height: 640 },
-    { key: '1280x720 | 16:9', width: 1280, height: 720 },
-    { key: '720x1280 | 9:16', width: 720, height: 1280 },
-    { key: '768x1280 | 3:5', width: 768, height: 1280 },
+    { key: '704x1344 | 11:21', width: 704, height: 1344 },
+    { key: '768x1344 | 4:7', width: 768, height: 1344 },
+    { key: '768x1280 | 9:15', width: 768, height: 1280 },
+    { key: '832x1216 | 13:19', width: 832, height: 1216 },
     { key: '1024x1024 | 1:1', width: 1024, height: 1024 },
     { key: '1024x768 | 4:3', width: 1024, height: 768 },
-    { key: '1280x768 | 5:3', width: 1280, height: 768 },
+    { key: '1080x1920 | 9:16', width: 1080, height: 1920 },
+    { key: '1216x832 | 19:13', width: 1216, height: 832 },
+    { key: '1280x768 | 15:9', width: 1280, height: 768 },
+    { key: '1344x768 | 7:4', width: 1344, height: 768 },
+    { key: '1344x704 | 21:11', width: 1344, height: 704 },
     { key: '1600x900 | 16:9', width: 1600, height: 900 },
     { key: '1600x1200 | 4:3', width: 1600, height: 1200 },
     { key: '1920x1080 | 16:9', width: 1920, height: 1080 },
-    { key: '1080x1920 | 9:16', width: 1080, height: 1920 },
   ]
 }

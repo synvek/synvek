@@ -19,9 +19,12 @@ import {
 import { EllipsisOutlined, FolderOpenOutlined, FolderOutlined, MessageOutlined, PushpinOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import {
   Button,
+  Checkbox,
+  CheckboxChangeEvent,
   ConfigProvider,
   Dropdown,
   Input,
+  InputNumber,
   MenuProps,
   message,
   Modal,
@@ -93,6 +96,15 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [negativePrompt, setNegativePrompt] = useState<string>(defaultNegativePrompt)
+  const oldCustomWidth = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH)
+  const defaultCustomWidth = oldCustomWidth ? Number.parseInt(oldCustomWidth) : Consts.CHAT_IMAGE_CUSTOM_WIDTH_DEFAULT
+  const oldCustomHeight = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_HEIGHT)
+  const defaultCustomHeight = oldCustomHeight ? Number.parseInt(oldCustomHeight) : Consts.CHAT_IMAGE_CUSTOM_HEIGHT_DEFAULT
+  const oldCustomSize = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE)
+  const defaultCustomSize = oldCustomSize ? oldCustomSize.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CUSTOM_SIZE_DEFAULT
+  const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
+  const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
+  const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
 
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
 
@@ -1033,6 +1045,24 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     currentWorkspace.triggerSettingsChanged()
   }
 
+  const handleEnableCustomSizeChange = (e: CheckboxChangeEvent) => {
+    setEnableCustomSize(e.target.checked)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE, e.target.checked ? 'true' : 'false')
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleCustomWidthChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH, '' + value)
+    setCustomWidth(value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleCustomHeightChange = (value: number) => {
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_HEIGHT, '' + value)
+    setCustomHeight(value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
   const chatSettingView = (
     <div className={styles.chatSettingView}>
       <PropertyContainer
@@ -1133,6 +1163,21 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
       />
       <PropertyContainer
         label={
+          <div style={{ margin: '8px 0' }}>
+            <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.image-enable-custom-size.tooltip' })}>
+              <Checkbox defaultChecked={enableCustomSize} checked={enableCustomSize} onChange={handleEnableCustomSizeChange}>
+                <FormattedMessage id={'image-generation-view.setting-property-enable-custom-size'} />
+              </Checkbox>
+            </Tooltip>
+          </div>
+        }
+        value={<div />}
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
           <div>
             <FormattedMessage id={'conversion-panel.settings.image-size'} />
             <Tooltip title={intl.formatMessage({ id: 'conversion-panel.settings.image-size.tooltip' })}>
@@ -1150,8 +1195,58 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
             options={sizeOptions}
           />
         }
-        visible={true}
-        enableDivider={true}
+        visible={!enableCustomSize}
+        enableDivider={!enableCustomSize}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div style={{ margin: '8px 0' }}>
+            <FormattedMessage id={'conversion-panel.settings.image-custom-width'} />
+          </div>
+        }
+        value={
+          <div style={{ margin: '8px 0' }}>
+            <InputNumber
+              size={'small'}
+              defaultValue={customWidth}
+              value={customWidth}
+              style={{ width: '100%' }}
+              controls={false}
+              min={256}
+              max={4096}
+              // @ts-ignore
+              onChange={handleCustomWidthChange}
+            />
+          </div>
+        }
+        visible={enableCustomSize}
+        enableDivider={false}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div style={{ margin: '8px 0' }}>
+            <FormattedMessage id={'conversion-panel.settings.image-custom-height'} />
+          </div>
+        }
+        value={
+          <div style={{ margin: '8px 0' }}>
+            <InputNumber
+              size={'small'}
+              defaultValue={customHeight}
+              value={customHeight}
+              style={{ width: '100%' }}
+              controls={false}
+              min={256}
+              max={4096}
+              // @ts-ignore
+              onChange={handleCustomHeightChange}
+            />
+          </div>
+        }
+        visible={enableCustomSize}
+        enableDivider={enableCustomSize}
         columnMode={true}
       />
       <PropertyContainer
@@ -1166,6 +1261,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
         value={
           <TextArea
             className={styles.imageGenerationPropertyTextArea}
+            value={negativePrompt}
             placeholder={intl.formatMessage({ id: 'conversion-panel.settings.image-negative-prompt.placeholder' })}
             onChange={handleNegativePromptChange}
             style={{ margin: '8px 0 16px 0' }}

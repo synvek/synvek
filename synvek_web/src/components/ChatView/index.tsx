@@ -127,6 +127,15 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultSize = oldSize ? Number.parseInt(oldSize) : Consts.CHAT_IMAGE_SIZE_DEFAULT
   const oldNegativePrompt = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT)
   const defaultNegativePrompt = oldNegativePrompt ? oldNegativePrompt : Consts.CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT
+  const oldCustomWidth = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH)
+  const defaultCustomWidth = oldCustomWidth ? Number.parseInt(oldCustomWidth) : Consts.CHAT_IMAGE_CUSTOM_WIDTH_DEFAULT
+  const oldCustomHeight = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_HEIGHT)
+  const defaultCustomHeight = oldCustomHeight ? Number.parseInt(oldCustomHeight) : Consts.CHAT_IMAGE_CUSTOM_HEIGHT_DEFAULT
+  const oldCustomSize = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE)
+  const defaultCustomSize = oldCustomSize ? oldCustomSize.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CUSTOM_SIZE_DEFAULT
+  const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
+  const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
+  const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
 
   useEffect(() => {
     if (!initRef.current) {
@@ -791,8 +800,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             chatContent[0].text,
             defaultTextModel,
             1,
-            imageSize.width,
-            imageSize.height,
+            enableCustomSize ? customWidth : imageSize.width,
+            enableCustomSize ? customHeight : imageSize.height,
             seed,
             format,
             negativePrompt,
@@ -805,8 +814,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             chatContent[0].text,
             defaultTextModel,
             1,
-            imageSize.width,
-            imageSize.height,
+            enableCustomSize ? customWidth : imageSize.width,
+            enableCustomSize ? customHeight : imageSize.height,
             seed,
             format,
             negativePrompt,
