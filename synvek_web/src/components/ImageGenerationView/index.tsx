@@ -159,8 +159,6 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   }
 
   const handleGeneration = async () => {
-    setLoading(true)
-    setUserText('')
     try {
       if (!currentWorkspace.settings.defaultImageGenerationModel) {
         await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'image-generation-view-view.message-no-default-model-found' }))
@@ -184,6 +182,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       if (!supportImageEdit && refImageFileList.length > 0) {
         await WorkspaceUtils.showMessage(messageApi, 'warning', intl.formatMessage({ id: 'image-generation-view.message-generate-warning-with-attachments' }))
       }
+      setLoading(true)
+      setUserText('')
       const refImages = refImageFileList.map((file) => {
         const fileContent = refImageFileContentMap.get(file.uid)
         const fileContentText: string = fileContent ? fileContent : ''
