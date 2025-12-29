@@ -228,6 +228,9 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID : ${{ secrets.APPLE_TEAM_ID  }}
+          LIBRARY_PATH: ${{ runner.arch == 'X64' && '/usr/local/lib' || '/opt/homebrew/lib' }}
+          CPATH: ${{ runner.arch == 'X64' && '/usr/local/include' || '/opt/homebrew/include' }}
+          PKG_CONFIG_PATH: ${{ runner.arch == 'X64' && '/usr/local/lib/pkgconfig' || '/opt/homebrew/lib/pkgconfig' }}
       run: |
         cargo install tauri-cli --version "^2.0.0" --locked
         cargo tauri build
