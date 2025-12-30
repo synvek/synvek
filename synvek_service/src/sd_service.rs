@@ -281,7 +281,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 high_noise_commit_hash.as_str(),
             );
             t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
-            vae_path = find_relative_model_file_path(&task, "wan2.1_vae.safetensors");
+            vae_path = find_relative_model_file_path(&task, "wan_2.1_vae.safetensors");
         }
     }
 
@@ -533,7 +533,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
 
                     let image_count = get_image_count(image_output);
                     tracing::info!("Image count = {}", image_count);
-                    if isWan22TI2V {
+                    if isWan22TI2V || isWan22T2VI2V {
                         if image_count > 0 {
                             let webp_data = create_webp_from_images(image_count,image_output, get_image_data_length, get_image_data);
                             if let Ok(webp_data) = webp_data {
