@@ -103,6 +103,9 @@ export class Consts {
   public static LOCAL_STORAGE_CHAT_CONTEXT = 'synvek.chat.context'
   public static LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE = 'synvek.chat.image.cfg-scale'
   public static LOCAL_STORAGE_CHAT_IMAGE_STEPS_COUNT = 'synvek.chat.image.steps-count'
+  public static LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_CFG_SCALE = 'synvek.chat.image.high-noise-cfg-scale'
+  public static LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT = 'synvek.chat.image.high-noise-steps-count'
+  public static LOCAL_STORAGE_CHAT_IMAGE_FRAMES_COUNT = 'synvek.chat.image.frames-count'
   public static LOCAL_STORAGE_CHAT_IMAGE_SIZE = 'synvek.chat.image.size'
   public static LOCAL_STORAGE_CHAT_IMAGE_NEGATIVE_PROMPT = 'synvek.chat.image.negative-prompt'
   public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH = 'synvek.chat.image.custom-width'
@@ -113,6 +116,9 @@ export class Consts {
   public static CHAT_CONTEXT_DEFAULT = 5
   public static CHAT_IMAGE_STEPS_COUNT_DEFAULT = 20
   public static CHAT_IMAGE_CFG_SCALE_DEFAULT = 7.0
+  public static CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT_DEFAULT = 10
+  public static CHAT_IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT = 3.5
+  public static CHAT_IMAGE_FRAMES_COUNT_DEFAULT = 36
   public static CHAT_IMAGE_SIZE_DEFAULT = 1
   public static CHAT_IMAGE_NEGATIVE_PROMPT_DEFAULT = ''
   public static CHAT_IMAGE_CUSTOM_WIDTH_DEFAULT = 512
@@ -129,6 +135,9 @@ export class Consts {
   public static LOCAL_STORAGE_IMAGE_SEED = 'synvek.image.seed'
   public static LOCAL_STORAGE_IMAGE_STEPS_COUNT = 'synvek.image.steps-count'
   public static LOCAL_STORAGE_IMAGE_CFG_SCALE = 'synvek.image.cfg-scale'
+  public static LOCAL_STORAGE_IMAGE_HIGH_NOISE_STEPS_COUNT = 'synvek.image.high-noise-steps-count'
+  public static LOCAL_STORAGE_IMAGE_HIGH_NOISE_CFG_SCALE = 'synvek.image.high-noise-cfg-scale'
+  public static LOCAL_STORAGE_IMAGE_FRAMES_COUNT = 'synvek.image.frames-count'
   public static LOCAL_STORAGE_IMAGE_PERFORMANCE = 'synvek.image.performance'
   public static IMAGE_COUNT_DEFAULT = 1
   public static IMAGE_SIZE_DEFAULT = 1
@@ -139,6 +148,9 @@ export class Consts {
   public static IMAGE_SEED_DEFAULT = 42
   public static IMAGE_STEPS_COUNT_DEFAULT = 20
   public static IMAGE_CFG_SCALE_DEFAULT = 7.0
+  public static IMAGE_HIGH_NOISE_STEPS_COUNT_DEFAULT = 10
+  public static IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT = 3.5
+  public static IMAGE_FRAMES_COUNT_DEFAULT = 36
   public static IMAGE_PERFORMANCE_DEFAULT = 1
 
   //Local storage for version check time

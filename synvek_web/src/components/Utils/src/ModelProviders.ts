@@ -71,6 +71,12 @@ export interface ModelProvider {
   supportOffloadedToCPU?: boolean
   supportImageEdit?: boolean
   supportVideoGen?: boolean
+  supportHighNoiseStepCount?: boolean
+  supportHighNoiseCfgScale?: boolean
+  //Model may have optimized steps count as default steps count
+  defaultHighNoiseStepsCount?: number
+  //Model may have optimized cfg scale as default
+  defaultHighNoiseCfgScale?: number
 }
 
 export const modelProviders: ModelProvider[] = [
@@ -4524,8 +4530,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '59.09GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4535,8 +4541,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '32.49GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4546,8 +4552,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '34.56GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4557,8 +4563,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '28.22GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4568,8 +4574,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '24.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4579,8 +4585,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.96GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4590,8 +4596,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '26.38GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4601,8 +4607,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.07GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4612,8 +4618,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '22.16GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4623,8 +4629,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.84GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4634,8 +4640,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.11GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4645,8 +4651,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '21.80GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4656,8 +4662,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '18.00GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4667,8 +4673,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '19.23GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4678,8 +4684,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '15.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4709,6 +4715,10 @@ export const modelProviders: ModelProvider[] = [
     supportDiffusionFA: true,
     supportImageEdit: false,
     supportVideoGen: true,
+    supportHighNoiseCfgScale: true,
+    supportHighNoiseStepCount: true,
+    defaultHighNoiseStepsCount: 10,
+    defaultHighNoiseCfgScale: 3.5,
   },
   {
     modelId: 'Wan2.2-T2V-A14B',
@@ -4720,8 +4730,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '59.09GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4731,8 +4741,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '32.49GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4742,8 +4752,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '34.56GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4753,8 +4763,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '28.22GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4764,8 +4774,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '24.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4775,8 +4785,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.96GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4786,8 +4796,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '26.38GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4797,8 +4807,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.07GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4808,8 +4818,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '22.16GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4819,8 +4829,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.84GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4830,8 +4840,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.11GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4841,8 +4851,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '21.80GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4852,8 +4862,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '18.00GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4863,8 +4873,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '19.23GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4874,8 +4884,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '15.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-T2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-T2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4905,6 +4915,10 @@ export const modelProviders: ModelProvider[] = [
     supportDiffusionFA: true,
     supportImageEdit: false,
     supportVideoGen: true,
+    supportHighNoiseCfgScale: true,
+    supportHighNoiseStepCount: true,
+    defaultHighNoiseStepsCount: 10,
+    defaultHighNoiseCfgScale: 3.5,
   },
   {
     modelId: 'Wan2.2-I2V-A14B',
@@ -4916,8 +4930,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '59.09GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4927,8 +4941,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '32.49GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4938,8 +4952,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '34.56GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4949,8 +4963,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '28.22GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4960,8 +4974,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '24.75GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4971,8 +4985,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.97GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4982,8 +4996,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '26.38GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -4993,8 +5007,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.08GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5004,8 +5018,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '22.16GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5015,8 +5029,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.84GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5026,8 +5040,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '18.00GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5037,8 +5051,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '19.23GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5048,8 +5062,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '15.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5079,6 +5093,10 @@ export const modelProviders: ModelProvider[] = [
     supportDiffusionFA: true,
     supportImageEdit: false,
     supportVideoGen: true,
+    supportHighNoiseCfgScale: true,
+    supportHighNoiseStepCount: true,
+    defaultHighNoiseStepsCount: 10,
+    defaultHighNoiseCfgScale: 3.5,
   },
   {
     modelId: 'Wan2.2-I2V-A14B',
@@ -5090,8 +5108,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '59.09GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5101,8 +5119,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '32.49GB',
         repos: [],
         files: [
-          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors' },
+          { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5112,8 +5130,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '34.56GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5123,8 +5141,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '28.22GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q6_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q6_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5134,8 +5152,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '24.75GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5145,8 +5163,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.97GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5156,8 +5174,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '26.38GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5167,8 +5185,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '25.08GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q5_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q5_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5178,8 +5196,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '22.16GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5189,8 +5207,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '23.84GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5200,8 +5218,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '14.49GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_1.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_1.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5211,8 +5229,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '13.83GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_0.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_0.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5222,8 +5240,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '18.00GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_S.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_S.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5233,8 +5251,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '19.23GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q3_K_M.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q3_K_M.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5244,8 +5262,8 @@ export const modelProviders: ModelProvider[] = [
         fileSize: '15.74GB',
         repos: [],
         files: [
-          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'LowNoise/Wan2.2-I2V-A14B-LowNoise-Q2_K.gguf' },
+          { repoName: 'QuantStack/Wan2.2-I2V-A14B-GGUF', repoFile: 'HighNoise/Wan2.2-I2V-A14B-HighNoise-Q2_K.gguf' },
           { repoName: 'city96/umt5-xxl-encoder-gguf', repoFile: 'umt5-xxl-encoder-Q8_0.gguf' },
           { repoName: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', repoFile: 'split_files/vae/wan_2.1_vae.safetensors' },
         ],
@@ -5275,5 +5293,9 @@ export const modelProviders: ModelProvider[] = [
     supportDiffusionFA: true,
     supportImageEdit: false,
     supportVideoGen: true,
+    supportHighNoiseCfgScale: true,
+    supportHighNoiseStepCount: true,
+    defaultHighNoiseStepsCount: 10,
+    defaultHighNoiseCfgScale: 3.5,
   },
 ]

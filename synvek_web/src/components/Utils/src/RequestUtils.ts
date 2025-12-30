@@ -704,6 +704,9 @@ export class RequestUtils {
     cfgScale: number = 7.0,
     refImages: ImageData[],
     initImages: ImageData[],
+    highNoiseStepsCount: number = 10,
+    highNoiseCfgScale: number = 3.5,
+    framesCount: number = 36,
   ) {
     const data = {
       userMessage: userMessage,
@@ -718,6 +721,9 @@ export class RequestUtils {
       cfgScale: cfgScale,
       refImages: refImages,
       initImages: initImages,
+      highNoiseStepsCount: highNoiseStepsCount,
+      highNoiseCfgScale: highNoiseCfgScale,
+      framesCount: framesCount,
     }
     const config = {
       headers: {

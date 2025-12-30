@@ -159,7 +159,8 @@ export class RequestUtils {
     return axios.post(`${serverAddress}`, data, config)
   }
 
-  public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number) {
+  public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
+                                seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number) {
     const data = {
       model: modelName,
       prompt: message,
@@ -174,6 +175,9 @@ export class RequestUtils {
       cfg_scale: cfgScale,
       ref_images: [],
       init_images: [],
+      high_noise_steps_count: 10,
+      high_noise_cfg_scale: 3.5,
+      frames_count: 36,
     }
     const config = {
       headers: {
@@ -184,7 +188,10 @@ export class RequestUtils {
   }
 
 
-  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number, seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number, refImages: {width: number, height: number, data: string}[], initImages: {width: number, height: number, data: string}[]) {
+  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
+                            seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
+                            refImages: {width: number, height: number, data: string}[], initImages: {width: number, height: number, data: string}[],
+                            highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number) {
     const data = {
       model: modelName,
       prompt: message,
@@ -199,6 +206,9 @@ export class RequestUtils {
       cfg_scale: cfgScale,
       ref_images: refImages,
       init_images: initImages,
+      high_noise_steps_count: highNoiseStepsCount,
+      high_noise_cfg_scale: highNoiseCfgScale,
+      frames_count: framesCount,
     }
     const config = {
       headers: {

@@ -133,9 +133,12 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultCustomHeight = oldCustomHeight ? Number.parseInt(oldCustomHeight) : Consts.CHAT_IMAGE_CUSTOM_HEIGHT_DEFAULT
   const oldCustomSize = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE)
   const defaultCustomSize = oldCustomSize ? oldCustomSize.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CUSTOM_SIZE_DEFAULT
-  const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
-  const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
-  const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
+  const oldHighNoiseStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT)
+  const defaultHighNoiseStepsCount = oldHighNoiseStepsCount ? Number.parseInt(oldHighNoiseStepsCount) : Consts.CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT_DEFAULT
+  const oldHighNoiseCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_CFG_SCALE)
+  const defaultHighNoiseCfgScale = oldHighNoiseCfgScale ? Number.parseFloat(oldHighNoiseCfgScale) : Consts.CHAT_IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT
+  const oldFramesCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_FRAMES_COUNT)
+  const defaultFramesCount = oldFramesCount ? Number.parseInt(oldFramesCount) : Consts.CHAT_IMAGE_FRAMES_COUNT_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -749,6 +752,12 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     const seed = SystemUtils.generateRandomInteger(1, 999999)
     let stepsCount: number = defaultStepsCount
     let cfgScale: number = defaultCfgScale
+    let highNoiseStepsCount: number = defaultHighNoiseStepsCount
+    let highNoiseCfgScale: number = defaultHighNoiseCfgScale
+    let framesCount: number = defaultFramesCount
+    let customWidth: number = defaultCustomWidth
+    let customHeight: number = defaultCustomHeight
+    let enableCustomSize: boolean = defaultCustomSize
     let size: number = defaultSize
     let negativePrompt: string = defaultNegativePrompt
     const imageSize = Consts.IMAGE_SIZES[size]
@@ -809,6 +818,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             cfgScale,
             supportImageEdit ? refImages : [],
             supportVideoGen ? initImages : [],
+            highNoiseStepsCount,
+            highNoiseCfgScale,
+            framesCount,
           )
         : await RequestUtils.generateImage(
             chatContent[0].text,

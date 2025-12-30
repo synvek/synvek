@@ -95,6 +95,15 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
   const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
   const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
+  const oldHighNoiseStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_HIGH_NOISE_STEPS_COUNT)
+  const defaultHighNoiseStepsCount = oldHighNoiseStepsCount ? Number.parseInt(oldHighNoiseStepsCount) : Consts.IMAGE_HIGH_NOISE_STEPS_COUNT_DEFAULT
+  const oldHighNoiseCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_HIGH_NOISE_CFG_SCALE)
+  const defaultHighNoiseCfgScale = oldHighNoiseCfgScale ? Number.parseFloat(oldHighNoiseCfgScale) : Consts.IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT
+  const [highNoiseStepsCount, setHighNoiseStepsCount] = useState<number>(defaultHighNoiseStepsCount)
+  const [highNoiseCfgScale, setHighNoiseCfgScale] = useState<number>(defaultHighNoiseCfgScale)
+  const oldFramesCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_FRAMES_COUNT)
+  const defaultFramesCount = oldFramesCount ? Number.parseInt(oldFramesCount) : Consts.IMAGE_FRAMES_COUNT_DEFAULT
+  const [framesCount, setFramesCount] = useState<number>(defaultFramesCount)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -103,6 +112,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   let enableCfgScale: boolean | undefined = undefined
   let supportImageEdit: boolean = false
   let supportVideoGen: boolean = false
+  let modelDefaultHighNoiseStepsCount: number | undefined = undefined
+  let modelDefaultHighNoiseCfgScale: number | undefined = undefined
+  let enableHighNoiseStepsCount: boolean | undefined = undefined
+  let enableHighNoiseCfgScale: boolean | undefined = undefined
   if (currentWorkspace.settings.defaultImageGenerationModel) {
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultImageGenerationModel) {
@@ -114,6 +127,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               enableNegativePrompt = modelProvider.supportNegativePrompt
               enableStepsCount = modelProvider.supportStepsCount
               enableCfgScale = modelProvider.supportCfgScale
+              enableHighNoiseStepsCount = modelProvider.supportHighNoiseStepCount
+              enableHighNoiseCfgScale = modelProvider.supportHighNoiseCfgScale
+              modelDefaultHighNoiseStepsCount = modelProvider.defaultHighNoiseStepsCount
+              modelDefaultHighNoiseCfgScale = modelProvider.defaultHighNoiseCfgScale
               if (modelProvider.supportImageEdit) {
                 supportImageEdit = true
               }
@@ -221,6 +238,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               cfgScale,
               refImages,
               initImages,
+              highNoiseStepsCount,
+              highNoiseCfgScale,
+              framesCount,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -399,14 +419,36 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     20: '20',
   }
 
+  const framesCountMarks: SliderSingleProps['marks'] = {
+    15: '15',
+    50: '50',
+    100: '100',
+    150: '150',
+  }
+
   const handleStepsCountChange = (value: number) => {
     setStepsCount(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_STEPS_COUNT, '' + value)
   }
 
-  const handleCfgScaleSChange = (value: number) => {
+  const handleCfgScaleChange = (value: number) => {
     setCfgScale(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CFG_SCALE, '' + value)
+  }
+
+  const handleHighNoiseStepsCountChange = (value: number) => {
+    setHighNoiseStepsCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_HIGH_NOISE_STEPS_COUNT, '' + value)
+  }
+
+  const handleHighNoiseCfgScaleChange = (value: number) => {
+    setHighNoiseCfgScale(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_HIGH_NOISE_CFG_SCALE, '' + value)
+  }
+
+  const handleFramesCountChange = (value: number) => {
+    setFramesCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_FRAMES_COUNT, '' + value)
   }
 
   const getFileBase64FromFile = (file: FileType, callback: (content: string) => void) => {
@@ -700,7 +742,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             step={0.5}
                             value={cfgScale}
                             marks={cfgScaleMarks}
-                            onChange={handleCfgScaleSChange}
+                            onChange={handleCfgScaleChange}
                           />
                         </div>
                       </div>
@@ -806,6 +848,73 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                               src={previewImage}
                             />
                           )}
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-frames-count'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={15}
+                            max={150}
+                            disabled={!supportVideoGen}
+                            defaultValue={framesCount}
+                            step={1}
+                            value={framesCount}
+                            marks={framesCountMarks}
+                            onChange={handleFramesCountChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-high-noise-steps-count'} />
+                          <Tooltip
+                            title={
+                              intl.formatMessage({ id: 'image-generation-view.setting-property-high-noise-steps-count-tooltip' }) +
+                              (modelDefaultHighNoiseStepsCount ? modelDefaultHighNoiseStepsCount : '')
+                            }
+                          >
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={1}
+                            max={100}
+                            disabled={!enableHighNoiseStepsCount}
+                            defaultValue={highNoiseStepsCount}
+                            value={highNoiseStepsCount}
+                            step={1}
+                            marks={stepsCountMarks}
+                            onChange={handleHighNoiseStepsCountChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-high-noise-cfg-scale'} />
+                          <Tooltip
+                            title={
+                              intl.formatMessage({ id: 'image-generation-view.setting-property-high-noise-cfg-scale-tooltip' }) +
+                              (modelDefaultHighNoiseCfgScale ? modelDefaultHighNoiseCfgScale : '')
+                            }
+                          >
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={0}
+                            max={20.0}
+                            disabled={!enableHighNoiseCfgScale}
+                            defaultValue={highNoiseCfgScale}
+                            step={0.5}
+                            value={highNoiseCfgScale}
+                            marks={cfgScaleMarks}
+                            onChange={handleHighNoiseCfgScaleChange}
+                          />
                         </div>
                       </div>
                     </div>

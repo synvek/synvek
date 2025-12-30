@@ -287,7 +287,8 @@ class LLMService {
   public static async editImage(userMessage: string, modelName: string, count: number, width: number, height: number,
                                     seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
                                     refImages: {width: number, height: number, data: string}[],
-                                    initImages: {width: number, height: number, data: string}[]) {
+                                    initImages: {width: number, height: number, data: string}[],
+                                highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number) {
     const modelServer = LLMService.buildGenerate(modelName)
     if(modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
@@ -302,7 +303,8 @@ class LLMService {
         }
       } else {
         try {
-          const imageResponse = await RequestUtils.editSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed, format, negativePrompt, stepsCount, cfgScale, refImages, initImages)
+          const imageResponse = await RequestUtils.editSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed,
+            format, negativePrompt, stepsCount, cfgScale, refImages, initImages, highNoiseStepsCount, highNoiseCfgScale, framesCount)
           return imageResponse
         } catch(error) {
           return `Internal error: ${error}`
@@ -751,7 +753,9 @@ export const chatService = new Elysia()
     '/image-edit',
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
-      const imageResponse = await LLMService.editImage(body.userMessage, body.modelName, body.count, body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale, body.refImages, body.initImages)
+      const imageResponse = await LLMService.editImage(body.userMessage, body.modelName, body.count,
+        body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale,
+        body.refImages, body.initImages, body.highNoiseStepsCount, body.highNoiseCfgScale, body.framesCount)
       if(typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
@@ -792,6 +796,9 @@ export const chatService = new Elysia()
           height: t.Number(),
           data: t.String()
         })),
+        highNoiseStepsCount: t.Number(),
+        highNoiseCfgScale: t.Number(),
+        framesCount: t.Number(),
       }),
     },
   )

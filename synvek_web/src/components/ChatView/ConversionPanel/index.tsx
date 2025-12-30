@@ -105,13 +105,26 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const [enableCustomSize, setEnableCustomSize] = useState<boolean>(defaultCustomSize)
   const [customWidth, setCustomWidth] = useState<number>(defaultCustomWidth)
   const [customHeight, setCustomHeight] = useState<number>(defaultCustomHeight)
-
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+  const oldHighNoiseStepsCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT)
+  const defaultHighNoiseStepsCount = oldHighNoiseStepsCount ? Number.parseInt(oldHighNoiseStepsCount) : Consts.CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT_DEFAULT
+  const oldHighNoiseCfgScale = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_CFG_SCALE)
+  const defaultHighNoiseCfgScale = oldHighNoiseCfgScale ? Number.parseFloat(oldHighNoiseCfgScale) : Consts.CHAT_IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT
+  const [highNoiseStepsCount, setHighNoiseStepsCount] = useState<number>(defaultHighNoiseStepsCount)
+  const [highNoiseCfgScale, setHighNoiseCfgScale] = useState<number>(defaultHighNoiseCfgScale)
+  const oldFramesCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_FRAMES_COUNT)
+  const defaultFramesCount = oldFramesCount ? Number.parseInt(oldFramesCount) : Consts.CHAT_IMAGE_FRAMES_COUNT_DEFAULT
+  const [framesCount, setFramesCount] = useState<number>(defaultFramesCount)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
   let enableStepsCount: boolean | undefined = undefined
   let enableCfgScale: boolean | undefined = undefined
+  let modelDefaultHighNoiseStepsCount: number | undefined = undefined
+  let modelDefaultHighNoiseCfgScale: number | undefined = undefined
+  let enableHighNoiseStepsCount: boolean | undefined = undefined
+  let enableHighNoiseCfgScale: boolean | undefined = undefined
+  let supportVideoGen: boolean | undefined = undefined
   if (currentWorkspace.settings.defaultImageGenerationModel) {
     currentWorkspace.tasks.forEach((task) => {
       if (task.task_name === currentWorkspace.settings.defaultTextModel) {
@@ -122,6 +135,13 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
               modelDefaultCfgScale = modelProvider.defaultCfgScale
               enableStepsCount = modelProvider.supportStepsCount
               enableCfgScale = modelProvider.supportCfgScale
+              enableHighNoiseStepsCount = modelProvider.supportHighNoiseStepCount
+              enableHighNoiseCfgScale = modelProvider.supportHighNoiseCfgScale
+              modelDefaultHighNoiseStepsCount = modelProvider.defaultHighNoiseStepsCount
+              modelDefaultHighNoiseCfgScale = modelProvider.defaultHighNoiseCfgScale
+              if (modelProvider.supportVideoGen) {
+                supportVideoGen = true
+              }
             }
           })
         })
@@ -1014,6 +1034,13 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
     20: '20',
   }
 
+  const framesCountMarks: SliderSingleProps['marks'] = {
+    15: '15',
+    50: '50',
+    100: '100',
+    150: '150',
+  }
+
   const sizeOptions = Consts.IMAGE_SIZES.map((imageSize, index) => {
     return {
       value: index,
@@ -1042,6 +1069,24 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   const handleCfgScaleSChange = (value: number) => {
     setCfgScale(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CFG_SCALE, '' + value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleHighNoiseStepsCountChange = (value: number) => {
+    setHighNoiseStepsCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_STEPS_COUNT, '' + value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleHighNoiseCfgScaleSChange = (value: number) => {
+    setHighNoiseCfgScale(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_HIGH_NOISE_CFG_SCALE, '' + value)
+    currentWorkspace.triggerSettingsChanged()
+  }
+
+  const handleFramesCountChange = (value: number) => {
+    setFramesCount(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_FRAMES_COUNT, '' + value)
     currentWorkspace.triggerSettingsChanged()
   }
 
@@ -1266,6 +1311,88 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
             onChange={handleNegativePromptChange}
             style={{ margin: '8px 0 16px 0' }}
           ></TextArea>
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-frames-count'} />
+          </div>
+        }
+        value={
+          <Slider
+            min={15}
+            max={150}
+            step={1}
+            disabled={!supportVideoGen}
+            defaultValue={framesCount}
+            value={framesCount}
+            marks={framesCountMarks}
+            onChange={handleFramesCountChange}
+          />
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-high-noise-steps-count'} />
+            <Tooltip
+              title={
+                intl.formatMessage({ id: 'conversion-panel.settings.image-high-noise-steps-count.tooltip' }) +
+                (modelDefaultHighNoiseStepsCount ? modelDefaultHighNoiseStepsCount : '')
+              }
+            >
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <Slider
+            min={1}
+            max={100}
+            step={1}
+            disabled={!enableHighNoiseStepsCount}
+            defaultValue={highNoiseStepsCount}
+            value={highNoiseStepsCount}
+            marks={stepsCountMarks}
+            onChange={handleHighNoiseStepsCountChange}
+          />
+        }
+        visible={true}
+        enableDivider={true}
+        columnMode={true}
+      />
+      <PropertyContainer
+        label={
+          <div>
+            <FormattedMessage id={'conversion-panel.settings.image-high-noise-cfg-scale'} />
+            <Tooltip
+              title={
+                intl.formatMessage({ id: 'conversion-panel.settings.image-high-noise-cfg-scale.tooltip' }) +
+                (modelDefaultHighNoiseCfgScale ? modelDefaultHighNoiseCfgScale : '')
+              }
+            >
+              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+            </Tooltip>
+          </div>
+        }
+        value={
+          <Slider
+            min={0}
+            max={20.0}
+            step={0.5}
+            disabled={!enableHighNoiseCfgScale}
+            defaultValue={highNoiseCfgScale}
+            value={highNoiseCfgScale}
+            marks={cfgScaleMarks}
+            onChange={handleHighNoiseCfgScaleSChange}
+          />
         }
         visible={true}
         enableDivider={false}

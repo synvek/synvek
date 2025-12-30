@@ -72,7 +72,10 @@ pub struct GenerationArgs {
     pub steps_count: i32,
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
-    pub init_images: Vec<RefImage>
+    pub init_images: Vec<RefImage>,
+    pub high_noise_steps_count: i32,
+    pub high_noise_cfg_scale: f32,
+    pub frames_count: i32,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -222,6 +225,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut isZImage = false;
     let mut isQwenImage = false;
     let mut isWan22TI2V = false;
+    let mut isWan22T2VI2V = false;
+    let mut high_noise_model_file_path: PathBuf = PathBuf::new();
 
     if let Some(task) = task {
         tracing::info!("Current task info: {:?}", task.clone());
@@ -248,6 +253,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         isZImage = task.task_name.to_lowercase().contains("z-image");
         isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
         isWan22TI2V = task.task_name.to_lowercase().contains("wan2.2_ti2v") || task.task_name.to_lowercase().contains("wan2.2-ti2v");
+        isWan22T2VI2V = task.task_name.to_lowercase().contains("wan2.2_t2v") || task.task_name.to_lowercase().contains("wan2.2-t2v") || task.task_name.to_lowercase().contains("wan2.2_i2v") || task.task_name.to_lowercase().contains("wan2.2-i2v");
 
         if isZImage {
             llm_path = find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
@@ -259,6 +265,23 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         if isWan22TI2V {
             t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
             vae_path = find_relative_model_file_path(&task, "wan2.2_vae.safetensors");
+        }
+        if isWan22T2VI2V {
+            let high_noise_task_item = task.task_items[1].clone();
+            let high_noise_repo_name = high_noise_task_item.repo_name;
+            let high_noise_file_name = high_noise_task_item.file_name;
+            let high_noise_revision = high_noise_task_item.revision;
+            let high_noise_commit_hash = high_noise_task_item.commit_hash;
+            let high_noise_model_source = high_noise_task_item.model_source;
+            high_noise_model_file_path = get_model_file_path(
+                high_noise_model_source.as_str(),
+                high_noise_repo_name.as_str(),
+                high_noise_file_name.as_str(),
+                high_noise_revision.as_str(),
+                high_noise_commit_hash.as_str(),
+            );
+            t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
+            vae_path = find_relative_model_file_path(&task, "wan2.1_vae.safetensors");
         }
     }
 
@@ -415,13 +438,43 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         //String::from("--sampling-method"),
                         //String::from("euler"),
                         String::from("--video-frames"),
-                        String::from("72"),
+                        String::from(generation_args.frames_count.to_string()),
                         String::from("--offload-to-cpu"),
                         String::from("--diffusion-fa"),
                         String::from("--vae-tiling"),
                         //String::from("--vae-on-cpu"),
-                        //String::from("-i"),
-                        //String::from("./cat_with_sd_cpp_42.png"),
+                        String::from("--flow-shift"),
+                        String::from("3"),
+                    ]
+                } else if model_type == "diffusion" && isWan22T2VI2V {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("-M"),
+                        String::from("vid_gen"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--high-noise-diffusion-model"),
+                        high_noise_model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--t5xxl"),
+                        t5xxl_path.to_str().unwrap().to_string(),
+                        String::from("--steps"),
+                        String::from(generation_args.steps_count.to_string()),
+                        String::from("--high-noise-steps"),
+                        String::from(generation_args.high_noise_steps_count.to_string()),
+                        String::from("--high-noise-cfg-scale"),
+                        String::from(generation_args.high_noise_cfg_scale.to_string()),
+                        String::from("--high-noise-sampling-method"),
+                        String::from("euler"),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("--video-frames"),
+                        String::from(generation_args.frames_count.to_string()),
+                        String::from("--offload-to-cpu"),
+                        String::from("--diffusion-fa"),
+                        String::from("--vae-tiling"),
+                        //String::from("--vae-on-cpu"),
                         String::from("--flow-shift"),
                         String::from("3"),
                     ]

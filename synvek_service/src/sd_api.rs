@@ -19,6 +19,9 @@ pub struct ImageGenerationRequest {
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
     pub init_images: Vec<RefImage>,
+    pub high_noise_steps_count: i32,
+    pub high_noise_cfg_scale: f32,
+    pub frames_count: i32,
 }
 /// Request for edit image
 #[derive(Debug, Deserialize, Serialize)]
@@ -35,6 +38,9 @@ pub struct ImageEditRequest {
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
     pub init_images: Vec<RefImage>,
+    pub high_noise_steps_count: i32,
+    pub high_noise_cfg_scale: f32,
+    pub frames_count: i32,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -92,6 +98,9 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         cfg_scale: req.cfg_scale,
         ref_images: req.ref_images.clone(),
         init_images: req.init_images.clone(),
+        high_noise_steps_count: req.high_noise_steps_count,
+        high_noise_cfg_scale: req.high_noise_cfg_scale,
+        frames_count: req.frames_count,
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -125,7 +134,10 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         steps_count: req.steps_count,
         cfg_scale: req.cfg_scale,
         ref_images: req.ref_images.clone(),
-        init_images: req.init_images.clone()
+        init_images: req.init_images.clone(),
+        high_noise_steps_count: req.high_noise_steps_count,
+        high_noise_cfg_scale: req.high_noise_cfg_scale,
+        frames_count: req.frames_count,
     };
     let image_output = sd_service::generate_image(&image_edit_args);
     let mut image_data: Vec<ImageData> = vec![];
