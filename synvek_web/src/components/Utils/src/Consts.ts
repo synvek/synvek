@@ -172,11 +172,13 @@ export class Consts {
 
   public static IMAGE_SIZES: ImageSize[] = [
     { key: '256x256 | 1:1', width: 256, height: 256 },
+    { key: '480x864 | 5:9', width: 480, height: 864 },
     { key: '512x512 | 1:1', width: 512, height: 512 },
     { key: '704x1344 | 11:21', width: 704, height: 1344 },
     { key: '768x1344 | 4:7', width: 768, height: 1344 },
     { key: '768x1280 | 9:15', width: 768, height: 1280 },
     { key: '832x1216 | 13:19', width: 832, height: 1216 },
+    { key: '864x480 | 9:5', width: 864, height: 480 },
     { key: '1024x1024 | 1:1', width: 1024, height: 1024 },
     { key: '1024x768 | 4:3', width: 1024, height: 768 },
     { key: '1080x1920 | 9:16', width: 1080, height: 1920 },
