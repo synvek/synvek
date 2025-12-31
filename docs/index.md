@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Synvek"
   text: "Manage & explore LLMs locally"
-  tagline: Support chat, image generation, voice generation and so on
+  tagline: Support chat, image, video & voice generation and so on
   actions:
     - theme: brand
       text: About Synvek

@@ -5,7 +5,7 @@ layout: home
 hero:
   name: Synvek
   text: 本地管理和探索大模型
-  tagline: 支持文本对话，图像生成，语音生成等
+  tagline: 支持文本对话，图像生成，视频生成, 语音生成等
   actions:
     - theme: brand
       text: 关于Synvek
