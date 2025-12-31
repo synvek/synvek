@@ -374,6 +374,8 @@ pub fn run() {
             std::thread::sleep(std::time::Duration::from_millis(400));
 
             let main_window = app.get_webview_window("main").unwrap();
+            //Title seems missing and we set it here again.
+            main_window.set_title("Synvek Explorer").expect("Failed to windows title");
 
             #[cfg(any(target_os = "macos"))]
             main_window.create_overlay_titlebar().unwrap();
