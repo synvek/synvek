@@ -19,7 +19,8 @@ https://www.synvek.com
 ### 多模型支持. 可以在一个对话里支持包括对话完成、图像生成、语音生成等输出
 
 - 对话完成模型: GPT-oss, Deepseek, Qwen3, gemma-3
-- 图片生成: Stable Diffusion 3.5, Flux, Z-Image-Turbo, Qwen-Image, Qwen-Image-Edit, Ovis-Image, MiniCPM-4.5
+- 图像生成: Stable Diffusion 3.5, Flux, Z-Image-Turbo, Qwen-Image, Qwen-Image-Edit, Ovis-Image, MiniCPM-4.5
+- 视频生成: Wan 2.2
 - 语音生成: Dia 1.5
 - 多模态模型: Phi-4,Qwen2-VL, MiniCPM-V-4.5
 - 更多在开发中

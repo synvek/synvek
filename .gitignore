@@ -1,5 +1,6 @@
 output/
 build/
+build_vulkan/
 target/
 third_party2/
 node_modules
