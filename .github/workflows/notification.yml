@@ -18,7 +18,7 @@ on:
       api_url:
         description: 'API endpoint URL to send data'
         required: true
-        default: 'https://release.synvek.com'
+        default: 'https://release.synvek.com/api/releases'
       api_auth_token:
         description: 'API authentication token (optional)'
         required: false
