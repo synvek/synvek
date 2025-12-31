@@ -32,8 +32,8 @@ features:
     details: GPT OSS, Qwen, Deepseek, Flux, Stable Diffusion, Dia, Z-Image-Turbo, Qwen-Image, Qwen-Image-Edit, Ovis-Image, MiniCPM-4.5, Wan 2.2 and so on
   - title: GPU support
     details: Support CUDA&Vulkan on windows/Linux, Metal on macos
-  - title: Text, image and voice generation
-    details: Chat completion, image generation, voice generation and so on.
+  - title: Text, image, video and voice generation
+    details: Chat completion, image generation, video generation, voice generation and so on.
   - title: MCP and Function call support
     details: Support MCP and function call.
 ---

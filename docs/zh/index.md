@@ -32,8 +32,8 @@ features:
     details: 支持GPT OSS开源版，千问,DeepSeek，Flux，Stable Diffusion, Dia, Z-Image-Turbo, Qwen-Image, Qwen-Image-Edit, Ovis-Image, MiniCPM-4.5, 通义万相Wan 2.2等
   - title: GPU加速支持
     details: Windows/Linux版本支持Cuda&Vulkan加速。Macos支持Metal加速
-  - title: 文本、图形和语音生成支持
-    details: 文本、图形和语音生成支持
+  - title: 文本、图形、视频和语音生成支持
+    details: 文本、图形、视频和语音生成支持
   - title: MCP和Function Call支持
     details: MCP和Function Call支持
 ---
