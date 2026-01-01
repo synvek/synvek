@@ -52,6 +52,7 @@ export default defineConfig({
     'process.env.PRODUCTION_NAME': pkg.name,
     'process.env.PRODUCTION_VERSION': pkg.version,
     'process.env.PRODUCTION_HOMEPAGE': pkg.homepage,
+    'process.env.APPLICATION_NAME': 'Synvek Explorer',
     'process.env.ENV_NAME': 'default',
     'process.env.AD_ENABLED': 'false',
   },
@@ -62,10 +63,10 @@ export default defineConfig({
   request: {},
   routes: routes,
   metas: [
-    { name: 'keywords', content: 'ivipa, ratel, diagram, open source, online, offline, flow chart, flowchart, UML, ER' },
+    { name: 'keywords', content: 'synvek, open source, local, LLM, chat, image generation, video generation, llama.cpp, stable-diffusion.cpp, rust' },
     {
       name: 'description',
-      content: 'Ivipa - Ratel, A open source general online diagram editor for making flowcharts, process diagrams, UML, ER and other diagrams',
+      content: 'Synvek - Synvek is all-in-one application to manage & run & explore LLM with text, image and video locally.',
     },
   ],
   npmClient: 'npm',

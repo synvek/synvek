@@ -12,6 +12,7 @@ interface TextEditWindowProps {
   title?: string
   tag?: string
   singleLine?: boolean
+  readonly?: boolean
   onWindowCancel: () => void
   onWindowOk: (textEditId: string, textEditContent: string, tag: string | undefined) => void
 }
@@ -27,6 +28,7 @@ const TextEditWindowPage: FC<TextEditWindowProps> = ({
   height,
   singleLine,
   textContent,
+  readonly,
   onWindowCancel,
   onWindowOk,
 }) => {
@@ -47,7 +49,7 @@ const TextEditWindowPage: FC<TextEditWindowProps> = ({
         textContent,
       })
     }
-  }, [visible]) // 当窗口显示时设置表单值
+  }, [visible])
 
   const onOk = async () => {
     try {
@@ -104,6 +106,7 @@ const TextEditWindowPage: FC<TextEditWindowProps> = ({
               {singleLine ? (
                 <Input
                   placeholder={intl.formatMessage({ id: 'text-edit-window.column-text-content-placeholder' })}
+                  readOnly={!!readonly}
                   size="small"
                   style={{ width: '100%', height: `${height}px` }}
                 />
@@ -111,6 +114,7 @@ const TextEditWindowPage: FC<TextEditWindowProps> = ({
                 <TextArea
                   placeholder={intl.formatMessage({ id: 'text-edit-window.column-text-content-placeholder' })}
                   size="small"
+                  readOnly={!!readonly}
                   style={{ width: '100%', height: `${height}px` }}
                 />
               )}
