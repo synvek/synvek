@@ -1035,7 +1035,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
   }
 
   const framesCountMarks: SliderSingleProps['marks'] = {
-    15: '15',
+    5: '5',
     50: '50',
     100: '100',
     150: '150',
