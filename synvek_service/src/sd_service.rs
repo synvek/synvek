@@ -220,12 +220,13 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut t5xxl_path: PathBuf = PathBuf::new();
     let mut llm_path: PathBuf = PathBuf::new();
     let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
-    let mut isFlux = false;
+    let mut isFlux1 = false;
     let mut isOvis = false;
     let mut isZImage = false;
     let mut isQwenImage = false;
     let mut isWan22TI2V = false;
     let mut isWan22T2VI2V = false;
+    let mut isFlux2 = false;
     let mut high_noise_model_file_path: PathBuf = PathBuf::new();
 
     if let Some(task) = task {
@@ -248,7 +249,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         vae_path = find_relative_model_file_path(&task, "ae.safetensors");
         t5xxl_path = find_relative_model_file_path(&task, "t5xxl_fp16.safetensors");
         llm_path = find_relative_model_file_path(&task, "ovis_2.5.safetensors");
-        isFlux = task.task_name.to_lowercase().contains("flux");
+        isFlux1 = task.task_name.to_lowercase().contains("flux.1");
+        isFlux2 = task.task_name.to_lowercase().contains("flux2-dev");
         isOvis = task.task_name.to_lowercase().contains("ovis");
         isZImage = task.task_name.to_lowercase().contains("z-image");
         isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
@@ -261,6 +263,10 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         if isQwenImage {
             llm_path = find_relative_model_file_path(&task, "Qwen2.5-VL-7B-Instruct-Q4_0.gguf");
             vae_path = find_relative_model_file_path(&task, "qwen_image_vae.safetensors");
+        }
+        if isFlux2 {
+            llm_path = find_relative_model_file_path(&task, "Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf");
+            vae_path = find_relative_model_file_path(&task, "flux2-vae.safetensors");
         }
         if isWan22TI2V {
             t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
@@ -351,7 +357,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
                 //TODO: Can be removed or optimized if dynamic loading required
                 let cleanup_log_callback_func: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
-                let mut start_args: Vec<String> = if model_type == "diffusion" && isFlux {
+                let mut start_args: Vec<String> = if model_type == "diffusion" && isFlux1 {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -369,6 +375,24 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from("--batch-count"),
                         String::from(generation_args.n.to_string()),
                         String::from("--clip-on-cpu"),
+                    ]
+                } else if model_type == "diffusion" && isFlux2 {
+                    vec![
+                        String::from("synvek_service"),
+                        String::from("--diffusion-model"),
+                        model_file_path.to_str().unwrap().to_string(),
+                        String::from("--vae"),
+                        vae_path.to_str().unwrap().to_string(),
+                        String::from("--llm"),
+                        llm_path.to_str().unwrap().to_string(),
+                        String::from("--steps"),
+                        String::from(generation_args.steps_count.to_string()),
+                        String::from("--batch-count"),
+                        String::from(generation_args.n.to_string()),
+                        String::from("--sampling-method"),
+                        String::from("euler"),
+                        String::from("--offload-to-cpu"),
+                        String::from("--diffusion-fa"),
                     ]
                 } else if model_type == "diffusion" && isOvis {
                     vec![
