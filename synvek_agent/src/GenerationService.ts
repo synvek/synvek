@@ -7,7 +7,7 @@ import { SystemUtils } from './Utils/SystemUtils.ts'
 const generation = new Elysia().state({ message: '' })
 
 export class GenerationService {
-  public static getGenerations(generationType: string, fullContent: boolean): Generation[] {
+  public static getGenerations(fullContent: boolean, limitation: number | undefined): Generation[] {
     const db = SqliteUtils.connectStorageDatabase()
     const rows = db
       .prepare(
@@ -17,9 +17,8 @@ export class GenerationService {
           'generation_content, generation_summary, generation_time, ' +
           'model_name, finish_reason, system_fingerprint, input_tokens, ' +
           'output_tokens, total_tokens, updated_date, created_date from generation ' +
-          'where generation_type = ? order by created_date',
-      )
-      .all(generationType)
+          'order by created_date desc ' + (limitation ? 'limit ' + limitation : ''),
+      ).all()
     return rows.map((row: GenerationRow) => {
       const rowData: GenerationRow = row as GenerationRow
       const generation: Generation = {
@@ -227,7 +226,7 @@ export const generationService = new Elysia({ prefix: 'generation' })
   .post(
     '/generations',
     ({ body, set }) => {
-      const generations = GenerationService.getGenerations(body.generationType, body.fullContent)
+      const generations = GenerationService.getGenerations(body.fullContent, body.limitation)
       if (generations !== null) {
         return SystemUtils.buildResponse(true, generations)
       } else {
@@ -236,8 +235,8 @@ export const generationService = new Elysia({ prefix: 'generation' })
     },
     {
       body: t.Object({
-        generationType: t.String(),
         fullContent: t.Boolean(),
+        limitation: t.Optional(t.Number()),
       }),
     },
   )

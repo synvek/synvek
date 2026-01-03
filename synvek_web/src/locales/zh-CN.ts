@@ -121,6 +121,8 @@ export default {
   'image-generation-view.message-model-not-started': '模型未启动',
   'image-generation-view.message-no-default-model-found': '默认模型未检测到',
   'image-generation-view.message-user-prompt-is-required': '提示词不可为空',
+  'image-generation-view.list.history': '历史记录',
+  'image-generation-view.list.generations': '当前生成',
   'image-generation-view.setting-property.upload': '上传',
   'image-generation-view.setting-property-cfg-scale': '无分类器引导尺度',
   'image-generation-view.setting-property-cfg-scale-tooltip': '仅当模型支持时可用,当前模型默认值:',

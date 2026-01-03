@@ -122,6 +122,8 @@ export default {
   'image-generation-view.message-model-not-started': 'Model not started',
   'image-generation-view.message-no-default-model-found': 'Default model not found',
   'image-generation-view.message-user-prompt-is-required': 'User prompt is required.',
+  'image-generation-view.list.history': 'History',
+  'image-generation-view.list.generations': 'Generations',
   'image-generation-view.setting-property.upload': 'Upload',
   'image-generation-view.setting-property-cfg-scale': 'Classifier-Free Guidance Scale',
   'image-generation-view.setting-property-cfg-scale-tooltip': 'Only available if supported, default value for current model:',

@@ -1495,9 +1495,10 @@ export class RequestUtils {
     })
   }
 
-  public static getGenerations(generationType: string) {
+  public static getGenerations(limitation: number | undefined) {
     const data = {
-      generationType: generationType,
+      fullContent: false,
+      limitation: limitation,
     }
     const config = {
       headers: {
@@ -1510,6 +1511,7 @@ export class RequestUtils {
   public static getGeneration(generationId: number) {
     const data = {
       generationId: generationId,
+      fullContent: true,
     }
     const config = {
       headers: {

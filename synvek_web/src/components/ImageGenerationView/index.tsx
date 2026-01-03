@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'react'
 
-import { Consts, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
+import { Consts, Generation, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
@@ -11,10 +11,12 @@ import {
   Collapse,
   ConfigProvider,
   Divider,
+  Dropdown,
   GetProp,
   Image,
   Input,
   InputNumber,
+  MenuProps,
   message,
   Select,
   Slider,
@@ -104,6 +106,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const oldFramesCount = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_FRAMES_COUNT)
   const defaultFramesCount = oldFramesCount ? Number.parseInt(oldFramesCount) : Consts.IMAGE_FRAMES_COUNT_DEFAULT
   const [framesCount, setFramesCount] = useState<number>(defaultFramesCount)
+  const [generations, setGenerations] = useState<Generation[]>([])
+  const [currentGeneration, setCurrentGeneration] = useState<Generation | null>(null)
+  const [currentGenerationVisible, setCurrentGenerationVisible] = useState<boolean>(false)
+  const [currentGenerationLitmition, setCurrentGenerationLimitation] = useState<number>(50)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -280,7 +286,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const saveGeneration = async (images: string[]) => {
     for (let i = 0; i < images.length; i++) {
       const image = images[i]
-      const thumbData = await SystemUtils.resizeImage(image, 64, 64)
+      const thumbData = await SystemUtils.resizeImage(image, 128, 128)
       const generationData = await RequestUtils.addGeneration(
         supportVideoGen ? Consts.GENERATION_TYPE_VIDEO : Consts.GENERATION_TYPE_IMAGE,
         userText,
@@ -367,6 +373,33 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
             <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           ) : (
             <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          )}
+        </div>
+      )
+    })
+  }
+
+  const handleShowGeneration = async (generationId: number) => {
+    const generationResponse = await RequestUtils.getGeneration(generationId)
+    await WorkspaceUtils.handleRequest(
+      messageApi,
+      generationResponse,
+      (data: Generation) => {
+        setCurrentGeneration(data)
+        setCurrentGenerationVisible(true)
+      },
+      () => {},
+      () => {},
+    )
+  }
+  const generateImageGenerations = () => {
+    return generations.map((generation, index) => {
+      return (
+        <div key={index} onClick={() => handleShowGeneration(generation.generationId)} style={{ cursor: 'pointer' }}>
+          {generation.generationType === 'image' ? (
+            <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          ) : (
+            <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           )}
         </div>
       )
@@ -514,6 +547,55 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     }
     setInitImageFileList([...info.fileList])
   }
+
+  const handleHistoryChange = async (key: string[]) => {
+    let showHistory = false
+    if (key && key.length > 0) {
+      key.forEach((item) => {
+        if (item === 'history') {
+          showHistory = true
+        }
+      })
+    }
+    if (showHistory) {
+      if (generations.length === 0) {
+        const generationsResponse = await RequestUtils.getGenerations(currentGenerationLitmition)
+        await WorkspaceUtils.handleRequest(
+          messageApi,
+          generationsResponse,
+          (data: Generation[]) => {
+            console.log(data)
+            setGenerations(data)
+          },
+          () => {},
+          () => {},
+        )
+      }
+    }
+  }
+
+  const historyMenuItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Latest 100',
+      onClick: () => setCurrentGenerationLimitation(100),
+    },
+    {
+      key: '2',
+      label: 'Latest 200',
+      onClick: () => setCurrentGenerationLimitation(200),
+    },
+    {
+      key: '3',
+      label: 'Latest 300',
+      onClick: () => setCurrentGenerationLimitation(300),
+    },
+    {
+      key: '4',
+      label: 'Latest 500',
+      onClick: () => setCurrentGenerationLimitation(500),
+    },
+  ]
 
   return (
     <div className={styles.imageGenerationView} style={{ display: visible ? 'block' : 'none' }}>
@@ -1019,10 +1101,65 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               </Splitter>
             </ConfigProvider>
           </Splitter.Panel>
-          <Splitter.Panel defaultSize={120} min={120} max={120} resizable={false}>
-            <div className={styles.imageGenerationViewImageList} style={{}}>
-              {generateImageList()}
-            </div>
+          <Splitter.Panel defaultSize={160} min={160} max={300} resizable>
+            <Collapse
+              ghost={false}
+              defaultActiveKey={['generations']}
+              bordered={false}
+              className={styles.imageGenerationPropertyRegion}
+              onChange={handleHistoryChange}
+            >
+              <Collapse.Panel
+                key={'history'}
+                collapsible={'icon'}
+                header={
+                  <div style={{ fontWeight: 'bold' }}>
+                    <FormattedMessage id={'image-generation-view.list.history'} />
+                  </div>
+                }
+                extra={
+                  <Dropdown menu={{ items: historyMenuItems }} arrow>
+                    <Button size={'small'} type={'text'} shape={'circle'} icon={<SyncOutlined />} className={styles.historyButton} />
+                  </Dropdown>
+                }
+              >
+                <div
+                  className={styles.collapseContent}
+                  style={{ backgroundColor: token.colorBgElevated, borderColor: token.colorBorder, maxHeight: '360px', overflowY: 'scroll', overflowX: 'auto' }}
+                >
+                  <div className={styles.imageGenerationViewImageList}>{generateImageGenerations()}</div>
+                  <Image
+                    width={60}
+                    style={{ display: 'none' }}
+                    alt={currentGeneration ? currentGeneration.generationType : ''}
+                    src={currentGeneration ? currentGeneration.generationSummary : ''}
+                    preview={{
+                      visible: currentGenerationVisible,
+                      src: currentGeneration ? currentGeneration.generationContent : '',
+                      onVisibleChange: (value) => {
+                        setCurrentGeneration(null)
+                        setCurrentGenerationVisible(false)
+                      },
+                    }}
+                  />
+                </div>
+              </Collapse.Panel>
+              <Collapse.Panel
+                key={'generations'}
+                header={
+                  <div style={{ fontWeight: 'bold' }}>
+                    <FormattedMessage id={'image-generation-view.list.generations'} />
+                  </div>
+                }
+              >
+                <div
+                  className={styles.collapseContent}
+                  style={{ backgroundColor: token.colorBgElevated, borderColor: token.colorBorder, display: images.length > 0 ? undefined : 'none' }}
+                >
+                  <div className={styles.imageGenerationViewImageList}>{generateImageList()}</div>
+                </div>
+              </Collapse.Panel>
+            </Collapse>
           </Splitter.Panel>
         </Splitter>
       </ConfigProvider>
