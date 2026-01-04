@@ -577,22 +577,22 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const historyMenuItems: MenuProps['items'] = [
     {
       key: '1',
-      label: 'Latest 100',
+      label: intl.formatMessage({ id: 'image-generation-view.list.latest-100' }),
       onClick: () => setCurrentGenerationLimitation(100),
     },
     {
       key: '2',
-      label: 'Latest 200',
+      label: intl.formatMessage({ id: 'image-generation-view.list.latest-200' }),
       onClick: () => setCurrentGenerationLimitation(200),
     },
     {
       key: '3',
-      label: 'Latest 300',
+      label: intl.formatMessage({ id: 'image-generation-view.list.latest-300' }),
       onClick: () => setCurrentGenerationLimitation(300),
     },
     {
       key: '4',
-      label: 'Latest 500',
+      label: intl.formatMessage({ id: 'image-generation-view.list.latest-500' }),
       onClick: () => setCurrentGenerationLimitation(500),
     },
   ]
