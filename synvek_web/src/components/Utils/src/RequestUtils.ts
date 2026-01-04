@@ -670,6 +670,13 @@ export class RequestUtils {
     negativePrompt: string = '',
     stepsCount: number = 20,
     cfgScale: number = 7.0,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
   ) {
     const data = {
       userMessage: userMessage,
@@ -682,6 +689,13 @@ export class RequestUtils {
       negativePrompt: negativePrompt,
       stepsCount: stepsCount,
       cfgScale: cfgScale,
+      samplingMethod: samplingMethod,
+      offloadToCPU: offloadToCPU,
+      diffusionFA: diffusionFA,
+      clipOnCPU: clipOnCPU,
+      vaeTiling: vaeTiling,
+      flowShift: flowShift,
+      vaeOnCPU: vaeOnCPU,
     }
     const config = {
       headers: {
@@ -707,6 +721,13 @@ export class RequestUtils {
     highNoiseStepsCount: number = 10,
     highNoiseCfgScale: number = 3.5,
     framesCount: number = 36,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
   ) {
     const data = {
       userMessage: userMessage,
@@ -724,6 +745,13 @@ export class RequestUtils {
       highNoiseStepsCount: highNoiseStepsCount,
       highNoiseCfgScale: highNoiseCfgScale,
       framesCount: framesCount,
+      samplingMethod: samplingMethod,
+      offloadToCPU: offloadToCPU,
+      diffusionFA: diffusionFA,
+      clipOnCPU: clipOnCPU,
+      vaeTiling: vaeTiling,
+      flowShift: flowShift,
+      vaeOnCPU: vaeOnCPU,
     }
     const config = {
       headers: {

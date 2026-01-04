@@ -139,6 +139,22 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultHighNoiseCfgScale = oldHighNoiseCfgScale ? Number.parseFloat(oldHighNoiseCfgScale) : Consts.CHAT_IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT
   const oldFramesCount = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_FRAMES_COUNT)
   const defaultFramesCount = oldFramesCount ? Number.parseInt(oldFramesCount) : Consts.CHAT_IMAGE_FRAMES_COUNT_DEFAULT
+  const oldSamplingMethod = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_SAMPLING_METHOD)
+  const defaultSamplingMethod = oldSamplingMethod ? oldSamplingMethod : Consts.CHAT_IMAGE_SAMPLING_METHOD_DEFAULT
+  const oldOffloadToCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_OFFLOAD_TO_CPU)
+  const defaultOffloadToCPU = oldOffloadToCPU ? oldOffloadToCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_OFFLOAD_TO_CPU_DEFAULT
+  const oldDiffusionFA = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_DIFFUSION_FA)
+  const defaultDiffusionFA = oldDiffusionFA ? oldDiffusionFA.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_DIFFUSION_FA_DEFAULT
+  const oldClipOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CLIP_ON_CPU)
+  const defaultClipOnCPU = oldClipOnCPU ? oldClipOnCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CLIP_ON_CPU_DEFAULT
+  const oldVaeTiling = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_VAE_TILING)
+  const defaultVaeTiling = oldVaeTiling ? oldVaeTiling.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_VAE_TILING_DEFAULT
+  const oldFlowShift = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_FLOW_SHIFT)
+  const defaultFlowShift = oldFlowShift ? Number.parseFloat(oldFlowShift) : Consts.CHAT_IMAGE_FLOW_SHIFT_DEFAULT
+  const oldAutoFlowShift = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_AUTO_FLOW_SHIFT)
+  const defaultAutoFlowShift = oldAutoFlowShift ? oldAutoFlowShift.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_AUTO_FLOW_SHIFT_DEFAULT
+  const oldVaeOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_VAE_ON_CPU)
+  const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_VAE_ON_CPU_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -821,6 +837,13 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             highNoiseStepsCount,
             highNoiseCfgScale,
             framesCount,
+            defaultSamplingMethod === 'auto' ? undefined : defaultSamplingMethod,
+            defaultOffloadToCPU,
+            defaultDiffusionFA,
+            defaultClipOnCPU,
+            defaultVaeTiling,
+            defaultAutoFlowShift ? undefined : defaultFlowShift,
+            defaultVaeOnCPU,
           )
         : await RequestUtils.generateImage(
             chatContent[0].text,
@@ -833,6 +856,13 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             negativePrompt,
             stepsCount,
             cfgScale,
+            defaultSamplingMethod === 'auto' ? undefined : defaultSamplingMethod,
+            defaultOffloadToCPU,
+            defaultDiffusionFA,
+            defaultClipOnCPU,
+            defaultVaeTiling,
+            defaultAutoFlowShift ? undefined : defaultFlowShift,
+            defaultVaeOnCPU,
           )
     await WorkspaceUtils.handleRequest(
       messageApi,

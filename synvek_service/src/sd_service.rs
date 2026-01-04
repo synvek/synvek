@@ -76,6 +76,13 @@ pub struct GenerationArgs {
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
+    pub sampling_method: Option<String>,
+    pub offload_to_cpu: bool,
+    pub diffusion_fa: bool,
+    pub clip_on_cpu: bool,
+    pub vae_tiling: bool,
+    pub vae_on_cpu: bool,
+    pub flow_shift: Option<f32>,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -220,13 +227,13 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let mut t5xxl_path: PathBuf = PathBuf::new();
     let mut llm_path: PathBuf = PathBuf::new();
     let mut model_source: String = common::MODEL_SOURCE_HUGGINGFACE.to_string();
-    let mut isFlux1 = false;
-    let mut isOvis = false;
-    let mut isZImage = false;
-    let mut isQwenImage = false;
-    let mut isWan22TI2V = false;
-    let mut isWan22T2VI2V = false;
-    let mut isFlux2 = false;
+    let mut is_flux1 = false;
+    let mut is_ovis = false;
+    let mut is_zimage = false;
+    let mut is_qwen_image = false;
+    let mut is_wan22ti2v = false;
+    let mut is_wan22t2vi2v = false;
+    let mut is_flux2 = false;
     let mut high_noise_model_file_path: PathBuf = PathBuf::new();
 
     if let Some(task) = task {
@@ -249,30 +256,30 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         vae_path = find_relative_model_file_path(&task, "ae.safetensors");
         t5xxl_path = find_relative_model_file_path(&task, "t5xxl_fp16.safetensors");
         llm_path = find_relative_model_file_path(&task, "ovis_2.5.safetensors");
-        isFlux1 = task.task_name.to_lowercase().contains("flux.1");
-        isFlux2 = task.task_name.to_lowercase().contains("flux2-dev");
-        isOvis = task.task_name.to_lowercase().contains("ovis");
-        isZImage = task.task_name.to_lowercase().contains("z-image");
-        isQwenImage = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
-        isWan22TI2V = task.task_name.to_lowercase().contains("wan2.2_ti2v") || task.task_name.to_lowercase().contains("wan2.2-ti2v");
-        isWan22T2VI2V = task.task_name.to_lowercase().contains("wan2.2_t2v") || task.task_name.to_lowercase().contains("wan2.2-t2v") || task.task_name.to_lowercase().contains("wan2.2_i2v") || task.task_name.to_lowercase().contains("wan2.2-i2v");
+        is_flux1 = task.task_name.to_lowercase().contains("flux.1");
+        is_flux2 = task.task_name.to_lowercase().contains("flux2-dev");
+        is_ovis = task.task_name.to_lowercase().contains("ovis");
+        is_zimage = task.task_name.to_lowercase().contains("z-image");
+        is_qwen_image = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
+        is_wan22ti2v = task.task_name.to_lowercase().contains("wan2.2_ti2v") || task.task_name.to_lowercase().contains("wan2.2-ti2v");
+        is_wan22t2vi2v = task.task_name.to_lowercase().contains("wan2.2_t2v") || task.task_name.to_lowercase().contains("wan2.2-t2v") || task.task_name.to_lowercase().contains("wan2.2_i2v") || task.task_name.to_lowercase().contains("wan2.2-i2v");
 
-        if isZImage {
+        if is_zimage {
             llm_path = find_relative_model_file_path(&task, "Qwen3-4B-Instruct-2507-Q4_K_M.gguf");
         }
-        if isQwenImage {
+        if is_qwen_image {
             llm_path = find_relative_model_file_path(&task, "Qwen2.5-VL-7B-Instruct-Q4_0.gguf");
             vae_path = find_relative_model_file_path(&task, "qwen_image_vae.safetensors");
         }
-        if isFlux2 {
+        if is_flux2 {
             llm_path = find_relative_model_file_path(&task, "Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf");
             vae_path = find_relative_model_file_path(&task, "flux2-vae.safetensors");
         }
-        if isWan22TI2V {
+        if is_wan22ti2v {
             t5xxl_path = find_relative_model_file_path(&task, "umt5-xxl-encoder-Q8_0.gguf");
             vae_path = find_relative_model_file_path(&task, "wan2.2_vae.safetensors");
         }
-        if isWan22T2VI2V {
+        if is_wan22t2vi2v {
             let high_noise_task_item = task.task_items[1].clone();
             let high_noise_repo_name = high_noise_task_item.repo_name;
             let high_noise_file_name = high_noise_task_item.file_name;
@@ -357,7 +364,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 let init_log_callback: Symbol<InitLogCallback> = init_log_callback_func;
                 //TODO: Can be removed or optimized if dynamic loading required
                 let cleanup_log_callback_func: Symbol<CleanupLogCallback> = cleanup_log_callback_func;
-                let mut start_args: Vec<String> = if model_type == "diffusion" && isFlux1 {
+                let mut start_args: Vec<String> = if model_type == "diffusion" && is_flux1 {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -368,15 +375,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         clip_l_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
                         t5xxl_path.to_str().unwrap().to_string(),
-                        String::from("--sampling-method"),
-                        String::from("euler"),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--batch-count"),
-                        String::from(generation_args.n.to_string()),
-                        String::from("--clip-on-cpu"),
                     ]
-                } else if model_type == "diffusion" && isFlux2 {
+                } else if model_type == "diffusion" && is_flux2 {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -385,16 +385,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--batch-count"),
-                        String::from(generation_args.n.to_string()),
-                        String::from("--sampling-method"),
-                        String::from("euler"),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
                     ]
-                } else if model_type == "diffusion" && isOvis {
+                } else if model_type == "diffusion" && is_ovis {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -403,14 +395,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--batch-count"),
-                        String::from(generation_args.n.to_string()),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
                     ]
-                } else if model_type == "diffusion" && isZImage {
+                } else if model_type == "diffusion" && is_zimage {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -419,14 +405,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--batch-count"),
-                        String::from(generation_args.n.to_string()),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
                     ]
-                } else if model_type == "diffusion" && isQwenImage {
+                } else if model_type == "diffusion" && is_qwen_image {
                     vec![
                         String::from("synvek_service"),
                         String::from("--diffusion-model"),
@@ -435,18 +415,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--llm"),
                         llm_path.to_str().unwrap().to_string(),
-                        String::from("--sampling-method"),
-                        String::from("euler"),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--batch-count"),
-                        String::from(generation_args.n.to_string()),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
-                        String::from("--flow-shift"),
-                        String::from("3"),
                     ]
-                } else if model_type == "diffusion" && isWan22TI2V {
+                } else if model_type == "diffusion" && is_wan22ti2v {
                     vec![
                         String::from("synvek_service"),
                         String::from("-M"),
@@ -457,20 +427,10 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         vae_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
                         t5xxl_path.to_str().unwrap().to_string(),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        //String::from("--sampling-method"),
-                        //String::from("euler"),
                         String::from("--video-frames"),
                         String::from(generation_args.frames_count.to_string()),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
-                        String::from("--vae-tiling"),
-                        //String::from("--vae-on-cpu"),
-                        String::from("--flow-shift"),
-                        String::from("3"),
                     ]
-                } else if model_type == "diffusion" && isWan22T2VI2V {
+                } else if model_type == "diffusion" && is_wan22t2vi2v {
                     vec![
                         String::from("synvek_service"),
                         String::from("-M"),
@@ -491,16 +451,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         String::from(generation_args.high_noise_cfg_scale.to_string()),
                         String::from("--high-noise-sampling-method"),
                         String::from("euler"),
-                        String::from("--sampling-method"),
-                        String::from("euler"),
                         String::from("--video-frames"),
                         String::from(generation_args.frames_count.to_string()),
-                        String::from("--offload-to-cpu"),
-                        String::from("--diffusion-fa"),
-                        String::from("--vae-tiling"),
-                        //String::from("--vae-on-cpu"),
-                        String::from("--flow-shift"),
-                        String::from("3"),
                     ]
                 } else { //flux gguf
                     vec![
@@ -513,13 +465,38 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         clip_g_path.to_str().unwrap().to_string(),
                         String::from("--t5xxl"),
                         t5xxl_path.to_str().unwrap().to_string(),
-                        String::from("--steps"),
-                        String::from(generation_args.steps_count.to_string()),
-                        String::from("--sampling-method"),
-                        String::from("euler"),
-                        String::from("--clip-on-cpu"),
                     ]
                 };
+                if generation_args.sampling_method.clone().is_some() {
+                    start_args.push(String::from("--sampling-method"));
+                    start_args.push(String::from(generation_args.sampling_method.clone().unwrap()));
+                }
+                if generation_args.offload_to_cpu {
+                    start_args.push(String::from("--offload-to-cpu"));
+                }
+                if generation_args.diffusion_fa {
+                    start_args.push(String::from("--diffusion-fa"));
+                }
+                if generation_args.clip_on_cpu {
+                    start_args.push(String::from("--clip-on-cpu"));
+                }
+                if generation_args.vae_tiling {
+                    start_args.push(String::from("--vae-tiling"));
+                }
+                if generation_args.vae_on_cpu {
+                    start_args.push(String::from("--vae-on-cpu"));
+                }
+                if generation_args.flow_shift.clone().is_some() {
+                    start_args.push(String::from("--flow-shift"));
+                    start_args.push(generation_args.flow_shift.clone().unwrap().to_string());
+                } else if model_type == "diffusion" && (is_qwen_image || is_wan22t2vi2v || is_wan22ti2v) {
+                    start_args.push(String::from("--flow-shift"));
+                    start_args.push(String::from("3"));
+                }
+                start_args.push(String::from("--steps"));
+                start_args.push(String::from(generation_args.steps_count.to_string()));
+                start_args.push(String::from("--batch-count"));
+                start_args.push(String::from(generation_args.n.to_string()));
                 start_args.push(String::from("-p"));
                 start_args.push(generation_args.prompt.to_string());
                 start_args.push(String::from("--cfg-scale"));
@@ -557,7 +534,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
 
                     let image_count = get_image_count(image_output);
                     tracing::info!("Image count = {}", image_count);
-                    if isWan22TI2V || isWan22T2VI2V {
+                    if is_wan22ti2v || is_wan22t2vi2v {
                         if image_count > 0 {
                             let webp_data = create_webp_from_images(image_count,image_output, get_image_data_length, get_image_data);
                             if let Ok(webp_data) = webp_data {

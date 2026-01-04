@@ -22,6 +22,13 @@ pub struct ImageGenerationRequest {
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
+    pub sampling_method: Option<String>,
+    pub offload_to_cpu: bool,
+    pub diffusion_fa: bool,
+    pub clip_on_cpu: bool,
+    pub vae_tiling: bool,
+    pub vae_on_cpu: bool,
+    pub flow_shift: Option<f32>,
 }
 /// Request for edit image
 #[derive(Debug, Deserialize, Serialize)]
@@ -41,6 +48,13 @@ pub struct ImageEditRequest {
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
+    pub sampling_method: Option<String>,
+    pub offload_to_cpu: bool,
+    pub diffusion_fa: bool,
+    pub clip_on_cpu: bool,
+    pub vae_tiling: bool,
+    pub vae_on_cpu: bool,
+    pub flow_shift: Option<f32>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -101,6 +115,13 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         high_noise_steps_count: req.high_noise_steps_count,
         high_noise_cfg_scale: req.high_noise_cfg_scale,
         frames_count: req.frames_count,
+        sampling_method: req.sampling_method.clone(),
+        offload_to_cpu: req.offload_to_cpu,
+        diffusion_fa: req.offload_to_cpu,
+        clip_on_cpu: req.offload_to_cpu,
+        vae_tiling: req.offload_to_cpu,
+        vae_on_cpu: req.offload_to_cpu,
+        flow_shift: req.flow_shift.clone(),
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -138,6 +159,13 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         high_noise_steps_count: req.high_noise_steps_count,
         high_noise_cfg_scale: req.high_noise_cfg_scale,
         frames_count: req.frames_count,
+        sampling_method: req.sampling_method.clone(),
+        offload_to_cpu: req.offload_to_cpu,
+        diffusion_fa: req.offload_to_cpu,
+        clip_on_cpu: req.offload_to_cpu,
+        vae_tiling: req.offload_to_cpu,
+        vae_on_cpu: req.offload_to_cpu,
+        flow_shift: req.flow_shift.clone(),
     };
     let image_output = sd_service::generate_image(&image_edit_args);
     let mut image_data: Vec<ImageData> = vec![];

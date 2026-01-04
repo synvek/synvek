@@ -1324,7 +1324,7 @@ const ConversionPanel: FC<ConversionPanelProps> = (visible) => {
         }
         value={
           <Slider
-            min={15}
+            min={5}
             max={150}
             step={1}
             disabled={!supportVideoGen}

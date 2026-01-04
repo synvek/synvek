@@ -111,6 +111,14 @@ export class Consts {
   public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_WIDTH = 'synvek.chat.image.custom-width'
   public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_HEIGHT = 'synvek.chat.image.custom-height'
   public static LOCAL_STORAGE_CHAT_IMAGE_CUSTOM_SIZE = 'synvek.chat.image.custom-size'
+  public static LOCAL_STORAGE_CHAT_IMAGE_SAMPLING_METHOD = 'synvek.chat.image.sampling-method'
+  public static LOCAL_STORAGE_CHAT_IMAGE_OFFLOAD_TO_CPU = 'synvek.chat.image.offload-to-cpu'
+  public static LOCAL_STORAGE_CHAT_IMAGE_DIFFUSION_FA = 'synvek.chat.image.diffusion-fa'
+  public static LOCAL_STORAGE_CHAT_IMAGE_CLIP_ON_CPU = 'synvek.chat.image.clip-on-cpu'
+  public static LOCAL_STORAGE_CHAT_IMAGE_FLOW_SHIFT = 'synvek.chat.image.flow-shift'
+  public static LOCAL_STORAGE_CHAT_IMAGE_AUTO_FLOW_SHIFT = 'synvek.chat.image.auto-flow-shift'
+  public static LOCAL_STORAGE_CHAT_IMAGE_VAE_TILING = 'synvek.chat.image.vae-tiling'
+  public static LOCAL_STORAGE_CHAT_IMAGE_VAE_ON_CPU = 'synvek.chat.image.vae-on-cpu'
   public static CHAT_TEMPERATURE_DEFAULT = 1
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
@@ -124,6 +132,14 @@ export class Consts {
   public static CHAT_IMAGE_CUSTOM_WIDTH_DEFAULT = 512
   public static CHAT_IMAGE_CUSTOM_HEIGHT_DEFAULT = 512
   public static CHAT_IMAGE_CUSTOM_SIZE_DEFAULT = false
+  public static CHAT_IMAGE_SAMPLING_METHOD_DEFAULT = 'auto'
+  public static CHAT_IMAGE_OFFLOAD_TO_CPU_DEFAULT = true
+  public static CHAT_IMAGE_DIFFUSION_FA_DEFAULT = true
+  public static CHAT_IMAGE_CLIP_ON_CPU_DEFAULT = false
+  public static CHAT_IMAGE_VAE_TILING_DEFAULT = true
+  public static CHAT_IMAGE_FLOW_SHIFT_DEFAULT = 3.0
+  public static CHAT_IMAGE_AUTO_FLOW_SHIFT_DEFAULT = true
+  public static CHAT_IMAGE_VAE_ON_CPU_DEFAULT = false
 
   //Local storage for image generation settings
   public static LOCAL_STORAGE_IMAGE_COUNT = 'synvek.image.count'
@@ -139,6 +155,14 @@ export class Consts {
   public static LOCAL_STORAGE_IMAGE_HIGH_NOISE_CFG_SCALE = 'synvek.image.high-noise-cfg-scale'
   public static LOCAL_STORAGE_IMAGE_FRAMES_COUNT = 'synvek.image.frames-count'
   public static LOCAL_STORAGE_IMAGE_PERFORMANCE = 'synvek.image.performance'
+  public static LOCAL_STORAGE_IMAGE_SAMPLING_METHOD = 'synvek.image.sampling-method'
+  public static LOCAL_STORAGE_IMAGE_OFFLOAD_TO_CPU = 'synvek.image.offload-to-cpu'
+  public static LOCAL_STORAGE_IMAGE_DIFFUSION_FA = 'synvek.image.diffusion-fa'
+  public static LOCAL_STORAGE_IMAGE_CLIP_ON_CPU = 'synvek.image.clip-on-cpu'
+  public static LOCAL_STORAGE_IMAGE_FLOW_SHIFT = 'synvek.image.flow-shift'
+  public static LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT = 'synvek.image.auto-flow-shift'
+  public static LOCAL_STORAGE_IMAGE_VAE_TILING = 'synvek.image.vae-tiling'
+  public static LOCAL_STORAGE_IMAGE_VAE_ON_CPU = 'synvek.image.vae-on-cpu'
   public static IMAGE_COUNT_DEFAULT = 1
   public static IMAGE_SIZE_DEFAULT = 1
   public static IMAGE_CUSTOM_WIDTH_DEFAULT = 512
@@ -152,6 +176,14 @@ export class Consts {
   public static IMAGE_HIGH_NOISE_CFG_SCALE_DEFAULT = 3.5
   public static IMAGE_FRAMES_COUNT_DEFAULT = 36
   public static IMAGE_PERFORMANCE_DEFAULT = 1
+  public static IMAGE_SAMPLING_METHOD_DEFAULT = 'auto'
+  public static IMAGE_OFFLOAD_TO_CPU_DEFAULT = true
+  public static IMAGE_DIFFUSION_FA_DEFAULT = true
+  public static IMAGE_CLIP_ON_CPU_DEFAULT = false
+  public static IMAGE_VAE_TILING_DEFAULT = true
+  public static IMAGE_FLOW_SHIFT_DEFAULT = 3.0
+  public static IMAGE_AUTO_FLOW_SHIFT_DEFAULT = true
+  public static IMAGE_VAE_ON_CPU_DEFAULT = false
 
   //Local storage for version check time
   public static LOCAL_STORAGE_VERSION_CHECK_TIME = 'synvek.version.check-time'

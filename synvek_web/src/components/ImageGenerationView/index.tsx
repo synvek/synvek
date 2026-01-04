@@ -3,7 +3,7 @@ import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'rea
 
 import { Consts, Generation, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
-import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined, ReloadOutlined, SyncOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
@@ -109,7 +109,31 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [generations, setGenerations] = useState<Generation[]>([])
   const [currentGeneration, setCurrentGeneration] = useState<Generation | null>(null)
   const [currentGenerationVisible, setCurrentGenerationVisible] = useState<boolean>(false)
-  const [currentGenerationLitmition, setCurrentGenerationLimitation] = useState<number>(50)
+  const [currentGenerationLimitation, setCurrentGenerationLimitation] = useState<number>(100)
+  const oldSamplingMethod = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_SAMPLING_METHOD)
+  const defaultSamplingMethod = oldSamplingMethod ? oldSamplingMethod : Consts.IMAGE_SAMPLING_METHOD_DEFAULT
+  const [samplingMethod, setSamplingMethod] = useState<string>(defaultSamplingMethod)
+  const oldOffloadToCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_OFFLOAD_TO_CPU)
+  const defaultOffloadToCPU = oldOffloadToCPU ? oldOffloadToCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_OFFLOAD_TO_CPU_DEFAULT
+  const [offloadToCPU, setOffloadToCPU] = useState<boolean>(defaultOffloadToCPU)
+  const oldDiffusionFA = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_DIFFUSION_FA)
+  const defaultDiffusionFA = oldDiffusionFA ? oldDiffusionFA.toUpperCase() === 'TRUE' : Consts.IMAGE_DIFFUSION_FA_DEFAULT
+  const [diffusionFA, setDiffusionFA] = useState<boolean>(defaultDiffusionFA)
+  const oldClipOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CLIP_ON_CPU)
+  const defaultClipOnCPU = oldClipOnCPU ? oldClipOnCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_CLIP_ON_CPU_DEFAULT
+  const [clipOnCPU, setClipOnCPU] = useState<boolean>(defaultClipOnCPU)
+  const oldVaeTiling = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_VAE_TILING)
+  const defaultVaeTiling = oldVaeTiling ? oldVaeTiling.toUpperCase() === 'TRUE' : Consts.IMAGE_VAE_TILING_DEFAULT
+  const [vaeTiling, setVaeTiling] = useState<boolean>(defaultVaeTiling)
+  const oldFlowShift = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_FLOW_SHIFT)
+  const defaultFlowShift = oldFlowShift ? Number.parseFloat(oldFlowShift) : Consts.IMAGE_FLOW_SHIFT_DEFAULT
+  const [flowShift, setFlowShift] = useState<number>(defaultFlowShift)
+  const oldAutoFlowShift = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT)
+  const defaultAutoFlowShift = oldAutoFlowShift ? oldAutoFlowShift.toUpperCase() === 'TRUE' : Consts.IMAGE_AUTO_FLOW_SHIFT_DEFAULT
+  const [autoFlowShift, setAutoFlowShift] = useState<boolean>(defaultAutoFlowShift)
+  const oldVaeOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_VAE_ON_CPU)
+  const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_VAE_ON_CPU_DEFAULT
+  const [vaeOnCPU, setVaeOnCPU] = useState<boolean>(defaultVaeOnCPU)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -247,6 +271,13 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               highNoiseStepsCount,
               highNoiseCfgScale,
               framesCount,
+              samplingMethod === 'auto' ? undefined : samplingMethod,
+              offloadToCPU,
+              diffusionFA,
+              clipOnCPU,
+              vaeTiling,
+              autoFlowShift ? undefined : flowShift,
+              vaeOnCPU,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -259,6 +290,13 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               negativePrompt,
               stepsCount,
               cfgScale,
+              samplingMethod === 'auto' ? undefined : samplingMethod,
+              offloadToCPU,
+              diffusionFA,
+              clipOnCPU,
+              vaeTiling,
+              autoFlowShift ? undefined : flowShift,
+              vaeOnCPU,
             )
       await WorkspaceUtils.handleRequest(
         messageApi,
@@ -355,14 +393,18 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_SIZE, e.target.checked ? 'true' : 'false')
   }
 
-  const handleCustomWidthChange = (value: number) => {
-    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_WIDTH, '' + value)
-    setCustomWidth(value)
+  const handleCustomWidthChange = (value: number | null) => {
+    if (value) {
+      localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_WIDTH, '' + value)
+      setCustomWidth(value)
+    }
   }
 
-  const handleCustomHeightChange = (value: number) => {
-    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_HEIGHT, '' + value)
-    setCustomHeight(value)
+  const handleCustomHeightChange = (value: number | null) => {
+    if (value) {
+      localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_HEIGHT, '' + value)
+      setCustomHeight(value)
+    }
   }
 
   const generateImageList = () => {
@@ -457,6 +499,71 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     50: '50',
     100: '100',
     150: '150',
+  }
+
+  //euler, euler_a, heun, dpm2, dpm++2s_a, dpm++2m, dpm++2mv2, ipndm, ipndm_v, lcm, ddim_trailing,tcd
+  //(default: euler for Flux/SD3/Wan, euler_a otherwise)
+  const samplingMethodOptions = [
+    { value: 'auto', label: 'Auto' },
+    { value: 'euler', label: 'euler' },
+    { value: 'euler_a', label: 'euler_a' },
+    { value: 'heun', label: 'heun' },
+    { value: 'dpm2', label: 'dpm2' },
+    { value: 'dpm++2s_a', label: 'dpm++2s_a' },
+    { value: 'dpm++2m', label: 'dpm++2m' },
+    { value: 'ipndm', label: 'ipndm' },
+    { value: 'ipndm_v', label: 'ipndm_v' },
+    { value: 'lcm', label: 'lcm' },
+    { value: 'ddim_trailing', label: 'ddim_trailing' },
+    { value: 'tcd', label: 'tcd' },
+  ]
+
+  const flowShiftMarks: SliderSingleProps['marks'] = {
+    '-10': '-10',
+    '-5': '-5',
+    '0': '0',
+    '5': '5',
+    '10': '10',
+  }
+
+  const handleSamplingMethodChange = (value: string) => {
+    setSamplingMethod(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SAMPLING_METHOD, value)
+  }
+
+  const handleOffloadToCPUChange = (value: boolean) => {
+    setOffloadToCPU(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_OFFLOAD_TO_CPU, '' + value)
+  }
+
+  const handleDiffusionFAChange = (value: boolean) => {
+    setDiffusionFA(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_DIFFUSION_FA, '' + value)
+  }
+
+  const handleClipOnCPUChange = (value: boolean) => {
+    setClipOnCPU(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CLIP_ON_CPU, '' + value)
+  }
+
+  const handleVAETilingChange = (value: boolean) => {
+    setVaeTiling(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_VAE_TILING, '' + value)
+  }
+
+  const handleVAEOnCPUChange = (value: boolean) => {
+    setVaeOnCPU(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_VAE_ON_CPU, '' + value)
+  }
+
+  const handleFlowShiftChange = (value: number) => {
+    setFlowShift(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_FLOW_SHIFT, '' + value)
+  }
+
+  const handleAutoFlowShiftChange = (value: boolean) => {
+    setAutoFlowShift(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT, value ? 'true' : 'false')
   }
 
   const handleStepsCountChange = (value: number) => {
@@ -559,12 +666,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     }
     if (showHistory) {
       if (generations.length === 0) {
-        const generationsResponse = await RequestUtils.getGenerations(currentGenerationLitmition)
+        const generationsResponse = await RequestUtils.getGenerations(currentGenerationLimitation)
         await WorkspaceUtils.handleRequest(
           messageApi,
           generationsResponse,
           (data: Generation[]) => {
-            console.log(data)
             setGenerations(data)
           },
           () => {},
@@ -574,26 +680,42 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     }
   }
 
+  const updateHistoryLimitation = async (limitation: number) => {
+    if (limitation !== currentGenerationLimitation) {
+      setCurrentGenerationLimitation(limitation)
+      const generationsResponse = await RequestUtils.getGenerations(limitation)
+      await WorkspaceUtils.handleRequest(
+        messageApi,
+        generationsResponse,
+        (data: Generation[]) => {
+          setGenerations(data)
+        },
+        () => {},
+        () => {},
+      )
+    }
+  }
+
   const historyMenuItems: MenuProps['items'] = [
     {
       key: '1',
       label: intl.formatMessage({ id: 'image-generation-view.list.latest-100' }),
-      onClick: () => setCurrentGenerationLimitation(100),
+      onClick: () => updateHistoryLimitation(100),
     },
     {
       key: '2',
       label: intl.formatMessage({ id: 'image-generation-view.list.latest-200' }),
-      onClick: () => setCurrentGenerationLimitation(200),
+      onClick: () => updateHistoryLimitation(200),
     },
     {
       key: '3',
       label: intl.formatMessage({ id: 'image-generation-view.list.latest-300' }),
-      onClick: () => setCurrentGenerationLimitation(300),
+      onClick: () => updateHistoryLimitation(300),
     },
     {
       key: '4',
       label: intl.formatMessage({ id: 'image-generation-view.list.latest-500' }),
-      onClick: () => setCurrentGenerationLimitation(500),
+      onClick: () => updateHistoryLimitation(500),
     },
   ]
 
@@ -938,7 +1060,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         </div>
                         <div className={styles.imageGenerationPropertyValue}>
                           <Slider
-                            min={15}
+                            min={5}
                             max={150}
                             disabled={!supportVideoGen}
                             defaultValue={framesCount}
@@ -997,6 +1119,187 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             marks={cfgScaleMarks}
                             onChange={handleHighNoiseCfgScaleChange}
                           />
+                        </div>
+                      </div>
+                    </div>
+                  </Collapse.Panel>
+                  <Collapse.Panel
+                    key={'expert'}
+                    header={
+                      <div style={{ fontWeight: 'bold' }}>
+                        <FormattedMessage id={'image-generation-view.setting-category-expert'} />
+                      </div>
+                    }
+                  >
+                    <div className={styles.collapseContent} style={{ backgroundColor: token.colorBgElevated, borderColor: token.colorBorder }}>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-sampling-method'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-sampling-method-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleSamplingMethodChange('auto')}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Select
+                            size={'small'}
+                            defaultValue={samplingMethod}
+                            value={samplingMethod}
+                            style={{ width: '100%' }}
+                            onChange={(value) => handleSamplingMethodChange(value)}
+                            options={samplingMethodOptions}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={offloadToCPU} checked={offloadToCPU} onChange={(e) => handleOffloadToCPUChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-offload-to-cpu'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-offload-to-cpu-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleOffloadToCPUChange(Consts.IMAGE_OFFLOAD_TO_CPU_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={diffusionFA} checked={diffusionFA} onChange={(e) => handleDiffusionFAChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-diffusion-fa'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-diffusion-fa-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleDiffusionFAChange(Consts.IMAGE_DIFFUSION_FA_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={clipOnCPU} checked={clipOnCPU} onChange={(e) => handleClipOnCPUChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-clip-on-cpu'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-clip-on-cpu-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleClipOnCPUChange(Consts.IMAGE_CLIP_ON_CPU_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={vaeTiling} checked={vaeTiling} onChange={(e) => handleVAETilingChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-vae-tiling'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-vae-tiling-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleVAETilingChange(Consts.IMAGE_VAE_TILING_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={vaeOnCPU} checked={vaeOnCPU} onChange={(e) => handleVAEOnCPUChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-vae-on-cpu'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-vae-on-cpu-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleVAEOnCPUChange(Consts.IMAGE_VAE_ON_CPU_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={autoFlowShift} checked={autoFlowShift} onChange={(e) => handleAutoFlowShiftChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-auto-flow-shift'} />
+                            <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-auto-flow-shift-tooltip' })}>
+                              <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                            </Tooltip>
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleAutoFlowShiftChange(Consts.IMAGE_AUTO_FLOW_SHIFT_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div style={{ display: autoFlowShift ? 'none' : undefined }}>
+                          <div className={styles.imageGenerationPropertyValue}>
+                            <Divider type={'horizontal'} style={{ margin: '8px 0 4px 0' }} />
+                            <div className={styles.imageGenerationPropertyTitle}>
+                              <FormattedMessage id={'image-generation-view.setting-property-flow-shift'} />
+                              <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-flow-shift-tooltip' })}>
+                                <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                              </Tooltip>
+                            </div>
+                            <div className={styles.imageGenerationPropertyTitle}>
+                              <Slider
+                                min={-10.0}
+                                max={10.0}
+                                defaultValue={flowShift}
+                                step={0.5}
+                                value={flowShift}
+                                marks={flowShiftMarks}
+                                onChange={handleFlowShiftChange}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
