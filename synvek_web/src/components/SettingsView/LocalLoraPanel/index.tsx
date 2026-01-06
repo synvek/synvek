@@ -5,32 +5,29 @@ import TextEditWindow from '@/components/TextEditWindow'
 import { Consts, modelProviders, RequestUtils, SystemUtils, Task, UpdateFetchRequest, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { BulbFilled, DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Button, Card, Divider, message, Space, theme, Tooltip, Typography } from 'antd'
+import { Button, Card, Divider, message, Space, theme, Tooltip } from 'antd'
 import { FormattedMessage } from 'umi'
 import styles from './index.less'
 
-const { Text, Link } = Typography
 const { useToken } = theme
 
-interface LocalModelPanelProps {
+interface LocalLoraPanelProps {
   visible: boolean
 }
 
 const TAG_MIRROR = 'mirror'
 const TAG_ACCESS_TOKEN = 'access-token'
-const ISQ_UNDEFINED = 'Undefined'
 
 const FORCE_UPDATE_INDEX = 0
-const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
+const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const currentWorkspace = globalContext.currentWorkspace
   const [initialized, setInitialized] = useState<boolean>(false)
   const [textEditWindowVisible, setTextEditWindowVisible] = useState<boolean>(false)
   const [textEditId, setTextEditId] = useState<string>('')
   const [textEditContent, setTextEditContent] = useState<string>('')
-  const [textEditTitle, settextEditTitle] = useState<string>('')
+  const [textEditTitle, setTextEditTitle] = useState<string>('')
   const [textEditTag, setTextEditTag] = useState<string>('')
   const [forceUpdate, setForceUpdate] = useState<number>(FORCE_UPDATE_INDEX)
   const { token } = useToken()
@@ -97,7 +94,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
     setTextEditId(task.task_name)
     setTextEditContent(task.mirror ? task.mirror : '')
     setTextEditWindowVisible(true)
-    settextEditTitle(intl.formatMessage({ id: 'setting-view.local-models.new-mirror' }))
+    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-lora.new-mirror' }))
     setTextEditTag(TAG_MIRROR)
   }
 
@@ -105,7 +102,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
     setTextEditId(task.task_name)
     setTextEditContent(task.access_token ? task.access_token : '')
     setTextEditWindowVisible(true)
-    settextEditTitle(intl.formatMessage({ id: 'setting-view.local-models.new-access-token' }))
+    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-lora.new-access-token' }))
     setTextEditTag(TAG_ACCESS_TOKEN)
   }
 
@@ -170,113 +167,18 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
     setTextEditWindowVisible(false)
   }
 
-  const handleISQChange = async (value: string, task: Task) => {
-    const isqValue = value === ISQ_UNDEFINED ? null : value
-    const updateFetchRequest: UpdateFetchRequest = {
-      fetch_name: task.task_name,
-      isq: isqValue,
-      mirror: task.mirror,
-      access_token: task.access_token,
-      cpu: task.cpu,
-      offloaded: task.offloaded,
-    }
-    const response = await RequestUtils.updateFetch(updateFetchRequest)
-    await WorkspaceUtils.handleRequest(
-      messageApi,
-      response,
-      () => {
-        setForceUpdate(forceUpdate + 1)
-        currentWorkspace.triggerTasksChangeEvent()
-      },
-      (failure) => {
-        console.log(`Request failed with reason: ${failure}`)
-      },
-      (error) => {
-        console.log(`Request failed with reason: ${error}`)
-      },
-    )
-  }
-
-  const handleCPUChange = async (value: boolean, task: Task) => {
-    const updateFetchRequest: UpdateFetchRequest = {
-      fetch_name: task.task_name,
-      isq: task.isq,
-      mirror: task.mirror,
-      access_token: task.access_token,
-      cpu: value,
-      offloaded: task.offloaded,
-    }
-    const response = await RequestUtils.updateFetch(updateFetchRequest)
-    await WorkspaceUtils.handleRequest(
-      messageApi,
-      response,
-      () => {
-        setForceUpdate(forceUpdate + 1)
-        currentWorkspace.triggerTasksChangeEvent()
-      },
-      (failure) => {
-        console.log(`Request failed with reason: ${failure}`)
-      },
-      (error) => {
-        console.log(`Request failed with reason: ${error}`)
-      },
-    )
-  }
-
-  const handleAddRemoteModel = async () => {}
-
-  const handleOffloadedChange = async (value: boolean, task: Task) => {
-    const updateFetchRequest: UpdateFetchRequest = {
-      fetch_name: task.task_name,
-      isq: task.isq,
-      mirror: task.mirror,
-      access_token: task.access_token,
-      cpu: task.cpu,
-      offloaded: value,
-    }
-    const response = await RequestUtils.updateFetch(updateFetchRequest)
-    await WorkspaceUtils.handleRequest(
-      messageApi,
-      response,
-      () => {
-        setForceUpdate(forceUpdate + 1)
-        currentWorkspace.triggerTasksChangeEvent()
-      },
-      (failure) => {
-        console.log(`Request failed with reason: ${failure}`)
-      },
-      (error) => {
-        console.log(`Request failed with reason: ${error}`)
-      },
-    )
-  }
-
-  const isqOptions = [
-    { value: ISQ_UNDEFINED, label: intl.formatMessage({ id: 'setting-view.local-models.isq-disabled' }) },
-    { value: '4', label: '4' },
-    { value: '8', label: '8' },
-    { value: '16', label: '16' },
-  ]
-
   const generateModels = () => {
-    const filteredTasks = currentWorkspace.tasks.filter((task) => !task.private_model && !task.lora_model)
+    const filteredTasks = currentWorkspace.tasks.filter((task) => task.lora_model)
     const modelSections: ReactNode[] = filteredTasks.map((task) => {
       let modelDownloading = false
       let modelDownloaded = true
       let modelDownloadSpeed = 0
       let modelTotalSize = 0
       let modelDownloadedSize = 0
-      let isqValue = task.isq ? task.isq : ISQ_UNDEFINED
-      let cpuValue = task.cpu ? task.cpu : false
-      let offloadedValue = task.offloaded ? task.offloaded : false
-      let supportISQ = false
-      let supportOffloaded = false
 
       modelProviders.forEach((modelProvider) => {
         modelProvider.modelOptions.forEach((modelOption) => {
           if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
-            supportISQ = modelProvider.supportISQ
-            supportOffloaded = modelProvider.supportOffloaded
           }
         })
       })
@@ -335,134 +237,47 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
           title={
             <div>
               {task.task_name}
-              <span style={{ fontSize: '11px', fontStyle: 'italic', marginLeft: '8px' }}>{task.model_source}</span>
+              <span style={{ fontSize: '11px', color: 'silver' }}>{task.model_source}</span>
             </div>
           }
           extra={<div></div>}
         >
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.model-id'} />
+              <FormattedMessage id={'setting-view.local-lora.lora-id'} />
             </div>
             <div>{task.model_id}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.total-size'} />
+              <FormattedMessage id={'setting-view.local-lora.total-size'} />
             </div>
             <div>{modelTotalSizeDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.downloaded-size'} />
+              <FormattedMessage id={'setting-view.local-lora.downloaded-size'} />
             </div>
             <div>{modelDownloadedSizeDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
-          {/*<div className={styles.localModelItemPropertyContainer}>*/}
-          {/*  <div>*/}
-          {/*    <FormattedMessage id={'setting-view.local-models.turn-on'} />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <Switch*/}
-          {/*      defaultValue={modelInfo.enabled}*/}
-          {/*      value={modelInfo.enabled}*/}
-          {/*      style={{ marginLeft: '16px' }}*/}
-          {/*      onChange={(checked) => handleEnabledChange(checked, modelInfo)}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
-          {/*<div className={styles.localModelItemPropertyContainer}>*/}
-          {/*  <div>*/}
-          {/*    <FormattedMessage id={'setting-view.local-models.isq'} />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <Select*/}
-          {/*      disabled={!supportISQ}*/}
-          {/*      size={'small'}*/}
-          {/*      defaultValue={isqValue}*/}
-          {/*      value={isqValue}*/}
-          {/*      onChange={(value) => handleISQChange(value, task)}*/}
-          {/*      style={{ width: '140px' }}*/}
-          {/*      options={isqOptions}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
-          {/*<div className={styles.localModelItemPropertyContainer}>*/}
-          {/*  <div>*/}
-          {/*    <FormattedMessage id={'setting-view.local-models.cpu'} />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <Switch defaultValue={cpuValue} value={cpuValue} onChange={(value) => handleCPUChange(value, task)} />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
-          {/*<div className={styles.localModelItemPropertyContainer}>*/}
-          {/*  <div>*/}
-          {/*    <FormattedMessage id={'setting-view.local-models.offloaded'} />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <Switch*/}
-          {/*      disabled={!supportOffloaded}*/}
-          {/*      defaultValue={offloadedValue}*/}
-          {/*      value={offloadedValue}*/}
-          {/*      onChange={(value) => handleOffloadedChange(value, task)}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
-          {/*<div className={styles.localModelItemPropertyContainer}>*/}
-          {/*  <div>*/}
-          {/*    <FormattedMessage id={'setting-view.local-models.status'} />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    {downloadedSize >= totalSize && totalSize > 0 ? (*/}
-          {/*      <BulbFilled style={{ color: token.colorSuccess, fontSize: '16px' }} />*/}
-          {/*    ) : (*/}
-          {/*      <>*/}
-          {/*        <BulbFilled style={{ color: token.colorTextDisabled, fontSize: '16px' }} />*/}
-          {/*      </>*/}
-          {/*    )}*/}
-          {/*    <Button*/}
-          {/*      type={'primary'}*/}
-          {/*      hidden={(downloadedSize >= totalSize && totalSize > 0) || modelInfo.downloading}*/}
-          {/*      icon={<DownloadOutlined />}*/}
-          {/*      style={{ marginLeft: '10px' }}*/}
-          {/*      onClick={() => handleStartDownloadModel(modelInfo)}*/}
-          {/*    >*/}
-          {/*      <FormattedMessage id={'setting-view.local-models.continue-downloading'} />*/}
-          {/*    </Button>*/}
-          {/*    <Button*/}
-          {/*      type={'primary'}*/}
-          {/*      hidden={(downloadedSize >= totalSize && totalSize > 0) || !modelInfo.downloading}*/}
-          {/*      icon={<DownloadOutlined />}*/}
-          {/*      style={{ marginLeft: '10px' }}*/}
-          {/*      onClick={() => handleStopDownloadModel(modelInfo)}*/}
-          {/*    >*/}
-          {/*      <FormattedMessage id={'setting-view.local-models.suspend-downloading'} />*/}
-          {/*    </Button>*/}
-          {/*  </div>*/}
-          {/*</div>{' '}*/}
-          {/*<Divider type={'horizontal'} style={{ margin: '8px 0' }} />*/}
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.status'} />
+              <FormattedMessage id={'setting-view.local-lora.status'} />
             </div>
             <div>
               {modelDownloaded ? (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.status-ready' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-ready' })}>
                   <BulbFilled style={{ color: token.colorSuccess, fontSize: '16px' }} />
                 </Tooltip>
               ) : modelDownloading ? (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.status-downloading' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-downloading' })}>
                   <SyncOutlined spin style={{ color: token.colorPrimary, fontSize: '16px' }} />
                 </Tooltip>
               ) : (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.status-not-ready' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-not-ready' })}>
                   <BulbFilled style={{ color: token.colorTextDisabled, fontSize: '16px' }} />
                 </Tooltip>
               )}
@@ -473,7 +288,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
                 style={{ marginLeft: '10px' }}
                 onClick={() => handleSuspendDownloadModelByProvider(task)}
               >
-                <FormattedMessage id={'setting-view.local-models.suspend-downloading'} />
+                <FormattedMessage id={'setting-view.local-lora.suspend-downloading'} />
               </Button>
               <Button
                 type={'primary'}
@@ -482,52 +297,52 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
                 style={{ marginLeft: '10px' }}
                 onClick={() => handleStartDownloadModelByProvider(task)}
               >
-                <FormattedMessage id={'setting-view.local-models.continue-downloading'} />
+                <FormattedMessage id={'setting-view.local-lora.continue-downloading'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.use-mirror'} />
+              <FormattedMessage id={'setting-view.local-lora.use-mirror'} />
             </div>
             <div className={styles.localModelItemPropertyContent}>
               {task.mirror}
               <Button type={'primary'} onClick={() => handleUpdateMirror(task)}>
-                <FormattedMessage id={'setting-view.local-models.update-mirror'} />
+                <FormattedMessage id={'setting-view.local-lora.update-mirror'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.use-access-token'} />
+              <FormattedMessage id={'setting-view.local-lora.use-access-token'} />
             </div>
             <div className={styles.localModelItemPropertyContent}>
               {task.access_token}
               <Button type={'primary'} onClick={() => handleUpdateAccessToken(task)}>
-                <FormattedMessage id={'setting-view.local-models.update-access-token'} />
+                <FormattedMessage id={'setting-view.local-lora.update-access-token'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.download-percentage'} />
+              <FormattedMessage id={'setting-view.local-lora.download-percentage'} />
             </div>
             <div>{modelDownloadedPercent}%</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.current-downloading-speed'} />
+              <FormattedMessage id={'setting-view.local-lora.current-downloading-speed'} />
             </div>
             <div>{modelDownloadSpeedDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-models.current-downloading-remaining-time'} />
+              <FormattedMessage id={'setting-view.local-lora.current-downloading-remaining-time'} />
             </div>
             <div>{remainingTimeDescription}</div>
           </div>
@@ -538,27 +353,9 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
   }
 
   return (
-    <div className={styles.localModelPanel} style={{ display: visible ? 'block' : 'none' }}>
+    <div className={styles.localLoraPanel} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
       <Space direction={'vertical'} size={'large'} className={styles.localModelContent} style={{ backgroundColor: 'var(--setting-background-color)' }}>
-        {/*<div className={styles.localModelHint} style={{}}>*/}
-        {/*  <Text italic>*/}
-        {/*    <FormattedMessage id={'setting-view.local-models.hint.gguf-model-auto-loaded'} />*/}
-        {/*  </Text>*/}
-
-        {/*  /!*<Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.button-add.tooltip' })}>*!/*/}
-        {/*  /!*  <Button type={'primary'} onClick={handleAddRemoteModel}>*!/*/}
-        {/*  /!*    <FormattedMessage id={'setting-view.local-models.button-add'} />*!/*/}
-        {/*  /!*  </Button>*!/*/}
-        {/*  /!*</Tooltip>*!/*/}
-        {/*</div>*/}
-        {/*<div className={styles.localModelHeader} style={{}}>*/}
-        {/*  <Tooltip title={intl.formatMessage({ id: 'setting-view.local-models.button-add.tooltip' })}>*/}
-        {/*    <Button type={'primary'} onClick={handleAddRemoteModel}>*/}
-        {/*      <FormattedMessage id={'setting-view.local-models.button-add'} />*/}
-        {/*    </Button>*/}
-        {/*  </Tooltip>*/}
-        {/*</div>*/}
         {generateModels()}
       </Space>
       <TextEditWindow
@@ -576,4 +373,4 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
   )
 }
 
-export default LocalModelPanel
+export default LocalLoraPanel

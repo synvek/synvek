@@ -289,6 +289,7 @@ export interface FetchRequest {
   model_id: string
   mirror: string | null
   access_token: string | null
+  lora_model: boolean
 }
 
 export interface TaskItem {
@@ -313,6 +314,7 @@ export interface Task {
   cpu: boolean | null
   offloaded: boolean | null
   private_model: boolean
+  lora_model: boolean
 }
 
 export interface UpdateFetchRequest {
@@ -351,6 +353,7 @@ export interface FetchStatusData {
   file_size: number | null
   current_size: number | null
   error: string | null
+  lora_model: boolean
 }
 
 export interface FinishedTaskItem {
@@ -375,6 +378,7 @@ export interface RunningTask {
   all_task_items: TaskItem[]
   running_task_items: RunningTaskItem[]
   finished_task_items: FinishedTaskItem[]
+  lora_model: boolean
 }
 
 export interface Folder {
@@ -978,6 +982,7 @@ export class RequestUtils {
       model_id: fetchRequest.model_id,
       mirror: fetchRequest.mirror,
       access_token: fetchRequest.access_token,
+      lora_model: fetchRequest.lora_model,
     }
     const config = {
       headers: {

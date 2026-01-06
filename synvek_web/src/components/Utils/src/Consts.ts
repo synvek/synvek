@@ -54,6 +54,8 @@ export class Consts {
   public static SETTING_TOOLS = 'Tools'
   public static SETTING_DATA_SETTINGS = 'DataSettings'
   public static SETTING_ABOUT = 'About'
+  public static SETTING_LOCAL_LORA = 'LocalLora'
+  public static SETTING_LORA_SEARCH = 'LoraSearch'
 
   public static MODEL_SERVERS_COUNTDOWN = 10
   public static MODEL_SERVERS_COUNTER = 10

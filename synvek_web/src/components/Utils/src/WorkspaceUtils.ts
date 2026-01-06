@@ -108,6 +108,9 @@ export class WorkspaceUtils {
       if (oldRunningTaskItem.error !== newRunningTaskItem.error) {
         return true
       }
+      if (oldRunningTaskItem.lora_model !== newRunningTaskItem.lora_model) {
+        return true
+      }
     }
   }
 
@@ -143,6 +146,9 @@ export class WorkspaceUtils {
         return true
       }
       if (oldTask.private_model !== newTask.private_model) {
+        return true
+      }
+      if (oldTask.lora_model !== newTask.lora_model) {
         return true
       }
       if (oldTask.task_items.length !== newTask.task_items.length) {

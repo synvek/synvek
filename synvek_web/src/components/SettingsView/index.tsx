@@ -5,7 +5,9 @@ import AboutPanel from '@/components/SettingsView/AboutPanel'
 import DataSettingsPanel from '@/components/SettingsView/DataSettingsPanel'
 import DefaultModelsPanel from '@/components/SettingsView/DefaultModelsPanel'
 import GeneralSettingsPanel from '@/components/SettingsView/GeneralSettingsPanel'
+import LocalLoraPanel from '@/components/SettingsView/LocalLoraPanel'
 import LocalModelsPanel from '@/components/SettingsView/LocalModelsPanel'
+import LoraSearchPanel from '@/components/SettingsView/LoraSearchPanel'
 import MCPServersPanel from '@/components/SettingsView/MCPServersPanel'
 import ModelSearchPanel from '@/components/SettingsView/ModelSearchPanel'
 import ToolsPanel from '@/components/SettingsView/ToolsPanel'
@@ -74,6 +76,14 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
       key: Consts.SETTING_MODEL_SEARCH,
       label: intl.formatMessage({ id: 'setting-view.setting-model-search' }),
     },
+    {
+      key: Consts.SETTING_LOCAL_LORA,
+      label: intl.formatMessage({ id: 'setting-view.setting-local-lora' }),
+    },
+    {
+      key: Consts.SETTING_LORA_SEARCH,
+      label: intl.formatMessage({ id: 'setting-view.setting-lora-search' }),
+    },
     // {
     //   key: Consts.SETTING_WEB_SEARCH,
     //   label: intl.formatMessage({ id: 'setting-view.setting-web-search' }),
@@ -120,6 +130,8 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
           <MCPServersPanel visible={activeItemKey === Consts.SETTING_MCP_SERVERS} />
           <ModelSearchPanel visible={activeItemKey === Consts.SETTING_MODEL_SEARCH} />
           <WebSearchPanel visible={activeItemKey === Consts.SETTING_WEB_SEARCH} />
+          <LoraSearchPanel visible={activeItemKey === Consts.SETTING_LORA_SEARCH} />
+          <LocalLoraPanel visible={activeItemKey === Consts.SETTING_LOCAL_LORA} />
         </div>
       </div>
     </div>

@@ -30,6 +30,8 @@ pub struct StartFetchRequest {
     pub mirror: Option<String>,
 
     pub access_token: Option<String>,
+    
+    pub lora_model: bool,
 }
 
 /// Response for Start Model Server
@@ -110,6 +112,8 @@ pub struct FetchStatusData {
     pub current_size: Option<u64>,
 
     pub error: Option<String>,
+    
+    pub lora_model: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -243,6 +247,7 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
         cpu: None,
         offloaded: None,
         private_model: false,
+        lora_model: req.lora_model,
     };
     if task.fetch_repos.len() > 0 {
         task.fetch_repos.iter_mut().for_each(|fetch_repo| {
@@ -540,6 +545,7 @@ fn populate_fetch_status(
             file_size: Option::from(item.file_size),
             current_size: None,
             error: None,
+            lora_model: running_task.lora_model,
         };
         fetch_status.push(fetch_status_data);
     });
@@ -556,6 +562,7 @@ fn populate_fetch_status(
             file_size: Option::from(item.total_size),
             current_size: Option::from(item.downloaded_size),
             error: item.error.clone(),
+            lora_model: running_task.lora_model,
         };
         fetch_status.push(fetch_status_data);
     });

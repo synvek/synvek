@@ -82,6 +82,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
       model_id: modelId,
       mirror: mirror,
       access_token: accessToken,
+      lora_model: false,
     }
     const fetchResponse = await RequestUtils.startFetch(fetchRequest)
     await WorkspaceUtils.handleRequest(
@@ -275,7 +276,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
                     renderItem={(item) => {
                       return (
                         <List.Item className={styles.modelSearchPanelModelOption}>
-                          <div>{item.name}</div>
+                          <div className={styles.modelSearchPanelModelOptionTitle}>{item.name}</div>
                           <div className={styles.modelSearchPanelModelOptionContent}>
                             {item.fileSize}
                             <Button

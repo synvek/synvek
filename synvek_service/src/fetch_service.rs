@@ -89,6 +89,8 @@ pub struct Task {
     pub cpu: Option<bool>,
     pub offloaded: Option<bool>,
     pub private_model: bool,
+    #[serde(default = "default_lora_model")]
+    pub lora_model: bool,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -102,6 +104,7 @@ pub struct RunningTask {
     pub all_task_items: Vec<TaskItem>,
     pub running_task_items: Vec<RunningTaskItem>,
     pub finished_task_items: Vec<FinishedTaskItem>,
+    pub lora_model: bool,
 }
 
 #[derive(Clone)]
@@ -138,6 +141,10 @@ pub struct CacheRepoFile {
 
 fn default_model_source() -> String {
     MODEL_SOURCE_HUGGINGFACE.to_string()
+}
+
+fn default_lora_model() -> bool {
+    false
 }
 
 static RUNNING_TASKS: OnceLock<Arc<Mutex<HashMap<String, RunningTask>>>> = OnceLock::new();
@@ -496,6 +503,7 @@ pub fn start_fetch_repo(
             cpu: None,
             offloaded: None,
             private_model: false,
+            lora_model: false,
         };
         let fetch_repo: FetchRepo = FetchRepo {
             model_source: model_source.to_string(),
@@ -578,6 +586,7 @@ pub fn start_fetch_repo_file(
             cpu: None,
             offloaded: None,
             private_model: false,
+            lora_model: false,
         };
         let fetch_file: FetchFile = FetchFile {
             model_source: model_source.to_string(),
@@ -648,6 +657,7 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
     update_local_tasks(task);
     let mut current_task = RunningTask::default();
     current_task.task_name = task.task_name.clone();
+    current_task.lora_model = task.lora_model;
     let task_items: Vec<TaskItem> = task.task_items.iter().cloned().collect();
     task_items.iter().for_each(|item| {
         current_task.all_task_items.push(item.clone());
@@ -1058,6 +1068,7 @@ fn load_local_private_tasks(tasks: &mut Tasks) {
             cpu: None,
             offloaded: None,
             private_model: true,
+            lora_model: false,
         };
         tasks.tasks.push(task);
     }
