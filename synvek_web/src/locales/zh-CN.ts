@@ -127,6 +127,8 @@ export default {
   'image-generation-view.list.latest-200': '最近200',
   'image-generation-view.list.latest-300': '最近300',
   'image-generation-view.list.latest-500': '最近500',
+  'image-generation-view.lora.add': '增加Lora',
+  'image-generation-view.lora.selection-place-holder': '选择Lora',
   'image-generation-view.setting-property.upload': '上传',
   'image-generation-view.setting-property-auto-flow-shift': '启用自动Flow Shift',
   'image-generation-view.setting-property-auto-flow-shift-tooltip': '启用自动Flow Shift后，后端引擎根据模型自动设置默认值',

@@ -51,6 +51,12 @@ interface ImageData {
   data: string
 }
 
+interface LoraItem {
+  id: string
+  name: string
+  weight: number
+}
+
 const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
@@ -134,6 +140,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const oldVaeOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_VAE_ON_CPU)
   const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_VAE_ON_CPU_DEFAULT
   const [vaeOnCPU, setVaeOnCPU] = useState<boolean>(defaultVaeOnCPU)
+  const [selectedLoras, setSelectedLoras] = useState<LoraItem[]>([])
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -181,10 +188,16 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   useEffect(() => {
     console.log(`Initializing ImageGenerationView now ...`)
     currentWorkspace.onSettingsChanged(handleDefaultServerChange)
+    currentWorkspace.onFetchStatusChanged(handleModelDataChange)
     return () => {
       currentWorkspace.removeSettingsChangedListener(handleDefaultServerChange)
+      currentWorkspace.removeFetchStatusChangedListener(handleModelDataChange)
     }
   })
+
+  const handleModelDataChange = () => {
+    setForceUpdate(!forceUpdate)
+  }
 
   const handleDefaultServerChange = () => {
     setForceUpdate(!forceUpdate)
@@ -564,6 +577,38 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const handleAutoFlowShiftChange = (value: boolean) => {
     setAutoFlowShift(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT, value ? 'true' : 'false')
+  }
+
+  const mockLoraOptions = currentWorkspace.tasks
+    .filter((task) => {
+      return task.task_items.length === 1 && task.lora_model
+    })
+    .map((task) => {
+      return {
+        value: task.task_items[0].file_name,
+        label: task.task_items[0].file_name,
+      }
+    })
+
+  const handleAddLora = () => {
+    const newLora: LoraItem = {
+      id: SystemUtils.generateUUID(),
+      name: '',
+      weight: 1.0,
+    }
+    setSelectedLoras([...selectedLoras, newLora])
+  }
+
+  const handleRemoveLora = (id: string) => {
+    setSelectedLoras(selectedLoras.filter((lora) => lora.id !== id))
+  }
+
+  const handleLoraNameChange = (id: string, name: string) => {
+    setSelectedLoras(selectedLoras.map((lora) => (lora.id === id ? { ...lora, name } : lora)))
+  }
+
+  const handleLoraWeightChange = (id: string, weight: number) => {
+    setSelectedLoras(selectedLoras.map((lora) => (lora.id === id ? { ...lora, weight } : lora)))
   }
 
   const handleStepsCountChange = (value: number) => {
@@ -1370,11 +1415,54 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     {}
                   </div>
                 </Splitter.Panel>
-                <Splitter.Panel defaultSize={160} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
+                <Splitter.Panel defaultSize={200} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
                   <div
                     className={styles.imageGenerationViewContentFooter}
                     style={{ backgroundColor: token.colorBgElevated, border: `${token.colorBorder} solid 1.5px` }}
                   >
+                    {/* Lora Selection Section */}
+                    {selectedLoras.length > 0 && (
+                      <div style={{ padding: '12px', borderBottom: `1px solid ${token.colorBorder}`, display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {selectedLoras.map((lora) => (
+                          <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'center', width: '320px' }}>
+                            <Select
+                              size="small"
+                              placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}
+                              style={{ width: '140px' }}
+                              popupMatchSelectWidth={false}
+                              value={lora.name || undefined}
+                              onChange={(value) => handleLoraNameChange(lora.id, value)}
+                              options={mockLoraOptions}
+                            />
+                            <Slider
+                              min={0}
+                              max={2}
+                              step={0.1}
+                              value={lora.weight}
+                              onChange={(value) => handleLoraWeightChange(lora.id, value)}
+                              style={{ width: '80px', margin: 0 }}
+                            />
+                            <InputNumber
+                              size="small"
+                              min={0}
+                              max={2}
+                              step={0.1}
+                              value={lora.weight}
+                              onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}
+                              style={{ width: '55px' }}
+                            />
+                            <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>
+                              ×
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ padding: '8px 12px', borderBottom: `1px solid ${token.colorBorder}` }}>
+                      <Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora} block>
+                        <FormattedMessage id={'image-generation-view.lora.add'} />
+                      </Button>
+                    </div>
                     <div className={styles.imageGenerationViewContentFooterText}>
                       <TextArea
                         ref={inputRef}
