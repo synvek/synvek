@@ -129,6 +129,7 @@ export default {
   'image-generation-view.list.latest-300': 'Latest 300',
   'image-generation-view.list.latest-500': 'Latest 500',
   'image-generation-view.lora.add': 'Add Lora',
+  'image-generation-view.lora.available-loras': 'Available Loras',
   'image-generation-view.lora.selection-place-holder': 'Select Lora',
   'image-generation-view.setting-property.upload': 'Upload',
   'image-generation-view.setting-property-auto-flow-shift': 'Enable Auto Flow Shift',

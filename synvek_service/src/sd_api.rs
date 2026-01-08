@@ -117,10 +117,10 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         frames_count: req.frames_count,
         sampling_method: req.sampling_method.clone(),
         offload_to_cpu: req.offload_to_cpu,
-        diffusion_fa: req.offload_to_cpu,
-        clip_on_cpu: req.offload_to_cpu,
-        vae_tiling: req.offload_to_cpu,
-        vae_on_cpu: req.offload_to_cpu,
+        diffusion_fa: req.diffusion_fa,
+        clip_on_cpu: req.clip_on_cpu,
+        vae_tiling: req.vae_tiling,
+        vae_on_cpu: req.vae_on_cpu,
         flow_shift: req.flow_shift.clone(),
     };
     let image_output = sd_service::generate_image(&generation_args);
@@ -161,10 +161,10 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         frames_count: req.frames_count,
         sampling_method: req.sampling_method.clone(),
         offload_to_cpu: req.offload_to_cpu,
-        diffusion_fa: req.offload_to_cpu,
-        clip_on_cpu: req.offload_to_cpu,
-        vae_tiling: req.offload_to_cpu,
-        vae_on_cpu: req.offload_to_cpu,
+        diffusion_fa: req.diffusion_fa,
+        clip_on_cpu: req.clip_on_cpu,
+        vae_tiling: req.vae_tiling,
+        vae_on_cpu: req.vae_on_cpu,
         flow_shift: req.flow_shift.clone(),
     };
     let image_output = sd_service::generate_image(&image_edit_args);

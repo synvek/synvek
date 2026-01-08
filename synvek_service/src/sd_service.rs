@@ -220,6 +220,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let model_id = sd_config.args.model_id;
     let model_type = sd_config.args.model_type;
     let task = fetch_service::load_local_task(model_name.as_str());
+    let lora_dir = config::get_lora_dir();
     let mut model_file_path: PathBuf = PathBuf::new();
     let mut clip_l_path: PathBuf = PathBuf::new();
     let mut clip_g_path: PathBuf = PathBuf::new();
@@ -493,6 +494,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     start_args.push(String::from("--flow-shift"));
                     start_args.push(String::from("3"));
                 }
+                start_args.push(String::from("--lora-model-dir"));
+                start_args.push(lora_dir.to_str().unwrap().to_string());
                 start_args.push(String::from("--steps"));
                 start_args.push(String::from(generation_args.steps_count.to_string()));
                 start_args.push(String::from("--batch-count"));

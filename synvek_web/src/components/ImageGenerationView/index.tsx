@@ -579,6 +579,25 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT, value ? 'true' : 'false')
   }
 
+  const generateAvailableLoras = () => {
+    const loras = currentWorkspace.tasks
+      .filter((task) => {
+        return task.task_items.length === 1 && task.lora_model
+      })
+      .map((task) => {
+        return (
+          <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
+            {task.task_items[0].file_name}
+          </Text>
+        )
+      })
+    return (
+      <>
+        <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:</Text>
+        {loras}
+      </>
+    )
+  }
   const mockLoraOptions = currentWorkspace.tasks
     .filter((task) => {
       return task.task_items.length === 1 && task.lora_model
@@ -1414,47 +1433,44 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         </div>
                       )}
                     </div>
-                    <div>
-                      {selectedLoras.length > 0 && (
-                        <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline' }}>
-                          <Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>
-                            <FormattedMessage id={'image-generation-view.lora.add'} />
-                          </Button>
-                          {selectedLoras.map((lora) => (
-                            <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'baseline', width: '320px' }}>
-                              <Select
-                                size="small"
-                                placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}
-                                style={{ width: '140px' }}
-                                popupMatchSelectWidth={false}
-                                value={lora.name || undefined}
-                                onChange={(value) => handleLoraNameChange(lora.id, value)}
-                                options={mockLoraOptions}
-                              />
-                              <Slider
-                                min={0}
-                                max={2}
-                                step={0.1}
-                                value={lora.weight}
-                                onChange={(value) => handleLoraWeightChange(lora.id, value)}
-                                style={{ width: '80px', margin: 0 }}
-                              />
-                              <InputNumber
-                                size="small"
-                                min={0}
-                                max={2}
-                                step={0.1}
-                                value={lora.weight}
-                                onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}
-                                style={{ width: '55px' }}
-                              />
-                              <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>
-                                ×
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                    <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline' }}>
+                      {generateAvailableLoras()}
+                      {/*<Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>*/}
+                      {/*  <FormattedMessage id={'image-generation-view.lora.add'} />*/}
+                      {/*</Button>*/}
+                      {/*{selectedLoras.map((lora) => (*/}
+                      {/*  <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'baseline', width: '320px' }}>*/}
+                      {/*    <Select*/}
+                      {/*      size="small"*/}
+                      {/*      placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}*/}
+                      {/*      style={{ width: '140px' }}*/}
+                      {/*      popupMatchSelectWidth={false}*/}
+                      {/*      value={lora.name || undefined}*/}
+                      {/*      onChange={(value) => handleLoraNameChange(lora.id, value)}*/}
+                      {/*      options={mockLoraOptions}*/}
+                      {/*    />*/}
+                      {/*    <Slider*/}
+                      {/*      min={0}*/}
+                      {/*      max={2}*/}
+                      {/*      step={0.1}*/}
+                      {/*      value={lora.weight}*/}
+                      {/*      onChange={(value) => handleLoraWeightChange(lora.id, value)}*/}
+                      {/*      style={{ width: '80px', margin: 0 }}*/}
+                      {/*    />*/}
+                      {/*    <InputNumber*/}
+                      {/*      size="small"*/}
+                      {/*      min={0}*/}
+                      {/*      max={2}*/}
+                      {/*      step={0.1}*/}
+                      {/*      value={lora.weight}*/}
+                      {/*      onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}*/}
+                      {/*      style={{ width: '55px' }}*/}
+                      {/*    />*/}
+                      {/*    <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>*/}
+                      {/*      ×*/}
+                      {/*    </Button>*/}
+                      {/*  </div>*/}
+                      {/*))}*/}
                     </div>
                   </div>
                 </Splitter.Panel>
