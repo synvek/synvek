@@ -25,12 +25,28 @@
       "default": "0.0.0.0",
       "type": "string"
     },
+    "lora_dir": {
+      "description": "Setup custom lora model dir, default is $DATA_DIR/lora if not provided",
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "model_port": {
       "description": "First model server port number, followings will increase by 1",
       "default": 12002,
       "type": "integer",
       "format": "uint16",
       "minimum": 0.0
+    },
+    "models_dir": {
+      "description": "Setup custom model dir, default is $DATA_DIR/models if not provided",
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "multi_process": {
       "description": "If multiple process mode is turned on. If it is on, each model server will use independent process to make main process much more stable.",

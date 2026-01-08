@@ -1,8 +1,8 @@
 use crate::common::{MODEL_SOURCE_MODELSCOPE, MODELSCOPE_MODELS_DIR, MODELSCOPE_MODELS_DIR_PREFIX};
 use crate::fetch_api::ListFetchData;
-use crate::{file_service, modelscope_helper, utils};
+use crate::{fetch_helper, file_service, modelscope_helper, utils};
 use anyhow::anyhow;
-use hf_hub::api::sync::{Api, ApiBuilder, ApiError, ApiRepo, Metadata};
+use hf_hub::api::sync::{symlink_or_rename, Api, ApiBuilder, ApiError, ApiRepo, Metadata};
 use hf_hub::api::{Progress, RepoInfo, Siblings};
 use hf_hub::{Cache, Repo, RepoType};
 use serde::{Deserialize, Serialize};
@@ -74,6 +74,28 @@ pub fn exists_in_cache(
         let file_path = cache_repo.get(file_name);
         //tracing::info!("Checking file in path:  {:?}", file_path);
         file_path.is_some()
+    }
+}
+
+pub fn get_file_path_in_cache(
+    model_source: &str,
+    repo_name: &str,
+    file_name: &str,
+    revision: &str,
+) -> Option<PathBuf> {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_model_dir());
+    let cache = Cache::new(path.clone());
+    let repo = Repo::with_revision(repo_name.to_string(), RepoType::Model, revision.to_string());
+    let cache_repo = cache.repo(repo.clone());
+    if model_source == MODEL_SOURCE_MODELSCOPE {
+        let mut folder_name = repo.folder_name();
+        folder_name = folder_name.replace("models--", MODELSCOPE_MODELS_DIR_PREFIX);
+        let file_path = modelscope_helper::get_file_path(folder_name.as_str(), file_name, revision);
+        file_path
+    } else {
+        let file_path = cache_repo.get(file_name);
+        file_path
     }
 }
 
@@ -326,6 +348,16 @@ pub fn get_file_meta_remote(
             api.unwrap_err()
         );
         None
+    }
+}
+
+pub fn create_link(src: &Path, dst: &Path
+) -> anyhow::Result<()>  {
+    let result = symlink_or_rename(src, dst);
+    if result.is_ok() {
+        Ok(())
+    } else {
+        Err(anyhow!("Error on create link on src={}, dst={}: {}", src.display(), dst.display(), result.unwrap_err()))
     }
 }
 

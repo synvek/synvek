@@ -1,4 +1,4 @@
-use crate::{CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, MODEL_SOURCE_HUGGINGFACE, MODEL_SOURCE_MODELSCOPE, MODEL_SOURCES, common, fetch_helper, file_service, system_service};
+use crate::{CACHE_REPO_FILES_SLEEP_DURATION, DOWNLOAD_RETRY_COUNT_LIMIT, MODEL_SOURCE_HUGGINGFACE, MODEL_SOURCE_MODELSCOPE, MODEL_SOURCES, common, fetch_helper, file_service, system_service, config};
 use anyhow::{Error, Result, anyhow};
 use hf_hub::api::Progress;
 use hf_hub::api::sync::Metadata;
@@ -901,6 +901,15 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
                             first_running_task_item.access_token,
                             update_time,
                         );
+                        //check and create lora link
+                        if current_task.lora_model {
+                            create_lora_link(
+                                first_running_task_item.model_source.as_str(),
+                                first_running_task_item.repo_name.as_str(),
+                                first_running_task_item.file_name.as_str(),
+                                first_running_task_item.revision.as_str(),
+                                first_running_task_item.commit_hash.as_str());
+                        }
                     }
                 }
             });
@@ -927,6 +936,25 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
     }
     Ok(true)
 }
+
+fn create_lora_link(model_source: &str, repo_name: &str, file_name: &str, revision: &str, commit_hash: &str) {
+    let lora_file_path = fetch_helper::get_file_path_in_cache(model_source, repo_name, file_name, revision);
+    if let Some(lora_file_path) = lora_file_path {
+        let lora_path = config::get_lora_dir();
+        let dir_result = fs::create_dir_all(lora_path.clone());
+        if dir_result.is_ok() {
+            let lora_dst_path = lora_path.join(file_name);
+            let result = fetch_helper::create_link(&lora_file_path, &lora_dst_path);
+            if result.is_err() {
+                tracing::error!("Failed to copy lora file with error: {}", result.unwrap_err());
+            }
+        } else {
+            tracing::error!("Failed to create lora dir: {}", lora_path.display());
+        }
+    }
+
+}
+
 
 //TODO: Not implemented yet
 pub fn delete_task(task_name: &str) -> Result<bool> {

@@ -41,6 +41,14 @@ pub struct SynvekConfig {
     #[schemars(description = "Enable debug information for logging")]
     #[serde(default = "enable_debug_log")]
     pub enable_debug_log: bool,
+
+    #[schemars(description = "Setup custom model dir, default is $DATA_DIR/models if not provided")]
+    #[serde(default = "models_dir")]
+    pub models_dir: Option<String>,
+
+    #[schemars(description = "Setup custom lora model dir, default is $DATA_DIR/lora if not provided")]
+    #[serde(default = "lora_dir")]
+    pub lora_dir: Option<String>,
 }
 
 fn default_port() -> u16 {
@@ -69,6 +77,14 @@ fn enable_debug_log() -> bool {
     false
 }
 
+fn models_dir() -> Option<String> {
+    None
+}
+
+fn lora_dir() -> Option<String> {
+    None
+}
+
 impl Default for SynvekConfig {
     fn default() -> Self {
         Self {
@@ -79,6 +95,8 @@ impl Default for SynvekConfig {
             endpoint: default_endpoint(),
             multi_process: default_multi_process(),
             enable_debug_log: enable_debug_log(),
+            models_dir: models_dir(),
+            lora_dir: lora_dir(),
         }
     }
 }
@@ -120,6 +138,8 @@ fn update_synvek_config(synvek_config: SynvekConfig) {
     config.host = synvek_config.host;
     config.endpoint = synvek_config.endpoint;
     config.multi_process = synvek_config.multi_process;
+    config.models_dir = synvek_config.models_dir;
+    config.lora_dir = synvek_config.lora_dir;
 }
 
 pub fn initialize_synvek_config() {
@@ -199,6 +219,8 @@ impl Config {
             endpoint: "https://huggingface.co".to_string(),
             multi_process: true,
             enable_debug_log: false,
+            models_dir: None,
+            lora_dir: None,
         }
     }
     fn from_working_dir() -> Self {
@@ -273,6 +295,12 @@ impl Config {
         if let Some(enable_debug_log) = new_config.get(common::CONFIG_ENABLE_DEBUG_LOG) {
             config.enable_debug_log = enable_debug_log.as_bool().unwrap();
         }
+        if let Some(models_dir) = new_config.get(common::MODELS_DIR) {
+            config.models_dir = Some(models_dir.as_str().unwrap().to_owned());
+        }
+        if let Some(lora_dir) = new_config.get(common::LORA_DIR) {
+            config.lora_dir = Some(lora_dir.as_str().unwrap().to_owned());
+        }
         config
     }
 
@@ -316,10 +344,27 @@ impl Config {
         data_dir
     }
     pub fn get_model_dir(&self) -> PathBuf {
-        let mut config_path = self.data_dir.clone();
-        config_path.push(common::MODELS_DIR_NAME);
-        config_path
+        let synvek_config = get_synvek_config();
+        if synvek_config.models_dir.is_some() {
+            PathBuf::from(synvek_config.models_dir.unwrap())
+        } else {
+            let mut config_path = self.data_dir.clone();
+            config_path.push(common::MODELS_DIR_NAME);
+            config_path
+        }
     }
+
+    pub fn get_lora_dir(&self) -> PathBuf {
+        let synvek_config = get_synvek_config();
+        if synvek_config.lora_dir.is_some() {
+            PathBuf::from(synvek_config.lora_dir.unwrap())
+        } else {
+            let mut config_path = self.data_dir.clone();
+            config_path.push(common::LORA_DIR_NAME);
+            config_path
+        }
+    }
+
 
     pub fn get_log_dir(&self) -> PathBuf {
         let mut config_path = self.data_dir.clone();
@@ -360,6 +405,12 @@ impl Config {
         let config = get_synvek_config();
         config.enable_debug_log
     }
+}
+
+pub fn get_lora_dir() -> PathBuf {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_lora_dir());
+    path
 }
 
 pub fn generate_schema() -> Result<(), Box<dyn std::error::Error>> {

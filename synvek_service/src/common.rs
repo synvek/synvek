@@ -14,6 +14,7 @@ pub static GLOBAL_PROJECT_ORGANIZATION_NAME: &str = "Synvek";
 
 pub static CONFIG_DIR_NAME: &str = "config";
 pub static MODELS_DIR_NAME: &str = "models";
+pub static LORA_DIR_NAME: &str = "lora";
 
 pub static LOG_DIR_NAME: &str = "logs";
 
@@ -42,6 +43,10 @@ pub static CONFIG_MODEL_PORT: &str = "model_port";
 pub static CONFIG_MULTI_PROCESS: &str = "multi_process";
 
 pub static CONFIG_ENABLE_DEBUG_LOG: &str = "enable_debug_log";
+
+pub static MODELS_DIR: &str = "models_dir";
+
+pub static LORA_DIR: &str = "lora_dir";
 
 pub static CONFIG_PORT: &str = "port";
 
