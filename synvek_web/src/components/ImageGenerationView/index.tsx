@@ -1386,83 +1386,83 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
             >
               <Splitter layout={'vertical'} className={styles.imageGenerationViewContent}>
                 <Splitter.Panel>
-                  <div className={styles.imageGenerationImagePreviewContainer}>
-                    {loading ? (
-                      <div className={styles.loadingOverlay}>
-                        <Spin indicator={<LoadingOutlined spin size={48} />} />
-                      </div>
-                    ) : images.length > currentImageIndex ? (
-                      images[currentImageIndex].type === 'image' ? (
-                        <img
-                          src={images[currentImageIndex].data}
-                          alt={''}
-                          className={styles.imageGenerationImagePreview}
-                          style={{ borderColor: token.colorError }}
-                        />
+                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
+                    <div className={styles.imageGenerationImagePreviewContainer} style={{ flex: 1 }}>
+                      {loading ? (
+                        <div className={styles.loadingOverlay}>
+                          <Spin indicator={<LoadingOutlined spin size={48} />} />
+                        </div>
+                      ) : images.length > currentImageIndex ? (
+                        images[currentImageIndex].type === 'image' ? (
+                          <img
+                            src={images[currentImageIndex].data}
+                            alt={''}
+                            className={styles.imageGenerationImagePreview}
+                            style={{ borderColor: token.colorError }}
+                          />
+                        ) : (
+                          <img
+                            src={images[currentImageIndex].data}
+                            alt={''}
+                            className={styles.imageGenerationImagePreview}
+                            style={{ borderColor: token.colorError }}
+                          />
+                        )
                       ) : (
-                        <img
-                          src={images[currentImageIndex].data}
-                          alt={''}
-                          className={styles.imageGenerationImagePreview}
-                          style={{ borderColor: token.colorError }}
-                        />
-                      )
-                    ) : (
-                      <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>
-                        Please click and generate
-                      </div>
-                    )}
-                    {}
+                        <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>
+                          Please click and generate
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      {selectedLoras.length > 0 && (
+                        <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline' }}>
+                          <Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>
+                            <FormattedMessage id={'image-generation-view.lora.add'} />
+                          </Button>
+                          {selectedLoras.map((lora) => (
+                            <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'baseline', width: '320px' }}>
+                              <Select
+                                size="small"
+                                placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}
+                                style={{ width: '140px' }}
+                                popupMatchSelectWidth={false}
+                                value={lora.name || undefined}
+                                onChange={(value) => handleLoraNameChange(lora.id, value)}
+                                options={mockLoraOptions}
+                              />
+                              <Slider
+                                min={0}
+                                max={2}
+                                step={0.1}
+                                value={lora.weight}
+                                onChange={(value) => handleLoraWeightChange(lora.id, value)}
+                                style={{ width: '80px', margin: 0 }}
+                              />
+                              <InputNumber
+                                size="small"
+                                min={0}
+                                max={2}
+                                step={0.1}
+                                value={lora.weight}
+                                onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}
+                                style={{ width: '55px' }}
+                              />
+                              <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>
+                                ×
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Splitter.Panel>
-                <Splitter.Panel defaultSize={200} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
+                <Splitter.Panel defaultSize={160} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
                   <div
                     className={styles.imageGenerationViewContentFooter}
                     style={{ backgroundColor: token.colorBgElevated, border: `${token.colorBorder} solid 1.5px` }}
                   >
-                    {/* Lora Selection Section */}
-                    {selectedLoras.length > 0 && (
-                      <div style={{ padding: '12px', borderBottom: `1px solid ${token.colorBorder}`, display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                        {selectedLoras.map((lora) => (
-                          <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'center', width: '320px' }}>
-                            <Select
-                              size="small"
-                              placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}
-                              style={{ width: '140px' }}
-                              popupMatchSelectWidth={false}
-                              value={lora.name || undefined}
-                              onChange={(value) => handleLoraNameChange(lora.id, value)}
-                              options={mockLoraOptions}
-                            />
-                            <Slider
-                              min={0}
-                              max={2}
-                              step={0.1}
-                              value={lora.weight}
-                              onChange={(value) => handleLoraWeightChange(lora.id, value)}
-                              style={{ width: '80px', margin: 0 }}
-                            />
-                            <InputNumber
-                              size="small"
-                              min={0}
-                              max={2}
-                              step={0.1}
-                              value={lora.weight}
-                              onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}
-                              style={{ width: '55px' }}
-                            />
-                            <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>
-                              ×
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <div style={{ padding: '8px 12px', borderBottom: `1px solid ${token.colorBorder}` }}>
-                      <Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora} block>
-                        <FormattedMessage id={'image-generation-view.lora.add'} />
-                      </Button>
-                    </div>
                     <div className={styles.imageGenerationViewContentFooterText}>
                       <TextArea
                         ref={inputRef}
