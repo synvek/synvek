@@ -591,10 +591,31 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           </Text>
         )
       })
+    const private_loras = currentWorkspace.tasks
+      .filter((task) => {
+        let isRemoteLoraModel = false
+        if (task.private_lora_model) {
+          currentWorkspace.tasks.forEach((theTask) => {
+            if (theTask.lora_model && theTask.task_items.length === 1 && task.task_name === theTask.task_items[0].file_name) {
+              isRemoteLoraModel = true
+            }
+          })
+        }
+        return task.private_lora_model && !isRemoteLoraModel
+      })
+      .map((task) => {
+        return (
+          <Text code key={`${task.task_name}`}>
+            {task.task_name}
+          </Text>
+        )
+      })
     return (
       <>
         <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:</Text>
         {loras}
+        <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-local-loras' })}:</Text>
+        {private_loras}
       </>
     )
   }
@@ -1433,7 +1454,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         </div>
                       )}
                     </div>
-                    <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline' }}>
+                    <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
                       {generateAvailableLoras()}
                       {/*<Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>*/}
                       {/*  <FormattedMessage id={'image-generation-view.lora.add'} />*/}

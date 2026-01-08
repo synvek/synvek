@@ -43,8 +43,10 @@ import {
   Collapse,
   ConfigProvider,
   Divider,
+  Dropdown,
   GetProp,
   MappingAlgorithm,
+  MenuProps,
   message,
   Modal,
   Space,
@@ -170,12 +172,18 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     currentWorkspace.onConversionListVisibleChange(handleConversionListVisibleChange)
     currentWorkspace.onSelectedConversionChangeEvent(handleSelectedConversionChange)
     currentWorkspace.onSettingsChanged(handleSettingChange)
+    currentWorkspace.onFetchStatusChanged(handleModelDataChange)
     return () => {
       currentWorkspace.removeConversionListVisibleChangeListener(handleConversionListVisibleChange)
       currentWorkspace.removeSelectedConversionChangeEventListener(handleSelectedConversionChange)
       currentWorkspace.removeSettingsChangedListener(handleSettingChange)
+      currentWorkspace.removeFetchStatusChangedListener(handleModelDataChange)
     }
   })
+
+  const handleModelDataChange = () => {
+    setForceUpdate(forceUpdate + 1)
+  }
 
   const handleSettingChange = () => {
     setForceUpdate(forceUpdate + 1)
@@ -1390,6 +1398,38 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
     requireScrollRef.current = true
   }
 
+  const remoteLoraMenuItems: MenuProps['items'] = currentWorkspace.tasks
+    .filter((task) => {
+      return task.task_items.length === 1 && task.lora_model
+    })
+    .map((task) => {
+      return {
+        key: task.task_items[0].file_name,
+        label: task.task_items[0].file_name,
+      }
+    })
+
+  const localLoraMenuItems: MenuProps['items'] = currentWorkspace.tasks
+    .filter((task) => {
+      let isRemoteLoraModel = false
+      if (task.private_lora_model) {
+        currentWorkspace.tasks.forEach((theTask) => {
+          if (theTask.lora_model && theTask.task_items.length === 1 && task.task_name === theTask.task_items[0].file_name) {
+            isRemoteLoraModel = true
+          }
+        })
+      }
+      return task.private_lora_model && !isRemoteLoraModel
+    })
+    .map((task) => {
+      return {
+        key: task.task_name,
+        label: task.task_name,
+      }
+    })
+
+  const loraMenuItems: MenuProps['items'] = [...remoteLoraMenuItems, { type: 'divider' }, ...localLoraMenuItems]
+
   return (
     <div className={styles.chatView} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
@@ -1532,6 +1572,11 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
                             onClick={handleEnableMCP}
                           />
                         </Tooltip>
+                        <Dropdown menu={{ items: loraMenuItems }}>
+                          <Button color={'default'} variant={'text'}>
+                            <FormattedMessage id={'chat-view.button-lora'} />
+                          </Button>
+                        </Dropdown>
                       </div>
                       <div className={styles.chatFooterButtonSubmitSection}>
                         <Upload onChange={handleUploadChange} fileList={fileList} showUploadList={false}>

@@ -259,7 +259,7 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
   ]
 
   const generateModels = () => {
-    const filteredTasks = currentWorkspace.tasks.filter((task) => !task.private_model && !task.lora_model)
+    const filteredTasks = currentWorkspace.tasks.filter((task) => !task.private_model && !task.lora_model && !task.private_lora_model)
     const modelSections: ReactNode[] = filteredTasks.map((task) => {
       let modelDownloading = false
       let modelDownloaded = true

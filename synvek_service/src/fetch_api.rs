@@ -248,6 +248,7 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
         offloaded: None,
         private_model: false,
         lora_model: req.lora_model,
+        private_lora_model: false,
     };
     if task.fetch_repos.len() > 0 {
         task.fetch_repos.iter_mut().for_each(|fetch_repo| {

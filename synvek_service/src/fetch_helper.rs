@@ -149,6 +149,32 @@ pub fn get_private_model_files() -> Vec<String> {
     model_files
 }
 
+pub fn get_private_lora_model_files() -> Vec<String> {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_lora_dir());
+    let mut model_files: Vec<String> = Vec::new();
+    if let Ok(entries) = fs::read_dir(path.as_path()) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                if path.is_file() {
+                    if let Some(extension) = path.extension() {
+                        if extension.to_ascii_lowercase() == "gguf"
+                            || extension.to_ascii_lowercase() == "safetensors"
+                            || extension.to_ascii_lowercase() == "pt"
+                        {
+                            let model_file_name =
+                                path.file_name().unwrap().to_str().unwrap().to_string();
+                            model_files.push(model_file_name);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    model_files
+}
+
 pub fn get_repo_files_in_cache(
     model_source: &str,
     repo_name: &str,

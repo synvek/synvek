@@ -315,6 +315,7 @@ export interface Task {
   offloaded: boolean | null
   private_model: boolean
   lora_model: boolean
+  private_lora_model: boolean
 }
 
 export interface UpdateFetchRequest {
