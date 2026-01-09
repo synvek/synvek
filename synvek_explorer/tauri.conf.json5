@@ -1,7 +1,7 @@
 {
   $schema: './../synvek_web/node_modules/@tauri-apps/cli/config.schema.json',
   productName: 'SynvekExplorer',
-  version: '0.4.10',
+  version: '0.4.11',
   identifier: 'com.synvek.SynvekExplorer',
   build: {
     frontendDist: './../synvek_web/build',
