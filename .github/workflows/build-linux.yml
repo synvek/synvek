@@ -134,6 +134,16 @@ jobs:
       run: |
         df
 
+    - name: Cleanup &Copy CUDA runtime
+      run: |
+        cp /usr/local/cuda/targets/x86_64-linux/lib/libcublas.so.12* output/
+        cp /usr/local/cuda/targets/x86_64-linux/lib/libcublasLt.so.12* output/
+        cp /usr/local/cuda/targets/x86_64-linux/lib/libcudart.so.12* output/
+
+    - name: Disk space after coping cuda runtime
+      run: |
+        df
+
     - name: Remove cuda for dispace
       run: |
         dpkg -l | grep cuda || true

@@ -275,6 +275,9 @@ jobs:
         Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cuda_legacy.dll" 
         Copy-Item "build/mistral.rs/build_cpu/release/synvek_backend_default.dll" "output/" 
         Rename-Item  "output/synvek_backend_default.dll" "synvek_backend_default_cpu.dll" 
+        Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cublas64_12.dll" "output/" 
+        Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cublasLt64_12.dll" "output/" 
+        Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cudart64_12.dll" "output/" 
 
 
     - name: Disk space check
