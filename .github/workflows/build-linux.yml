@@ -321,7 +321,7 @@ jobs:
         sudo find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
         npm cache clean --force
         deno clean
-        rm -rf synvek_web/node_modules
+        rm -rf synvek_agent/node_modules
 
     - name: Disk space after build synvek_agent
       run: |
@@ -334,14 +334,27 @@ jobs:
         cp -r synvek_explorer/service_plugins output 
         cp -r synvek_explorer/storage output 
 
-    - name: Copy artifacts for mistral rs cuda
+    - name: Disk space before build synvek_explorer
       run: |
         df
 
-    - name: Configure and build synvek_explorer
+    - name: Configure and build synvek_explorer code
       run: |
         cargo install tauri-cli --version "^2.0.0" --locked
-        cargo tauri build
+        cargo build --release --bin synvek_explorer
+      working-directory: ./synvek_explorer
+
+    - name: Cleanup for installer
+      run: |
+        rm -rf ~/.cargo/registry/index/*
+        rm -rf ~/.cargo/registry/cache/*
+        find synvek_explorer/target/release -name "*.o" -delete
+        find synvek_explorer/target/release -name "*.d" -delete
+      working-directory: ./synvek_explorer
+
+    - name: Configure and build synvek_explorer installer
+      run: |
+        tauri build --bundles deb
       working-directory: ./synvek_explorer
 
     - name: Disk space after build synvek_explorer
