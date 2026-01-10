@@ -38,3 +38,7 @@ https://www.synvek.com
 ## 支持平台
 
 Windows, Macos & Linux(Ubuntu)
+
+**社区**
+
+- **Discord**: [https://discord.gg/u4eJbrQnc5]

@@ -42,3 +42,6 @@ This project is currently under active development​ and not yet production-rea
 
 Windows, Macos & Linux(Ubuntu)
 
+**Community**
+
+- **Discord**: [https://discord.gg/u4eJbrQnc5]
