@@ -348,8 +348,8 @@ jobs:
       run: |
         rm -rf ~/.cargo/registry/index/*
         rm -rf ~/.cargo/registry/cache/*
-        find synvek_explorer/target/release -name "*.o" -delete
-        find synvek_explorer/target/release -name "*.d" -delete
+        find target/release -name "*.o" -delete
+        find target/release -name "*.d" -delete
       working-directory: ./synvek_explorer
 
     - name: Configure and build synvek_explorer installer
