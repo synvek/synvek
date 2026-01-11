@@ -167,7 +167,7 @@ export const lightTheme: ThemeConfig = {
     ...baseTheme.components,
     Tooltip: {
       borderRadius: 6,
-      colorBgDefault: designTokens.colors.light.text.primary,
+      colorBgDefault: 'rgba(0, 0, 0, 0.85)',
       colorText: designTokens.colors.light.text.inverse,
     },
   },
@@ -213,8 +213,8 @@ export const darkTheme: ThemeConfig = {
     },
     Tooltip: {
       borderRadius: 6,
-      colorBgDefault: designTokens.colors.dark.text.primary,
-      colorText: designTokens.colors.dark.text.inverse,
+      colorBgDefault: 'rgba(0, 0, 0, 0.85)',
+      colorText: designTokens.colors.dark.text.primary,
     },
   },
 };
