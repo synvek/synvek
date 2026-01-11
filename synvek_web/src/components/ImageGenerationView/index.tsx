@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'react'
 
-import { Consts, Generation, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
+import { Consts, Generation, GenerationContext, modelProviders, RequestUtils, SystemUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { useIntl } from '@@/exports'
 import { ArrowUpOutlined, LoadingOutlined, PlusOutlined, QuestionCircleOutlined, ReloadOutlined, SyncOutlined } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
   CheckboxChangeEvent,
+  Col,
   Collapse,
   ConfigProvider,
   Divider,
@@ -18,6 +19,7 @@ import {
   InputNumber,
   MenuProps,
   message,
+  Row,
   Select,
   Slider,
   SliderSingleProps,
@@ -266,6 +268,30 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
       const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
       const imageSize = Consts.IMAGE_SIZES[size]
+      const generationContext: GenerationContext = {
+        userPrompt: userText,
+        modelName: currentWorkspace.settings.defaultImageGenerationModel,
+        count: count,
+        imageWidth: enableCustomSize ? customWidth : imageSize.width,
+        imageHeight: enableCustomSize ? customHeight : imageSize.height,
+        seed: seedNumber,
+        format: 'png',
+        negativePrompt: negativePrompt,
+        stepsCount: stepsCount,
+        cfgScale: cfgScale,
+        refImages: refImages,
+        initImages: initImages,
+        highNoiseStepsCount: highNoiseStepsCount,
+        highNoiseCfgScale: highNoiseCfgScale,
+        framesCount: framesCount,
+        samplingMethod: samplingMethod === 'auto' ? undefined : samplingMethod,
+        offloadToCPU: offloadToCPU,
+        diffusionFA: diffusionFA,
+        clipOnCPU: clipOnCPU,
+        vaeTiling: vaeTiling,
+        vaeOnCPU: vaeOnCPU,
+        flowShift: autoFlowShift ? undefined : flowShift,
+      }
       const imageData =
         (refImageFileList.length > 0 && supportImageEdit) || supportVideoGen
           ? await RequestUtils.editImage(
@@ -324,7 +350,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           })
           setImages(newImages)
           setCurrentImageIndex(newImages.length - 1)
-          await saveGeneration(data)
+          await saveGeneration(generationContext, data)
         },
         () => {},
         () => {},
@@ -334,14 +360,15 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     }
   }
 
-  const saveGeneration = async (images: string[]) => {
+  const saveGeneration = async (generationContext: GenerationContext, images: string[]) => {
+    const genContext = JSON.stringify(generationContext)
     for (let i = 0; i < images.length; i++) {
       const image = images[i]
       const thumbData = await SystemUtils.resizeImage(image, 128, 128)
       const generationData = await RequestUtils.addGeneration(
         supportVideoGen ? Consts.GENERATION_TYPE_VIDEO : Consts.GENERATION_TYPE_IMAGE,
         userText,
-        '',
+        genContext,
         SystemUtils.generateUUID(),
         image,
         thumbData,
@@ -447,15 +474,133 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       () => {},
     )
   }
+
+  const generateImageTooltip = (generation: Generation) => {
+    const generationContextString = generation.generationContext
+    if (generationContextString && generationContextString.trim().length > 0) {
+      const generationContext: GenerationContext = JSON.parse(generationContextString)
+      const time = SystemUtils.extractDateTimeFromServerCalendar(generation.createdDate)
+      return (
+        <div style={{ width: '480px' }}>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.list.property.time'} />:
+            </Col>
+            <Col span={9}> {time}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.list.property.width'} />:
+            </Col>
+            <Col span={9}>{generationContext.imageWidth}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.list.property.height'} />:
+            </Col>
+            <Col span={9}>{generationContext.imageHeight}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-steps-count'} />:
+            </Col>
+            <Col span={9}>{generationContext.stepsCount}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-cfg-scale'} />:
+            </Col>
+            <Col span={9}>{generationContext.cfgScale}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-seed'} />:
+            </Col>
+            <Col span={9}>{generationContext.seed}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-sampling-method'} />:
+            </Col>
+            <Col span={9}>{generationContext.samplingMethod}</Col>
+          </Row>
+          {/*<Row gutter={16}>*/}
+          {/*  <Col span={9} style={{ fontWeight: 'bold' }}>*/}
+          {/*    <FormattedMessage id={'image-generation-view.setting-property-offload-to-cpu'} />:*/}
+          {/*  </Col>*/}
+          {/*  <Col span={9}>{generationContext.offloadToCPU}</Col>*/}
+          {/*</Row>*/}
+          {/*<Row gutter={16}>*/}
+          {/*  <Col span={9} style={{ fontWeight: 'bold' }}>*/}
+          {/*    <FormattedMessage id={'image-generation-view.setting-property-diffusion-fa'} />:*/}
+          {/*  </Col>*/}
+          {/*  <Col span={9}>{generationContext.diffusionFA}</Col>*/}
+          {/*</Row>*/}
+          {/*<Row gutter={16}>*/}
+          {/*  <Col span={9} style={{ fontWeight: 'bold' }}>*/}
+          {/*    <FormattedMessage id={'image-generation-view.setting-property-clip-on-cpu'} />:*/}
+          {/*  </Col>*/}
+          {/*  <Col span={9}>{generationContext.clipOnCPU}</Col>*/}
+          {/*</Row>*/}
+          {/*<Row gutter={16}>*/}
+          {/*  <Col span={9} style={{ fontWeight: 'bold' }}>*/}
+          {/*    <FormattedMessage id={'image-generation-view.setting-property-vae-tiling'} />:*/}
+          {/*  </Col>*/}
+          {/*  <Col span={9}>{generationContext.vaeTiling}</Col>*/}
+          {/*</Row>*/}
+          {/*<Row gutter={16}>*/}
+          {/*  <Col span={9} style={{ fontWeight: 'bold' }}>*/}
+          {/*    <FormattedMessage id={'image-generation-view.setting-property-vae-on-cpu'} />:*/}
+          {/*  </Col>*/}
+          {/*  <Col span={9}>{generationContext.vaeOnCPU}</Col>*/}
+          {/*</Row>*/}
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-flow-shift'} />:
+            </Col>
+            <Col span={9}>{generationContext.flowShift}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-high-noise-steps-count'} />:
+            </Col>
+            <Col span={9}>{generationContext.highNoiseStepsCount}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-high-noise-cfg-scale'} />:
+            </Col>
+            <Col span={9}>{generationContext.highNoiseCfgScale}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-user-prompt'} />:
+            </Col>
+            <Col span={9}>{generationContext.userPrompt}</Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={9} style={{ fontWeight: 'bold' }}>
+              <FormattedMessage id={'image-generation-view.setting-property-negative-prompt'} />:
+            </Col>
+            <Col span={9}>{generationContext.negativePrompt}</Col>
+          </Row>
+        </div>
+      )
+    } else {
+      return <div></div>
+    }
+  }
   const generateImageGenerations = () => {
     return generations.map((generation, index) => {
       return (
         <div key={index} onClick={() => handleShowGeneration(generation.generationId)} style={{ cursor: 'pointer' }}>
-          {generation.generationType === 'image' ? (
-            <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
-          ) : (
-            <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
-          )}
+          <Tooltip title={generateImageTooltip(generation)} overlayStyle={{ maxWidth: '480px' }}>
+            {generation.generationType === 'image' ? (
+              <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            ) : (
+              <img src={generation.generationSummary} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            )}
+          </Tooltip>
         </div>
       )
     })

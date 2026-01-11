@@ -456,6 +456,31 @@ export interface Message {
   messageContent: string | null
 }
 
+export interface GenerationContext {
+  userPrompt: string
+  modelName: string
+  count: number
+  imageWidth: number
+  imageHeight: number
+  seed: number
+  format: string
+  negativePrompt: string
+  stepsCount: number
+  cfgScale: number
+  refImages: ImageData[]
+  initImages: ImageData[]
+  highNoiseStepsCount: number
+  highNoiseCfgScale: number
+  framesCount: number
+  samplingMethod: string | undefined
+  offloadToCPU: boolean
+  diffusionFA: boolean
+  clipOnCPU: boolean
+  vaeTiling: boolean
+  vaeOnCPU: boolean
+  flowShift: number | undefined
+}
+
 export interface Generation {
   generationId: number
   generationType: string
