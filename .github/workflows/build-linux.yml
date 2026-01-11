@@ -13,6 +13,17 @@ jobs:
       VULKAN_SDK_VERSION: "1.4.321.1"
 
     steps:
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        tool-cache: false
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: false
+        docker-images: true
+        swap-storage: false
+      
     - name: Initialize & Cleanup
       run: |
         sudo apt update
@@ -341,20 +352,7 @@ jobs:
     - name: Configure and build synvek_explorer code
       run: |
         cargo install tauri-cli --version "^2.0.0" --locked
-        cargo build --release --bin synvek_explorer
-      working-directory: ./synvek_explorer
-
-    - name: Cleanup for installer
-      run: |
-        rm -rf ~/.cargo/registry/index/*
-        rm -rf ~/.cargo/registry/cache/*
-        find target/release -name "*.o" -delete
-        find target/release -name "*.d" -delete
-      working-directory: ./synvek_explorer
-
-    - name: Configure and build synvek_explorer installer
-      run: |
-        cargo tauri build --bundles deb
+        cargo tauri build
       working-directory: ./synvek_explorer
 
     - name: Disk space after build synvek_explorer
