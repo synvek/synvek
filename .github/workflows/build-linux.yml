@@ -354,7 +354,7 @@ jobs:
 
     - name: Configure and build synvek_explorer installer
       run: |
-        tauri build --bundles deb
+        cargo tauri build --bundles deb
       working-directory: ./synvek_explorer
 
     - name: Disk space after build synvek_explorer
