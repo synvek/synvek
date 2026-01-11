@@ -1536,5 +1536,23 @@
         "revision": "main",
         "endpoint": "",
         "access_token": null
+    },
+    {
+        "repo_source": "modelscope",
+        "repo_name": "unsloth/Qwen-Image-2512-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "master",
+        "endpoint": "",
+        "access_token": null
+    },
+    {
+        "repo_source": "huggingface",
+        "repo_name": "unsloth/Qwen-Image-2512-GGUF",
+        "repo_provider": "",
+        "repo_description": "",
+        "revision": "main",
+        "endpoint": "",
+        "access_token": null
     }
 ]

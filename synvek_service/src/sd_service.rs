@@ -261,7 +261,7 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
         is_flux2 = task.task_name.to_lowercase().contains("flux2-dev");
         is_ovis = task.task_name.to_lowercase().contains("ovis");
         is_zimage = task.task_name.to_lowercase().contains("z-image");
-        is_qwen_image = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509");
+        is_qwen_image = task.task_name.to_lowercase().contains("qwen_image") || task.task_name.to_lowercase().contains("qwen_image_edit") || task.task_name.to_lowercase().contains("qwen-image-edit-2509") || task.task_name.to_lowercase().contains("qwen-image-2512");
         is_wan22ti2v = task.task_name.to_lowercase().contains("wan2.2_ti2v") || task.task_name.to_lowercase().contains("wan2.2-ti2v");
         is_wan22t2vi2v = task.task_name.to_lowercase().contains("wan2.2_t2v") || task.task_name.to_lowercase().contains("wan2.2-t2v") || task.task_name.to_lowercase().contains("wan2.2_i2v") || task.task_name.to_lowercase().contains("wan2.2-i2v");
 
