@@ -27,6 +27,15 @@ jobs:
     # - name: Verify HIP SDK Installation
     #   run: |
     #     & "$env:HIP_PATH\bin\clang.exe" --version
+    - name: Check VC runtime list
+      run: |
+        dir "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC"
+
+    - name: Copy VC runtime for synvek_explorer
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Path "output" -Force | Out-Null      
+
 
     - name: Install Vulkan SDK
       run: |
@@ -250,7 +259,6 @@ jobs:
     - name: Copy reasources for synvek_explorer
       shell: pwsh
       run: |
-        New-Item -ItemType Directory -Path "output" -Force | Out-Null
         Copy-Item "synvek_explorer/agent_plugins" "output/" 
         Copy-Item "synvek_explorer/config" "output/" 
         Copy-Item "synvek_explorer/service_plugins" "output/" 
