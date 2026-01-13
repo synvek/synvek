@@ -35,7 +35,7 @@ jobs:
       shell: pwsh
       run: |
         New-Item -ItemType Directory -Path "output" -Force | Out-Null      
-        Copy-Item "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\14.44.35112\x64\Microsoft.VC143.CRT\*.dll" "output/" 
+        # Copy-Item "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\14.44.35112\x64\Microsoft.VC143.CRT\*.dll" "output/" 
 
     - name: Check VC runtime list
       run: |
@@ -263,6 +263,7 @@ jobs:
     - name: Copy reasources for synvek_explorer
       shell: pwsh
       run: |
+        New-Item -ItemType Directory -Path "output" -Force | Out-Null      
         Copy-Item "synvek_explorer/agent_plugins" "output/" 
         Copy-Item "synvek_explorer/config" "output/" 
         Copy-Item "synvek_explorer/service_plugins" "output/" 
@@ -290,6 +291,19 @@ jobs:
         Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cublas64_12.dll" "output/" 
         Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cublasLt64_12.dll" "output/" 
         Copy-Item "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/cudart64_12.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/msvcp140_1.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/msvcp140_2.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/msvcp140_atomic_wait.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/msvcp140_codecvt_ids.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/msvcp140.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/vccorlib140.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/vcruntime140_1.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/vcruntime140_threads.dll" "output/" 
+        Copy-Item "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT/vcruntime140.dll" "output/" 
+
+    - name: Check VC runtime list
+      run: |
+        dir "output"
 
 
     - name: Disk space check
