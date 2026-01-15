@@ -16,6 +16,12 @@ pub static CONFIG_DIR_NAME: &str = "config";
 pub static MODELS_DIR_NAME: &str = "models";
 pub static LORA_DIR_NAME: &str = "lora";
 
+pub static CONTROL_NET_DIR_NAME: &str = "control_net";
+
+pub static EMBEDDING_DIR_NAME: &str = "embedding";
+
+pub static UPSCALE_DIR_NAME: &str = "upscale";
+
 pub static LOG_DIR_NAME: &str = "logs";
 
 pub static BACKEND_DIR_NAME: &str = "backend";
@@ -47,6 +53,12 @@ pub static CONFIG_ENABLE_DEBUG_LOG: &str = "enable_debug_log";
 pub static MODELS_DIR: &str = "models_dir";
 
 pub static LORA_DIR: &str = "lora_dir";
+
+pub static CONTROL_NET_DIR: &str = "control_net_dir";
+
+pub static EMBEDDING_DIR: &str = "embedding_dir";
+
+pub static UPSCALE_DIR: &str = "upscale_dir";
 
 pub static CONFIG_PORT: &str = "port";
 

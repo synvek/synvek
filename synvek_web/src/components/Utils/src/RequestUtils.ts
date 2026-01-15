@@ -469,6 +469,10 @@ export interface GenerationContext {
   cfgScale: number
   refImages: ImageData[]
   initImages: ImageData[]
+  endImages: ImageData[]
+  maskImages: ImageData[]
+  controlImages: ImageData[]
+  controlVideoImages: ImageData[]
   highNoiseStepsCount: number
   highNoiseCfgScale: number
   framesCount: number
@@ -479,6 +483,9 @@ export interface GenerationContext {
   vaeTiling: boolean
   vaeOnCPU: boolean
   flowShift: number | undefined
+  scheduler: string | undefined
+  upscaleRepeats: number
+  controlNetCPU: boolean
 }
 
 export interface Generation {
@@ -707,6 +714,9 @@ export class RequestUtils {
     vaeTiling: boolean,
     flowShift: number | undefined,
     vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
   ) {
     const data = {
       userMessage: userMessage,
@@ -726,6 +736,9 @@ export class RequestUtils {
       vaeTiling: vaeTiling,
       flowShift: flowShift,
       vaeOnCPU: vaeOnCPU,
+      scheduler: scheduler,
+      upscaleRepeats: upscaleRepeats,
+      controlNetCpu: controlNetCpu,
     }
     const config = {
       headers: {
@@ -748,6 +761,10 @@ export class RequestUtils {
     cfgScale: number = 7.0,
     refImages: ImageData[],
     initImages: ImageData[],
+    endImages: ImageData[],
+    maskImages: ImageData[],
+    controlImages: ImageData[],
+    controlVideoImages: ImageData[],
     highNoiseStepsCount: number = 10,
     highNoiseCfgScale: number = 3.5,
     framesCount: number = 36,
@@ -758,6 +775,9 @@ export class RequestUtils {
     vaeTiling: boolean,
     flowShift: number | undefined,
     vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
   ) {
     const data = {
       userMessage: userMessage,
@@ -772,6 +792,10 @@ export class RequestUtils {
       cfgScale: cfgScale,
       refImages: refImages,
       initImages: initImages,
+      endImages: endImages,
+      maskImages: maskImages,
+      controlImages: controlImages,
+      controlVideoImages: controlVideoImages,
       highNoiseStepsCount: highNoiseStepsCount,
       highNoiseCfgScale: highNoiseCfgScale,
       framesCount: framesCount,
@@ -782,6 +806,9 @@ export class RequestUtils {
       vaeTiling: vaeTiling,
       flowShift: flowShift,
       vaeOnCPU: vaeOnCPU,
+      scheduler: scheduler,
+      upscaleRepeats: upscaleRepeats,
+      controlNetCpu: controlNetCpu,
     }
     const config = {
       headers: {

@@ -260,7 +260,7 @@ class LLMService {
   public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number,
                                     seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
                                     samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                    vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean) {
+                                    vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
     const modelServer = LLMService.buildGenerate(modelName)
     if(modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
@@ -276,7 +276,8 @@ class LLMService {
       } else {
         try {
           const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height,
-            seed, format, negativePrompt, stepsCount, cfgScale, samplingMethod, offloadToCPU, diffusionFA, clipOnCPU, vaeTiling, flowShift, vaeOnCPU)
+            seed, format, negativePrompt, stepsCount, cfgScale, samplingMethod, offloadToCPU, diffusionFA, clipOnCPU,
+            vaeTiling, flowShift, vaeOnCPU, scheduler, upscaleRepeats, controlNetCpu)
           return imageResponse
         } catch(error) {
           return `Internal error: ${error}`
@@ -291,9 +292,13 @@ class LLMService {
                                     seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
                                     refImages: {width: number, height: number, data: string}[],
                                     initImages: {width: number, height: number, data: string}[],
+                                endImages: {width: number, height: number, data: string}[],
+                                maskImages: {width: number, height: number, data: string}[],
+                                controlImages: {width: number, height: number, data: string}[],
+                                controlVideoImages: {width: number, height: number, data: string}[],
                                 highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number,
                                 samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean) {
+                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
     const modelServer = LLMService.buildGenerate(modelName)
     if(modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
@@ -309,8 +314,9 @@ class LLMService {
       } else {
         try {
           const imageResponse = await RequestUtils.editSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed,
-            format, negativePrompt, stepsCount, cfgScale, refImages, initImages, highNoiseStepsCount, highNoiseCfgScale, framesCount, samplingMethod, offloadToCPU,
-            diffusionFA, clipOnCPU, vaeTiling, flowShift, vaeOnCPU)
+            format, negativePrompt, stepsCount, cfgScale, refImages, initImages, endImages, maskImages, controlImages, controlVideoImages,
+            highNoiseStepsCount, highNoiseCfgScale, framesCount, samplingMethod, offloadToCPU,
+            diffusionFA, clipOnCPU, vaeTiling, flowShift, vaeOnCPU, scheduler, upscaleRepeats, controlNetCpu)
           return imageResponse
         } catch(error) {
           return `Internal error: ${error}`
@@ -723,7 +729,8 @@ export const chatService = new Elysia()
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
       const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName,
         body.count, body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale,
-        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift, body.vaeOnCPU)
+        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift,
+        body.vaeOnCPU, body.scheduler, body.upscaleRepeats, body.controlNetCpu)
       if(typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
@@ -761,6 +768,9 @@ export const chatService = new Elysia()
         vaeTiling: t.Boolean(),
         flowShift: t.Optional(t.Number()),
         vaeOnCPU: t.Boolean(),
+        scheduler: t.Optional(t.String()),
+        upscaleRepeats: t.Number(),
+        controlNetCpu: t.Boolean(),
       }),
     },
   )
@@ -770,8 +780,10 @@ export const chatService = new Elysia()
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
       const imageResponse = await LLMService.editImage(body.userMessage, body.modelName, body.count,
         body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale,
-        body.refImages, body.initImages, body.highNoiseStepsCount, body.highNoiseCfgScale, body.framesCount,
-        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift, body.vaeOnCPU)
+        body.refImages, body.initImages, body.endImages,body.maskImages,body.controlImages,body.controlVideoImages,
+        body.highNoiseStepsCount, body.highNoiseCfgScale, body.framesCount,
+        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift,
+        body.vaeOnCPU, body.scheduler, body.upscaleRepeats, body.controlNetCpu)
       if(typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
@@ -812,6 +824,26 @@ export const chatService = new Elysia()
           height: t.Number(),
           data: t.String()
         })),
+        endImages: t.Array(t.Object({
+          width: t.Number(),
+          height: t.Number(),
+          data: t.String()
+        })),
+        maskImages: t.Array(t.Object({
+          width: t.Number(),
+          height: t.Number(),
+          data: t.String()
+        })),
+        controlImages: t.Array(t.Object({
+          width: t.Number(),
+          height: t.Number(),
+          data: t.String()
+        })),
+        controlVideoImages: t.Array(t.Object({
+          width: t.Number(),
+          height: t.Number(),
+          data: t.String()
+        })),
         highNoiseStepsCount: t.Number(),
         highNoiseCfgScale: t.Number(),
         framesCount: t.Number(),
@@ -822,6 +854,9 @@ export const chatService = new Elysia()
         vaeTiling: t.Boolean(),
         flowShift: t.Optional(t.Number()),
         vaeOnCPU: t.Boolean(),
+        scheduler: t.Optional(t.String()),
+        upscaleRepeats: t.Number(),
+        controlNetCpu: t.Boolean(),
       }),
     },
   )

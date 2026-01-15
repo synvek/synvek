@@ -143,6 +143,23 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_VAE_ON_CPU_DEFAULT
   const [vaeOnCPU, setVaeOnCPU] = useState<boolean>(defaultVaeOnCPU)
   const [selectedLoras, setSelectedLoras] = useState<LoraItem[]>([])
+  const oldScheduler = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_SCHEDULER)
+  const defaultScheduler = oldScheduler ? oldScheduler : Consts.IMAGE_SCHEDULER_DEFAULT
+  const oldUpscaleRepeats = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_UPSCALE_REPEATS)
+  const defaultUpscaleRepeats = oldUpscaleRepeats ? Number.parseInt(oldUpscaleRepeats) : Consts.IMAGE_UPSCALE_REPEATS_DEFAULT
+  const oldControlNetCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CONTROL_NET_CPU)
+  const defaultControlNetCPU = oldControlNetCPU ? oldControlNetCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_CONTROL_NET_CPU_DEFAULT
+  const [scheduler, setScheduler] = useState<string>(defaultScheduler)
+  const [upscaleRepeats, setUpscaleRepeats] = useState<number>(defaultUpscaleRepeats)
+  const [controlNetCPU, setControlNetCPU] = useState<boolean>(defaultControlNetCPU)
+  const [endImageFileList, setEndImageFileList] = useState<UploadFile[]>([])
+  const [endImageFileContentMap, setEndImageFileContentMap] = useState<Map<string, string>>(new Map())
+  const [maskImageFileList, setMaskImageFileList] = useState<UploadFile[]>([])
+  const [maskImageFileContentMap, setMaskImageFileContentMap] = useState<Map<string, string>>(new Map())
+  const [controlImageFileList, setControlImageFileList] = useState<UploadFile[]>([])
+  const [controlImageFileContentMap, setControlImageFileContentMap] = useState<Map<string, string>>(new Map())
+  const [controlVideoImageFileList, setControlVideoImageFileList] = useState<UploadFile[]>([])
+  const [controlVideoImageFileContentMap, setControlVideoImageFileContentMap] = useState<Map<string, string>>(new Map())
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -266,6 +283,46 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           data: fileContentText,
         }
       })
+      const endImages = endImageFileList.map((file) => {
+        const fileContent = endImageFileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
+      const maskImages = maskImageFileList.map((file) => {
+        const fileContent = maskImageFileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
+      const controlImages = controlImageFileList.map((file) => {
+        const fileContent = controlImageFileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
+      const controlVideoImages = controlVideoImageFileList.map((file) => {
+        const fileContent = controlVideoImageFileContentMap.get(file.uid)
+        const fileContentText: string = fileContent ? fileContent : ''
+        //width and height can be ignored, backend will force to compute them later
+        return {
+          width: 0,
+          height: 0,
+          data: fileContentText,
+        }
+      })
       const seedNumber = enableRandomSeed ? SystemUtils.generateRandomInteger(0, 999999) : seed
       const imageSize = Consts.IMAGE_SIZES[size]
       const generationContext: GenerationContext = {
@@ -281,6 +338,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         cfgScale: cfgScale,
         refImages: refImages,
         initImages: initImages,
+        endImages: endImages,
+        maskImages: maskImages,
+        controlImages: controlImages,
+        controlVideoImages: controlVideoImages,
         highNoiseStepsCount: highNoiseStepsCount,
         highNoiseCfgScale: highNoiseCfgScale,
         framesCount: framesCount,
@@ -291,6 +352,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         vaeTiling: vaeTiling,
         vaeOnCPU: vaeOnCPU,
         flowShift: autoFlowShift ? undefined : flowShift,
+        scheduler: scheduler === 'auto' ? undefined : scheduler,
+        upscaleRepeats: upscaleRepeats,
+        controlNetCPU: controlNetCPU,
       }
       const imageData =
         (refImageFileList.length > 0 && supportImageEdit) || supportVideoGen
@@ -307,6 +371,10 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               cfgScale,
               refImages,
               initImages,
+              endImages,
+              maskImages,
+              controlImages,
+              controlVideoImages,
               highNoiseStepsCount,
               highNoiseCfgScale,
               framesCount,
@@ -317,6 +385,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               vaeTiling,
               autoFlowShift ? undefined : flowShift,
               vaeOnCPU,
+              scheduler === 'auto' ? undefined : scheduler,
+              upscaleRepeats,
+              controlNetCPU,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -336,6 +407,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               vaeTiling,
               autoFlowShift ? undefined : flowShift,
               vaeOnCPU,
+              scheduler === 'auto' ? undefined : scheduler,
+              upscaleRepeats,
+              controlNetCPU,
             )
       await WorkspaceUtils.handleRequest(
         messageApi,
@@ -652,6 +726,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     20: '20',
   }
 
+  const upscaleRepeatsMarks: SliderSingleProps['marks'] = {
+    1: '1',
+    8: '8',
+    16: '16',
+  }
+
   const framesCountMarks: SliderSingleProps['marks'] = {
     5: '5',
     50: '50',
@@ -676,6 +756,22 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     { value: 'tcd', label: 'tcd' },
   ]
 
+  //denoiser sigma scheduler, one of [discrete, karras, exponential, ays, gits, smoothstep, sgm_uniform, simple, lcm],
+  //default: discrete
+  const schedulerOptions = [
+    { value: 'auto', label: 'Auto' },
+    { value: 'discrete', label: 'discrete' },
+    { value: 'karras', label: 'karras' },
+    { value: 'exponential', label: 'exponential' },
+    { value: 'ays', label: 'ays' },
+    { value: 'gits', label: 'gits' },
+    { value: 'dpm++2m', label: 'dpm++2m' },
+    { value: 'smoothstep', label: 'smoothstep' },
+    { value: 'sgm_uniform', label: 'sgm_uniform' },
+    { value: 'simple', label: 'simple' },
+    { value: 'lcm', label: 'lcm' },
+  ]
+
   const flowShiftMarks: SliderSingleProps['marks'] = {
     '-10': '-10',
     '-5': '-5',
@@ -687,6 +783,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const handleSamplingMethodChange = (value: string) => {
     setSamplingMethod(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SAMPLING_METHOD, value)
+  }
+
+  const handleSchedulerChange = (value: string) => {
+    setScheduler(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_SCHEDULER, value)
   }
 
   const handleOffloadToCPUChange = (value: boolean) => {
@@ -712,6 +813,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const handleVAEOnCPUChange = (value: boolean) => {
     setVaeOnCPU(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_VAE_ON_CPU, '' + value)
+  }
+
+  const handleControlNetCPUChange = (value: boolean) => {
+    setControlNetCPU(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CONTROL_NET_CPU, '' + value)
   }
 
   const handleFlowShiftChange = (value: number) => {
@@ -816,6 +922,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_HIGH_NOISE_CFG_SCALE, '' + value)
   }
 
+  const handleUpScaleRepeatsChange = (value: number) => {
+    setUpscaleRepeats(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_UPSCALE_REPEATS, '' + value)
+  }
+
   const handleFramesCountChange = (value: number) => {
     setFramesCount(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_FRAMES_COUNT, '' + value)
@@ -883,6 +994,90 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     if (status === 'removed') {
     }
     setInitImageFileList([...info.fileList])
+  }
+
+  const handleEndImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    endImageFileContentMap.set(info.file.uid, content)
+    setEndImageFileContentMap(new Map([...endImageFileContentMap]))
+  }
+
+  const handleEndImageUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleEndImageFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setEndImageFileList([...info.fileList])
+  }
+
+  const handleMaskImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    maskImageFileContentMap.set(info.file.uid, content)
+    setMaskImageFileContentMap(new Map([...maskImageFileContentMap]))
+  }
+
+  const handleMaskImageUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleMaskImageFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setMaskImageFileList([...info.fileList])
+  }
+
+  const handleControlImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    controlImageFileContentMap.set(info.file.uid, content)
+    setControlImageFileContentMap(new Map([...controlImageFileContentMap]))
+  }
+
+  const handleControlImageUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleControlImageFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setControlImageFileList([...info.fileList])
+  }
+
+  const handleControlVideoImageFileDetail = (info: UploadChangeParam<UploadFile<any>>, content: string) => {
+    controlVideoImageFileContentMap.set(info.file.uid, content)
+    setControlVideoImageFileContentMap(new Map([...controlVideoImageFileContentMap]))
+  }
+
+  const handleControlVideoImageUploadChange: UploadProps['onChange'] = (info) => {
+    const { status } = info.file
+    if (status !== 'uploading') {
+    }
+    if (status === 'done') {
+      getFileBase64FromFile(info.file.originFileObj as FileType, (content) => {
+        handleControlVideoImageFileDetail(info, content)
+      })
+    }
+    if (status === 'error') {
+    }
+    if (status === 'removed') {
+    }
+    setControlVideoImageFileList([...info.fileList])
   }
 
   const handleHistoryChange = async (key: string[]) => {
@@ -1232,6 +1427,32 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                           )}
                         </div>
                       </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-mask-image'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleMaskImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={maskImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {maskImageFileList.length > 1 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                        </div>
+                      </div>
                     </div>
                   </Collapse.Panel>
                   <Collapse.Panel
@@ -1267,21 +1488,84 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                               </button>
                             )}
                           </Upload>
-                          {previewImage && (
-                            <Image
-                              style={{ display: 'none' }}
-                              preview={{
-                                visible: previewOpen,
-                                onVisibleChange: (visible: boolean) => {
-                                  setPreviewOpen(visible)
-                                  if (!visible) {
-                                    setPreviewImage('')
-                                  }
-                                },
-                              }}
-                              src={previewImage}
-                            />
-                          )}
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-end-image'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleEndImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={endImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {endImageFileList.length > 1 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-control-image'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleControlImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={controlImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {controlImageFileList.length > 1 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-control-video-images'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleControlVideoImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={controlVideoImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {controlVideoImageFileList.length > 24 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
                         </div>
                       </div>
                       <div className={styles.imageGenerationPropertyContainer}>
@@ -1392,6 +1676,63 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                       </div>
                       <div className={styles.imageGenerationPropertyContainer}>
                         <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-scheduler'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-scheduler-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleSchedulerChange('auto')}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Select
+                            size={'small'}
+                            defaultValue={scheduler}
+                            value={scheduler}
+                            style={{ width: '100%' }}
+                            onChange={(value) => handleSchedulerChange(value)}
+                            options={schedulerOptions}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-upscale-repeats'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-upscale-repeats-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleUpScaleRepeatsChange(Consts.IMAGE_UPSCALE_REPEATS_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={1}
+                            max={16}
+                            defaultValue={upscaleRepeats}
+                            step={1}
+                            value={upscaleRepeats}
+                            marks={upscaleRepeatsMarks}
+                            onChange={handleUpScaleRepeatsChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
                           <Checkbox defaultChecked={offloadToCPU} checked={offloadToCPU} onChange={(e) => handleOffloadToCPUChange(e.target.checked)}>
                             <FormattedMessage id={'image-generation-view.setting-property-offload-to-cpu'} />
                           </Checkbox>
@@ -1486,6 +1827,26 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                               icon={<ReloadOutlined />}
                               style={{ float: 'right' }}
                               onClick={() => handleVAEOnCPUChange(Consts.IMAGE_VAE_ON_CPU_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <Checkbox defaultChecked={controlNetCPU} checked={controlNetCPU} onChange={(e) => handleControlNetCPUChange(e.target.checked)}>
+                            <FormattedMessage id={'image-generation-view.setting-property-control-net-cpu'} />
+                          </Checkbox>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-control-net-cpu-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleControlNetCPUChange(Consts.IMAGE_CONTROL_NET_CPU_DEFAULT)}
                             />
                           </Tooltip>
                         </div>

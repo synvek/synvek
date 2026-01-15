@@ -157,6 +157,12 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultAutoFlowShift = oldAutoFlowShift ? oldAutoFlowShift.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_AUTO_FLOW_SHIFT_DEFAULT
   const oldVaeOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_VAE_ON_CPU)
   const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_VAE_ON_CPU_DEFAULT
+  const oldScheduler = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_SCHEDULER)
+  const defaultScheduler = oldScheduler ? oldScheduler : Consts.CHAT_IMAGE_SCHEDULER_DEFAULT
+  const oldUpscaleRepeats = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_UPSCALE_REPEATS)
+  const defaultUpscaleRepeats = oldUpscaleRepeats ? Number.parseInt(oldUpscaleRepeats) : Consts.CHAT_IMAGE_UPSCALE_REPEATS_DEFAULT
+  const oldControlNetCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CONTROL_NET_CPU)
+  const defaultControlNetCPU = oldControlNetCPU ? oldControlNetCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CONTROL_NET_CPU_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -842,6 +848,10 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             cfgScale,
             supportImageEdit ? refImages : [],
             supportVideoGen ? initImages : [],
+            [],
+            [],
+            [],
+            [],
             highNoiseStepsCount,
             highNoiseCfgScale,
             framesCount,
@@ -852,6 +862,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultVaeTiling,
             defaultAutoFlowShift ? undefined : defaultFlowShift,
             defaultVaeOnCPU,
+            defaultScheduler === 'auto' ? undefined : defaultScheduler,
+            defaultUpscaleRepeats,
+            defaultControlNetCPU,
           )
         : await RequestUtils.generateImage(
             chatContent[0].text,
@@ -871,6 +884,9 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultVaeTiling,
             defaultAutoFlowShift ? undefined : defaultFlowShift,
             defaultVaeOnCPU,
+            defaultScheduler === 'auto' ? undefined : defaultScheduler,
+            defaultUpscaleRepeats,
+            defaultControlNetCPU,
           )
     await WorkspaceUtils.handleRequest(
       messageApi,

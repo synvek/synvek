@@ -162,7 +162,7 @@ export class RequestUtils {
   public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
                                 seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
                                 samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean) {
+                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
     const data = {
       model: modelName,
       prompt: message,
@@ -177,6 +177,10 @@ export class RequestUtils {
       cfg_scale: cfgScale,
       ref_images: [],
       init_images: [],
+      end_images: [],
+      mask_images: [],
+      control_images: [],
+      control_video_images: [],
       high_noise_steps_count: 10,
       high_noise_cfg_scale: 3.5,
       frames_count: 36,
@@ -187,6 +191,9 @@ export class RequestUtils {
       vae_tiling: vaeTiling,
       flow_shift: flowShift,
       vae_on_cpu: vaeOnCPU,
+      scheduler: scheduler,
+      upscale_repeats: upscaleRepeats,
+      control_net_cpu: controlNetCpu,
     }
 
     const config = {
@@ -201,9 +208,11 @@ export class RequestUtils {
   public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
                             seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
                             refImages: {width: number, height: number, data: string}[], initImages: {width: number, height: number, data: string}[],
+                            endImages: {width: number, height: number, data: string}[],maskImages: {width: number, height: number, data: string}[],
+                            controlImages: {width: number, height: number, data: string}[],controlVideoImages: {width: number, height: number, data: string}[],
                             highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number,
                             samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                            vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean) {
+                            vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
     const data = {
       model: modelName,
       prompt: message,
@@ -218,6 +227,10 @@ export class RequestUtils {
       cfg_scale: cfgScale,
       ref_images: refImages,
       init_images: initImages,
+      end_images: endImages,
+      mask_images: maskImages,
+      control_images: controlImages,
+      control_video_images: controlVideoImages,
       high_noise_steps_count: highNoiseStepsCount,
       high_noise_cfg_scale: highNoiseCfgScale,
       frames_count: framesCount,
@@ -228,6 +241,9 @@ export class RequestUtils {
       vae_tiling: vaeTiling,
       flow_shift: flowShift,
       vae_on_cpu: vaeOnCPU,
+      scheduler: scheduler,
+      upscale_repeats: upscaleRepeats,
+      control_net_cpu: controlNetCpu,
     }
     const config = {
       headers: {

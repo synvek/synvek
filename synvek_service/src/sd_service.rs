@@ -31,7 +31,7 @@ pub struct ImageOutput {
     _private: PhantomData<()>,
 }
 
-type GenerateImageData = unsafe fn(c_int, *const *const c_char, *const RefImageDataArray, *const RefImageDataArray) -> *mut ImageOutput;
+type GenerateImageData = unsafe fn(c_int, *const *const c_char, *const RefImageDataArray, *const RefImageDataArray, *const RefImageDataArray, *const RefImageDataArray, *const RefImageDataArray, *const RefImageDataArray) -> *mut ImageOutput;
 type GetImageCount = unsafe fn(*mut ImageOutput) -> usize;
 type GetImageDataLength = unsafe fn(*mut ImageOutput, usize) -> usize;
 type GetImageData = unsafe fn(*mut ImageOutput, usize) -> *const u8;
@@ -73,6 +73,10 @@ pub struct GenerationArgs {
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
     pub init_images: Vec<RefImage>,
+    pub end_images: Vec<RefImage>,
+    pub mask_images: Vec<RefImage>,
+    pub control_images: Vec<RefImage>,
+    pub control_video_images: Vec<RefImage>,
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
@@ -83,6 +87,9 @@ pub struct GenerationArgs {
     pub vae_tiling: bool,
     pub vae_on_cpu: bool,
     pub flow_shift: Option<f32>,
+    pub scheduler: Option<String>,
+    pub upscale_repeats: i32,
+    pub control_net_cpu: bool,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -221,6 +228,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
     let model_type = sd_config.args.model_type;
     let task = fetch_service::load_local_task(model_name.as_str());
     let lora_dir = config::get_lora_dir();
+    let control_net_dir = config::get_control_net_dir();
+    let embedding_dir = config::get_embedding_dir();
+    let upscale_dir = config::get_upscale_dir();
     let mut model_file_path: PathBuf = PathBuf::new();
     let mut clip_l_path: PathBuf = PathBuf::new();
     let mut clip_g_path: PathBuf = PathBuf::new();
@@ -487,6 +497,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 if generation_args.vae_on_cpu {
                     start_args.push(String::from("--vae-on-cpu"));
                 }
+                if generation_args.control_net_cpu {
+                    start_args.push(String::from("--control-net-cpu"));
+                }
                 if generation_args.flow_shift.clone().is_some() {
                     start_args.push(String::from("--flow-shift"));
                     start_args.push(generation_args.flow_shift.clone().unwrap().to_string());
@@ -494,8 +507,20 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     start_args.push(String::from("--flow-shift"));
                     start_args.push(String::from("3"));
                 }
+                if generation_args.scheduler.clone().is_some() {
+                    start_args.push(String::from("--scheduler"));
+                    start_args.push(generation_args.scheduler.clone().unwrap().to_string());
+                }
                 start_args.push(String::from("--lora-model-dir"));
                 start_args.push(lora_dir.to_str().unwrap().to_string());
+                start_args.push(String::from("--control-net"));
+                start_args.push(control_net_dir.to_str().unwrap().to_string());
+                start_args.push(String::from("--upscale-model"));
+                start_args.push(upscale_dir.to_str().unwrap().to_string());
+                start_args.push(String::from("--embd-dir"));
+                start_args.push(embedding_dir.to_str().unwrap().to_string());
+                start_args.push(String::from("--upscale-repeats"));
+                start_args.push(String::from(generation_args.upscale_repeats.to_string()));
                 start_args.push(String::from("--steps"));
                 start_args.push(String::from(generation_args.steps_count.to_string()));
                 start_args.push(String::from("--batch-count"));
@@ -518,7 +543,14 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     .iter()
                     .map(|s| CString::new(s.as_str()))
                     .collect::<anyhow::Result<Vec<_>, _>>();
-                let ref_image_array_wrapper = RefImageDataArrayWrapper::new(generation_args.ref_images.clone(), generation_args.init_images.clone());
+                let ref_image_array_wrapper = RefImageDataArrayWrapper::new(
+                    generation_args.ref_images.clone(),
+                    generation_args.init_images.clone(),
+                    generation_args.end_images.clone(),
+                    generation_args.mask_images.clone(),
+                    generation_args.control_images.clone(),
+                    generation_args.control_video_images.clone()
+                );
                 if ref_image_array_wrapper.is_err() {
                     panic!("Failed to create reference images wrapper with error: {}", ref_image_array_wrapper.err().unwrap());
                 }
@@ -529,7 +561,9 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                         c_start_strings.iter().map(|cs| cs.as_ptr()).collect();
                     init_log_callback(Some(handle_stable_diffusion_cpp_log_callback));
                     let image_output =
-                        generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr(), c_ref_images_wrapper.as_ref_ptr(), c_ref_images_wrapper.as_init_ptr());
+                        generate_image_data(start_args.len() as c_int, raw_ptrs.as_ptr(), c_ref_images_wrapper.as_ref_ptr(),
+                                            c_ref_images_wrapper.as_init_ptr(), c_ref_images_wrapper.as_end_ptr(), c_ref_images_wrapper.as_mask_ptr(),
+                                            c_ref_images_wrapper.as_control_ptr(), c_ref_images_wrapper.as_control_video_ptr());
 
                     if image_output == null_mut() {
                         panic!("Failed to get string array from DLL");
@@ -652,12 +686,29 @@ pub struct RefImageDataArrayWrapper {
     init_data_vec: Vec<Vec<u8>>,        // original
     init_images: Vec<RefImageData>, // c structures after convert
     init_array: RefImageDataArray,        // final data structure
+    end_data_vec: Vec<Vec<u8>>,        // original
+    end_images: Vec<RefImageData>, // c structures after convert
+    end_array: RefImageDataArray,        // final data structure
+    mask_data_vec: Vec<Vec<u8>>,        // original
+    mask_images: Vec<RefImageData>, // c structures after convert
+    mask_array: RefImageDataArray,        // final data structure
+    control_data_vec: Vec<Vec<u8>>,        // original
+    control_images: Vec<RefImageData>, // c structures after convert
+    control_array: RefImageDataArray,        // final data structure
+    control_video_data_vec: Vec<Vec<u8>>,        // original
+    control_video_images: Vec<RefImageData>, // c structures after convert
+    control_video_array: RefImageDataArray,        // final data structure
 }
 
 impl RefImageDataArrayWrapper {
-    pub fn new(ref_source: Vec<RefImage>, init_source: Vec<RefImage>) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn new(ref_source: Vec<RefImage>, init_source: Vec<RefImage>, end_source: Vec<RefImage>,
+               mask_source: Vec<RefImage>, control_source: Vec<RefImage>, control_video_source: Vec<RefImage>) -> Result<Self, Box<dyn std::error::Error>> {
         let mut ref_data: Vec<Vec<u8>> = vec![];
         let mut init_data: Vec<Vec<u8>> = vec![];
+        let mut end_data: Vec<Vec<u8>> = vec![];
+        let mut mask_data: Vec<Vec<u8>> = vec![];
+        let mut control_data: Vec<Vec<u8>> = vec![];
+        let mut control_video_data: Vec<Vec<u8>> = vec![];
         for (i, image) in ref_source.iter().enumerate() {
             let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
             let img_length = img_data.len();
@@ -668,11 +719,39 @@ impl RefImageDataArrayWrapper {
             let img_length = img_data.len();
             init_data.push(img_data);
         }
+        for (i, image) in end_source.iter().enumerate() {
+            let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
+            let img_length = img_data.len();
+            end_data.push(img_data);
+        }
+        for (i, image) in mask_source.iter().enumerate() {
+            let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
+            let img_length = img_data.len();
+            mask_data.push(img_data);
+        }
+        for (i, image) in control_source.iter().enumerate() {
+            let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
+            let img_length = img_data.len();
+            control_data.push(img_data);
+        }
+        for (i, image) in control_video_source.iter().enumerate() {
+            let (img_data, _) = DataUrlDecoder::decode(image.data.as_str()).map_err(|e| e.to_string())?;
+            let img_length = img_data.len();
+            control_video_data.push(img_data);
+        }
 
         let mut ref_images = Vec::with_capacity(ref_data.len());
         let mut ref_total_size = 0;
         let mut init_images = Vec::with_capacity(init_data.len());
         let mut init_total_size = 0;
+        let mut end_images = Vec::with_capacity(end_data.len());
+        let mut end_total_size = 0;
+        let mut mask_images = Vec::with_capacity(mask_data.len());
+        let mut mask_total_size = 0;
+        let mut control_images = Vec::with_capacity(control_data.len());
+        let mut control_total_size = 0;
+        let mut control_video_images = Vec::with_capacity(control_video_data.len());
+        let mut control_video_total_size = 0;
 
         for (i, item) in ref_data.iter().enumerate() {
             let binary_data = RefImageData {
@@ -696,6 +775,50 @@ impl RefImageDataArrayWrapper {
             init_images.push(binary_data);
             init_total_size += item.len();
         }
+        for (i, item) in end_data.iter().enumerate() {
+            let binary_data = RefImageData {
+                width: 0,
+                height: 0,
+                data: item.as_ptr() as *const c_uchar,
+                length: item.len() as c_int,
+
+            };
+            end_images.push(binary_data);
+            end_total_size += item.len();
+        }
+        for (i, item) in mask_data.iter().enumerate() {
+            let binary_data = RefImageData {
+                width: 0,
+                height: 0,
+                data: item.as_ptr() as *const c_uchar,
+                length: item.len() as c_int,
+
+            };
+            mask_images.push(binary_data);
+            mask_total_size += item.len();
+        }
+        for (i, item) in control_data.iter().enumerate() {
+            let binary_data = RefImageData {
+                width: 0,
+                height: 0,
+                data: item.as_ptr() as *const c_uchar,
+                length: item.len() as c_int,
+
+            };
+            control_images.push(binary_data);
+            control_total_size += item.len();
+        }
+        for (i, item) in control_video_data.iter().enumerate() {
+            let binary_data = RefImageData {
+                width: 0,
+                height: 0,
+                data: item.as_ptr() as *const c_uchar,
+                length: item.len() as c_int,
+
+            };
+            control_video_images.push(binary_data);
+            control_video_total_size += item.len();
+        }
 
         let ref_array = RefImageDataArray {
             images: ref_images.as_ptr(),
@@ -707,6 +830,26 @@ impl RefImageDataArrayWrapper {
             length: init_images.len() as c_int,
             capacity: init_images.len() as c_int,
         };
+        let end_array = RefImageDataArray {
+            images: end_images.as_ptr(),
+            length: end_images.len() as c_int,
+            capacity: end_images.len() as c_int,
+        };
+        let mask_array = RefImageDataArray {
+            images: mask_images.as_ptr(),
+            length: mask_images.len() as c_int,
+            capacity: mask_images.len() as c_int,
+        };
+        let control_array = RefImageDataArray {
+            images: control_images.as_ptr(),
+            length: control_images.len() as c_int,
+            capacity: control_images.len() as c_int,
+        };
+        let control_video_array = RefImageDataArray {
+            images: control_video_images.as_ptr(),
+            length: control_video_images.len() as c_int,
+            capacity: control_video_images.len() as c_int,
+        };
 
         Ok(Self {
             ref_data_vec: ref_data,
@@ -715,6 +858,18 @@ impl RefImageDataArrayWrapper {
             init_data_vec: init_data,
             init_images,
             init_array,
+            end_data_vec: end_data,
+            end_images,
+            end_array,
+            mask_data_vec: mask_data,
+            mask_images,
+            mask_array,
+            control_data_vec: control_data,
+            control_images,
+            control_array,
+            control_video_data_vec: control_video_data,
+            control_video_images,
+            control_video_array,
         })
     }
 
@@ -726,6 +881,22 @@ impl RefImageDataArrayWrapper {
         &self.init_array
     }
 
+
+    pub fn as_end_ptr(&self) -> *const RefImageDataArray {
+        &self.end_array
+    }
+
+    pub fn as_mask_ptr(&self) -> *const RefImageDataArray {
+        &self.mask_array
+    }
+
+    pub fn as_control_ptr(&self) -> *const RefImageDataArray {
+        &self.control_array
+    }
+
+    pub fn as_control_video_ptr(&self) -> *const RefImageDataArray {
+        &self.control_video_array
+    }
     pub fn as_mut_data(&mut self) -> &mut Vec<Vec<u8>> {
         &mut self.ref_data_vec
     }

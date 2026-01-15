@@ -49,6 +49,18 @@ pub struct SynvekConfig {
     #[schemars(description = "Setup custom lora model dir, default is $DATA_DIR/lora if not provided")]
     #[serde(default = "lora_dir")]
     pub lora_dir: Option<String>,
+
+    #[schemars(description = "Setup custom control net model dir, default is $DATA_DIR/lora if not provided")]
+    #[serde(default = "control_net_dir")]
+    pub control_net_dir: Option<String>,
+
+    #[schemars(description = "Setup custom embedding model dir, default is $DATA_DIR/lora if not provided")]
+    #[serde(default = "embedding_dir")]
+    pub embedding_dir: Option<String>,
+
+    #[schemars(description = "Setup custom upscale model dir, default is $DATA_DIR/lora if not provided")]
+    #[serde(default = "upscale_dir")]
+    pub upscale_dir: Option<String>,
 }
 
 fn default_port() -> u16 {
@@ -70,9 +82,11 @@ fn default_host() -> String {
 fn default_endpoint() -> String {
     "https://huggingface.co".to_string()
 }
+
 fn default_multi_process() -> bool {
     true
 }
+
 fn enable_debug_log() -> bool {
     false
 }
@@ -82,6 +96,18 @@ fn models_dir() -> Option<String> {
 }
 
 fn lora_dir() -> Option<String> {
+    None
+}
+
+fn control_net_dir() -> Option<String> {
+    None
+}
+
+fn embedding_dir() -> Option<String> {
+    None
+}
+
+fn upscale_dir() -> Option<String> {
     None
 }
 
@@ -97,6 +123,9 @@ impl Default for SynvekConfig {
             enable_debug_log: enable_debug_log(),
             models_dir: models_dir(),
             lora_dir: lora_dir(),
+            control_net_dir: control_net_dir(),
+            embedding_dir: embedding_dir(),
+            upscale_dir: upscale_dir(),
         }
     }
 }
@@ -140,6 +169,9 @@ fn update_synvek_config(synvek_config: SynvekConfig) {
     config.multi_process = synvek_config.multi_process;
     config.models_dir = synvek_config.models_dir;
     config.lora_dir = synvek_config.lora_dir;
+    config.control_net_dir = synvek_config.control_net_dir;
+    config.embedding_dir = synvek_config.embedding_dir;
+    config.upscale_dir = synvek_config.upscale_dir;
 }
 
 pub fn initialize_synvek_config() {
@@ -221,6 +253,9 @@ impl Config {
             enable_debug_log: false,
             models_dir: None,
             lora_dir: None,
+            control_net_dir: None,
+            embedding_dir: None,
+            upscale_dir: None,
         }
     }
     fn from_working_dir() -> Self {
@@ -301,6 +336,15 @@ impl Config {
         if let Some(lora_dir) = new_config.get(common::LORA_DIR) {
             config.lora_dir = Some(lora_dir.as_str().unwrap().to_owned());
         }
+        if let Some(control_net_dir) = new_config.get(common::CONTROL_NET_DIR) {
+            config.control_net_dir = Some(control_net_dir.as_str().unwrap().to_owned());
+        }
+        if let Some(embedding_dir) = new_config.get(common::EMBEDDING_DIR) {
+            config.embedding_dir = Some(embedding_dir.as_str().unwrap().to_owned());
+        }
+        if let Some(upscale_dir) = new_config.get(common::UPSCALE_DIR) {
+            config.upscale_dir = Some(upscale_dir.as_str().unwrap().to_owned());
+        }
         config
     }
 
@@ -365,6 +409,38 @@ impl Config {
         }
     }
 
+    pub fn get_control_net_dir(&self) -> PathBuf {
+        let synvek_config = get_synvek_config();
+        if synvek_config.control_net_dir.is_some() {
+            PathBuf::from(synvek_config.control_net_dir.unwrap())
+        } else {
+            let mut config_path = self.data_dir.clone();
+            config_path.push(common::CONTROL_NET_DIR_NAME);
+            config_path
+        }
+    }
+
+    pub fn get_embedding_dir(&self) -> PathBuf {
+        let synvek_config = get_synvek_config();
+        if synvek_config.embedding_dir.is_some() {
+            PathBuf::from(synvek_config.embedding_dir.unwrap())
+        } else {
+            let mut config_path = self.data_dir.clone();
+            config_path.push(common::EMBEDDING_DIR_NAME);
+            config_path
+        }
+    }
+
+    pub fn get_upscale_dir(&self) -> PathBuf {
+        let synvek_config = get_synvek_config();
+        if synvek_config.upscale_dir.is_some() {
+            PathBuf::from(synvek_config.upscale_dir.unwrap())
+        } else {
+            let mut config_path = self.data_dir.clone();
+            config_path.push(common::UPSCALE_DIR_NAME);
+            config_path
+        }
+    }
 
     pub fn get_log_dir(&self) -> PathBuf {
         let mut config_path = self.data_dir.clone();
@@ -410,6 +486,25 @@ impl Config {
 pub fn get_lora_dir() -> PathBuf {
     let config = crate::config::Config::new();
     let path = std::path::PathBuf::from(config.get_lora_dir());
+    path
+}
+
+
+pub fn get_control_net_dir() -> PathBuf {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_control_net_dir());
+    path
+}
+
+pub fn get_embedding_dir() -> PathBuf {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_embedding_dir());
+    path
+}
+
+pub fn get_upscale_dir() -> PathBuf {
+    let config = crate::config::Config::new();
+    let path = std::path::PathBuf::from(config.get_upscale_dir());
     path
 }
 

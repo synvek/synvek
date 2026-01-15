@@ -144,6 +144,10 @@ export default {
   'image-generation-view.setting-property-clip-on-cpu': 'Clip on CPU',
   'image-generation-view.setting-property-clip-on-cpu-tooltip':
     'CLIP text encoder converts text prompts into vector representations. By default, the CLIP model runs on GPU for maximum speed. However, when GPU VRAM is limited, running CLIP may cause OOM (Out Of Memory) errors. Enabling this forces the CLIP model to run on the CPU instead of the GPU',
+  'image-generation-view.setting-property-control-image': 'Control Image',
+  'image-generation-view.setting-property-control-video-images': 'Control Video Image',
+  'image-generation-view.setting-property-control-net-cpu': 'Control Net on CPU',
+  'image-generation-view.setting-property-control-net-cpu-tooltip': 'Moves ControlNet model inference from GPU to CPU， Reduces GPU VRAM usage',
   'image-generation-view.setting-property-count': 'Count',
   'image-generation-view.setting-property-custom-height': 'Custom Height',
   'image-generation-view.setting-property-custom-width': 'Custom Width',
@@ -152,6 +156,7 @@ export default {
   'image-generation-view.setting-property-enable-custom-size': 'Enable Custom Size',
   'image-generation-view.setting-property-enable-custom-size.tooltip':
     'Be carefully enable custom size, which may impact performance or cause generation failure',
+  'image-generation-view.setting-property-end-image': 'End Image',
   'image-generation-view.setting-property-flow-shift': 'Flow Shift',
   'image-generation-view.setting-property-flow-shift-tooltip':
     'The parameter controls the timestep shifting strategy in Flow Matching models. In Flow Matching models (a new diffusion model training paradigm), it controls the timestep offset during generation, adjusting the noise schedule and smoothing the generation trajectory. It subtly shifts the sampling timesteps, influencing the noise addition/removal rhythm during generation, thereby balancing generation quality and diversity',
@@ -161,6 +166,7 @@ export default {
   'image-generation-view.setting-property-high-noise-steps-count': 'Steps Count(High Noise)',
   'image-generation-view.setting-property-high-noise-steps-count-tooltip': 'Only available if supported, default value for current model:',
   'image-generation-view.setting-property-init-image': 'Initial Image',
+  'image-generation-view.setting-property-mask-image': 'Mask Image',
   'image-generation-view.setting-property-negative-place-holder': 'Please input your negative prompt',
   'image-generation-view.setting-property-negative-prompt': 'Negative Prompt',
   'image-generation-view.setting-property-negative-prompt-description': 'Describing what you do not want to see.',
@@ -173,11 +179,16 @@ export default {
   'image-generation-view.setting-property-reset': 'Reset',
   'image-generation-view.setting-property-sampling-method': 'Sampling Method',
   'image-generation-view.setting-property-sampling-method-tooltip': 'The parameter controls the denoising algorithm used during generation.',
+  'image-generation-view.setting-property-scheduler': 'Scheduler',
+  'image-generation-view.setting-property-scheduler-tooltip': 'Denoiser sigma scheduler',
   'image-generation-view.setting-property-seed': 'Seed',
   'image-generation-view.setting-property-seed-random': 'Random seed',
   'image-generation-view.setting-property-size': 'Size',
   'image-generation-view.setting-property-steps-count': 'Steps Count',
   'image-generation-view.setting-property-steps-count-tooltip': 'Only available if supported, default value for current model:',
+  'image-generation-view.setting-property-upscale-repeats': 'Upscale Repeats',
+  'image-generation-view.setting-property-upscale-repeats-tooltip':
+    'This parameter determines how many times the upscaling model is applied. Each repetition further enlarges the image and enhances details, suitable for scenarios requiring extremely high resolution or fine details.',
   'image-generation-view.setting-property-user-prompt': 'User Prompt',
   'image-generation-view.setting-property-vae-on-cpu': 'VAE on CPU',
   'image-generation-view.setting-property-vae-on-cpu-tooltip':

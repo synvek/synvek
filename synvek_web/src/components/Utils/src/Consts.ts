@@ -121,6 +121,9 @@ export class Consts {
   public static LOCAL_STORAGE_CHAT_IMAGE_AUTO_FLOW_SHIFT = 'synvek.chat.image.auto-flow-shift'
   public static LOCAL_STORAGE_CHAT_IMAGE_VAE_TILING = 'synvek.chat.image.vae-tiling'
   public static LOCAL_STORAGE_CHAT_IMAGE_VAE_ON_CPU = 'synvek.chat.image.vae-on-cpu'
+  public static LOCAL_STORAGE_CHAT_IMAGE_SCHEDULER = 'synvek.chat.image.scheduler'
+  public static LOCAL_STORAGE_CHAT_IMAGE_UPSCALE_REPEATS = 'synvek.chat.image.upscale-repeats'
+  public static LOCAL_STORAGE_CHAT_IMAGE_CONTROL_NET_CPU = 'synvek.chat.image.control-net-cpu'
   public static CHAT_TEMPERATURE_DEFAULT = 1
   public static CHAT_TOP_P_DEFAULT = 0.8
   public static CHAT_CONTEXT_DEFAULT = 5
@@ -142,6 +145,9 @@ export class Consts {
   public static CHAT_IMAGE_FLOW_SHIFT_DEFAULT = 3.0
   public static CHAT_IMAGE_AUTO_FLOW_SHIFT_DEFAULT = true
   public static CHAT_IMAGE_VAE_ON_CPU_DEFAULT = false
+  public static CHAT_IMAGE_SCHEDULER_DEFAULT = 'auto'
+  public static CHAT_IMAGE_UPSCALE_REPEATS_DEFAULT = 1
+  public static CHAT_IMAGE_CONTROL_NET_CPU_DEFAULT = false
 
   //Local storage for image generation settings
   public static LOCAL_STORAGE_IMAGE_COUNT = 'synvek.image.count'
@@ -165,6 +171,9 @@ export class Consts {
   public static LOCAL_STORAGE_IMAGE_AUTO_FLOW_SHIFT = 'synvek.image.auto-flow-shift'
   public static LOCAL_STORAGE_IMAGE_VAE_TILING = 'synvek.image.vae-tiling'
   public static LOCAL_STORAGE_IMAGE_VAE_ON_CPU = 'synvek.image.vae-on-cpu'
+  public static LOCAL_STORAGE_IMAGE_SCHEDULER = 'synvek.image.scheduler'
+  public static LOCAL_STORAGE_IMAGE_UPSCALE_REPEATS = 'synvek.image.upscale-repeats'
+  public static LOCAL_STORAGE_IMAGE_CONTROL_NET_CPU = 'synvek.image.control-net-cpu'
   public static IMAGE_COUNT_DEFAULT = 1
   public static IMAGE_SIZE_DEFAULT = 1
   public static IMAGE_CUSTOM_WIDTH_DEFAULT = 512
@@ -186,6 +195,9 @@ export class Consts {
   public static IMAGE_FLOW_SHIFT_DEFAULT = 3.0
   public static IMAGE_AUTO_FLOW_SHIFT_DEFAULT = true
   public static IMAGE_VAE_ON_CPU_DEFAULT = false
+  public static IMAGE_SCHEDULER_DEFAULT = 'auto'
+  public static IMAGE_UPSCALE_REPEATS_DEFAULT = 1
+  public static IMAGE_CONTROL_NET_CPU_DEFAULT = false
 
   //Local storage for version check time
   public static LOCAL_STORAGE_VERSION_CHECK_TIME = 'synvek.version.check-time'

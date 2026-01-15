@@ -19,6 +19,10 @@ pub struct ImageGenerationRequest {
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
     pub init_images: Vec<RefImage>,
+    pub end_images: Vec<RefImage>,
+    pub mask_images: Vec<RefImage>,
+    pub control_images: Vec<RefImage>,
+    pub control_video_images: Vec<RefImage>,
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
@@ -29,6 +33,9 @@ pub struct ImageGenerationRequest {
     pub vae_tiling: bool,
     pub vae_on_cpu: bool,
     pub flow_shift: Option<f32>,
+    pub scheduler: Option<String>,
+    pub upscale_repeats: i32,
+    pub control_net_cpu: bool,
 }
 /// Request for edit image
 #[derive(Debug, Deserialize, Serialize)]
@@ -45,6 +52,10 @@ pub struct ImageEditRequest {
     pub cfg_scale: f32,
     pub ref_images: Vec<RefImage>,
     pub init_images: Vec<RefImage>,
+    pub end_images: Vec<RefImage>,
+    pub mask_images: Vec<RefImage>,
+    pub control_images: Vec<RefImage>,
+    pub control_video_images: Vec<RefImage>,
     pub high_noise_steps_count: i32,
     pub high_noise_cfg_scale: f32,
     pub frames_count: i32,
@@ -55,6 +66,9 @@ pub struct ImageEditRequest {
     pub vae_tiling: bool,
     pub vae_on_cpu: bool,
     pub flow_shift: Option<f32>,
+    pub scheduler: Option<String>,
+    pub upscale_repeats: i32,
+    pub control_net_cpu: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -112,6 +126,10 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         cfg_scale: req.cfg_scale,
         ref_images: req.ref_images.clone(),
         init_images: req.init_images.clone(),
+        end_images: req.end_images.clone(),
+        mask_images: req.mask_images.clone(),
+        control_images: req.control_images.clone(),
+        control_video_images: req.control_video_images.clone(),
         high_noise_steps_count: req.high_noise_steps_count,
         high_noise_cfg_scale: req.high_noise_cfg_scale,
         frames_count: req.frames_count,
@@ -122,6 +140,9 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         vae_tiling: req.vae_tiling,
         vae_on_cpu: req.vae_on_cpu,
         flow_shift: req.flow_shift.clone(),
+        scheduler: req.scheduler.clone(),
+        upscale_repeats: req.upscale_repeats,
+        control_net_cpu: req.control_net_cpu,
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -156,6 +177,10 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         cfg_scale: req.cfg_scale,
         ref_images: req.ref_images.clone(),
         init_images: req.init_images.clone(),
+        end_images: req.end_images.clone(),
+        mask_images: req.mask_images.clone(),
+        control_images: req.control_images.clone(),
+        control_video_images: req.control_video_images.clone(),
         high_noise_steps_count: req.high_noise_steps_count,
         high_noise_cfg_scale: req.high_noise_cfg_scale,
         frames_count: req.frames_count,
@@ -166,6 +191,9 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         vae_tiling: req.vae_tiling,
         vae_on_cpu: req.vae_on_cpu,
         flow_shift: req.flow_shift.clone(),
+        scheduler: req.scheduler.clone(),
+        upscale_repeats: req.upscale_repeats,
+        control_net_cpu: req.control_net_cpu,
     };
     let image_output = sd_service::generate_image(&image_edit_args);
     let mut image_data: Vec<ImageData> = vec![];
