@@ -309,7 +309,11 @@ const LocalModelPanel: FC<LocalModelPanelProps> = ({ visible }) => {
           modelDownloaded = false
         }
         currentWorkspace.fetchStatusData.forEach((fetchStatusData) => {
-          if (fetchStatusData.repo_name === taskItem.repo_name && fetchStatusData.file_name === taskItem.file_name) {
+          if (
+            fetchStatusData.fetch_name === task.task_name &&
+            fetchStatusData.repo_name === taskItem.repo_name &&
+            fetchStatusData.file_name === taskItem.file_name
+          ) {
             modelDownloading = true
             if (fetchStatusData.downloading) {
               modelDownloadSpeed += fetchStatusData.speed ? fetchStatusData.speed : 0
