@@ -159,14 +159,35 @@ export class RequestUtils {
     return axios.post(`${serverAddress}`, data, config)
   }
 
-  public static generateSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
-                                seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
-                                samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
+  public static generateSDImage(
+    serverAddress: string,
+    message: string,
+    modelName: string,
+    count: number,
+    width: number,
+    height: number,
+    seed: number,
+    format: string,
+    negativePrompt: string,
+    stepsCount: number,
+    cfgScale: number,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number,
+  ) {
     const data = {
       model: modelName,
       prompt: message,
-      response_format: "B64Json",
+      response_format: 'B64Json',
       n: count,
       width: width,
       height: height,
@@ -194,6 +215,8 @@ export class RequestUtils {
       scheduler: scheduler,
       upscale_repeats: upscaleRepeats,
       control_net_cpu: controlNetCpu,
+      strength: strength,
+      control_strength: controlStrength,
     }
 
     const config = {
@@ -204,19 +227,44 @@ export class RequestUtils {
     return axios.post(`${serverAddress}`, data, config)
   }
 
-
-  public static editSDImage(serverAddress: string, message: string, modelName: string, count: number, width: number, height: number,
-                            seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
-                            refImages: {width: number, height: number, data: string}[], initImages: {width: number, height: number, data: string}[],
-                            endImages: {width: number, height: number, data: string}[],maskImages: {width: number, height: number, data: string}[],
-                            controlImages: {width: number, height: number, data: string}[],controlVideoImages: {width: number, height: number, data: string}[],
-                            highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number,
-                            samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                            vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
+  public static editSDImage(
+    serverAddress: string,
+    message: string,
+    modelName: string,
+    count: number,
+    width: number,
+    height: number,
+    seed: number,
+    format: string,
+    negativePrompt: string,
+    stepsCount: number,
+    cfgScale: number,
+    refImages: { width: number; height: number; data: string }[],
+    initImages: { width: number; height: number; data: string }[],
+    endImages: { width: number; height: number; data: string }[],
+    maskImages: { width: number; height: number; data: string }[],
+    controlImages: { width: number; height: number; data: string }[],
+    controlVideoImages: { width: number; height: number; data: string }[],
+    highNoiseStepsCount: number,
+    highNoiseCfgScale: number,
+    framesCount: number,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number,
+  ) {
     const data = {
       model: modelName,
       prompt: message,
-      response_format: "B64Json",
+      response_format: 'B64Json',
       n: count,
       width: width,
       height: height,
@@ -244,6 +292,8 @@ export class RequestUtils {
       scheduler: scheduler,
       upscale_repeats: upscaleRepeats,
       control_net_cpu: controlNetCpu,
+      strength: strength,
+      control_strength: controlStrength,
     }
     const config = {
       headers: {

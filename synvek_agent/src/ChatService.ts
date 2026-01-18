@@ -55,9 +55,9 @@ class LLMService {
         // Additional configuration for better llama.cpp compatibility
         ...(streaming && {
           streamOptions: {
-            includeUsage: true
-          }
-        })
+            includeUsage: true,
+          },
+        }),
       })
     } else {
       return new ChatOpenAI({
@@ -76,9 +76,9 @@ class LLMService {
         // Additional configuration for better llama.cpp compatibility
         ...(streaming && {
           streamOptions: {
-            includeUsage: true
-          }
-        })
+            includeUsage: true,
+          },
+        }),
       })
     }
   }
@@ -119,7 +119,7 @@ class LLMService {
     // }
     if (message.length === 0) {
       return {
-        content: []
+        content: [],
       }
     }
     const messageItems = message.map((messageItem) => {
@@ -253,16 +253,36 @@ class LLMService {
     //return model.invoke(userMessage[0].text)
     //const test = await toolModel.invoke(messages)
     //console.log(`Test result = ${test}`)
-    return agent.stream({ messages: messages }, { streamMode: ['messages', 'debug'], })
+    return agent.stream({ messages: messages }, { streamMode: ['messages', 'debug'] })
     //return toolModel.stream(messages)
   }
 
-  public static async generateImage(userMessage: string, modelName: string, count: number, width: number, height: number,
-                                    seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
-                                    samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                    vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
+  public static async generateImage(
+    userMessage: string,
+    modelName: string,
+    count: number,
+    width: number,
+    height: number,
+    seed: number,
+    format: string,
+    negativePrompt: string,
+    stepsCount: number,
+    cfgScale: number,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number
+  ) {
     const modelServer = LLMService.buildGenerate(modelName)
-    if(modelServer) {
+    if (modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
       const settings = LLMService.getSettings()
       const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/generations`
@@ -270,37 +290,81 @@ class LLMService {
         try {
           const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
           return imageResponse
-        } catch(error) {
+        } catch (error) {
           return `Internal error: ${error}`
         }
       } else {
         try {
-          const imageResponse = await RequestUtils.generateSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height,
-            seed, format, negativePrompt, stepsCount, cfgScale, samplingMethod, offloadToCPU, diffusionFA, clipOnCPU,
-            vaeTiling, flowShift, vaeOnCPU, scheduler, upscaleRepeats, controlNetCpu)
+          const imageResponse = await RequestUtils.generateSDImage(
+            serverAddress,
+            userMessage,
+            modelServer.modelId,
+            count,
+            width,
+            height,
+            seed,
+            format,
+            negativePrompt,
+            stepsCount,
+            cfgScale,
+            samplingMethod,
+            offloadToCPU,
+            diffusionFA,
+            clipOnCPU,
+            vaeTiling,
+            flowShift,
+            vaeOnCPU,
+            scheduler,
+            upscaleRepeats,
+            controlNetCpu,
+            strength,
+            controlStrength,
+          )
           return imageResponse
-        } catch(error) {
+        } catch (error) {
           return `Internal error: ${error}`
         }
       }
     } else {
-      return "Model server not found"
+      return 'Model server not found'
     }
   }
 
-  public static async editImage(userMessage: string, modelName: string, count: number, width: number, height: number,
-                                    seed: number, format: string, negativePrompt: string, stepsCount: number, cfgScale: number,
-                                    refImages: {width: number, height: number, data: string}[],
-                                    initImages: {width: number, height: number, data: string}[],
-                                endImages: {width: number, height: number, data: string}[],
-                                maskImages: {width: number, height: number, data: string}[],
-                                controlImages: {width: number, height: number, data: string}[],
-                                controlVideoImages: {width: number, height: number, data: string}[],
-                                highNoiseStepsCount: number, highNoiseCfgScale: number, framesCount: number,
-                                samplingMethod: string | undefined, offloadToCPU: boolean, diffusionFA: boolean, clipOnCPU: boolean,
-                                vaeTiling: boolean, flowShift: number | undefined, vaeOnCPU: boolean, scheduler: string | undefined, upscaleRepeats: number, controlNetCpu: boolean) {
+  public static async editImage(
+    userMessage: string,
+    modelName: string,
+    count: number,
+    width: number,
+    height: number,
+    seed: number,
+    format: string,
+    negativePrompt: string,
+    stepsCount: number,
+    cfgScale: number,
+    refImages: { width: number; height: number; data: string }[],
+    initImages: { width: number; height: number; data: string }[],
+    endImages: { width: number; height: number; data: string }[],
+    maskImages: { width: number; height: number; data: string }[],
+    controlImages: { width: number; height: number; data: string }[],
+    controlVideoImages: { width: number; height: number; data: string }[],
+    highNoiseStepsCount: number,
+    highNoiseCfgScale: number,
+    framesCount: number,
+    samplingMethod: string | undefined,
+    offloadToCPU: boolean,
+    diffusionFA: boolean,
+    clipOnCPU: boolean,
+    vaeTiling: boolean,
+    flowShift: number | undefined,
+    vaeOnCPU: boolean,
+    scheduler: string | undefined,
+    upscaleRepeats: number,
+    controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number
+  ) {
     const modelServer = LLMService.buildGenerate(modelName)
-    if(modelServer) {
+    if (modelServer) {
       const isDefaultBackend = modelServer.backend === 'default'
       const settings = LLMService.getSettings()
       const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/images/edit`
@@ -308,81 +372,111 @@ class LLMService {
         try {
           const imageResponse = await RequestUtils.generateImage(serverAddress, userMessage, modelServer.modelId, count, width, height)
           return imageResponse
-        } catch(error) {
+        } catch (error) {
           return `Internal error: ${error}`
         }
       } else {
         try {
-          const imageResponse = await RequestUtils.editSDImage(serverAddress, userMessage, modelServer.modelId, count, width, height, seed,
-            format, negativePrompt, stepsCount, cfgScale, refImages, initImages, endImages, maskImages, controlImages, controlVideoImages,
-            highNoiseStepsCount, highNoiseCfgScale, framesCount, samplingMethod, offloadToCPU,
-            diffusionFA, clipOnCPU, vaeTiling, flowShift, vaeOnCPU, scheduler, upscaleRepeats, controlNetCpu)
+          const imageResponse = await RequestUtils.editSDImage(
+            serverAddress,
+            userMessage,
+            modelServer.modelId,
+            count,
+            width,
+            height,
+            seed,
+            format,
+            negativePrompt,
+            stepsCount,
+            cfgScale,
+            refImages,
+            initImages,
+            endImages,
+            maskImages,
+            controlImages,
+            controlVideoImages,
+            highNoiseStepsCount,
+            highNoiseCfgScale,
+            framesCount,
+            samplingMethod,
+            offloadToCPU,
+            diffusionFA,
+            clipOnCPU,
+            vaeTiling,
+            flowShift,
+            vaeOnCPU,
+            scheduler,
+            upscaleRepeats,
+            controlNetCpu,
+            strength,
+            controlStrength,
+          )
           return imageResponse
-        } catch(error) {
+        } catch (error) {
           return `Internal error: ${error}`
         }
       }
     } else {
-      return "Model server not found"
+      return 'Model server not found'
     }
   }
 
   public static async generateSpeech(userMessage: string, modelName: string, speed: number, format: string) {
     const modelServer = LLMService.buildGenerate(modelName)
-    if(modelServer) {
+    if (modelServer) {
       const settings = LLMService.getSettings()
       const serverAddress = `${settings.backendServerProtocol}${settings.backendServerHost}:${modelServer.port}${settings.backendServerPath}/audio/speech`
       try {
         const speechResponse = await RequestUtils.generateSpeech(serverAddress, userMessage, 'default', speed, format)
         return speechResponse
-      } catch(error) {
+      } catch (error) {
         return `Internal error: ${error}`
       }
     } else {
-      return "Model server not found"
+      return 'Model server not found'
     }
   }
 
   // OpenAI API compatible methods
   public static async openAIChatCompletions(req: {
-    model: string;
-    messages: Array<{ role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }>;
-    temperature?: number;
-    top_p?: number;
-    n?: number;
-    stream?: boolean;
-    stop?: string | Array<string>;
-    max_tokens?: number;
-    presence_penalty?: number;
-    frequency_penalty?: number;
-    logit_bias?: Record<string, number>;
-    user?: string;
+    model: string
+    messages: Array<{ role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }>
+    temperature?: number
+    top_p?: number
+    n?: number
+    stream?: boolean
+    stop?: string | Array<string>
+    max_tokens?: number
+    presence_penalty?: number
+    frequency_penalty?: number
+    logit_bias?: Record<string, number>
+    user?: string
   }) {
     // Convert OpenAI messages to internal format
-    const userMessage: ChatContent[] = [];
-    const systemMessage: ChatContent[] = [];
-    const historyMessage: ChatContent[] = [];
+    const userMessage: ChatContent[] = []
+    const systemMessage: ChatContent[] = []
+    const historyMessage: ChatContent[] = []
 
     req.messages.forEach((msg) => {
       if (msg.role === 'system') {
-        systemMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' });
+        systemMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' })
       } else if (msg.role === 'user') {
         if (typeof msg.content === 'string') {
-          userMessage.push({ type: 'text', text: msg.content });
+          userMessage.push({ type: 'text', text: msg.content })
         } else {
           // Handle multi-modal content
           msg.content.forEach((contentItem) => {
             if (contentItem.type === 'text') {
-              userMessage.push({ type: 'text', text: contentItem.text || '' });
+              userMessage.push({ type: 'text', text: contentItem.text || '' })
             } else if (contentItem.type === 'image_url') {
-              userMessage.push({ type: 'image', text: contentItem.image_url?.url || '' });
+              userMessage.push({ type: 'image', text: contentItem.image_url?.url || '' })
             }
-          });
+          })
         }
       } else if (msg.role === 'assistant') {
-        historyMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' });
+        historyMessage.push({ type: 'text', text: typeof msg.content === 'string' ? msg.content : '' })
       }
-    });
+    })
 
     if (req.stream) {
       const chatStream = await LLMService.chatStream(
@@ -395,9 +489,9 @@ class LLMService {
         [], // activatedToolPlugins
         [], // activatedMCPServices
         req.temperature,
-        req.top_p
-      );
-      return chatStream;
+        req.top_p,
+      )
+      return chatStream
     } else {
       const response = await LLMService.chat(
         userMessage,
@@ -409,51 +503,46 @@ class LLMService {
         [], // activatedToolPlugins
         [], // activatedMCPServices
         req.temperature,
-        req.top_p
-      );
-      return response;
+        req.top_p,
+      )
+      return response
     }
   }
 
   public static async openAIModels() {
-    const modelServers = ModelServerService.getModelServers();
+    const modelServers = ModelServerService.getModelServers()
     return modelServers.map((server) => ({
       id: server.modelName,
       object: 'model',
-      created: Date.now() / 1000 | 0,
+      created: (Date.now() / 1000) | 0,
       owned_by: 'organization-owner',
-      permission: [{
-        id: 'modelperm-' + SystemUtils.generateUUID(),
-        object: 'model_permission',
-        created: Date.now() / 1000 | 0,
-        allow_create_engine: false,
-        allow_sampling: true,
-        allow_logprobs: true,
-        allow_search_indices: false,
-        allow_view: true,
-        allow_fine_tuning: false,
-        organization: '*',
-        group: null,
-        is_blocking: false
-      }],
+      permission: [
+        {
+          id: 'modelperm-' + SystemUtils.generateUUID(),
+          object: 'model_permission',
+          created: (Date.now() / 1000) | 0,
+          allow_create_engine: false,
+          allow_sampling: true,
+          allow_logprobs: true,
+          allow_search_indices: false,
+          allow_view: true,
+          allow_fine_tuning: false,
+          organization: '*',
+          group: null,
+          is_blocking: false,
+        },
+      ],
       root: server.modelName,
-      parent: null
-    }));
+      parent: null,
+    }))
   }
 
-  public static async openAIImageGenerations(req: {
-    model: string;
-    prompt: string;
-    n?: number;
-    size?: string;
-    response_format?: string;
-    user?: string;
-  }) {
+  public static async openAIImageGenerations(req: { model: string; prompt: string; n?: number; size?: string; response_format?: string; user?: string }) {
     // Convert OpenAI parameters to internal format
-    const count = req.n || 1;
-    const [width, height] = req.size ? req.size.split('x').map(Number) : [1024, 1024];
-    const format = req.response_format === 'url' ? 'url' : 'b64_json';
-    
+    const count = req.n || 1
+    const [width, height] = req.size ? req.size.split('x').map(Number) : [1024, 1024]
+    const format = req.response_format === 'url' ? 'url' : 'b64_json'
+
     // Use existing generateImage method
     const result = await LLMService.generateImage(
       req.prompt,
@@ -462,68 +551,54 @@ class LLMService {
       width,
       height,
       0, // seed
-      'png' // format
-    );
-    
-    return result;
+      'png', // format
+    )
+
+    return result
   }
 
-  public static async openAITextToSpeech(req: {
-    model: string;
-    input: string;
-    voice?: string;
-    response_format?: string;
-    speed?: number;
-  }) {
+  public static async openAITextToSpeech(req: { model: string; input: string; voice?: string; response_format?: string; speed?: number }) {
     // Convert OpenAI parameters to internal format
-    const format = req.response_format || 'mp3';
-    const speed = req.speed || 1.0;
-    
+    const format = req.response_format || 'mp3'
+    const speed = req.speed || 1.0
+
     // Use existing generateSpeech method
-    const result = await LLMService.generateSpeech(
-      req.input,
-      req.model,
-      speed,
-      format
-    );
-    
-    return result;
+    const result = await LLMService.generateSpeech(req.input, req.model, speed, format)
+
+    return result
   }
 
   public static async openAIAudioTranscriptions(req: any) {
     // For now, return a simple response as we don't have full Whisper implementation
     return {
-      text: 'This is a placeholder response for audio transcription. Full implementation needed.'
-    };
+      text: 'This is a placeholder response for audio transcription. Full implementation needed.',
+    }
   }
 
   public static async openAIAudioTranslations(req: any) {
     // For now, return a simple response as we don't have full Whisper implementation
     return {
-      text: 'This is a placeholder response for audio translation. Full implementation needed.'
-    };
+      text: 'This is a placeholder response for audio translation. Full implementation needed.',
+    }
   }
 
-  public static async openAIEmbeddings(req: {
-    model: string;
-    input: string | Array<string>;
-    encoding_format?: string;
-    user?: string;
-  }) {
+  public static async openAIEmbeddings(req: { model: string; input: string | Array<string>; encoding_format?: string; user?: string }) {
     // For now, return a placeholder response as we don't have full embeddings implementation
-    const texts = Array.isArray(req.input) ? req.input : [req.input];
+    const texts = Array.isArray(req.input) ? req.input : [req.input]
     return {
       object: 'list',
       data: texts.map((text, index) => ({
         object: 'embedding',
         index,
-        embedding: Array(1536).fill(0).map(() => Math.random() * 2 - 1), // Random embedding for placeholder
+        embedding: Array(1536)
+          .fill(0)
+          .map(() => Math.random() * 2 - 1), // Random embedding for placeholder
         usage: {
           prompt_tokens: text.length,
-          total_tokens: text.length
-        }
-      }))
-    };
+          total_tokens: text.length,
+        },
+      })),
+    }
   }
 }
 
@@ -550,42 +625,43 @@ export const chatService = new Elysia()
                 body.activatedToolPlugins,
                 body.activatedMCPServices,
                 body.temperature,
-                body.topN
+                body.topN,
               )
               //Logger.info(`Chat stream is created`)
-              
+
               // Track cumulative usage for streaming
               let cumulativeUsage = {
                 inputTokens: 0,
                 outputTokens: 0,
-                totalTokens: 0
+                totalTokens: 0,
               }
-              
+
               for await (const [mode, chunk] of chatStream) {
                 //Logger.info(`${chunk.content}  -  ${chunk.response_metadata}`)
                 const id = SystemUtils.generateUUID()
                 const event = 'Chat Event'
-                 console.log(`CHUNK = ${JSON.stringify(chunk)}`)
-                 //console.log(`METADATA = ${JSON.stringify(metadata)}`)
-                 //console.log(`content = ${JSON.stringify(chunk.content)}`)
-                 //console.log(`content = ${chunk.content ? chunk.content.toString() : chunk.content}`)
+                console.log(`CHUNK = ${JSON.stringify(chunk)}`)
+                //console.log(`METADATA = ${JSON.stringify(metadata)}`)
+                //console.log(`content = ${JSON.stringify(chunk.content)}`)
+                //console.log(`content = ${chunk.content ? chunk.content.toString() : chunk.content}`)
                 const output: Chunk = {
                   content: '',
                   sourceType: 'ai',
-                  success: true
+                  success: true,
                 }
-                let message = chunk[0];
-                if(mode === 'debug') {
+                let message = chunk[0]
+                if (mode === 'debug') {
                   //Sometimes token usages are here. It is for llama.cpp & Qwen-0.6B-GGUF right now. We skip if it already generated to avoid duplicate output
-                  if(chunk.payload?.result?.messages?.length > 0 && !cumulativeUsage.totalTokens) {
+                  if (chunk.payload?.result?.messages?.length > 0 && !cumulativeUsage.totalTokens) {
                     message = chunk.payload.result.messages[0]
                   } else {
                     continue
                   }
-                } if(mode === 'messages' && chunk.length >= 2) {
+                }
+                if (mode === 'messages' && chunk.length >= 2) {
                   //Sometimes token usages are here. It is for mistral.rs & Qwen-0.6B
-                  output.content = message.content.toString();
-                  output.sourceType = message.type;
+                  output.content = message.content.toString()
+                  output.sourceType = message.type
                 }
                 if (message.lc_kwargs.tool_call_chunks) {
                   output.toolCallChunks = message.lc_kwargs.tool_call_chunks
@@ -602,10 +678,10 @@ export const chatService = new Elysia()
                     systemFingerprint: message.response_metadata.system_fingerprint,
                   }
                 }
-                
+
                 // Handle usage metadata from multiple possible sources
                 let usageFound = false
-                
+
                 // Try message.usage_metadata first (LangChain v1.x standard)
                 if (message.usage_metadata?.total_tokens) {
                   output.usageMetadata = {
@@ -616,7 +692,7 @@ export const chatService = new Elysia()
                   cumulativeUsage = output.usageMetadata
                   usageFound = true
                 }
-                
+
                 // Try chunk.response_metadata.usage (OpenAI format)
                 if (!usageFound && message.response_metadata.usage) {
                   output.usageMetadata = {
@@ -627,18 +703,18 @@ export const chatService = new Elysia()
                   cumulativeUsage = output.usageMetadata
                   usageFound = true
                 }
-                
+
                 // For llama.cpp streaming, usage might only be available in the final chunk
                 // If this is the final chunk (has finish_reason) and we have cumulative usage, include it
                 if (!usageFound && message.response_metadata?.finish_reason && cumulativeUsage.totalTokens > 0) {
                   output.usageMetadata = cumulativeUsage
                 }
-                
+
                 // If no usage in this chunk but we have cumulative usage from previous chunks, include it
                 if (!usageFound && cumulativeUsage.totalTokens > 0) {
                   output.usageMetadata = cumulativeUsage
                 }
-                
+
                 const data = `data: ${JSON.stringify(output)}\nid:${id}\nevent:${event}\n\n`
                 //Logger.info(data)
                 controller.enqueue(new TextEncoder().encode(data))
@@ -675,7 +751,7 @@ export const chatService = new Elysia()
           body.activatedToolPlugins,
           body.activatedMCPServices,
           body.temperature,
-          body.topN
+          body.topN,
         )
         const output: Chunk = {
           content: response.content.toString(),
@@ -727,11 +803,31 @@ export const chatService = new Elysia()
     '/image',
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
-      const imageResponse = await LLMService.generateImage(body.userMessage, body.modelName,
-        body.count, body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale,
-        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift,
-        body.vaeOnCPU, body.scheduler, body.upscaleRepeats, body.controlNetCpu)
-      if(typeof imageResponse !== 'string') {
+      const imageResponse = await LLMService.generateImage(
+        body.userMessage,
+        body.modelName,
+        body.count,
+        body.width,
+        body.height,
+        body.seed,
+        body.format,
+        body.negativePrompt,
+        body.stepsCount,
+        body.cfgScale,
+        body.samplingMethod,
+        body.offloadToCPU,
+        body.diffusionFA,
+        body.clipOnCPU,
+        body.vaeTiling,
+        body.flowShift,
+        body.vaeOnCPU,
+        body.scheduler,
+        body.upscaleRepeats,
+        body.controlNetCpu,
+        body.strength,
+        body.controlStrength,
+      )
+      if (typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
           const data = imageResponse.data.data.map((item: any) => item.b64_json)
@@ -771,6 +867,8 @@ export const chatService = new Elysia()
         scheduler: t.Optional(t.String()),
         upscaleRepeats: t.Number(),
         controlNetCpu: t.Boolean(),
+        strength: t.Number(),
+        controlStrength: t.Number(),
       }),
     },
   )
@@ -778,13 +876,40 @@ export const chatService = new Elysia()
     '/image-edit',
     async ({ body, store: chatData, set }) => {
       set.headers['content-type'] = 'text/plain; charset=UTF-8'
-      const imageResponse = await LLMService.editImage(body.userMessage, body.modelName, body.count,
-        body.width, body.height, body.seed, body.format, body.negativePrompt, body.stepsCount, body.cfgScale,
-        body.refImages, body.initImages, body.endImages,body.maskImages,body.controlImages,body.controlVideoImages,
-        body.highNoiseStepsCount, body.highNoiseCfgScale, body.framesCount,
-        body.samplingMethod, body.offloadToCPU, body.diffusionFA, body.clipOnCPU, body.vaeTiling, body.flowShift,
-        body.vaeOnCPU, body.scheduler, body.upscaleRepeats, body.controlNetCpu)
-      if(typeof imageResponse !== 'string') {
+      const imageResponse = await LLMService.editImage(
+        body.userMessage,
+        body.modelName,
+        body.count,
+        body.width,
+        body.height,
+        body.seed,
+        body.format,
+        body.negativePrompt,
+        body.stepsCount,
+        body.cfgScale,
+        body.refImages,
+        body.initImages,
+        body.endImages,
+        body.maskImages,
+        body.controlImages,
+        body.controlVideoImages,
+        body.highNoiseStepsCount,
+        body.highNoiseCfgScale,
+        body.framesCount,
+        body.samplingMethod,
+        body.offloadToCPU,
+        body.diffusionFA,
+        body.clipOnCPU,
+        body.vaeTiling,
+        body.flowShift,
+        body.vaeOnCPU,
+        body.scheduler,
+        body.upscaleRepeats,
+        body.controlNetCpu,
+        body.strength,
+        body.controlStrength,
+      )
+      if (typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
           // deno-lint-ignore no-explicit-any
           const data = imageResponse.data.data.map((item: any) => item.b64_json)
@@ -814,36 +939,48 @@ export const chatService = new Elysia()
         negativePrompt: t.String(),
         stepsCount: t.Number(),
         cfgScale: t.Number(),
-        refImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
-        initImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
-        endImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
-        maskImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
-        controlImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
-        controlVideoImages: t.Array(t.Object({
-          width: t.Number(),
-          height: t.Number(),
-          data: t.String()
-        })),
+        refImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
+        initImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
+        endImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
+        maskImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
+        controlImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
+        controlVideoImages: t.Array(
+          t.Object({
+            width: t.Number(),
+            height: t.Number(),
+            data: t.String(),
+          }),
+        ),
         highNoiseStepsCount: t.Number(),
         highNoiseCfgScale: t.Number(),
         framesCount: t.Number(),
@@ -857,6 +994,8 @@ export const chatService = new Elysia()
         scheduler: t.Optional(t.String()),
         upscaleRepeats: t.Number(),
         controlNetCpu: t.Boolean(),
+        strength: t.Number(),
+        controlStrength: t.Number(),
       }),
     },
   )
@@ -864,7 +1003,7 @@ export const chatService = new Elysia()
     '/speech',
     async ({ body, store: chatData, set }) => {
       const imageResponse = await LLMService.generateSpeech(body.userMessage, body.modelName, body.speed, body.format)
-      if(typeof imageResponse !== 'string') {
+      if (typeof imageResponse !== 'string') {
         if (imageResponse.status === 200) {
           const base64Data = CommonUtils.arrayBufferToBase64(imageResponse.data)
           return SystemUtils.buildResponse(true, `data:audio/${body.format};base64,${base64Data}`)
@@ -885,17 +1024,14 @@ export const chatService = new Elysia()
     },
   )
   // OpenAI API compatible endpoints
-  .get(
-    '/v1/models',
-    async ({ set }) => {
-      set.headers['content-type'] = 'application/json; charset=UTF-8'
-      const models = await LLMService.openAIModels()
-      return {
-        object: 'list',
-        data: models
-      }
+  .get('/v1/models', async ({ set }) => {
+    set.headers['content-type'] = 'application/json; charset=UTF-8'
+    const models = await LLMService.openAIModels()
+    return {
+      object: 'list',
+      data: models,
     }
-  )
+  })
   .post(
     '/v1/chat/completions',
     async ({ body, set }) => {
@@ -903,7 +1039,7 @@ export const chatService = new Elysia()
         set.headers['content-type'] = 'text/event-stream; charset=UTF-8'
         set.headers['Cache-Control'] = 'no-cache'
         set.headers['Connection'] = 'keep-alive'
-        
+
         const sseStream = new ReadableStream({
           async cancel(reason) {
             Logger.warn(`OpenAI chat stream is cancelled: ${reason}`)
@@ -912,52 +1048,56 @@ export const chatService = new Elysia()
             try {
               const chatStream = await LLMService.openAIChatCompletions(body)
               const id = `chatcmpl-${SystemUtils.generateUUID()}`
-              const created = Date.now() / 1000 | 0
-              
+              const created = (Date.now() / 1000) | 0
+
               // Track cumulative usage for OpenAI streaming
               let cumulativeUsage = {
                 prompt_tokens: 0,
                 completion_tokens: 0,
-                total_tokens: 0
+                total_tokens: 0,
               }
-              
+
               for await (const [chunk, metadata] of chatStream) {
                 const content = chunk.content.toString()
                 const finishReason = chunk.response_metadata?.finish_reason
-                
+
                 // Extract usage information from chunk
                 let usage = null
                 if (chunk.usage_metadata?.total_tokens) {
                   usage = {
                     prompt_tokens: chunk.usage_metadata.input_tokens,
                     completion_tokens: chunk.usage_metadata.output_tokens,
-                    total_tokens: chunk.usage_metadata.total_tokens
+                    total_tokens: chunk.usage_metadata.total_tokens,
                   }
                   cumulativeUsage = usage
                 } else if (chunk.response_metadata?.usage) {
                   usage = chunk.response_metadata.usage
                   cumulativeUsage = usage
                 }
-                
+
                 const eventData = {
                   id,
                   object: 'chat.completion.chunk',
                   created,
                   model: body.model,
-                  choices: [{
-                    index: 0,
-                    delta: finishReason ? {} : {
-                      role: 'assistant',
-                      content: content
+                  choices: [
+                    {
+                      index: 0,
+                      delta: finishReason
+                        ? {}
+                        : {
+                            role: 'assistant',
+                            content: content,
+                          },
+                      finish_reason: finishReason || null,
                     },
-                    finish_reason: finishReason || null
-                  }],
+                  ],
                   // Include usage in streaming response if available
-                  ...(usage && { usage })
+                  ...(usage && { usage }),
                 }
-                
+
                 controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(eventData)}\n\n`))
-                
+
                 if (finishReason) {
                   // Send final chunk with cumulative usage if not already included
                   if (!usage && cumulativeUsage.total_tokens > 0) {
@@ -966,19 +1106,21 @@ export const chatService = new Elysia()
                       object: 'chat.completion.chunk',
                       created,
                       model: body.model,
-                      choices: [{
-                        index: 0,
-                        delta: {},
-                        finish_reason: finishReason
-                      }],
-                      usage: cumulativeUsage
+                      choices: [
+                        {
+                          index: 0,
+                          delta: {},
+                          finish_reason: finishReason,
+                        },
+                      ],
+                      usage: cumulativeUsage,
                     }
                     controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(finalEventData)}\n\n`))
                   }
                   break
                 }
               }
-              
+
               controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
             } catch (error) {
               Logger.error(`OpenAI chat error: ${error}`)
@@ -987,55 +1129,68 @@ export const chatService = new Elysia()
                   message: error instanceof Error ? error.message : 'An error occurred',
                   type: 'server_error',
                   param: null,
-                  code: null
-                }
+                  code: null,
+                },
               }
               controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(errorData)}\n\n`))
             } finally {
               controller.close()
             }
-          }
+          },
         })
-        
+
         return new Response(sseStream)
       } else {
         set.headers['content-type'] = 'application/json; charset=UTF-8'
         const response = await LLMService.openAIChatCompletions(body)
-        
+
         return {
           id: `chatcmpl-${SystemUtils.generateUUID()}`,
           object: 'chat.completion',
-          created: Date.now() / 1000 | 0,
+          created: (Date.now() / 1000) | 0,
           model: body.model,
-          choices: [{
-            index: 0,
-            message: {
-              role: 'assistant',
-              content: response.content.toString()
+          choices: [
+            {
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: response.content.toString(),
+              },
+              finish_reason: response.response_metadata?.finish_reason || 'stop',
             },
-            finish_reason: response.response_metadata?.finish_reason || 'stop'
-          }],
-          usage: response.usage_metadata ? {
-            prompt_tokens: response.usage_metadata.input_tokens,
-            completion_tokens: response.usage_metadata.output_tokens,
-            total_tokens: response.usage_metadata.total_tokens
-          } : undefined
+          ],
+          usage: response.usage_metadata
+            ? {
+                prompt_tokens: response.usage_metadata.input_tokens,
+                completion_tokens: response.usage_metadata.output_tokens,
+                total_tokens: response.usage_metadata.total_tokens,
+              }
+            : undefined,
         }
       }
     },
     {
       body: t.Object({
         model: t.String(),
-        messages: t.Array(t.Object({
-          role: t.String(),
-          content: t.Union([t.String(), t.Array(t.Object({
-            type: t.String(),
-            text: t.Optional(t.String()),
-            image_url: t.Optional(t.Object({
-              url: t.String()
-            }))
-          }))])
-        })),
+        messages: t.Array(
+          t.Object({
+            role: t.String(),
+            content: t.Union([
+              t.String(),
+              t.Array(
+                t.Object({
+                  type: t.String(),
+                  text: t.Optional(t.String()),
+                  image_url: t.Optional(
+                    t.Object({
+                      url: t.String(),
+                    }),
+                  ),
+                }),
+              ),
+            ]),
+          }),
+        ),
         temperature: t.Optional(t.Number()),
         top_p: t.Optional(t.Number()),
         n: t.Optional(t.Number()),
@@ -1045,16 +1200,16 @@ export const chatService = new Elysia()
         presence_penalty: t.Optional(t.Number()),
         frequency_penalty: t.Optional(t.Number()),
         logit_bias: t.Optional(t.Record(t.String(), t.Number())),
-        user: t.Optional(t.String())
-      })
-    }
+        user: t.Optional(t.String()),
+      }),
+    },
   )
   .post(
     '/v1/images/generations',
     async ({ body, set }) => {
       set.headers['content-type'] = 'application/json; charset=UTF-8'
       const result = await LLMService.openAIImageGenerations(body)
-      
+
       if (typeof result === 'string') {
         // Error case
         return {
@@ -1062,22 +1217,22 @@ export const chatService = new Elysia()
             message: result,
             type: 'server_error',
             param: null,
-            code: null
-          }
+            code: null,
+          },
         }
       }
-      
+
       // Format response according to OpenAI API
-      const created = Date.now() / 1000 | 0
+      const created = (Date.now() / 1000) | 0
       const images = (result.data.data || result.data).map((item: any, index: number) => ({
         revised_prompt: body.prompt,
         url: item.url,
-        b64_json: item.b64_json
+        b64_json: item.b64_json,
       }))
-      
+
       return {
         created,
-        data: images
+        data: images,
       }
     },
     {
@@ -1087,15 +1242,15 @@ export const chatService = new Elysia()
         n: t.Optional(t.Number()),
         size: t.Optional(t.String()),
         response_format: t.Optional(t.String()),
-        user: t.Optional(t.String())
-      })
-    }
+        user: t.Optional(t.String()),
+      }),
+    },
   )
   .post(
     '/v1/audio/speech',
     async ({ body, set }) => {
       const result = await LLMService.openAITextToSpeech(body)
-      
+
       if (typeof result === 'string') {
         // Error case
         set.headers['content-type'] = 'application/json; charset=UTF-8'
@@ -1104,11 +1259,11 @@ export const chatService = new Elysia()
             message: result,
             type: 'server_error',
             param: null,
-            code: null
-          }
+            code: null,
+          },
         }
       }
-      
+
       // Return binary audio data
       set.headers['content-type'] = `audio/${body.response_format || 'mp3'}`
       return new Response(result.data)
@@ -1119,9 +1274,9 @@ export const chatService = new Elysia()
         input: t.String(),
         voice: t.Optional(t.String()),
         response_format: t.Optional(t.String()),
-        speed: t.Optional(t.Number())
-      })
-    }
+        speed: t.Optional(t.Number()),
+      }),
+    },
   )
   // .post(
   //   '/v1/audio/transcriptions',

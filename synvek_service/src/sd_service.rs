@@ -90,6 +90,8 @@ pub struct GenerationArgs {
     pub scheduler: Option<String>,
     pub upscale_repeats: i32,
     pub control_net_cpu: bool,
+    pub strength: f32,
+    pub control_strength: f32,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -513,8 +515,12 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 }
                 start_args.push(String::from("--lora-model-dir"));
                 start_args.push(lora_dir.to_str().unwrap().to_string());
-                start_args.push(String::from("--control-net"));
-                start_args.push(control_net_dir.to_str().unwrap().to_string());
+                if generation_args.control_images.len() > 0 {
+                    start_args.push(String::from("--control-net"));
+                    start_args.push(control_net_dir.to_str().unwrap().to_string());
+                    start_args.push(String::from("--control-strength"));
+                    start_args.push(generation_args.control_strength.to_string());
+                }
                 start_args.push(String::from("--upscale-model"));
                 start_args.push(upscale_dir.to_str().unwrap().to_string());
                 start_args.push(String::from("--embd-dir"));
@@ -525,6 +531,8 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 start_args.push(String::from(generation_args.steps_count.to_string()));
                 start_args.push(String::from("--batch-count"));
                 start_args.push(String::from(generation_args.n.to_string()));
+                start_args.push(String::from("--strength"));
+                start_args.push(generation_args.strength.to_string());
                 start_args.push(String::from("-p"));
                 start_args.push(generation_args.prompt.to_string());
                 start_args.push(String::from("--cfg-scale"));

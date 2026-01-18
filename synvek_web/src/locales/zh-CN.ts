@@ -147,6 +147,8 @@ export default {
   'image-generation-view.setting-property-control-video-images': '控制视频图像',
   'image-generation-view.setting-property-control-net-cpu': '强制ControlNet模型在CPU上运行',
   'image-generation-view.setting-property-control-net-cpu-tooltip': '将ControlNet模型的推理计算从GPU转移到CPU, 减少GPU显存占用',
+  'image-generation-view.setting-property-control-strength': '控制网强度',
+  'image-generation-view.setting-property-control-strength-tooltip': '调节控制网对最终生成图片的影响强度。它是一个介于 0.0 到 1.0​ 之间的浮点数.',
   'image-generation-view.setting-property-count': '数量',
   'image-generation-view.setting-property-custom-height': '自定义高度',
   'image-generation-view.setting-property-custom-width': '自定义宽度',
@@ -184,6 +186,8 @@ export default {
   'image-generation-view.setting-property-size': '尺寸',
   'image-generation-view.setting-property-steps-count': '采样步数',
   'image-generation-view.setting-property-steps-count-tooltip': '仅当模型支持时可用,当前模型默认值:',
+  'image-generation-view.setting-property-strength': '强度',
+  'image-generation-view.setting-property-strength-tooltip': '决定在图像到图像生成中输入图片应该在多大程度上被保留或改变, 一个介于0.0到1.0之间的浮点数.',
   'image-generation-view.setting-property-upscale-repeats': '超分辨率（放大）的重复次数',
   'image-generation-view.setting-property-upscale-repeats-tooltip':
     'Upscale Repeats 应用超分辨率模型的次数。每次重复都会进一步放大图像并增强细节，适合需要极高分辨率或精细细节的场景',

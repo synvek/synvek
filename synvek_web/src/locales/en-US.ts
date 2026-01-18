@@ -148,6 +148,9 @@ export default {
   'image-generation-view.setting-property-control-video-images': 'Control Video Image',
   'image-generation-view.setting-property-control-net-cpu': 'Control Net on CPU',
   'image-generation-view.setting-property-control-net-cpu-tooltip': 'Moves ControlNet model inference from GPU to CPU， Reduces GPU VRAM usage',
+  'image-generation-view.setting-property-control-strength': 'Control Strength',
+  'image-generation-view.setting-property-control-strength-tooltip':
+    'To adjust the influence strength of the ControlNet on the final generated image. It is a floating-point number between 0.0 and 1.0.',
   'image-generation-view.setting-property-count': 'Count',
   'image-generation-view.setting-property-custom-height': 'Custom Height',
   'image-generation-view.setting-property-custom-width': 'Custom Width',
@@ -186,6 +189,9 @@ export default {
   'image-generation-view.setting-property-size': 'Size',
   'image-generation-view.setting-property-steps-count': 'Steps Count',
   'image-generation-view.setting-property-steps-count-tooltip': 'Only available if supported, default value for current model:',
+  'image-generation-view.setting-property-strength': 'Strength',
+  'image-generation-view.setting-property-strength-tooltip':
+    'To determine to what extent your input image should be preserved or altered in an image-to-image generation task. It is also a floating-point number between 0.0 and 1.0.',
   'image-generation-view.setting-property-upscale-repeats': 'Upscale Repeats',
   'image-generation-view.setting-property-upscale-repeats-tooltip':
     'This parameter determines how many times the upscaling model is applied. Each repetition further enlarges the image and enhances details, suitable for scenarios requiring extremely high resolution or fine details.',

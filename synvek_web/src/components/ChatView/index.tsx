@@ -163,6 +163,10 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
   const defaultUpscaleRepeats = oldUpscaleRepeats ? Number.parseInt(oldUpscaleRepeats) : Consts.CHAT_IMAGE_UPSCALE_REPEATS_DEFAULT
   const oldControlNetCPU = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CONTROL_NET_CPU)
   const defaultControlNetCPU = oldControlNetCPU ? oldControlNetCPU.toUpperCase() === 'TRUE' : Consts.CHAT_IMAGE_CONTROL_NET_CPU_DEFAULT
+  const oldStrengths = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_STRENGTH)
+  const defaultStrength = oldStrengths ? Number.parseFloat(oldStrengths) : Consts.CHAT_IMAGE_STRENGTH_DEFAULT
+  const oldControlStrengths = localStorage.getItem(Consts.LOCAL_STORAGE_CHAT_IMAGE_CONTROL_STRENGTH)
+  const defaultControlStrength = oldControlStrengths ? Number.parseFloat(oldControlStrengths) : Consts.CHAT_IMAGE_CONTROL_STRENGTH_DEFAULT
 
   useEffect(() => {
     if (!initRef.current) {
@@ -865,6 +869,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultScheduler === 'auto' ? undefined : defaultScheduler,
             defaultUpscaleRepeats,
             defaultControlNetCPU,
+            defaultStrength,
+            defaultControlStrength,
           )
         : await RequestUtils.generateImage(
             chatContent[0].text,
@@ -887,6 +893,8 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultScheduler === 'auto' ? undefined : defaultScheduler,
             defaultUpscaleRepeats,
             defaultControlNetCPU,
+            defaultStrength,
+            defaultControlStrength,
           )
     await WorkspaceUtils.handleRequest(
       messageApi,

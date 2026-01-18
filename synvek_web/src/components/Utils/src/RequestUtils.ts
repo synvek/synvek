@@ -486,6 +486,8 @@ export interface GenerationContext {
   scheduler: string | undefined
   upscaleRepeats: number
   controlNetCPU: boolean
+  strength: number
+  controlStrength: number
 }
 
 export interface Generation {
@@ -717,6 +719,8 @@ export class RequestUtils {
     scheduler: string | undefined,
     upscaleRepeats: number,
     controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number,
   ) {
     const data = {
       userMessage: userMessage,
@@ -739,6 +743,8 @@ export class RequestUtils {
       scheduler: scheduler,
       upscaleRepeats: upscaleRepeats,
       controlNetCpu: controlNetCpu,
+      strength: strength,
+      controlStrength: controlStrength,
     }
     const config = {
       headers: {
@@ -778,6 +784,8 @@ export class RequestUtils {
     scheduler: string | undefined,
     upscaleRepeats: number,
     controlNetCpu: boolean,
+    strength: number,
+    controlStrength: number,
   ) {
     const data = {
       userMessage: userMessage,
@@ -809,6 +817,8 @@ export class RequestUtils {
       scheduler: scheduler,
       upscaleRepeats: upscaleRepeats,
       controlNetCpu: controlNetCpu,
+      strength: strength,
+      controlStrength: controlStrength,
     }
     const config = {
       headers: {

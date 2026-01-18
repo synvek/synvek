@@ -160,6 +160,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const [controlImageFileContentMap, setControlImageFileContentMap] = useState<Map<string, string>>(new Map())
   const [controlVideoImageFileList, setControlVideoImageFileList] = useState<UploadFile[]>([])
   const [controlVideoImageFileContentMap, setControlVideoImageFileContentMap] = useState<Map<string, string>>(new Map())
+  const oldStrengths = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_STRENGTH)
+  const defaultStrength = oldStrengths ? Number.parseFloat(oldStrengths) : Consts.IMAGE_STRENGTH_DEFAULT
+  const [strength, setStrength] = useState<number>(defaultStrength)
+  const oldControlStrengths = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CONTROL_STRENGTH)
+  const defaultControlStrength = oldControlStrengths ? Number.parseFloat(oldControlStrengths) : Consts.IMAGE_CONTROL_STRENGTH_DEFAULT
+  const [controlStrength, setControlStrength] = useState<number>(defaultControlStrength)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -388,6 +394,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               scheduler === 'auto' ? undefined : scheduler,
               upscaleRepeats,
               controlNetCPU,
+              strength,
+              controlStrength,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -410,6 +418,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               scheduler === 'auto' ? undefined : scheduler,
               upscaleRepeats,
               controlNetCPU,
+              strength,
+              controlStrength,
             )
       await WorkspaceUtils.handleRequest(
         messageApi,
@@ -732,6 +742,18 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     16: '16',
   }
 
+  const strengthMarks: SliderSingleProps['marks'] = {
+    0: '0.0',
+    0.5: '0.5',
+    1.0: '1.0',
+  }
+
+  const controlStrengthMarks: SliderSingleProps['marks'] = {
+    0: '0.0',
+    0.5: '0.5',
+    1.0: '1.0',
+  }
+
   const framesCountMarks: SliderSingleProps['marks'] = {
     5: '5',
     50: '50',
@@ -925,6 +947,16 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const handleUpScaleRepeatsChange = (value: number) => {
     setUpscaleRepeats(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_UPSCALE_REPEATS, '' + value)
+  }
+
+  const handleStrengthChange = (value: number) => {
+    setStrength(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_STRENGTH, '' + value)
+  }
+
+  const handleControlStrengthChange = (value: number) => {
+    setControlStrength(value)
+    localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_CONTROL_STRENGTH, '' + value)
   }
 
   const handleFramesCountChange = (value: number) => {
@@ -1728,6 +1760,56 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             value={upscaleRepeats}
                             marks={upscaleRepeatsMarks}
                             onChange={handleUpScaleRepeatsChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-strength'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-strength-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleStrengthChange(Consts.IMAGE_STRENGTH_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider min={0} max={1} defaultValue={strength} step={0.05} value={strength} marks={strengthMarks} onChange={handleStrengthChange} />
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-control-strength'} />
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-control-strength-tooltip' })}>
+                            <Button size={'small'} type={'text'} shape={'circle'} icon={<QuestionCircleOutlined />} />
+                          </Tooltip>
+                          <Tooltip title={intl.formatMessage({ id: 'image-generation-view.setting-property-reset' })}>
+                            <Button
+                              size={'small'}
+                              type={'text'}
+                              shape={'circle'}
+                              icon={<ReloadOutlined />}
+                              style={{ float: 'right' }}
+                              onClick={() => handleControlStrengthChange(Consts.IMAGE_CONTROL_STRENGTH_DEFAULT)}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Slider
+                            min={0}
+                            max={1.0}
+                            defaultValue={controlStrength}
+                            step={0.05}
+                            value={controlStrength}
+                            marks={controlStrengthMarks}
+                            onChange={handleControlStrengthChange}
                           />
                         </div>
                       </div>
