@@ -11,7 +11,7 @@ import styles from './index.less'
 
 const { useToken } = theme
 
-interface LocalLoraPanelProps {
+interface LocalControlNetPanelProps {
   visible: boolean
 }
 
@@ -19,7 +19,7 @@ const TAG_MIRROR = 'mirror'
 const TAG_ACCESS_TOKEN = 'access-token'
 
 const FORCE_UPDATE_INDEX = 0
-const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
+const LocalControlNetPanel: FC<LocalControlNetPanelProps> = ({ visible }) => {
   const [messageApi, contextHolder] = message.useMessage()
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
@@ -58,14 +58,18 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
       messageApi,
       fetchResponse,
       async () => {
-        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }))
+        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }))
         currentWorkspace.fetchStatusCountDown = Consts.FETCH_STATUS_COUNTDOWN
       },
       async (failure) => {
-        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }) + failure)
+        await WorkspaceUtils.showMessage(
+          messageApi,
+          'error',
+          intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }) + failure,
+        )
       },
       async (error) => {
-        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }) + error)
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }) + error)
       },
     )
     setForceUpdate(forceUpdate + 1)
@@ -77,14 +81,18 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
       messageApi,
       fetchResponse,
       async () => {
-        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }))
+        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }))
         currentWorkspace.fetchStatusCountDown = Consts.FETCH_STATUS_COUNTDOWN
       },
       async (failure) => {
-        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }) + failure)
+        await WorkspaceUtils.showMessage(
+          messageApi,
+          'error',
+          intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }) + failure,
+        )
       },
       async (error) => {
-        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-lora.message-success-request-sent' }) + error)
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.local-control-net.message-success-request-sent' }) + error)
       },
     )
     setForceUpdate(forceUpdate + 1)
@@ -94,7 +102,7 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
     setTextEditId(task.task_name)
     setTextEditContent(task.mirror ? task.mirror : '')
     setTextEditWindowVisible(true)
-    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-lora.new-mirror' }))
+    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-control-net.new-mirror' }))
     setTextEditTag(TAG_MIRROR)
   }
 
@@ -102,7 +110,7 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
     setTextEditId(task.task_name)
     setTextEditContent(task.access_token ? task.access_token : '')
     setTextEditWindowVisible(true)
-    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-lora.new-access-token' }))
+    setTextEditTitle(intl.formatMessage({ id: 'setting-view.local-control-net.new-access-token' }))
     setTextEditTag(TAG_ACCESS_TOKEN)
   }
 
@@ -168,7 +176,7 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
   }
 
   const generateModels = () => {
-    const filteredTasks = currentWorkspace.tasks.filter((task) => task.lora_model)
+    const filteredTasks = currentWorkspace.tasks.filter((task) => task.control_model)
     const modelSections: ReactNode[] = filteredTasks.map((task) => {
       let modelDownloading = false
       let modelDownloaded = true
@@ -244,40 +252,40 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
         >
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.lora-id'} />
+              <FormattedMessage id={'setting-view.local-control-net.controlNet-id'} />
             </div>
             <div>{task.model_id}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.total-size'} />
+              <FormattedMessage id={'setting-view.local-control-net.total-size'} />
             </div>
             <div>{modelTotalSizeDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.downloaded-size'} />
+              <FormattedMessage id={'setting-view.local-control-net.downloaded-size'} />
             </div>
             <div>{modelDownloadedSizeDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.status'} />
+              <FormattedMessage id={'setting-view.local-control-net.status'} />
             </div>
             <div>
               {modelDownloaded ? (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-ready' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-control-net.status-ready' })}>
                   <BulbFilled style={{ color: token.colorSuccess, fontSize: '16px' }} />
                 </Tooltip>
               ) : modelDownloading ? (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-downloading' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-control-net.status-downloading' })}>
                   <SyncOutlined spin style={{ color: token.colorPrimary, fontSize: '16px' }} />
                 </Tooltip>
               ) : (
-                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-lora.status-not-ready' })}>
+                <Tooltip title={intl.formatMessage({ id: 'setting-view.local-control-net.status-not-ready' })}>
                   <BulbFilled style={{ color: token.colorTextDisabled, fontSize: '16px' }} />
                 </Tooltip>
               )}
@@ -288,7 +296,7 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
                 style={{ marginLeft: '10px' }}
                 onClick={() => handleSuspendDownloadModelByProvider(task)}
               >
-                <FormattedMessage id={'setting-view.local-lora.suspend-downloading'} />
+                <FormattedMessage id={'setting-view.local-control-net.suspend-downloading'} />
               </Button>
               <Button
                 type={'primary'}
@@ -297,52 +305,52 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
                 style={{ marginLeft: '10px' }}
                 onClick={() => handleStartDownloadModelByProvider(task)}
               >
-                <FormattedMessage id={'setting-view.local-lora.continue-downloading'} />
+                <FormattedMessage id={'setting-view.local-control-net.continue-downloading'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.use-mirror'} />
+              <FormattedMessage id={'setting-view.local-control-net.use-mirror'} />
             </div>
             <div className={styles.localModelItemPropertyContent}>
               {task.mirror}
               <Button type={'primary'} onClick={() => handleUpdateMirror(task)}>
-                <FormattedMessage id={'setting-view.local-lora.update-mirror'} />
+                <FormattedMessage id={'setting-view.local-control-net.update-mirror'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.use-access-token'} />
+              <FormattedMessage id={'setting-view.local-control-net.use-access-token'} />
             </div>
             <div className={styles.localModelItemPropertyContent}>
               {task.access_token}
               <Button type={'primary'} onClick={() => handleUpdateAccessToken(task)}>
-                <FormattedMessage id={'setting-view.local-lora.update-access-token'} />
+                <FormattedMessage id={'setting-view.local-control-net.update-access-token'} />
               </Button>
             </div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.download-percentage'} />
+              <FormattedMessage id={'setting-view.local-control-net.download-percentage'} />
             </div>
             <div>{modelDownloadedPercent}%</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.current-downloading-speed'} />
+              <FormattedMessage id={'setting-view.local-control-net.current-downloading-speed'} />
             </div>
             <div>{modelDownloadSpeedDescription}</div>
           </div>
           <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
           <div className={styles.localModelItemPropertyContainer}>
             <div>
-              <FormattedMessage id={'setting-view.local-lora.current-downloading-remaining-time'} />
+              <FormattedMessage id={'setting-view.local-control-net.current-downloading-remaining-time'} />
             </div>
             <div>{remainingTimeDescription}</div>
           </div>
@@ -353,7 +361,7 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
   }
 
   return (
-    <div className={styles.localLoraPanel} style={{ display: visible ? 'block' : 'none' }}>
+    <div className={styles.localControlNetPanel} style={{ display: visible ? 'block' : 'none' }}>
       {contextHolder}
       <Space direction={'vertical'} size={'large'} className={styles.localModelContent} style={{ backgroundColor: 'var(--setting-background-color)' }}>
         {generateModels()}
@@ -373,4 +381,4 @@ const LocalLoraPanel: FC<LocalLoraPanelProps> = ({ visible }) => {
   )
 }
 
-export default LocalLoraPanel
+export default LocalControlNetPanel

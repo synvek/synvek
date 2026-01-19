@@ -56,6 +56,8 @@ export class Consts {
   public static SETTING_ABOUT = 'About'
   public static SETTING_LOCAL_LORA = 'LocalLora'
   public static SETTING_LORA_SEARCH = 'LoraSearch'
+  public static SETTING_LOCAL_CONTROL_NET = 'LocalControlNet'
+  public static SETTING_CONTROL_NET_SEARCH = 'ControlNetSearch'
 
   public static MODEL_SERVERS_COUNTDOWN = 10
   public static MODEL_SERVERS_COUNTER = 10

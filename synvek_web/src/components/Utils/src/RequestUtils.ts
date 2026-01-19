@@ -290,6 +290,7 @@ export interface FetchRequest {
   mirror: string | null
   access_token: string | null
   lora_model: boolean
+  control_model: boolean
 }
 
 export interface TaskItem {
@@ -316,6 +317,8 @@ export interface Task {
   private_model: boolean
   lora_model: boolean
   private_lora_model: boolean
+  control_model: boolean
+  private_control_model: boolean
 }
 
 export interface UpdateFetchRequest {
@@ -1046,6 +1049,7 @@ export class RequestUtils {
       mirror: fetchRequest.mirror,
       access_token: fetchRequest.access_token,
       lora_model: fetchRequest.lora_model,
+      control_model: fetchRequest.control_model,
     }
     const config = {
       headers: {

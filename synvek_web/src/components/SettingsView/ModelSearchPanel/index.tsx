@@ -83,6 +83,7 @@ const ModelSearchPanel: FC<ModelSearchPanelProps> = ({ visible }) => {
       mirror: mirror,
       access_token: accessToken,
       lora_model: false,
+      control_model: false,
     }
     const fetchResponse = await RequestUtils.startFetch(fetchRequest)
     await WorkspaceUtils.handleRequest(

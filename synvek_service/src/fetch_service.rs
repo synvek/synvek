@@ -93,6 +93,10 @@ pub struct Task {
     pub lora_model: bool,
     #[serde(default = "default_private_lora_model")]
     pub private_lora_model: bool,
+    #[serde(default = "default_control_model")]
+    pub control_model: bool,
+    #[serde(default = "default_private_control_model")]
+    pub private_control_model: bool,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -150,6 +154,14 @@ fn default_lora_model() -> bool {
 }
 
 fn default_private_lora_model() -> bool {
+    false
+}
+
+fn default_control_model() -> bool {
+    false
+}
+
+fn default_private_control_model() -> bool {
     false
 }
 
@@ -511,6 +523,8 @@ pub fn start_fetch_repo(
             private_model: false,
             lora_model: false,
             private_lora_model: false,
+            control_model: false,
+            private_control_model: false,
         };
         let fetch_repo: FetchRepo = FetchRepo {
             model_source: model_source.to_string(),
@@ -595,6 +609,8 @@ pub fn start_fetch_repo_file(
             private_model: false,
             lora_model: false,
             private_lora_model: false,
+            control_model: false,
+            private_control_model: false,
         };
         let fetch_file: FetchFile = FetchFile {
             model_source: model_source.to_string(),
@@ -1073,6 +1089,7 @@ pub fn load_local_tasks(with_private_model: bool) -> Tasks {
             if with_private_model {
                 load_local_private_tasks(&mut tasks);
                 load_local_private_lora_tasks(&mut tasks);
+                load_local_private_control_tasks(&mut tasks);
             }
             //tracing::info!("Load local tasks={:?}", tasks);
             return tasks;
@@ -1107,6 +1124,8 @@ fn load_local_private_tasks(tasks: &mut Tasks) {
             private_model: true,
             lora_model: false,
             private_lora_model: false,
+            control_model: false,
+            private_control_model: false,
         };
         tasks.tasks.push(task);
     }
@@ -1130,6 +1149,33 @@ fn load_local_private_lora_tasks(tasks: &mut Tasks) {
             private_model: false,
             lora_model: false,
             private_lora_model: true,
+            control_model: false,
+            private_control_model: false,
+        };
+        tasks.tasks.push(task);
+    }
+}
+
+fn load_local_private_control_tasks(tasks: &mut Tasks) {
+    let model_files = fetch_helper::get_private_lora_model_files();
+    for (_, element) in model_files.iter().enumerate() {
+        let task = Task {
+            task_name: element.to_string(),
+            task_items: vec![],
+            fetch_repos: vec![],
+            fetch_files: vec![],
+            model_source: "".to_string(),
+            model_id: None,
+            mirror: None,
+            access_token: None,
+            isq: None,
+            cpu: None,
+            offloaded: None,
+            private_model: false,
+            lora_model: false,
+            private_lora_model: false,
+            control_model: false,
+            private_control_model: true,
         };
         tasks.tasks.push(task);
     }

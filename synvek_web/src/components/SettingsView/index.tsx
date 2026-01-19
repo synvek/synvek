@@ -2,9 +2,11 @@
 import { FC, useEffect, useState } from 'react'
 
 import AboutPanel from '@/components/SettingsView/AboutPanel'
+import ControlNetSearchPanel from '@/components/SettingsView/ControlNetSearchPanel'
 import DataSettingsPanel from '@/components/SettingsView/DataSettingsPanel'
 import DefaultModelsPanel from '@/components/SettingsView/DefaultModelsPanel'
 import GeneralSettingsPanel from '@/components/SettingsView/GeneralSettingsPanel'
+import LocalControlNetPanel from '@/components/SettingsView/LocalControlNetPanel'
 import LocalLoraPanel from '@/components/SettingsView/LocalLoraPanel'
 import LocalModelsPanel from '@/components/SettingsView/LocalModelsPanel'
 import LoraSearchPanel from '@/components/SettingsView/LoraSearchPanel'
@@ -84,6 +86,14 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
       key: Consts.SETTING_LORA_SEARCH,
       label: intl.formatMessage({ id: 'setting-view.setting-lora-search' }),
     },
+    {
+      key: Consts.SETTING_LOCAL_CONTROL_NET,
+      label: intl.formatMessage({ id: 'setting-view.setting-local-control-net' }),
+    },
+    {
+      key: Consts.SETTING_CONTROL_NET_SEARCH,
+      label: intl.formatMessage({ id: 'setting-view.setting-control-net-search' }),
+    },
     // {
     //   key: Consts.SETTING_WEB_SEARCH,
     //   label: intl.formatMessage({ id: 'setting-view.setting-web-search' }),
@@ -132,6 +142,8 @@ const SettingsView: FC<SettingsViewProps> = ({ visible }) => {
           <WebSearchPanel visible={activeItemKey === Consts.SETTING_WEB_SEARCH} />
           <LoraSearchPanel visible={activeItemKey === Consts.SETTING_LORA_SEARCH} />
           <LocalLoraPanel visible={activeItemKey === Consts.SETTING_LOCAL_LORA} />
+          <ControlNetSearchPanel visible={activeItemKey === Consts.SETTING_CONTROL_NET_SEARCH} />
+          <LocalControlNetPanel visible={activeItemKey === Consts.SETTING_LOCAL_CONTROL_NET} />
         </div>
       </div>
     </div>

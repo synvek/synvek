@@ -32,6 +32,8 @@ pub struct StartFetchRequest {
     pub access_token: Option<String>,
     
     pub lora_model: bool,
+
+    pub control_model: bool,
 }
 
 /// Response for Start Model Server
@@ -249,6 +251,8 @@ async fn start_fetch(req: web::Json<StartFetchRequest>) -> impl Responder {
         private_model: false,
         lora_model: req.lora_model,
         private_lora_model: false,
+        control_model: req.control_model,
+        private_control_model: false,
     };
     if task.fetch_repos.len() > 0 {
         task.fetch_repos.iter_mut().for_each(|fetch_repo| {

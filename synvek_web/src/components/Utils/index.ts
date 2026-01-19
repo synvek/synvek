@@ -13,6 +13,8 @@ import type {
   UsageMetadata,
   User,
 } from './src/Common'
+import type { ControlNetTarget } from './src/ControlNetProviders'
+import type { LoraTarget } from './src/LoraProviders'
 import type { ModelCategory, ModelFile, ModelOption, ModelProvider, ModelProviderStatus, ModelRepo, ModelType } from './src/ModelProviders'
 import type {
   Attachment,
@@ -56,12 +58,14 @@ import type {
 } from './src/RequestUtils'
 export * from './src/BackgroundEnhancement'
 export { Consts } from './src/Consts'
+export { controlNetProviders } from './src/ControlNetProviders'
 export { CurrentWorkspace, WorkMode } from './src/CurrentWorkspace'
 export * from './src/EnhancedIcon'
 export { useGlobalContext } from './src/GlobalContext'
 export * from './src/IconUtils'
 export { Knowledge } from './src/Knowledge'
 export * from './src/LoadingStates'
+export { loraProviders } from './src/LoraProviders'
 export { modelProviders } from './src/ModelProviders'
 export { Provider } from './src/Provider'
 export { ProviderUtils } from './src/ProviderUtils'
@@ -77,6 +81,7 @@ export {
   ChatContent,
   ChatMessage,
   Chunk,
+  ControlNetTarget,
   Conversion,
   ConversionData,
   ConversionTreeNode,
@@ -90,6 +95,7 @@ export {
   InvalidToolCall,
   KnowledgeListType,
   ListFetchData,
+  LoraTarget,
   MCPServer,
   Message,
   Model,

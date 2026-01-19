@@ -2,8 +2,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react'
 
 import LoraFormWindow from '@/components/LoraFormWindow'
-import { Consts, RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
-import { loraProviders, LoraTarget } from '@/components/Utils/src/LoraProvider'
+import { Consts, loraProviders, LoraTarget, RequestUtils, useGlobalContext, WorkspaceUtils } from '@/components/Utils'
 import { FetchFile, FetchRepo, FetchRequest } from '@/components/Utils/src/RequestUtils'
 import { FormattedMessage, useIntl } from '@@/exports'
 import { DownloadOutlined } from '@ant-design/icons'
@@ -73,6 +72,7 @@ const LoraSearchPanel: FC<LoraSearchPanelProps> = ({ visible }) => {
       mirror: mirror,
       access_token: accessToken,
       lora_model: true,
+      control_model: false,
     }
     const fetchResponse = await RequestUtils.startFetch(fetchRequest)
     await WorkspaceUtils.handleRequest(
