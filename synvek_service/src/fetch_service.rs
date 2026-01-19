@@ -1188,7 +1188,7 @@ fn load_local_private_lora_tasks(tasks: &mut Tasks) {
 }
 
 fn load_local_private_control_tasks(tasks: &mut Tasks) {
-    let model_files = fetch_helper::get_private_lora_model_files();
+    let model_files = fetch_helper::get_private_control_net_model_files();
     for (_, element) in model_files.iter().enumerate() {
         let task = Task {
             task_name: element.to_string(),

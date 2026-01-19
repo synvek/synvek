@@ -859,9 +859,14 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
       .map((task) => {
         return (
-          <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
-            {task.task_name}
-          </Text>
+          <Tooltip
+            key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}
+            title={task.task_items[0].file_name}
+          >
+            <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
+              {task.task_name}
+            </Text>
+          </Tooltip>
         )
       })
     const private_loras = currentWorkspace.tasks
@@ -882,9 +887,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
       .map((task) => {
         return (
-          <Text code key={`${task.task_name}`}>
-            {task.task_name}
-          </Text>
+          <Tooltip key={`${task.task_name}`} title={task.task_name}>
+            <Text code key={`${task.task_name}`}>
+              {task.task_name}
+            </Text>
+          </Tooltip>
         )
       })
     return (
@@ -906,9 +913,14 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
       .map((task) => {
         return (
-          <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
-            {task.task_name}
-          </Text>
+          <Tooltip
+            key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}
+            title={task.task_items[0].file_name}
+          >
+            <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
+              {task.task_name}
+            </Text>
+          </Tooltip>
         )
       })
     const privateControlNets = currentWorkspace.tasks
@@ -929,9 +941,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
       .map((task) => {
         return (
-          <Text code key={`${task.task_name}`}>
-            {task.task_name}
-          </Text>
+          <Tooltip key={`${task.task_name}`} title={task.task_name}>
+            <Text code key={`${task.task_name}`}>
+              {task.task_name}
+            </Text>
+          </Tooltip>
         )
       })
     return (
