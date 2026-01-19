@@ -79,18 +79,18 @@ const ControlNetSearchPanel: FC<ControlNetSearchPanelProps> = ({ visible }) => {
       messageApi,
       fetchResponse,
       async () => {
-        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.control-nNet-search.message-start-fetch-success' }))
+        await WorkspaceUtils.showMessage(messageApi, 'success', intl.formatMessage({ id: 'setting-view.control-net-search.message-start-fetch-success' }))
         currentWorkspace.triggerMCPServersRefreshed()
       },
       async (failure) => {
         await WorkspaceUtils.showMessage(
           messageApi,
           'warning',
-          intl.formatMessage({ id: 'setting-view.control-nNet-search.message-start-fetch-failure' }) + failure,
+          intl.formatMessage({ id: 'setting-view.control-net-search.message-start-fetch-failure' }) + failure,
         )
       },
       async (error) => {
-        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.control-nNet-search.message-start-fetch-error' }) + error)
+        await WorkspaceUtils.showMessage(messageApi, 'error', intl.formatMessage({ id: 'setting-view.control-net-search.message-start-fetch-error' }) + error)
       },
     )
     setControlNetFormWindowVisible(false)
@@ -161,27 +161,27 @@ const ControlNetSearchPanel: FC<ControlNetSearchPanelProps> = ({ visible }) => {
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.controlNetSearchPanelPropertyContainer}>
                   <div>
-                    <FormattedMessage id={'setting-view.control-nNet-search.control-nNet-source'} />
+                    <FormattedMessage id={'setting-view.control-net-search.control-net-source'} />
                   </div>
                   <div>{controlNetProvider.controlNetSource}</div>
                 </div>
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.controlNetSearchPanelPropertyContainer}>
                   <div>
-                    <FormattedMessage id={'setting-view.control-nNet-search.control-nNet-creator'} />
+                    <FormattedMessage id={'setting-view.control-net-search.control-net-creator'} />
                   </div>
                   <div>{controlNetProvider.controlNetCreator}</div>
                 </div>
                 <Divider type={'horizontal'} style={{ margin: '8px 0' }} />
                 <div className={styles.controlNetSearchPanelPropertyContainer}>
                   <div>
-                    <FormattedMessage id={'setting-view.control-nNet-search.control-nNet-target'} />
+                    <FormattedMessage id={'setting-view.control-net-search.control-net-target'} />
                   </div>
                   <div>{parseControlNetTargets(controlNetProvider.controlNetTargets)}</div>
                 </div>
               </div>
             </Card>
-            <Card title={intl.formatMessage({ id: 'setting-view.control-nNet-search.control-nNet-availabilities' })} style={{ width: '100%' }}>
+            <Card title={intl.formatMessage({ id: 'setting-view.control-net-search.control-net-availabilities' })} style={{ width: '100%' }}>
               <div className={styles.controlNetSearchPanelPropertyContainer}>
                 <List
                   itemLayout={'horizontal'}
@@ -205,7 +205,7 @@ const ControlNetSearchPanel: FC<ControlNetSearchPanelProps> = ({ visible }) => {
                               )
                             }
                           >
-                            <FormattedMessage id={'setting-view.control-nNet-search.control-nNet-options.download'} />
+                            <FormattedMessage id={'setting-view.control-net-search.control-net-options.download'} />
                           </Button>
                         </div>
                       </List.Item>
@@ -214,7 +214,7 @@ const ControlNetSearchPanel: FC<ControlNetSearchPanelProps> = ({ visible }) => {
                 ></List>
               </div>
             </Card>
-            <Card title={intl.formatMessage({ id: 'setting-view.control-nNet-search.control-nNet-details' })} style={{ width: '100%' }}>
+            <Card title={intl.formatMessage({ id: 'setting-view.control-net-search.control-net-details' })} style={{ width: '100%' }}>
               <div className={styles.generalSettingItemContainer}>
                 <div>{controlNetProvider.description}</div>
               </div>
@@ -279,7 +279,7 @@ const ControlNetSearchPanel: FC<ControlNetSearchPanelProps> = ({ visible }) => {
             >
               <Search
                 variant={'borderless'}
-                placeholder={intl.formatMessage({ id: 'setting-view.control-nNet-search.search-placeholder' })}
+                placeholder={intl.formatMessage({ id: 'setting-view.control-net-search.search-placeholder' })}
                 onSearch={handleSearch}
                 style={{ width: '100%' }}
               />

@@ -116,6 +116,8 @@ pub struct FetchStatusData {
     pub error: Option<String>,
     
     pub lora_model: bool,
+    
+    pub control_net: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -551,6 +553,7 @@ fn populate_fetch_status(
             current_size: None,
             error: None,
             lora_model: running_task.lora_model,
+            control_net: running_task.control_model,
         };
         fetch_status.push(fetch_status_data);
     });
@@ -568,6 +571,7 @@ fn populate_fetch_status(
             current_size: Option::from(item.downloaded_size),
             error: item.error.clone(),
             lora_model: running_task.lora_model,
+            control_net: running_task.control_model,
         };
         fetch_status.push(fetch_status_data);
     });

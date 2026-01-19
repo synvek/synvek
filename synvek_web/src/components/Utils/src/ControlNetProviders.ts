@@ -21,35 +21,35 @@ export type ControlNetTarget = 'qwen-image' | 'z-image' | 'stable-diffusion-3.5'
 
 export const controlNetProviders: ControlNetProvider[] = [
   {
-    controlNetId: 'Qwen-Image-Edit-2511-ICEdit-LoRA',
+    controlNetId: 'Qwen-Image-Blockwise-ControlNet-Canny',
     controlNetCreator: 'DiffSynth-Studio',
     controlNetSource: 'modelscope',
     controlNetOptions: [
       {
-        name: 'Qwen-Image-Edit-2511-ICEdit-LoRA',
-        fileSize: '0.9GB',
-        files: [{ repoName: 'DiffSynth-Studio/Qwen-Image-Edit-2511-ICEdit-LoRA', repoFile: 'model.safetensors' }],
+        name: 'Qwen-Image-Blockwise-ControlNet-Canny',
+        fileSize: '2.11GB',
+        files: [{ repoName: 'DiffSynth-Studio/Qwen-Image-Blockwise-ControlNet-Canny', repoFile: 'model.safetensors' }],
       },
     ],
     controlNetTargets: ['qwen-image'],
-    summary: 'Qwen-Image-Edit-2511-ICEdit-LoRA summary',
-    description: 'Qwen-Image-Edit-2511-ICEdit-LoRA details',
+    summary: 'Qwen-Image-Blockwise-ControlNet-Canny summary',
+    description: 'Qwen-Image-Blockwise-ControlNet-Canny details',
     accessTokenRequired: false,
   },
   {
-    controlNetId: 'AWPortrait-Z',
-    controlNetCreator: 'LiblibAI',
-    controlNetSource: 'modelscope',
+    controlNetId: 'Qwen-Image-Blockwise-ControlNet-Canny',
+    controlNetCreator: 'DiffSynth-Studio',
+    controlNetSource: 'huggingface',
     controlNetOptions: [
       {
-        name: 'AWPortrait-Z',
-        fileSize: '0.6GB',
-        files: [{ repoName: 'LiblibAI/AWPortrait-Z', repoFile: 'AWPortrait-Z.safetensors' }],
+        name: 'Qwen-Image-Blockwise-ControlNet-Canny',
+        fileSize: '2.11GB',
+        files: [{ repoName: 'DiffSynth-Studio/Qwen-Image-Blockwise-ControlNet-Canny', repoFile: 'model.safetensors' }],
       },
     ],
     controlNetTargets: ['qwen-image'],
-    summary: 'AWPortrait-Z summary',
-    description: 'AWPortrait-Z details',
+    summary: 'Qwen-Image-Blockwise-ControlNet-Canny summary',
+    description: 'Qwen-Image-Blockwise-ControlNet-Canny details',
     accessTokenRequired: false,
   },
 ]

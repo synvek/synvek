@@ -358,6 +358,7 @@ export interface FetchStatusData {
   current_size: number | null
   error: string | null
   lora_model: boolean
+  control_model: boolean
 }
 
 export interface FinishedTaskItem {
@@ -383,6 +384,7 @@ export interface RunningTask {
   running_task_items: RunningTaskItem[]
   finished_task_items: FinishedTaskItem[]
   lora_model: boolean
+  control_model: boolean
 }
 
 export interface Folder {

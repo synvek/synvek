@@ -111,6 +111,7 @@ pub struct RunningTask {
     pub running_task_items: Vec<RunningTaskItem>,
     pub finished_task_items: Vec<FinishedTaskItem>,
     pub lora_model: bool,
+    pub control_model: bool,
 }
 
 #[derive(Clone)]
@@ -682,6 +683,7 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
     let mut current_task = RunningTask::default();
     current_task.task_name = task.task_name.clone();
     current_task.lora_model = task.lora_model;
+    current_task.control_model = task.control_model;
     let task_items: Vec<TaskItem> = task.task_items.iter().cloned().collect();
     task_items.iter().for_each(|item| {
         current_task.all_task_items.push(item.clone());
@@ -934,6 +936,15 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
                                 first_running_task_item.revision.as_str(),
                                 first_running_task_item.commit_hash.as_str());
                         }
+                        //check and create control net link
+                        if current_task.control_model {
+                            create_control_link(
+                                first_running_task_item.model_source.as_str(),
+                                first_running_task_item.repo_name.as_str(),
+                                first_running_task_item.file_name.as_str(),
+                                first_running_task_item.revision.as_str(),
+                                first_running_task_item.commit_hash.as_str());
+                        }
                     }
                 }
             });
@@ -967,13 +978,33 @@ fn create_lora_link(model_source: &str, repo_name: &str, file_name: &str, revisi
         let lora_path = config::get_lora_dir();
         let dir_result = fs::create_dir_all(lora_path.clone());
         if dir_result.is_ok() {
-            let lora_dst_path = lora_path.join(file_name);
+            let lora_file_name = format!("{}-{}",model_source, repo_name.replace("/", "--"));
+            let lora_dst_path = lora_path.join(lora_file_name);
             let result = fetch_helper::create_link(&lora_file_path, &lora_dst_path);
             if result.is_err() {
                 tracing::error!("Failed to copy lora file with error: {}", result.unwrap_err());
             }
         } else {
             tracing::error!("Failed to create lora dir: {}", lora_path.display());
+        }
+    }
+
+}
+
+fn create_control_link(model_source: &str, repo_name: &str, file_name: &str, revision: &str, commit_hash: &str) {
+    let control_file_path = fetch_helper::get_file_path_in_cache(model_source, repo_name, file_name, revision);
+    if let Some(control_file_path) = control_file_path {
+        let control_path = config::get_control_net_dir();
+        let dir_result = fs::create_dir_all(control_path.clone());
+        if dir_result.is_ok() {
+            let control_file_name = format!("{}-{}",model_source, repo_name.replace("/", "--"));
+            let control_dst_path = control_path.join(control_file_name);
+            let result = fetch_helper::create_link(&control_file_path, &control_dst_path);
+            if result.is_err() {
+                tracing::error!("Failed to copy control net file with error: {}", result.unwrap_err());
+            }
+        } else {
+            tracing::error!("Failed to create control net dir: {}", control_path.display());
         }
     }
 

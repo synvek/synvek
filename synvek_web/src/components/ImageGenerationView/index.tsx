@@ -860,7 +860,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       .map((task) => {
         return (
           <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
-            {task.task_items[0].file_name}
+            {task.task_name}
           </Text>
         )
       })
@@ -869,7 +869,11 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         let isRemoteLoraModel = false
         if (task.private_lora_model) {
           currentWorkspace.tasks.forEach((theTask) => {
-            if (theTask.lora_model && theTask.task_items.length === 1 && task.task_name === theTask.task_items[0].file_name) {
+            if (
+              theTask.lora_model &&
+              theTask.task_items.length === 1 &&
+              task.task_name === theTask.task_items[0].repo_name + '--' + theTask.task_items[0].file_name
+            ) {
               isRemoteLoraModel = true
             }
           })
@@ -885,13 +889,63 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
     return (
       <>
-        <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:</Text>
+        <Text strong style={{ width: '120px' }}>
+          {intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:
+        </Text>
         {loras}
         <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-local-loras' })}:</Text>
         {private_loras}
       </>
     )
   }
+
+  const generateAvailableControlNets = () => {
+    const controlNets = currentWorkspace.tasks
+      .filter((task) => {
+        return task.task_items.length === 1 && task.control_model
+      })
+      .map((task) => {
+        return (
+          <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
+            {task.task_name}
+          </Text>
+        )
+      })
+    const privateControlNets = currentWorkspace.tasks
+      .filter((task) => {
+        let isRemoteControlModel = false
+        if (task.private_control_model) {
+          currentWorkspace.tasks.forEach((theTask) => {
+            if (
+              theTask.control_model &&
+              theTask.task_items.length === 1 &&
+              task.task_name === theTask.task_items[0].repo_name + '--' + theTask.task_items[0].file_name
+            ) {
+              isRemoteControlModel = true
+            }
+          })
+        }
+        return task.private_control_model && !isRemoteControlModel
+      })
+      .map((task) => {
+        return (
+          <Text code key={`${task.task_name}`}>
+            {task.task_name}
+          </Text>
+        )
+      })
+    return (
+      <>
+        <Text strong style={{ width: '120px' }}>
+          {intl.formatMessage({ id: 'image-generation-view.control-net.available-control-nets' })}:
+        </Text>
+        {controlNets}
+        <Text strong>{intl.formatMessage({ id: 'image-generation-view.control-net.available-local-control-nets' })}:</Text>
+        {privateControlNets}
+      </>
+    )
+  }
+
   const mockLoraOptions = currentWorkspace.tasks
     .filter((task) => {
       return task.task_items.length === 1 && task.lora_model
@@ -2038,12 +2092,15 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         )
                       ) : (
                         <div className={styles.imageGenerationImagePreviewPlaceholder} style={{ color: token.colorTextPlaceholder }}>
-                          Please click and generate
+                          {intl.formatMessage({ id: 'image-generation-view.message-generation' })}:
                         </div>
                       )}
                     </div>
-                    <div style={{ padding: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
+                    <div style={{ padding: '12px 12px 0 12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
                       {generateAvailableLoras()}
+                    </div>
+                    <div style={{ padding: '0 12px 12px 12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
+                      {generateAvailableControlNets()}
                       {/*<Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>*/}
                       {/*  <FormattedMessage id={'image-generation-view.lora.add'} />*/}
                       {/*</Button>*/}
