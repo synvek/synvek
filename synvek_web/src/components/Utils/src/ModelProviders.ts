@@ -5969,7 +5969,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'stable-diffusion-v1-5-emaonly',
-        fileSize: '15.40GB',
+        fileSize: '3.97GB',
         repos: [],
         files: [{ repoName: 'AI-ModelScope/stable-diffusion-v1-5', repoFile: 'v1-5-pruned-emaonly.safetensors' }],
       },
@@ -6009,7 +6009,7 @@ export const modelProviders: ModelProvider[] = [
       },
       {
         name: 'stable-diffusion-v1-5-emaonly',
-        fileSize: '15.40GB',
+        fileSize: '3.97GB',
         repos: [],
         files: [{ repoName: 'stable-diffusion-v1-5/stable-diffusion-v1-5', repoFile: 'v1-5-pruned-emaonly.safetensors' }],
       },
@@ -6043,13 +6043,13 @@ export const modelProviders: ModelProvider[] = [
     modelOptions: [
       {
         name: 'sd3_medium_incl_clips_t5xxlfp16',
-        fileSize: '15.40GB',
+        fileSize: '14.68GB',
         repos: [],
         files: [{ repoName: 'stabilityai/stable-diffusion-3-medium', repoFile: 'sd3_medium_incl_clips_t5xxlfp16.safetensors' }],
       },
       {
         name: 'sd3_medium_incl_clips_t5xxlfp8',
-        fileSize: '15.40GB',
+        fileSize: '10.12GB',
         repos: [],
         files: [{ repoName: 'stabilityai/stable-diffusion-3-medium', repoFile: 'sd3_medium_incl_clips_t5xxlfp8.safetensors' }],
       },

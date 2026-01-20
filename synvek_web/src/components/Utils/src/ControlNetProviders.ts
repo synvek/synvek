@@ -17,7 +17,7 @@ export interface ControlNetProvider {
   accessTokenRequired: boolean
 }
 
-export type ControlNetTarget = 'qwen-image' | 'z-image' | 'stable-diffusion-3.5' | 'stable-diffusion-1.5'
+export type ControlNetTarget = 'qwen-image' | 'z-image' | 'stable-diffusion-3.5' | 'stable-diffusion-3' | 'stable-diffusion-1.5'
 
 export const controlNetProviders: ControlNetProvider[] = [
   {
@@ -59,8 +59,8 @@ export const controlNetProviders: ControlNetProvider[] = [
     controlNetOptions: [
       {
         name: 'sd-controlnet-canny',
-        fileSize: '1.45GB',
-        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'model.safetensors' }],
+        fileSize: '1.35GB',
+        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'diffusion_pytorch_model.safetensors' }],
       },
     ],
     controlNetTargets: ['stable-diffusion-1.5'],
@@ -75,8 +75,8 @@ export const controlNetProviders: ControlNetProvider[] = [
     controlNetOptions: [
       {
         name: 'sd-controlnet-canny',
-        fileSize: '1.45GB',
-        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'model.safetensors' }],
+        fileSize: '1.35GB',
+        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'diffusion_pytorch_model.safetensors' }],
       },
     ],
     controlNetTargets: ['stable-diffusion-1.5'],
@@ -91,11 +91,27 @@ export const controlNetProviders: ControlNetProvider[] = [
     controlNetOptions: [
       {
         name: 'SD3.5M-Controlnet-Canny',
-        fileSize: '4.93GB',
-        files: [{ repoName: 'tensorart/SD3.5M-Controlnet-Canny', repoFile: 'model.safetensors' }],
+        fileSize: '4.59GB',
+        files: [{ repoName: 'tensorart/SD3.5M-Controlnet-Canny', repoFile: 'diffusion_pytorch_model.safetensors' }],
       },
     ],
-    controlNetTargets: ['stable-diffusion-1.5'],
+    controlNetTargets: ['stable-diffusion-3.5'],
+    summary: 'SD3.5M-Controlnet-Canny summary',
+    description: 'SD3.5M-Controlnet-Canny details',
+    accessTokenRequired: false,
+  },
+  {
+    controlNetId: 'SD3.5M-Controlnet-Canny',
+    controlNetCreator: 'tensorart',
+    controlNetSource: 'huggingface',
+    controlNetOptions: [
+      {
+        name: 'SD3.5M-Controlnet-Canny',
+        fileSize: '4.59GB',
+        files: [{ repoName: 'tensorart/SD3.5M-Controlnet-Canny', repoFile: 'diffusion_pytorch_model.safetensors' }],
+      },
+    ],
+    controlNetTargets: ['stable-diffusion-3.5'],
     summary: 'SD3.5M-Controlnet-Canny summary',
     description: 'SD3.5M-Controlnet-Canny details',
     accessTokenRequired: false,
