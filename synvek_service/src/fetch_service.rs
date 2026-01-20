@@ -979,8 +979,7 @@ fn create_lora_link(model_source: &str, repo_name: &str, file_name: &str, revisi
         let lora_path = config::get_lora_dir();
         let dir_result = fs::create_dir_all(lora_path.clone());
         if dir_result.is_ok() {
-            let lora_file_name = format!("{}-{}",model_source, repo_name.replace("/", "--"));
-            let lora_dst_path = lora_path.join(lora_file_name);
+            let lora_dst_path = lora_path.join(file_name);
             let result = fetch_helper::create_link(&lora_file_path, &lora_dst_path);
             if result.is_err() {
                 tracing::error!("Failed to copy lora file with error: {}", result.unwrap_err());

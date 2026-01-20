@@ -39,7 +39,7 @@ import styles from './index.less'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-const { Text, Title } = Typography
+const { Text } = Typography
 const { TextArea } = Input
 
 const { useToken } = theme
@@ -51,12 +51,6 @@ interface ImageGenerationViewProps {
 interface ImageData {
   type: 'image' | 'video'
   data: string
-}
-
-interface LoraItem {
-  id: string
-  name: string
-  weight: number
 }
 
 const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
@@ -85,6 +79,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const oldCustomSize = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CUSTOM_SIZE)
   const defaultCustomSize = oldCustomSize ? oldCustomSize.toUpperCase() === 'TRUE' : Consts.IMAGE_CUSTOM_SIZE_DEFAULT
   const [count, setCount] = useState<number>(defaultCount)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [performance, setPerformance] = useState<number>(defaultPerformance)
   const [size, setSize] = useState<number>(defaultSize)
   const [seed, setSeed] = useState<number>(defaultSeed)
@@ -142,7 +137,6 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const oldVaeOnCPU = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_VAE_ON_CPU)
   const defaultVaeOnCPU = oldVaeOnCPU ? oldVaeOnCPU.toUpperCase() === 'TRUE' : Consts.IMAGE_VAE_ON_CPU_DEFAULT
   const [vaeOnCPU, setVaeOnCPU] = useState<boolean>(defaultVaeOnCPU)
-  const [selectedLoras, setSelectedLoras] = useState<LoraItem[]>([])
   const oldScheduler = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_SCHEDULER)
   const defaultScheduler = oldScheduler ? oldScheduler : Consts.IMAGE_SCHEDULER_DEFAULT
   const oldUpscaleRepeats = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_UPSCALE_REPEATS)
@@ -362,6 +356,8 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         scheduler: scheduler === 'auto' ? undefined : scheduler,
         upscaleRepeats: upscaleRepeats,
         controlNetCPU: controlNetCPU,
+        strength: strength,
+        controlStrength: controlStrength,
       }
       const imageData =
         (refImageFileList.length > 0 && supportImageEdit) || supportVideoGen
@@ -481,6 +477,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     setCurrentImageIndex(index)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handlePerformanceChange = (value: number) => {
     setPerformance(value)
     localStorage.setItem(Consts.LOCAL_STORAGE_IMAGE_PERFORMANCE, '' + value)
@@ -711,6 +708,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     { value: 64, label: '64' },
   ]
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const performanceOptions = [
     { value: '1', label: 'Quality' },
     { value: '2', label: 'Speed' },
@@ -945,100 +943,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       })
     return (
       <>
-        <Text strong style={{ width: '120px' }}>
-          {intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:
-        </Text>
+        <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-loras' })}:</Text>
         {loras}
         <Text strong>{intl.formatMessage({ id: 'image-generation-view.lora.available-local-loras' })}:</Text>
         {private_loras}
       </>
     )
-  }
-
-  const generateAvailableControlNets = () => {
-    const controlNets = currentWorkspace.tasks
-      .filter((task) => {
-        return task.task_items.length === 1 && task.control_model
-      })
-      .map((task) => {
-        return (
-          <Tooltip
-            key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}
-            title={task.task_items[0].file_name}
-          >
-            <Text code key={`${task.task_items[0].model_source}:${task.task_items[0].repo_name}:${task.task_items[0].file_name}`}>
-              {task.task_name}
-            </Text>
-          </Tooltip>
-        )
-      })
-    const privateControlNets = currentWorkspace.tasks
-      .filter((task) => {
-        let isRemoteControlModel = false
-        if (task.private_control_model) {
-          currentWorkspace.tasks.forEach((theTask) => {
-            if (
-              theTask.control_model &&
-              theTask.task_items.length === 1 &&
-              task.task_name === theTask.task_items[0].repo_name + '--' + theTask.task_items[0].file_name
-            ) {
-              isRemoteControlModel = true
-            }
-          })
-        }
-        return task.private_control_model && !isRemoteControlModel
-      })
-      .map((task) => {
-        return (
-          <Tooltip key={`${task.task_name}`} title={task.task_name}>
-            <Text code key={`${task.task_name}`}>
-              {task.task_name}
-            </Text>
-          </Tooltip>
-        )
-      })
-    return (
-      <>
-        <Text strong style={{ width: '120px' }}>
-          {intl.formatMessage({ id: 'image-generation-view.control-net.available-control-nets' })}:
-        </Text>
-        {controlNets}
-        <Text strong>{intl.formatMessage({ id: 'image-generation-view.control-net.available-local-control-nets' })}:</Text>
-        {privateControlNets}
-      </>
-    )
-  }
-
-  const mockLoraOptions = currentWorkspace.tasks
-    .filter((task) => {
-      return task.task_items.length === 1 && task.lora_model
-    })
-    .map((task) => {
-      return {
-        value: task.task_items[0].file_name,
-        label: task.task_items[0].file_name,
-      }
-    })
-
-  const handleAddLora = () => {
-    const newLora: LoraItem = {
-      id: SystemUtils.generateUUID(),
-      name: '',
-      weight: 1.0,
-    }
-    setSelectedLoras([...selectedLoras, newLora])
-  }
-
-  const handleRemoveLora = (id: string) => {
-    setSelectedLoras(selectedLoras.filter((lora) => lora.id !== id))
-  }
-
-  const handleLoraNameChange = (id: string, name: string) => {
-    setSelectedLoras(selectedLoras.map((lora) => (lora.id === id ? { ...lora, name } : lora)))
-  }
-
-  const handleLoraWeightChange = (id: string, weight: number) => {
-    setSelectedLoras(selectedLoras.map((lora) => (lora.id === id ? { ...lora, weight } : lora)))
   }
 
   const handleStepsCountChange = (value: number) => {
@@ -2178,45 +2088,6 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     <div style={{ padding: '12px 12px 0 12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
                       {generateAvailableLoras()}
                     </div>
-                    <div style={{ padding: '0 12px 12px 12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
-                      {generateAvailableControlNets()}
-                      {/*<Button size="small" type="dashed" icon={<PlusOutlined />} onClick={handleAddLora}>*/}
-                      {/*  <FormattedMessage id={'image-generation-view.lora.add'} />*/}
-                      {/*</Button>*/}
-                      {/*{selectedLoras.map((lora) => (*/}
-                      {/*  <div key={lora.id} style={{ display: 'flex', gap: '6px', alignItems: 'baseline', width: '320px' }}>*/}
-                      {/*    <Select*/}
-                      {/*      size="small"*/}
-                      {/*      placeholder={intl.formatMessage({ id: 'image-generation-view.lora.selection-place-holder' })}*/}
-                      {/*      style={{ width: '140px' }}*/}
-                      {/*      popupMatchSelectWidth={false}*/}
-                      {/*      value={lora.name || undefined}*/}
-                      {/*      onChange={(value) => handleLoraNameChange(lora.id, value)}*/}
-                      {/*      options={mockLoraOptions}*/}
-                      {/*    />*/}
-                      {/*    <Slider*/}
-                      {/*      min={0}*/}
-                      {/*      max={2}*/}
-                      {/*      step={0.1}*/}
-                      {/*      value={lora.weight}*/}
-                      {/*      onChange={(value) => handleLoraWeightChange(lora.id, value)}*/}
-                      {/*      style={{ width: '80px', margin: 0 }}*/}
-                      {/*    />*/}
-                      {/*    <InputNumber*/}
-                      {/*      size="small"*/}
-                      {/*      min={0}*/}
-                      {/*      max={2}*/}
-                      {/*      step={0.1}*/}
-                      {/*      value={lora.weight}*/}
-                      {/*      onChange={(value) => handleLoraWeightChange(lora.id, value || 1.0)}*/}
-                      {/*      style={{ width: '55px' }}*/}
-                      {/*    />*/}
-                      {/*    <Button size="small" type="text" danger onClick={() => handleRemoveLora(lora.id)} style={{ padding: '0 4px', minWidth: '24px' }}>*/}
-                      {/*      ×*/}
-                      {/*    </Button>*/}
-                      {/*  </div>*/}
-                      {/*))}*/}
-                    </div>
                   </div>
                 </Splitter.Panel>
                 <Splitter.Panel defaultSize={160} min={160} max={500} style={{ padding: '0 16px 16px 16px' }}>
@@ -2288,7 +2159,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     preview={{
                       visible: currentGenerationVisible,
                       src: currentGeneration ? currentGeneration.generationContent : '',
-                      onVisibleChange: (value) => {
+                      onVisibleChange: () => {
                         setCurrentGeneration(null)
                         setCurrentGenerationVisible(false)
                       },
