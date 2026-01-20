@@ -165,6 +165,8 @@ export default {
     'CLIP 文本编码器负责将文本提示词转换为向量表示。默认情况下，CLIP 模型会在 GPU 上运行以获得最快速度。但当 GPU 显存不足时，CLIP 模型的运行可能导致 OOM（内存不足）错误。启用后，CLIP 模型将在 CPU 上运行，而非 GPU 上',
   'image-generation-view.setting-property-control-image': '控制图像',
   'image-generation-view.setting-property-control-video-images': '控制视频图像',
+  'image-generation-view.setting-property-control-net': '控制网',
+  'image-generation-view.setting-property-control-net-local': '本地控制网',
   'image-generation-view.setting-property-control-net-cpu': '强制ControlNet模型在CPU上运行',
   'image-generation-view.setting-property-control-net-cpu-tooltip': '将ControlNet模型的推理计算从GPU转移到CPU, 减少GPU显存占用',
   'image-generation-view.setting-property-control-strength': '控制网强度',

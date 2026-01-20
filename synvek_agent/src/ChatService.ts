@@ -279,7 +279,8 @@ class LLMService {
     upscaleRepeats: number,
     controlNetCpu: boolean,
     strength: number,
-    controlStrength: number
+    controlStrength: number,
+    controlNet: string | undefined
   ) {
     const modelServer = LLMService.buildGenerate(modelName)
     if (modelServer) {
@@ -319,6 +320,7 @@ class LLMService {
             controlNetCpu,
             strength,
             controlStrength,
+            controlNet
           )
           return imageResponse
         } catch (error) {
@@ -361,7 +363,8 @@ class LLMService {
     upscaleRepeats: number,
     controlNetCpu: boolean,
     strength: number,
-    controlStrength: number
+    controlStrength: number,
+  controlNet: string | undefined
   ) {
     const modelServer = LLMService.buildGenerate(modelName)
     if (modelServer) {
@@ -410,6 +413,7 @@ class LLMService {
             controlNetCpu,
             strength,
             controlStrength,
+            controlNet,
           )
           return imageResponse
         } catch (error) {
@@ -826,6 +830,7 @@ export const chatService = new Elysia()
         body.controlNetCpu,
         body.strength,
         body.controlStrength,
+        body.controlNet,
       )
       if (typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
@@ -869,6 +874,7 @@ export const chatService = new Elysia()
         controlNetCpu: t.Boolean(),
         strength: t.Number(),
         controlStrength: t.Number(),
+        controlNet: t.Optional(t.String()),
       }),
     },
   )
@@ -908,6 +914,7 @@ export const chatService = new Elysia()
         body.controlNetCpu,
         body.strength,
         body.controlStrength,
+        body.controlNet,
       )
       if (typeof imageResponse !== 'string') {
         if (imageResponse.status === 200 && imageResponse.data.created) {
@@ -996,6 +1003,7 @@ export const chatService = new Elysia()
         controlNetCpu: t.Boolean(),
         strength: t.Number(),
         controlStrength: t.Number(),
+        controlNet: t.Optional(t.String()),
       }),
     },
   )

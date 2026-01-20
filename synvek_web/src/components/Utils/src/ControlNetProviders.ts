@@ -17,7 +17,7 @@ export interface ControlNetProvider {
   accessTokenRequired: boolean
 }
 
-export type ControlNetTarget = 'qwen-image' | 'z-image' | 'stable-diffusion-3.5'
+export type ControlNetTarget = 'qwen-image' | 'z-image' | 'stable-diffusion-3.5' | 'stable-diffusion-1.5'
 
 export const controlNetProviders: ControlNetProvider[] = [
   {
@@ -50,6 +50,54 @@ export const controlNetProviders: ControlNetProvider[] = [
     controlNetTargets: ['qwen-image'],
     summary: 'Qwen-Image-Blockwise-ControlNet-Canny summary',
     description: 'Qwen-Image-Blockwise-ControlNet-Canny details',
+    accessTokenRequired: false,
+  },
+  {
+    controlNetId: 'sd-controlnet-canny',
+    controlNetCreator: 'lllyasviel',
+    controlNetSource: 'modelscope',
+    controlNetOptions: [
+      {
+        name: 'sd-controlnet-canny',
+        fileSize: '1.45GB',
+        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'model.safetensors' }],
+      },
+    ],
+    controlNetTargets: ['stable-diffusion-1.5'],
+    summary: 'sd-controlnet-canny summary',
+    description: 'sd-controlnet-canny details',
+    accessTokenRequired: false,
+  },
+  {
+    controlNetId: 'sd-controlnet-canny',
+    controlNetCreator: 'lllyasviel',
+    controlNetSource: 'huggingface',
+    controlNetOptions: [
+      {
+        name: 'sd-controlnet-canny',
+        fileSize: '1.45GB',
+        files: [{ repoName: 'lllyasviel/sd-controlnet-canny', repoFile: 'model.safetensors' }],
+      },
+    ],
+    controlNetTargets: ['stable-diffusion-1.5'],
+    summary: 'sd-controlnet-canny summary',
+    description: 'sd-controlnet-canny details',
+    accessTokenRequired: false,
+  },
+  {
+    controlNetId: 'SD3.5M-Controlnet-Canny',
+    controlNetCreator: 'tensorart',
+    controlNetSource: 'modelscope',
+    controlNetOptions: [
+      {
+        name: 'SD3.5M-Controlnet-Canny',
+        fileSize: '4.93GB',
+        files: [{ repoName: 'tensorart/SD3.5M-Controlnet-Canny', repoFile: 'model.safetensors' }],
+      },
+    ],
+    controlNetTargets: ['stable-diffusion-1.5'],
+    summary: 'SD3.5M-Controlnet-Canny summary',
+    description: 'SD3.5M-Controlnet-Canny details',
     accessTokenRequired: false,
   },
 ]

@@ -183,6 +183,7 @@ export class RequestUtils {
     controlNetCpu: boolean,
     strength: number,
     controlStrength: number,
+    controlNet: string | undefined,
   ) {
     const data = {
       model: modelName,
@@ -217,6 +218,7 @@ export class RequestUtils {
       control_net_cpu: controlNetCpu,
       strength: strength,
       control_strength: controlStrength,
+      control_net: controlNet,
     }
 
     const config = {
@@ -260,6 +262,7 @@ export class RequestUtils {
     controlNetCpu: boolean,
     strength: number,
     controlStrength: number,
+    controlNet: string | undefined,
   ) {
     const data = {
       model: modelName,
@@ -294,6 +297,7 @@ export class RequestUtils {
       control_net_cpu: controlNetCpu,
       strength: strength,
       control_strength: controlStrength,
+      control_net: controlNet,
     }
     const config = {
       headers: {

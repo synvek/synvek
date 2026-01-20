@@ -936,15 +936,16 @@ pub fn start_task(task: &mut Task, require_remote_meta: bool) -> Result<bool> {
                                 first_running_task_item.revision.as_str(),
                                 first_running_task_item.commit_hash.as_str());
                         }
+                        //Don't need this, we can assign file directly
                         //check and create control net link
-                        if current_task.control_model {
-                            create_control_link(
-                                first_running_task_item.model_source.as_str(),
-                                first_running_task_item.repo_name.as_str(),
-                                first_running_task_item.file_name.as_str(),
-                                first_running_task_item.revision.as_str(),
-                                first_running_task_item.commit_hash.as_str());
-                        }
+                        // if current_task.control_model {
+                        //     create_control_link(
+                        //         first_running_task_item.model_source.as_str(),
+                        //         first_running_task_item.repo_name.as_str(),
+                        //         first_running_task_item.file_name.as_str(),
+                        //         first_running_task_item.revision.as_str(),
+                        //         first_running_task_item.commit_hash.as_str());
+                        // }
                     }
                 }
             });

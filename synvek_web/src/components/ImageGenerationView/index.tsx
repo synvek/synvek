@@ -166,6 +166,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
   const oldControlStrengths = localStorage.getItem(Consts.LOCAL_STORAGE_IMAGE_CONTROL_STRENGTH)
   const defaultControlStrength = oldControlStrengths ? Number.parseFloat(oldControlStrengths) : Consts.IMAGE_CONTROL_STRENGTH_DEFAULT
   const [controlStrength, setControlStrength] = useState<number>(defaultControlStrength)
+  const [controlNet, setControlNet] = useState<string | undefined>(undefined)
 
   let modelDefaultStepsCount: number | undefined = undefined
   let modelDefaultCfgScale: number | undefined = undefined
@@ -396,6 +397,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               controlNetCPU,
               strength,
               controlStrength,
+              controlNet,
             )
           : await RequestUtils.generateImage(
               userText,
@@ -420,6 +422,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
               controlNetCPU,
               strength,
               controlStrength,
+              controlNet,
             )
       await WorkspaceUtils.handleRequest(
         messageApi,
@@ -800,6 +803,52 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     '0': '0',
     '5': '5',
     '10': '10',
+  }
+
+  const controlNetRemoteOptions = currentWorkspace.tasks
+    .filter((task) => {
+      return task.task_items.length === 1 && task.control_model
+    })
+    .map((task) => {
+      return {
+        value: task.task_name,
+        label: task.task_name,
+      }
+    })
+
+  const controlNetLocalOptions = currentWorkspace.tasks
+    .filter((task) => {
+      let isRemoteControlModel = false
+      if (task.private_control_model) {
+        currentWorkspace.tasks.forEach((theTask) => {
+          if (
+            theTask.control_model &&
+            theTask.task_items.length === 1 &&
+            task.task_name === theTask.task_items[0].repo_name + '--' + theTask.task_items[0].file_name
+          ) {
+            isRemoteControlModel = true
+          }
+        })
+      }
+      return task.private_control_model && !isRemoteControlModel
+    })
+    .map((task) => {
+      return {
+        value: task.task_name,
+        label: task.task_name,
+      }
+    })
+
+  const controlNetLocalGroupOptions = {
+    label: intl.formatMessage({ id: 'image-generation-view.control-net.available-local-control-nets' }),
+    title: intl.formatMessage({ id: 'image-generation-view.control-net.available-local-control-nets' }),
+    options: [...controlNetLocalOptions],
+  }
+
+  const controlNetOptions = [...controlNetRemoteOptions, controlNetLocalGroupOptions]
+
+  const handleControlNetChange = (value: string) => {
+    setControlNet(value)
   }
 
   const handleSamplingMethodChange = (value: string) => {
@@ -1542,7 +1591,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             fileList={maskImageFileList}
                             showUploadList={{ showPreviewIcon: true }}
                           >
-                            {maskImageFileList.length > 1 ? null : (
+                            {maskImageFileList.length > 0 ? null : (
                               <button className={styles.imageGenerationViewUploadButton} type={'button'}>
                                 <PlusOutlined />
                                 <div style={{ marginTop: 8 }}>
@@ -1551,6 +1600,48 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                               </button>
                             )}
                           </Upload>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-control-image'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Upload
+                            onChange={handleControlImageUploadChange}
+                            onPreview={(file) => {
+                              handlePreview(file)
+                              return false
+                            }}
+                            listType="picture-card"
+                            fileList={controlImageFileList}
+                            showUploadList={{ showPreviewIcon: true }}
+                          >
+                            {controlImageFileList.length > 0 ? null : (
+                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
+                                </div>
+                              </button>
+                            )}
+                          </Upload>
+                        </div>
+                      </div>
+                      <div className={styles.imageGenerationPropertyContainer}>
+                        <div className={styles.imageGenerationPropertyTitle}>
+                          <FormattedMessage id={'image-generation-view.setting-property-control-net'} />
+                        </div>
+                        <div className={styles.imageGenerationPropertyValue}>
+                          <Select
+                            size={'small'}
+                            defaultValue={controlNet}
+                            value={controlNet}
+                            style={{ width: '100%' }}
+                            popupMatchSelectWidth={false}
+                            onChange={(value) => handleControlNetChange(value)}
+                            options={controlNetOptions}
+                          />
                         </div>
                       </div>
                     </div>
@@ -1605,33 +1696,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             fileList={endImageFileList}
                             showUploadList={{ showPreviewIcon: true }}
                           >
-                            {endImageFileList.length > 1 ? null : (
-                              <button className={styles.imageGenerationViewUploadButton} type={'button'}>
-                                <PlusOutlined />
-                                <div style={{ marginTop: 8 }}>
-                                  <FormattedMessage id={'image-generation-view.setting-property.upload'} />
-                                </div>
-                              </button>
-                            )}
-                          </Upload>
-                        </div>
-                      </div>
-                      <div className={styles.imageGenerationPropertyContainer}>
-                        <div className={styles.imageGenerationPropertyTitle}>
-                          <FormattedMessage id={'image-generation-view.setting-property-control-image'} />
-                        </div>
-                        <div className={styles.imageGenerationPropertyValue}>
-                          <Upload
-                            onChange={handleControlImageUploadChange}
-                            onPreview={(file) => {
-                              handlePreview(file)
-                              return false
-                            }}
-                            listType="picture-card"
-                            fileList={controlImageFileList}
-                            showUploadList={{ showPreviewIcon: true }}
-                          >
-                            {controlImageFileList.length > 1 ? null : (
+                            {endImageFileList.length > 0 ? null : (
                               <button className={styles.imageGenerationViewUploadButton} type={'button'}>
                                 <PlusOutlined />
                                 <div style={{ marginTop: 8 }}>

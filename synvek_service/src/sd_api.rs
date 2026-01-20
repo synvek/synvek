@@ -38,6 +38,7 @@ pub struct ImageGenerationRequest {
     pub control_net_cpu: bool,
     pub strength: f32,
     pub control_strength: f32,
+    pub control_net: Option<String>,
 }
 /// Request for edit image
 #[derive(Debug, Deserialize, Serialize)]
@@ -73,6 +74,7 @@ pub struct ImageEditRequest {
     pub control_net_cpu: bool,
     pub strength: f32,
     pub control_strength: f32,
+    pub control_net: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -149,6 +151,7 @@ async fn generate(req: web::Json<ImageGenerationRequest>) -> impl Responder {
         control_net_cpu: req.control_net_cpu,
         strength: req.strength,
         control_strength: req.control_strength,
+        control_net: req.control_net.clone(),
     };
     let image_output = sd_service::generate_image(&generation_args);
     let mut image_data: Vec<ImageData> = vec![];
@@ -202,6 +205,7 @@ async fn edit_image(req: web::Json<ImageEditRequest>) -> impl Responder {
         control_net_cpu: req.control_net_cpu,
         strength: req.strength,
         control_strength: req.control_strength,
+        control_net: req.control_net.clone(),
     };
     let image_output = sd_service::generate_image(&image_edit_args);
     let mut image_data: Vec<ImageData> = vec![];

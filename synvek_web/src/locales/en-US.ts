@@ -166,6 +166,8 @@ export default {
     'CLIP text encoder converts text prompts into vector representations. By default, the CLIP model runs on GPU for maximum speed. However, when GPU VRAM is limited, running CLIP may cause OOM (Out Of Memory) errors. Enabling this forces the CLIP model to run on the CPU instead of the GPU',
   'image-generation-view.setting-property-control-image': 'Control Image',
   'image-generation-view.setting-property-control-video-images': 'Control Video Image',
+  'image-generation-view.setting-property-control-net': 'Control Net',
+  'image-generation-view.setting-property-control-net-local': 'Local Control Net',
   'image-generation-view.setting-property-control-net-cpu': 'Control Net on CPU',
   'image-generation-view.setting-property-control-net-cpu-tooltip': 'Moves ControlNet model inference from GPU to CPU， Reduces GPU VRAM usage',
   'image-generation-view.setting-property-control-strength': 'Control Strength',

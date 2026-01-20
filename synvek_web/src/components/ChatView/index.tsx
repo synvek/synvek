@@ -871,6 +871,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultControlNetCPU,
             defaultStrength,
             defaultControlStrength,
+            undefined,
           )
         : await RequestUtils.generateImage(
             chatContent[0].text,
@@ -895,6 +896,7 @@ const ChatView: FC<ChatViewProps> = ({ visible }) => {
             defaultControlNetCPU,
             defaultStrength,
             defaultControlStrength,
+            undefined,
           )
     await WorkspaceUtils.handleRequest(
       messageApi,

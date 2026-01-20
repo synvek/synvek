@@ -1,6 +1,6 @@
 use crate::common::MODEL_SOURCE_MODELSCOPE;
 use crate::model_service::ModelServiceArgs;
-use crate::{common, fetch_service};
+use crate::{common, fetch_helper, fetch_service};
 use crate::{config, file_service};
 use crate::{modelscope_helper, utils};
 use base64::engine::general_purpose::STANDARD;
@@ -14,7 +14,7 @@ use std::collections::HashMap;
 use std::ffi::{CString, OsString, c_char, c_int, CStr, c_uchar};
 use std::marker::PhantomData;
 use std::path::PathBuf;
-use std::{mem, panic, ptr};
+use std::{fs, mem, panic, ptr};
 use std::panic::AssertUnwindSafe;
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex, OnceLock};
@@ -92,6 +92,7 @@ pub struct GenerationArgs {
     pub control_net_cpu: bool,
     pub strength: f32,
     pub control_strength: f32,
+    pub control_net: Option<String>,
 }
 
 static GLOBAL_SD_CONFIG: OnceLock<Arc<Mutex<SdConfig>>> = OnceLock::new();
@@ -166,13 +167,16 @@ pub fn get_model_file_path(
 pub fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
     let mut file_path: PathBuf = PathBuf::new();
     task.task_items.iter().for_each(|item| {
+        tracing::info!("find model file: {} on {}", file_name, item.file_name);
         if item.file_name.ends_with(file_name) {
+            tracing::info!("find model file ok: {} on {}, {}, {}", file_name, item.file_name, item.model_source, item.repo_name);
             let repo_file_info = file_service::search_repo_file_info(
                 item.model_source.as_str(),
                 item.repo_name.as_str(),
                 item.file_name.as_str(),
             );
             if let Some(repo_file_info) = repo_file_info {
+                tracing::info!("find model file path ok: {} on {}, {}, {}", file_name, item.file_name, item.model_source, item.repo_name);
                file_path = get_model_file_path(
                    repo_file_info.repo_source.as_str(),
                    repo_file_info.repo_name.as_str(),
@@ -184,6 +188,44 @@ pub fn find_relative_model_file_path(task: &Task, file_name: &str) -> PathBuf  {
     });
     file_path
 
+}
+
+fn get_control_net_file(control_net: &str) -> Option<PathBuf> {
+    let private_control_net_files =  fetch_helper::get_private_lora_model_files();
+    let mut is_private_file: bool = false;
+    for private_control_net_file in private_control_net_files {
+        if control_net == private_control_net_file {
+            is_private_file = true;
+            let mut control_net_path = config::get_control_net_dir();
+            let dir_result = fs::create_dir_all(control_net_path.clone());
+            if dir_result.is_ok() {
+                control_net_path.push(&private_control_net_file);
+                return Some(control_net_path);
+            } else {
+                tracing::error!("Failed to create or read control net dir: {}", control_net_path.display());
+            }
+        }
+    }
+    if !is_private_file {
+        let tasks = fetch_service::load_local_tasks(true);
+        for task in tasks.tasks {
+            if task.control_model && task.task_name == control_net {
+                for fetch_file in task.fetch_files {
+                    let revision = fetch_file.revision;
+
+                    let file_path = fetch_helper::get_file_path_in_cache(
+                        task.model_source.as_str(),
+                        fetch_file.repo_name.as_str(),
+                        fetch_file.file_name.as_str(),
+                        revision.unwrap_or("".to_string()).as_str()
+                    );
+                    return file_path;
+                }
+            }
+        }
+    }
+
+    None
 }
 
 /**
@@ -515,11 +557,16 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                 }
                 start_args.push(String::from("--lora-model-dir"));
                 start_args.push(lora_dir.to_str().unwrap().to_string());
-                if generation_args.control_images.len() > 0 {
-                    start_args.push(String::from("--control-net"));
-                    start_args.push(control_net_dir.to_str().unwrap().to_string());
-                    start_args.push(String::from("--control-strength"));
-                    start_args.push(generation_args.control_strength.to_string());
+                if generation_args.control_net.clone().is_some() {
+                    let control_net = generation_args.control_net.clone().unwrap();
+                    let control_net_file = get_control_net_file(control_net.as_str());
+                    if let Some(control_net_file) = control_net_file {
+                        start_args.push(String::from("--control-net"));
+                        start_args.push(control_net_file.to_str().unwrap().to_string());
+                        start_args.push(String::from("--control-strength"));
+                        start_args.push(generation_args.control_strength.to_string());
+                    }
+
                 }
                 start_args.push(String::from("--upscale-model"));
                 start_args.push(upscale_dir.to_str().unwrap().to_string());
