@@ -921,11 +921,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
         let isRemoteLoraModel = false
         if (task.private_lora_model) {
           currentWorkspace.tasks.forEach((theTask) => {
-            if (
-              theTask.lora_model &&
-              theTask.task_items.length === 1 &&
-              task.task_name === theTask.task_items[0].repo_name + '--' + theTask.task_items[0].file_name
-            ) {
+            if (theTask.lora_model && theTask.task_items.length === 1 && task.task_name === theTask.task_items[0].file_name) {
               isRemoteLoraModel = true
             }
           })
