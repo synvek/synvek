@@ -154,6 +154,12 @@ export class WorkspaceUtils {
       if (oldTask.private_lora_model !== newTask.private_lora_model) {
         return true
       }
+      if (oldTask.private_control_model !== newTask.private_control_model) {
+        return true
+      }
+      if (oldTask.control_model !== newTask.control_model) {
+        return true
+      }
       if (oldTask.task_items.length !== newTask.task_items.length) {
         return true
       }

@@ -741,7 +741,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   }
 
   const generatePopupRenderInternally = (isPrivateModels: boolean) => {
-    const filteredTasks = currentWorkspace.tasks.filter((task) => task.private_model === isPrivateModels && !task.lora_model && !task.private_lora_model)
+    const filteredTasks = currentWorkspace.tasks.filter(
+      (task) => task.private_model === isPrivateModels && !task.lora_model && !task.private_lora_model && !task.control_model && !task.private_control_model,
+    )
     return filteredTasks.map((task, index) => {
       let started = false
       let isDefault: boolean = false
