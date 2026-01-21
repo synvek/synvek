@@ -56,7 +56,7 @@ export default defineConfig({
     'process.env.ENV_NAME': 'default',
     'process.env.AD_ENABLED': 'false',
   },
-  title: 'Ratel',
+  title: 'Synvek Explorer',
   access: {},
   model: {},
   initialState: {},
