@@ -2081,7 +2081,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                         </div>
                       )}
                     </div>
-                    <div style={{ padding: '12px 12px 0 12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
+                    <div style={{ padding: '8px 16px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'baseline', maxHeight: '100px' }}>
                       {generateAvailableLoras()}
                     </div>
                   </div>
