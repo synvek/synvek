@@ -735,6 +735,7 @@ export const chatService = new Elysia()
                 const data = `data: ${JSON.stringify(output)}\nid:${id}\nevent:${event}\n\n`
                 controller.enqueue(new TextEncoder().encode(data))
               }
+              controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
               // deno-lint-ignore no-explicit-any
             } catch (error: any) {
               Logger.error(`Chat error on: ${error}`)
@@ -1059,6 +1060,7 @@ export const chatService = new Elysia()
         set.headers['content-type'] = 'text/event-stream; charset=UTF-8'
         set.headers['Cache-Control'] = 'no-cache'
         set.headers['Connection'] = 'keep-alive'
+        set.headers['X-Accel-Buffering'] = 'no'
 
         const sseStream = new ReadableStream({
           async cancel(reason) {
@@ -1069,6 +1071,8 @@ export const chatService = new Elysia()
               const chatStream = await LLMService.openAIChatCompletions(body)
               const id = `chatcmpl-${SystemUtils.generateUUID()}`
               const created = (Date.now() / 1000) | 0
+              let doneEnqueued = false
+              let sentRoleChunk = false
 
               for await (const { output, cumulativeUsage } of streamChunksToOutput(chatStream)) {
                 const finishReason = output.responseMetadata?.finishReason
@@ -1083,39 +1087,55 @@ export const chatService = new Elysia()
                   }
                 }
 
-                const eventData = {
-                  id,
-                  object: 'chat.completion.chunk',
-                  created,
-                  model: body.model,
-                  choices: [
-                    {
-                      index: 0,
-                      delta: finishReason
-                        ? {}
-                        : {
-                            role: 'assistant',
-                            content: output.content,
-                          },
-                      finish_reason: finishReason || null,
-                    },
-                  ],
-                  ...(usage && { usage }),
-                }
-
-                controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(eventData)}\n\n`))
-
                 if (finishReason) {
-                  if (!usage && cumulativeUsage.totalTokens > 0) {
-                    const finalEventData = {
+                  if (output.content !== '') {
+                    const contentChunk = {
                       id,
-                      object: 'chat.completion.chunk',
+                      object: 'chat.completion.chunk' as const,
                       created,
                       model: body.model,
                       choices: [
                         {
                           index: 0,
-                          delta: {},
+                          delta: { content: output.content },
+                          logprobs: null as null,
+                          finish_reason: null as null,
+                        },
+                      ],
+                    }
+                    controller.enqueue(
+                      new TextEncoder().encode(`data: ${JSON.stringify(contentChunk)}\n\n`),
+                    )
+                  }
+                  const finalChunk = {
+                    id,
+                    object: 'chat.completion.chunk' as const,
+                    created,
+                    model: body.model,
+                    choices: [
+                      {
+                        index: 0,
+                        delta: {} as Record<string, never>,
+                        logprobs: null as null,
+                        finish_reason: finishReason,
+                      },
+                    ],
+                    ...(usage && { usage }),
+                  }
+                  controller.enqueue(
+                    new TextEncoder().encode(`data: ${JSON.stringify(finalChunk)}\n\n`),
+                  )
+                  if (!usage && cumulativeUsage.totalTokens > 0) {
+                    const finalEventData = {
+                      id,
+                      object: 'chat.completion.chunk' as const,
+                      created,
+                      model: body.model,
+                      choices: [
+                        {
+                          index: 0,
+                          delta: {} as Record<string, never>,
+                          logprobs: null as null,
                           finish_reason: finishReason,
                         },
                       ],
@@ -1125,13 +1145,82 @@ export const chatService = new Elysia()
                         total_tokens: cumulativeUsage.totalTokens,
                       },
                     }
-                    controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(finalEventData)}\n\n`))
+                    controller.enqueue(
+                      new TextEncoder().encode(`data: ${JSON.stringify(finalEventData)}\n\n`),
+                    )
                   }
+                  controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
+                  doneEnqueued = true
                   break
                 }
+
+                if (!sentRoleChunk) {
+                  const roleChunk = {
+                    id,
+                    object: 'chat.completion.chunk' as const,
+                    created,
+                    model: body.model,
+                    choices: [
+                      {
+                        index: 0,
+                        delta: { role: 'assistant' as const, content: '' },
+                        logprobs: null as null,
+                        finish_reason: null as null,
+                      },
+                    ],
+                  }
+                  controller.enqueue(
+                    new TextEncoder().encode(`data: ${JSON.stringify(roleChunk)}\n\n`),
+                  )
+                  sentRoleChunk = true
+                }
+
+                const delta =
+                  output.content !== ''
+                    ? { content: output.content }
+                    : ({} as Record<string, string>)
+                if (Object.keys(delta).length === 0) continue
+
+                const eventData = {
+                  id,
+                  object: 'chat.completion.chunk' as const,
+                  created,
+                  model: body.model,
+                  choices: [
+                    {
+                      index: 0,
+                      delta,
+                      logprobs: null as null,
+                      finish_reason: null as null,
+                    },
+                  ],
+                  ...(usage && { usage }),
+                }
+                controller.enqueue(
+                  new TextEncoder().encode(`data: ${JSON.stringify(eventData)}\n\n`),
+                )
               }
 
-              controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
+              if (!doneEnqueued) {
+                const finalChunk = {
+                  id,
+                  object: 'chat.completion.chunk' as const,
+                  created,
+                  model: body.model,
+                  choices: [
+                    {
+                      index: 0,
+                      delta: {} as Record<string, never>,
+                      logprobs: null as null,
+                      finish_reason: 'stop' as const,
+                    },
+                  ],
+                }
+                controller.enqueue(
+                  new TextEncoder().encode(`data: ${JSON.stringify(finalChunk)}\n\n`),
+                )
+                controller.enqueue(new TextEncoder().encode(`data: [DONE]\n\n`))
+              }
             } catch (error) {
               Logger.error(`OpenAI chat error: ${error}`)
               const errorData = {
