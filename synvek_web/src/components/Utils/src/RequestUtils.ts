@@ -257,6 +257,13 @@ export interface StartModelServerRequest {
   offloaded: boolean
   backend: 'default' | 'llama_cpp' | 'stable_diffusion_cpp' | 'whisper_cpp'
   acceleration: string
+  contextLength?: number
+  gpuLayers?: number
+  cpuThreads?: number
+  batchSize?: number
+  ropeScaling?: string
+  ropeScale?: number
+  ropeFreqBase?: number
 }
 
 export interface StartModelServerResponse {
@@ -1014,6 +1021,13 @@ export class RequestUtils {
       offloaded: model.offloaded,
       backend: model.backend,
       acceleration: model.acceleration,
+      contextLength: model.contextLength,
+      gpuLayers: model.gpuLayers,
+      cpuThreads: model.cpuThreads,
+      batchSize: model.batchSize,
+      ropeScaling: model.ropeScaling,
+      ropeScale: model.ropeScale,
+      ropeFreqBase: model.ropeFreqBase,
     }
     const config = {
       headers: {

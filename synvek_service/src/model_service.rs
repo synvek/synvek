@@ -91,6 +91,28 @@ pub struct ModelServiceArgs {
 
     /// Acceleration
     pub acceleration: String,
+
+    /// Context Length
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    pub rope_freq_base: Option<u32>,
+
 }
 
 #[derive(Debug, Clone)]
@@ -132,6 +154,27 @@ pub struct ModelInfo {
 
     /// Acceleration
     pub acceleration: String,
+
+    /// Context Length
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    pub rope_freq_base: Option<u32>,
 }
 
 pub fn get_model_servers() -> Vec<ModelInfo> {
@@ -158,6 +201,13 @@ pub fn get_model_servers() -> Vec<ModelInfo> {
                 offloaded: info.offloaded,
                 backend: info.backend.clone(),
                 acceleration: info.acceleration.clone(),
+                context_length: info.context_length.clone(),
+                gpu_layers: info.gpu_layers.clone(),
+                cpu_threads: info.cpu_threads.clone(),
+                batch_size: info.batch_size.clone(),
+                rope_scaling: info.rope_scaling.clone(),
+                rope_scale: info.rope_scale.clone(),
+                rope_freq_base: info.rope_freq_base.clone(),
             };
             model_infos.push(model_info);
         });
@@ -247,6 +297,34 @@ async fn start_model_server_in_spawn_process(
         let token_source = updated_args.token_source.clone().unwrap();
         process_args.push("--token-source".to_string());
         process_args.push(token_source);
+    }
+    if let Some(context_length) = updated_args.context_length {
+        process_args.push("--context-length".to_string());
+        process_args.push(context_length.to_string());
+    }
+    if let Some(gpu_layers) = updated_args.gpu_layers {
+        process_args.push("--gpu-layers".to_string());
+        process_args.push(gpu_layers.to_string());
+    }
+    if let Some(cpu_threads) = updated_args.cpu_threads {
+        process_args.push("--cpu-threads".to_string());
+        process_args.push(cpu_threads.to_string());
+    }
+    if let Some(batch_size) = updated_args.batch_size {
+        process_args.push("--batch-size".to_string());
+        process_args.push(batch_size.to_string());
+    }
+    if let Some(rope_scaling) = updated_args.rope_scaling.clone() {
+        process_args.push("--rope-scaling".to_string());
+        process_args.push(rope_scaling);
+    }
+    if let Some(rope_scale) = updated_args.rope_scale {
+        process_args.push("--rope-scale".to_string());
+        process_args.push(rope_scale.to_string());
+    }
+    if let Some(rope_freq_base) = updated_args.rope_freq_base {
+        process_args.push("--rope-freq-base".to_string());
+        process_args.push(rope_freq_base.to_string());
     }
 
     tracing::info!("Starting model server {:?}", process_args);
@@ -707,6 +785,36 @@ fn populate_args_with_backend_llama_cpp(
             start_args.push(OsString::from(model_path.to_str().unwrap() ));
         }
         start_args.push(OsString::from("--jinja"));
+
+        if let Some(context_length) = args.context_length {
+            start_args.push(OsString::from("--ctx-size"));
+            start_args.push(OsString::from(context_length.to_string()));
+        }
+        if let Some(gpu_layers) = args.gpu_layers {
+            start_args.push(OsString::from("--gpu-layers"));
+            start_args.push(OsString::from(gpu_layers.to_string()));
+        }
+        if let Some(cpu_threads) = args.cpu_threads {
+            start_args.push(OsString::from("--threads"));
+            start_args.push(OsString::from(cpu_threads.to_string()));
+        }
+        if let Some(batch_size) = args.batch_size {
+            start_args.push(OsString::from("--batch-size"));
+            start_args.push(OsString::from(batch_size.to_string()));
+        }
+        if let Some(rope_scaling) = args.rope_scaling.clone() {
+            start_args.push(OsString::from("--rope-scaling"));
+            start_args.push(OsString::from(rope_scaling.as_str()));
+        }
+        if let Some(rope_scale) = args.rope_scale {
+            start_args.push(OsString::from("--rope-scale"));
+            start_args.push(OsString::from(rope_scale.to_string()));
+        }
+        if let Some(rope_freq_base) = args.rope_freq_base {
+            start_args.push(OsString::from("--rope-freq-base"));
+            start_args.push(OsString::from(rope_freq_base.to_string()));
+        }
+
     });
     if !gguf_found {
         tracing::error!("No GGUF found");
@@ -964,6 +1072,13 @@ async fn start_mistral_server_dll(
         offloaded: args.offloaded,
         backend: args.backend.clone(),
         acceleration: "".to_string(),
+        context_length: args.context_length.clone(),
+        gpu_layers: args.gpu_layers.clone(),
+        cpu_threads: args.cpu_threads.clone(),
+        batch_size: args.batch_size.clone(),
+        rope_scaling: args.rope_scaling.clone(),
+        rope_scale: args.rope_scale.clone(),
+        rope_freq_base: args.rope_freq_base.clone(),
     };
     let config = Config::new();
     let main_process_port = config.get_config_port().to_string();

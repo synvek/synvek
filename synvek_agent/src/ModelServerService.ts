@@ -40,6 +40,13 @@ export const modelServerService = new Elysia({ prefix: 'server' })
               offloaded: value.offloaded,
               backend: value.backend,
               acceleration: value.acceleration,
+              contextLength: value.context_length,
+              gpuLayers: value.gpu_layers,
+              cpuThreads: value.cpu_threads,
+              batchSize: value.batch_size,
+              ropeScaling: value.rope_scaling,
+              ropeScale: value.rope_scale,
+              ropeFreqBase: value.rope_freq_base,
             }
           })
           ModelServerService.setModelServers(modelServerInfos)
@@ -74,6 +81,13 @@ export const modelServerService = new Elysia({ prefix: 'server' })
         offloaded: body.offloaded,
         backend: body.backend,
         acceleration: body.acceleration,
+        contextLength: body.contextLength,
+        gpuLayers: body.gpuLayers,
+        cpuThreads: body.cpuThreads,
+        batchSize: body.batchSize,
+        ropeScaling: body.ropeScaling,
+        ropeScale: body.ropeScale,
+        ropeFreqBase: body.ropeFreqBase,
       }
       let response: string = ''
       const modelServerResponse = await RequestUtils.startModelServer(request)
@@ -95,6 +109,13 @@ export const modelServerService = new Elysia({ prefix: 'server' })
                 offloaded: data.offloaded,
                 backend: data.backend,
                 acceleration: data.acceleration,
+                contextLength: data.context_length,
+                gpuLayers: data.gpu_layers,
+                cpuThreads: data.cpu_threads,
+                batchSize: data.batch_size,
+                ropeScaling: data.rope_scaling,
+                ropeScale: data.rope_scale,
+                ropeFreqBase: data.rope_freq_base,
               }
             : null
           response = SystemUtils.buildResponse(true, modelServerInfo)
@@ -120,6 +141,13 @@ export const modelServerService = new Elysia({ prefix: 'server' })
         offloaded: t.Boolean(),
         backend: t.String(),
         acceleration: t.String(),
+        contextLength: t.Optional(t.Number()),
+        gpuLayers: t.Optional(t.Number()),
+        cpuThreads: t.Optional(t.Number()),
+        batchSize: t.Optional(t.Number()),
+        ropeScaling: t.Optional(t.String()),
+        ropeScale: t.Optional(t.Number()),
+        ropeFreqBase: t.Optional(t.Number()),
       }),
     },
   )

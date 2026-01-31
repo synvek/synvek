@@ -1062,6 +1062,11 @@ export const chatService = new Elysia()
         set.headers['Connection'] = 'keep-alive'
         set.headers['X-Accel-Buffering'] = 'no'
 
+        // body.messages.forEach(message => {
+        //   Logger.info(`prompt: role=${message.role} ,content=${message.content}`)
+        // })
+
+
         const sseStream = new ReadableStream({
           async cancel(reason) {
             Logger.warn(`OpenAI chat stream is cancelled: ${reason}`)

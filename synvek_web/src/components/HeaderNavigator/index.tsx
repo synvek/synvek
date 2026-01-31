@@ -766,6 +766,44 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     return items
   }
 
+  const populateStartModelServerRequest = (task: Task, startModelServerRequest: StartModelServerRequest) => {
+    const modelName = task.task_name
+    const keyPrefix = Consts.LOCAL_STORAGE_SERVER_SETTING_PREFIX + modelName + ':'
+    const localAutoContextLength = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CONTEXT_LENGTH)
+    const localContextLength = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CONTEXT_LENGTH)
+    const localAutoCpuThreads = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CPU_THREADS)
+    const localCpuThreads = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CPU_THREADS)
+    const localGpuLayers = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_GPU_LAYERS)
+    const localBatchSize = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_BATCH_SIZE)
+    const localAutoRopeScaling = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALING)
+    const localRopeScaling = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALING)
+    const localAutoRopeScale = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALE)
+    const localRopeScale = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALE)
+    const localAutoRopeFreqBase = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_FREQ_BASE)
+    const localRopeFreqBase = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_FREQ_BASE)
+    if (localAutoContextLength && localAutoContextLength.toUpperCase() !== 'TRUE' && localContextLength) {
+      startModelServerRequest.contextLength = Number.parseInt(localContextLength)
+    }
+    if (localAutoCpuThreads && localAutoCpuThreads.toUpperCase() !== 'TRUE' && localCpuThreads) {
+      startModelServerRequest.cpuThreads = Number.parseInt(localCpuThreads)
+    }
+    if (localGpuLayers) {
+      startModelServerRequest.gpuLayers = Number.parseInt(localGpuLayers)
+    }
+    if (localBatchSize) {
+      startModelServerRequest.batchSize = Number.parseInt(localBatchSize)
+    }
+    if (localAutoRopeScaling && localAutoRopeScaling.toUpperCase() !== 'TRUE' && localRopeScaling) {
+      startModelServerRequest.ropeScaling = localRopeScaling
+    }
+    if (localAutoRopeScale && localAutoRopeScale.toUpperCase() !== 'TRUE' && localRopeScale) {
+      startModelServerRequest.ropeScale = Number.parseInt(localRopeScale)
+    }
+    if (localAutoRopeFreqBase && localAutoRopeFreqBase.toUpperCase() !== 'TRUE' && localRopeFreqBase) {
+      startModelServerRequest.ropeFreqBase = Number.parseInt(localRopeFreqBase)
+    }
+  }
+
   const handleStartModelServer = async (task: Task) => {
     let modelType = 'plain'
     let backends: BackendType[] = []
@@ -809,6 +847,8 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       backend: backend,
       acceleration: acceleration,
     }
+    populateStartModelServerRequest(task, startModelServerRequest)
+    console.log(`request = ${startModelServerRequest}`)
     const startModelServerResponse = await RequestUtils.startModelServer(startModelServerRequest)
     await WorkspaceUtils.handleRequest(
       messageApi,

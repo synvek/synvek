@@ -55,6 +55,27 @@ pub struct ModelServerData {
 
     /// Acceleration
     pub acceleration: String,
+
+    /// Context Length
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    pub rope_freq_base: Option<u32>,
 }
 
 /// Request for Start Model Server
@@ -89,6 +110,29 @@ pub struct StartModelServerRequest {
 
     /// Acceleration
     pub acceleration: String,
+
+    /// Context Length
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    pub rope_freq_base: Option<u32>,
+
+
 }
 
 /// Response for Start Model Server
@@ -157,6 +201,13 @@ impl From<ModelInfo> for ModelServerData {
             offloaded: model_info.offloaded,
             backend: model_info.backend,
             acceleration: model_info.acceleration,
+            context_length: model_info.context_length,
+            gpu_layers: model_info.gpu_layers,
+            cpu_threads: model_info.cpu_threads,
+            batch_size: model_info.batch_size,
+            rope_scaling: model_info.rope_scaling,
+            rope_scale: model_info.rope_scale,
+            rope_freq_base: model_info.rope_freq_base,
         }
     }
 }
@@ -193,6 +244,13 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
         offloaded: req.offloaded,
         backend: req.backend.clone(),
         acceleration: req.acceleration.clone(),
+        context_length: req.context_length.clone(),
+        gpu_layers: req.gpu_layers.clone(),
+        cpu_threads: req.cpu_threads.clone(),
+        batch_size: req.batch_size.clone(),
+        rope_scaling: req.rope_scaling.clone(),
+        rope_scale: req.rope_scale.clone(),
+        rope_freq_base: req.rope_freq_base.clone(),
     };
     let config = config::get_synvek_config();
     let multi_process = config.multi_process;
@@ -213,6 +271,13 @@ async fn start_model_server(req: web::Json<StartModelServerRequest>) -> impl Res
                 offloaded: req.offloaded,
                 backend: req.backend.clone(),
                 acceleration: req.acceleration.clone(),
+                context_length: req.context_length.clone(),
+                gpu_layers: req.gpu_layers.clone(),
+                cpu_threads: req.cpu_threads.clone(),
+                batch_size: req.batch_size.clone(),
+                rope_scaling: req.rope_scaling.clone(),
+                rope_scale: req.rope_scale.clone(),
+                rope_freq_base: req.rope_freq_base.clone(),
             };
             let response = StartModelServerResponse {
                 success: true,

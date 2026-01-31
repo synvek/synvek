@@ -115,6 +115,35 @@ pub struct StartArgs {
     /// Acceleration
     #[arg(long)]
     pub acceleration: String,
+
+    /// Context Length
+    #[arg(long)]
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    #[arg(long)]
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    #[arg(long)]
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    #[arg(long)]
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    #[arg(long)]
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    #[arg(long)]
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    #[arg(long)]
+    pub rope_freq_base: Option<u32>,
+
 }
 
 /// Service Args
@@ -230,6 +259,13 @@ impl CommandHandler {
             offloaded: args.offloaded,
             backend: args.backend,
             acceleration: args.acceleration,
+            context_length: args.context_length,
+            gpu_layers: args.gpu_layers,
+            cpu_threads: args.cpu_threads,
+            batch_size: args.batch_size,
+            rope_scaling: args.rope_scaling,
+            rope_scale: args.rope_scale,
+            rope_freq_base: args.rope_freq_base,
         };
         crate::model_service::start_model_server_from_command(&model_args, args.task_id.as_str(), args.port.as_str()).await?;
         loop {

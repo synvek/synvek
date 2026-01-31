@@ -16,6 +16,13 @@ export interface ModelServerData {
   offloaded: boolean
   backend: string
   acceleration: string
+  context_length?: number
+  gpu_layers?: number
+  cpu_threads?: number
+  batch_size?: number
+  rope_scaling?: string
+  rope_scale?: number
+  rope_freq_base?: number
 }
 
 export interface ModelServerInfo {
@@ -32,6 +39,13 @@ export interface ModelServerInfo {
   offloaded: boolean
   backend: string
   acceleration: string
+  contextLength?: number
+  gpuLayers?: number
+  cpuThreads?: number
+  batchSize?: number
+  ropeScaling?: string
+  ropeScale?: number
+  ropeFreqBase?: number
 }
 
 export interface GetModelServersResponse {
@@ -52,6 +66,13 @@ export interface StartModelServerRequest {
   offloaded: boolean
   backend: string
   acceleration: string
+  contextLength?: number
+  gpuLayers?: number
+  cpuThreads?: number
+  batchSize?: number
+  ropeScaling?: string
+  ropeScale?: number
+  ropeFreqBase?: number
 }
 
 export interface StartModelServerResponse {
@@ -111,6 +132,13 @@ export class RequestUtils {
       offloaded: model.offloaded,
       backend: model.backend,
       acceleration: model.acceleration,
+      context_length: model.contextLength,
+      gpu_layers: model.gpuLayers,
+      cpu_threads: model.cpuThreads,
+      batch_size: model.batchSize,
+      rope_scaling: model.ropeScaling,
+      rope_scale: model.ropeScale,
+      rope_freq_base: model.ropeFreqBase,
     }
     const config = {
       headers: {

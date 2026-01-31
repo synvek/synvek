@@ -73,6 +73,27 @@ pub struct ProcessInfo {
 
     /// Acceleration
     pub acceleration: String,
+
+    /// Context Length
+    pub context_length: Option<u32>,
+
+    /// GPU layers (offload)
+    pub gpu_layers: Option<u32>,
+
+    /// CPU threads
+    pub cpu_threads: Option<u32>,
+
+    /// Batch size
+    pub batch_size: Option<u32>,
+
+    /// RoPE scaling method
+    pub rope_scaling: Option<String>,
+
+    /// RoPE scale
+    pub rope_scale: Option<u32>,
+
+    /// RoPE frequency base
+    pub rope_freq_base: Option<u32>,
 }
 
 static GLOBAL_PROCESSES: OnceLock<Arc<Mutex<HashMap<String, ProcessInfo>>>> = OnceLock::new();
@@ -180,6 +201,13 @@ pub fn start_process(task_id: String, process_args: Vec<String>, model_args: Mod
             offloaded: model_args.offloaded,
             backend: model_args.backend,
             acceleration: model_args.acceleration,
+            context_length: model_args.context_length,
+            gpu_layers: model_args.gpu_layers,
+            cpu_threads: model_args.cpu_threads,
+            batch_size: model_args.batch_size,
+            rope_scaling: model_args.rope_scaling,
+            rope_scale: model_args.rope_scale,
+            rope_freq_base: model_args.rope_freq_base,
         };
         insert_process(task_id.clone(), process_info);
 
