@@ -2,6 +2,7 @@
 import { Button, Divider, Dropdown, MenuProps, message, theme, Tooltip, Typography } from 'antd'
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
+import ServerSettingWindow from '@/components/HeaderNavigator/ServerSettingWindow'
 import { Placeholder, PlayOutlined16, StopOutlined16 } from '@/components/Resource/Icons'
 import {
   Consts,
@@ -27,6 +28,7 @@ import {
   FireOutlined,
   Loading3QuartersOutlined,
   SearchOutlined,
+  SettingOutlined,
   StopOutlined,
   ThunderboltFilled,
 } from '@ant-design/icons'
@@ -52,6 +54,22 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
   const globalContext = useGlobalContext()
   const currentWorkspace = globalContext.currentWorkspace
   const [forceUpdate, setForceUpdate] = useState<number>(FORCE_UPDATE_INDEX)
+  const [serverSettingWindowVisible, setServerSettingWindowVisible] = useState<boolean>(false)
+  const [modelName, setModelName] = useState<string>('')
+  const [modelId, setModelId] = useState<string>('')
+  const [enableAdvanced, setEnableAdvanced] = useState<boolean>(Consts.SERVER_SETTING_ENABLE_ADVANCED_DEFAULT)
+  const [autoContextLength, setAutoContextLength] = useState<boolean>(Consts.SERVER_SETTING_AUTO_CONTEXT_LENGTH_DEFAULT)
+  const [contextLength, setContextLength] = useState<number>(Consts.SERVER_SETTING_CONTEXT_LENGTH_DEFAULT)
+  const [autoCpuThreads, setAutoCpuThreads] = useState<boolean>(Consts.SERVER_SETTING_AUTO_CPU_THREADS_DEFAULT)
+  const [cpuThreads, setCpuThreads] = useState<number>(Consts.SERVER_SETTING_CPU_THREADS_DEFAULT)
+  const [gpuLayers, setGpuLayers] = useState<number>(Consts.SERVER_SETTING_GPU_LAYERS_DEFAULT)
+  const [batchSize, setBatchSize] = useState<number>(Consts.SERVER_SETTING_BATCH_SIZE_DEFAULT)
+  const [autoRopeScaling, setAutoRopeScaling] = useState<boolean>(Consts.SERVER_SETTING_AUTO_ROPE_SCALING_DEFAULT)
+  const [ropeScaling, setRopeScaling] = useState<string>(Consts.SERVER_SETTING_ROPE_SCALING_DEFAULT)
+  const [autoRopeScale, setAutoRopeScale] = useState<boolean>(Consts.SERVER_SETTING_AUTO_ROPE_SCALE_DEFAULT)
+  const [ropeScale, setRopeScale] = useState<number>(Consts.SERVER_SETTING_ROPE_SCALE_DEFAULT)
+  const [autoRopeFreqBase, setAutoRopeFreqBase] = useState<boolean>(Consts.SERVER_SETTING_AUTO_ROPE_FREQ_BASE_DEFAULT)
+  const [ropeFreqBase, setRopeFreqBase] = useState<number>(Consts.SERVER_SETTING_ROPE_FREQ_BASE_DEFAULT)
 
   const { token } = useToken()
   const intl = useIntl()
@@ -480,6 +498,93 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     setForceUpdate(forceUpdate + 1)
   }
 
+  const handleServerSetting = (task: Task) => {
+    const modelName = task.task_name
+    const modelId = task.model_id
+    const keyPrefix = Consts.LOCAL_STORAGE_SERVER_SETTING_PREFIX + modelName + ':'
+    const localEnableAdvanced = localStorage.getItem(Consts.LOCAL_STORAGE_SERVER_SETTING_ENABLE_ADVANCED)
+    const localAutoContextLength = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CONTEXT_LENGTH)
+    const localContextLength = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CONTEXT_LENGTH)
+    const localAutoCpuThreads = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CPU_THREADS)
+    const localCpuThreads = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CPU_THREADS)
+    const localGpuLayers = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_GPU_LAYERS)
+    const localBatchSize = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_BATCH_SIZE)
+    const localAutoRopeScaling = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALING)
+    const localRopeScaling = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALING)
+    const localAutoRopeScale = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALE)
+    const localRopeScale = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALE)
+    const localAutoRopeFreqBase = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_FREQ_BASE)
+    const localRopeFreqBase = localStorage.getItem(keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_FREQ_BASE)
+    setModelName(modelName)
+    setModelId(modelId + '')
+    if (localEnableAdvanced) {
+      setEnableAdvanced(localEnableAdvanced.toUpperCase() === 'TRUE')
+    } else {
+      setEnableAdvanced(Consts.SERVER_SETTING_ENABLE_ADVANCED_DEFAULT)
+    }
+    if (localAutoContextLength) {
+      setAutoContextLength(localAutoContextLength.toUpperCase() === 'TRUE')
+    } else {
+      setAutoContextLength(Consts.SERVER_SETTING_AUTO_CONTEXT_LENGTH_DEFAULT)
+    }
+    if (localContextLength) {
+      setContextLength(Number.parseInt(localContextLength))
+    } else {
+      setContextLength(Consts.SERVER_SETTING_CONTEXT_LENGTH_DEFAULT)
+    }
+    if (localAutoCpuThreads) {
+      setAutoCpuThreads(localAutoCpuThreads.toUpperCase() === 'TRUE')
+    } else {
+      setAutoCpuThreads(Consts.SERVER_SETTING_AUTO_CPU_THREADS_DEFAULT)
+    }
+    if (localCpuThreads) {
+      setCpuThreads(Number.parseInt(localCpuThreads))
+    } else {
+      setCpuThreads(Consts.SERVER_SETTING_CPU_THREADS_DEFAULT)
+    }
+    if (localGpuLayers) {
+      setGpuLayers(Number.parseInt(localGpuLayers))
+    } else {
+      setGpuLayers(Consts.SERVER_SETTING_GPU_LAYERS_DEFAULT)
+    }
+    if (localBatchSize) {
+      setBatchSize(Number.parseInt(localBatchSize))
+    } else {
+      setBatchSize(Consts.SERVER_SETTING_BATCH_SIZE_DEFAULT)
+    }
+    if (localAutoRopeScaling) {
+      setAutoRopeScaling(localAutoRopeScaling.toUpperCase() === 'TRUE')
+    } else {
+      setAutoRopeScaling(Consts.SERVER_SETTING_AUTO_ROPE_SCALING_DEFAULT)
+    }
+    if (localRopeScaling) {
+      setRopeScaling(localRopeScaling)
+    } else {
+      setRopeScaling(Consts.SERVER_SETTING_ROPE_SCALING_DEFAULT)
+    }
+    if (localAutoRopeScale) {
+      setAutoRopeScale(localAutoRopeScale.toUpperCase() === 'TRUE')
+    } else {
+      setAutoRopeScale(Consts.SERVER_SETTING_AUTO_ROPE_SCALE_DEFAULT)
+    }
+    if (localRopeScale) {
+      setRopeScale(Number.parseInt(localRopeScale))
+    } else {
+      setRopeScale(Consts.SERVER_SETTING_ROPE_SCALE_DEFAULT)
+    }
+    if (localAutoRopeFreqBase) {
+      setAutoRopeFreqBase(localAutoRopeFreqBase.toUpperCase() === 'TRUE')
+    } else {
+      setAutoRopeFreqBase(Consts.SERVER_SETTING_AUTO_ROPE_FREQ_BASE_DEFAULT)
+    }
+    if (localRopeFreqBase) {
+      setRopeFreqBase(Number.parseInt(localRopeFreqBase))
+    } else {
+      setRopeFreqBase(Consts.SERVER_SETTING_ROPE_FREQ_BASE_DEFAULT)
+    }
+    setServerSettingWindowVisible(true)
+  }
+
   const handleStartDownloadModelByProvider = async (task: Task) => {
     const fetchResponse = await RequestUtils.resumeFetch(task.task_name)
     await WorkspaceUtils.handleRequest(
@@ -755,27 +860,7 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       let modelTotalSize = 0
       let modelDownloadedSize = 0
       let taskId: string = ''
-      // let supportText2Text = false
-      // let supportImage2Text = false
-      // let supportSpeech2Text = false
-      // let supportVideo2Text = false
-      // let supportText2Image = false
-      // let supportText2Speech = false
-      //
-      // modelProviders.forEach((modelProvider) => {
-      //   modelProvider.modelOptions.forEach((modelOption) => {
-      //     if (modelOption.name === task.model_id) {
-      //       modelProvider.categories.forEach((category) => {
-      //         supportText2Text = category === 'text-to-text'
-      //         supportImage2Text = category === 'image-to-text'
-      //         supportSpeech2Text = category === 'speech-to-text'
-      //         supportVideo2Text = category === 'video-to-text'
-      //         supportText2Image = category === 'text-to-image'
-      //         supportText2Speech = category === 'text-to-speech'
-      //       })
-      //     }
-      //   })
-      // })
+
       currentWorkspace.modelServers.forEach((modelServer) => {
         if (modelServer.modelName === task.task_name) {
           taskId = modelServer.taskId
@@ -938,6 +1023,9 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                   <Button size={'small'} type={'text'} icon={<FireOutlined />} />
                 </Dropdown>
               </Tooltip>
+              <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-backend-settings' })}>
+                <Button size={'small'} type={'text'} icon={<SettingOutlined />} onClick={() => handleServerSetting(task)}></Button>
+              </Tooltip>
             </div>
           </div>
         </>
@@ -984,6 +1072,57 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
     currentWorkspace.triggerRouterChanged()
   }
 
+  const handleServerSettingWindowCancel = () => {
+    setServerSettingWindowVisible(false)
+  }
+
+  const handleServerSettingWindowOk = (
+    modelName: string,
+    _modelId: string,
+    enableAdvanced: boolean,
+    autoContextLength: boolean,
+    contextLength: number,
+    gpuLayers: number,
+    autoCpuThreads: boolean,
+    cpuThreads: number,
+    batchSize: number,
+    autoRopeScaling: boolean,
+    ropeScaling: string,
+    autoRopeScale: boolean,
+    ropeScale: number,
+    autoRopeFreqBase: boolean,
+    ropeFreqBase: number,
+  ) => {
+    setServerSettingWindowVisible(false)
+    const localEnableAdvancedKey = Consts.LOCAL_STORAGE_SERVER_SETTING_ENABLE_ADVANCED
+    const keyPrefix = Consts.LOCAL_STORAGE_SERVER_SETTING_PREFIX + modelName + ':'
+    const localAutoContextLengthKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CONTEXT_LENGTH
+    const localContextLengthKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CONTEXT_LENGTH
+    const localAutoCpuThreadsKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_CPU_THREADS
+    const localCpuThreadsKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_CPU_THREADS
+    const localGpuLayersKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_GPU_LAYERS
+    const localBatchSizeKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_BATCH_SIZE
+    const localAutoRopeScalingKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALING
+    const localRopeScalingKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALING
+    const localAutoRopeScaleKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALE
+    const localRopeScaleKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALE
+    const localAutoRopeFreqBaseKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_FREQ_BASE
+    const localRopeFreqBaseKey = keyPrefix + Consts.LOCAL_STORAGE_SERVER_SETTING_ROPE_FREQ_BASE
+    localStorage.setItem(localEnableAdvancedKey, String(enableAdvanced))
+    localStorage.setItem(localAutoContextLengthKey, String(autoContextLength))
+    localStorage.setItem(localContextLengthKey, String(contextLength))
+    localStorage.setItem(localAutoCpuThreadsKey, String(autoCpuThreads))
+    localStorage.setItem(localCpuThreadsKey, String(cpuThreads))
+    localStorage.setItem(localGpuLayersKey, String(gpuLayers))
+    localStorage.setItem(localBatchSizeKey, String(batchSize))
+    localStorage.setItem(localAutoRopeScalingKey, String(autoRopeScaling))
+    localStorage.setItem(localRopeScalingKey, String(ropeScaling))
+    localStorage.setItem(localAutoRopeScaleKey, String(autoRopeScale))
+    localStorage.setItem(localRopeScaleKey, String(ropeScale))
+    localStorage.setItem(localAutoRopeFreqBaseKey, String(autoRopeFreqBase))
+    localStorage.setItem(localRopeFreqBaseKey, String(ropeFreqBase))
+  }
+
   return (
     <div data-tauri-drag-region className={styles.main}>
       {contextHolder}
@@ -1011,6 +1150,26 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
           onClick={handleModelSearch}
         ></Button>
       </Tooltip>
+      <ServerSettingWindow
+        visible={serverSettingWindowVisible}
+        modelName={modelName}
+        modelId={modelId}
+        enableAdvanced={enableAdvanced}
+        autoContextLength={autoContextLength}
+        contextLength={contextLength}
+        gpuLayers={gpuLayers}
+        autoCpuThreads={autoCpuThreads}
+        cpuThreads={cpuThreads}
+        batchSize={batchSize}
+        autoRopeScaling={autoRopeScaling}
+        ropeScaling={ropeScaling}
+        autoRopeScale={autoRopeScale}
+        ropeScale={ropeScale}
+        autoRopeFreqBase={autoRopeFreqBase}
+        ropeFreqBase={ropeFreqBase}
+        onWindowCancel={handleServerSettingWindowCancel}
+        onWindowOk={handleServerSettingWindowOk}
+      />
     </div>
   )
 }

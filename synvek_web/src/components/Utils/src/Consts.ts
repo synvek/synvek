@@ -209,6 +209,34 @@ export class Consts {
   public static IMAGE_STRENGTH_DEFAULT = 0.75
   public static IMAGE_CONTROL_STRENGTH_DEFAULT = 0.9
 
+  public static LOCAL_STORAGE_SERVER_SETTING_PREFIX = 'synvek.server.'
+  public static LOCAL_STORAGE_SERVER_SETTING_ENABLE_ADVANCED = 'synvek.server.enable-advanced'
+  public static LOCAL_STORAGE_SERVER_SETTING_AUTO_CONTEXT_LENGTH = 'auto-context-length'
+  public static LOCAL_STORAGE_SERVER_SETTING_CONTEXT_LENGTH = 'context-length'
+  public static LOCAL_STORAGE_SERVER_SETTING_AUTO_CPU_THREADS = 'auto-cpu-threads'
+  public static LOCAL_STORAGE_SERVER_SETTING_CPU_THREADS = 'cpu-threads'
+  public static LOCAL_STORAGE_SERVER_SETTING_GPU_LAYERS = 'gpu-layers'
+  public static LOCAL_STORAGE_SERVER_SETTING_BATCH_SIZE = 'batch-size'
+  public static LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALING = 'auto-rope-scaling'
+  public static LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALING = 'rope-scaling'
+  public static LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_SCALE = 'auto-rope-scale'
+  public static LOCAL_STORAGE_SERVER_SETTING_ROPE_SCALE = 'rope-scale'
+  public static LOCAL_STORAGE_SERVER_SETTING_AUTO_ROPE_FREQ_BASE = 'auto-rope-freq-base'
+  public static LOCAL_STORAGE_SERVER_SETTING_ROPE_FREQ_BASE = 'rope-freq-base'
+  public static SERVER_SETTING_ENABLE_ADVANCED_DEFAULT = false
+  public static SERVER_SETTING_AUTO_CONTEXT_LENGTH_DEFAULT = true
+  public static SERVER_SETTING_CONTEXT_LENGTH_DEFAULT = 4096
+  public static SERVER_SETTING_AUTO_CPU_THREADS_DEFAULT = true
+  public static SERVER_SETTING_CPU_THREADS_DEFAULT = 4
+  public static SERVER_SETTING_GPU_LAYERS_DEFAULT = 0
+  public static SERVER_SETTING_BATCH_SIZE_DEFAULT = 512
+  public static SERVER_SETTING_AUTO_ROPE_SCALING_DEFAULT = true
+  public static SERVER_SETTING_ROPE_SCALING_DEFAULT = 'linear'
+  public static SERVER_SETTING_AUTO_ROPE_SCALE_DEFAULT = true
+  public static SERVER_SETTING_ROPE_SCALE_DEFAULT = 1.0
+  public static SERVER_SETTING_AUTO_ROPE_FREQ_BASE_DEFAULT = true
+  public static SERVER_SETTING_ROPE_FREQ_BASE_DEFAULT = 10000
+
   //Local storage for version check time
   public static LOCAL_STORAGE_VERSION_CHECK_TIME = 'synvek.version.check-time'
   public static LOCAL_STORAGE_VERSION_TAG_NAME = 'synvek.version.tag-name'
