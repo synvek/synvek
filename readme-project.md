@@ -115,28 +115,28 @@ Noted: Need to rename synvek_backend_llama.dll to synvek_backend_llama_metal.dll
 
 - Build stable-diffusion.cpp with cuda: 
 
-cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DSD_CUDA=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cuda.dll and copy to output folder
 
 - Build stable-diffusion.cpp with cpu: 
 
-cmake -B build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cpu -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cpu --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_cpu.dll and copy to output folder
 
 - Build stable-diffusion.cpp with Vulkan: 
 
-cmake -B build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_vulkan -DSD_VULKAN=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_vulkan --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_vulkan.dll and copy to output folder
 
 - Build stable-diffusion.cpp with metal: 
 
-cmake -B build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_metal -DSD_METAL=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_metal --config Release --target synvek_backend_sd -j 14
 
 Noted: Need to rename synvek_backend_sd.dll to synvek_backend_sd_metal.dll and copy to output folder

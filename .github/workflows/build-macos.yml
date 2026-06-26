@@ -125,7 +125,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp metal 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_metal -DSD_METAL=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/stable-diffusion.cpp/build_metal --config Release --target synvek_backend_sd -j  4
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp metal 
@@ -140,7 +140,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4 
 
     - name: Copy & cleanup reasources for synvek_explorer on build backend-> stable-diffusion.cpp cpu 

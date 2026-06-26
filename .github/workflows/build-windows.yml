@@ -171,7 +171,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cuda 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cuda -DSD_CUDA=ON -DSD_WEBM=ON -DSD_WEBP=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_cuda --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
@@ -181,7 +181,7 @@ jobs:
 
     - name: Configure and build backend-> stable-diffusion.cpp vulkan 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_vulkan -DSD_VULKAN=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_vulkan --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
@@ -191,7 +191,7 @@ jobs:
         
     - name: Configure and build backend-> stable-diffusion.cpp cpu 
       run: |
-        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
+        cmake -S third_party/stable-diffusion.cpp  -B build/stable-diffusion.cpp/build_cpu -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DSD_NATIVE=OFF -DSD_AVX=ON -DSD_AVX2=ON -DSD_FMA=ON -DSD_F16C=ON -DSD_AVX512=OFF -DSD_AVX512_VBMI=OFF -DSD_AVX512_VNNI=OFF
         cmake --build build/stable-diffusion.cpp/build_cpu --config Release --target synvek_backend_sd -j 4
 
     - name: Disk space check
