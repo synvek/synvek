@@ -6,6 +6,7 @@ target/
 third_party2/
 node_modules
 .idea/
+.DS_Store
 /.vscode
 /docs/.vitepress/cache
 /docs/.vitepress/dist
