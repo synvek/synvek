@@ -435,8 +435,12 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           setCurrentImageIndex(newImages.length - 1)
           await saveGeneration(generationContext, data)
         },
-        () => {},
-        () => {},
+        (message) => {
+          console.log(`Failed to generate image with reason: ${message}`)
+        },
+        (error) => {
+          console.log(`Error to generate image with error: ${error}`)
+        },
       )
     } finally {
       setLoading(false)
@@ -447,7 +451,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
     const genContext = JSON.stringify(generationContext)
     for (let i = 0; i < images.length; i++) {
       const image = images[i]
-      const thumbData = await SystemUtils.resizeImage(image, 128, 128)
+      const thumbData = await SystemUtils.resizeImage(image, 128, 128, supportVideoGen)
       const generationData = await RequestUtils.addGeneration(
         supportVideoGen ? Consts.GENERATION_TYPE_VIDEO : Consts.GENERATION_TYPE_IMAGE,
         userText,
@@ -466,9 +470,15 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
       await WorkspaceUtils.handleRequest(
         messageApi,
         generationData,
-        () => {},
-        () => {},
-        () => {},
+        (data) => {
+          console.log(`Save generation succeed: ${data}`)
+        },
+        (failure) => {
+          console.log(`Save generation failure: ${failure}`)
+        },
+        (error) => {
+          console.log(`Save generation error: ${error}`)
+        },
       )
     }
   }
@@ -538,7 +548,7 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
           {image.type === 'image' ? (
             <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           ) : (
-            <img src={image.data} alt={''} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            <video src={image.data} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           )}
         </div>
       )
@@ -2068,9 +2078,9 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                             style={{ borderColor: token.colorError }}
                           />
                         ) : (
-                          <img
+                          <video
                             src={images[currentImageIndex].data}
-                            alt={''}
+                            controls={true}
                             className={styles.imageGenerationImagePreview}
                             style={{ borderColor: token.colorError }}
                           />
@@ -2155,6 +2165,24 @@ const ImageGenerationView: FC<ImageGenerationViewProps> = ({ visible }) => {
                     preview={{
                       visible: currentGenerationVisible,
                       src: currentGeneration ? currentGeneration.generationContent : '',
+                      imageRender: (originalNode, info) => {
+                        if (currentGeneration?.generationType === 'video') {
+                          return (
+                            <video
+                              controls={true}
+                              autoPlay={false}
+                              style={{
+                                maxWidth: '90vw',
+                                maxHeight: '90vh',
+                                display: 'block',
+                                margin: '0 auto',
+                              }}
+                              src={currentGeneration.generationContent}
+                            />
+                          )
+                        }
+                        return originalNode
+                      },
                       onVisibleChange: () => {
                         setCurrentGeneration(null)
                         setCurrentGenerationVisible(false)

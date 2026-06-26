@@ -115,7 +115,7 @@ cmake --build build_metal --config Release --target synvek_backend_llama -j 14
 
 - 使用cuda支持构建stable-diffusion.cpp: 
 
-cmake -B build_cuda -DSD_CUDA=ON  -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -B build_cuda -DSD_CUDA=ON -DSD_WEBM=ON -DSD_WEBP=ON -DCMAKE_CUDA_ARCHITECTURES="50;52;61;75;86;89;90-virtual" -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build_cuda --config Release --target synvek_backend_sd -j 14
 
 注意: 需要将synvek_backend_sd.dll 改成synvek_backend_sd_cuda.dll并复制到output目录

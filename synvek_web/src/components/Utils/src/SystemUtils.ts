@@ -131,7 +131,10 @@ export class SystemUtils {
     }
   }
 
-  public static async resizeImage(base64ImageData: string, width: number, height: number): Promise<string> {
+  public static async resizeImage(base64ImageData: string, width: number, height: number, isVideo: boolean): Promise<string> {
+    if (isVideo) {
+      return SystemUtils.resizeVideo(base64ImageData, width, height)
+    }
     return new Promise((resolve, reject) => {
       const image = new Image()
       image.onload = () => {
@@ -156,6 +159,68 @@ export class SystemUtils {
     // canvas.height = height
     // await pica().resize(image, canvas, {})
     // return canvas.toDataURL('image/jpeg', 0.9)
+  }
+
+  public static async resizeVideo(base64VideoData: string, width: number, height: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // 创建 video 元素
+      const video = document.createElement('video')
+      video.muted = true // 必须静音，否则可能无法自动播放
+      video.crossOrigin = 'anonymous' // 如果使用外部 URL 需要设置
+
+      // 将 base64 数据转为 Blob URL（更可靠）
+      const blob = SystemUtils.dataURItoBlob(base64VideoData)
+      const url = URL.createObjectURL(blob)
+      video.src = url
+
+      // 等待视频元数据加载完成，然后跳到目标时间
+      video.addEventListener('loadedmetadata', () => {
+        // 如果请求的时间超出时长，截取最后一帧
+        const targetTime = Math.min(0, video.duration - 0.1)
+        video.currentTime = targetTime
+      })
+
+      // 跳转完成后，绘制帧
+      video.addEventListener('seeked', () => {
+        // 创建 Canvas
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          reject('Canvas context error')
+          return
+        }
+
+        // 绘制视频帧到 Canvas
+        ctx.drawImage(video, 0, 0, width, height)
+        // 释放 Blob URL
+        URL.revokeObjectURL(url)
+        // 导出缩略图（JPEG 质量 0.8）
+        resolve(canvas.toDataURL('image/jpeg', 0.8))
+      })
+
+      video.addEventListener('error', (e) => {
+        reject('Video load error: ' + e.message)
+      })
+
+      // 主动开始加载（某些浏览器需要）
+      video.load()
+    })
+  }
+
+  /**
+   辅助：将 data URI 转为 Blob（支持 base64 图片/视频）
+   */
+  public static dataURItoBlob(dataURI: string) {
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    return new Blob([ab], { type: mimeString })
   }
 
   /**

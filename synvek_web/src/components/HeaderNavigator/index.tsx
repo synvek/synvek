@@ -900,7 +900,19 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
       let modelTotalSize = 0
       let modelDownloadedSize = 0
       let taskId: string = ''
+      let enableServerSettings = false
 
+      modelProviders.forEach((modelProvider) => {
+        modelProvider.modelOptions.forEach((modelOption) => {
+          if (modelOption.name === task.model_id && modelProvider.modelSource === task.model_source) {
+            modelProvider.backends.forEach((backend) => {
+              if (backend === 'llama_cpp') {
+                enableServerSettings = true
+              }
+            })
+          }
+        })
+      })
       currentWorkspace.modelServers.forEach((modelServer) => {
         if (modelServer.modelName === task.task_name) {
           taskId = modelServer.taskId
@@ -1064,7 +1076,13 @@ const HeaderNavigator: FC<HeaderNavigatorProps> = ({}) => {
                 </Dropdown>
               </Tooltip>
               <Tooltip title={intl.formatMessage({ id: 'header.navigator.model-backend-settings' })}>
-                <Button size={'small'} type={'text'} icon={<SettingOutlined />} onClick={() => handleServerSetting(task)}></Button>
+                <Button
+                  size={'small'}
+                  type={'text'}
+                  icon={<SettingOutlined />}
+                  disabled={!enableServerSettings}
+                  onClick={() => handleServerSetting(task)}
+                ></Button>
               </Tooltip>
             </div>
           </div>

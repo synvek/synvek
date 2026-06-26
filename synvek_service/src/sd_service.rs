@@ -627,17 +627,28 @@ pub fn generate_image(generation_args: &GenerationArgs) -> Vec<String> {
                     let image_count = get_image_count(image_output);
                     tracing::info!("Image count = {}", image_count);
                     if is_wan22ti2v || is_wan22t2vi2v {
-                        if image_count > 0 {
-                            let webp_data = create_webp_from_images(image_count,image_output, get_image_data_length, get_image_data);
-                            if let Ok(webp_data) = webp_data {
-                                tracing::info!("Image data = {:?}", webp_data.len());
-                                let base64_string = STANDARD.encode(webp_data);
-                                let data_format = "image/webp";
-                                let data_url = format!("data:{};base64,{}",data_format, base64_string);
-                                output.push(data_url);
-                            } else {
-                                tracing::error!("Failed to parse video data with error: {}", webp_data.err().unwrap());
-                            }
+                        // if image_count > 0 {
+                        //     let webp_data = create_webp_from_images(image_count,image_output, get_image_data_length, get_image_data);
+                        //     if let Ok(webp_data) = webp_data {
+                        //         tracing::info!("Image data = {:?}", webp_data.len());
+                        //         let base64_string = STANDARD.encode(webp_data);
+                        //         let data_format = "image/webp";
+                        //         let data_url = format!("data:{};base64,{}",data_format, base64_string);
+                        //         output.push(data_url);
+                        //     } else {
+                        //         tracing::error!("Failed to parse video data with error: {}", webp_data.err().unwrap());
+                        //     }
+                        // }
+                        for i in 0..image_count {
+                            let image_data_length = get_image_data_length(image_output, i);
+                            let image_data = get_image_data(image_output, i);
+                            let image_data_slice: &[u8] =
+                                std::slice::from_raw_parts(image_data, image_data_length);
+                            tracing::info!("Image data = {:?}", image_data_slice.len());
+                            let base64_string = STANDARD.encode(image_data_slice);
+                            let data_format = "video/webm";
+                            let data_url = format!("data:{};base64,{}",data_format, base64_string);
+                            output.push(data_url);
                         }
                     } else {
                         for i in 0..image_count {
